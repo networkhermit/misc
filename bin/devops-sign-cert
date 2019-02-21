@@ -1,0 +1,253 @@
+#!/bin/bash
+
+while (( $# > 0 )); do
+    case "${1}" in
+        --digest)
+            DIGEST=true
+            shift
+            ;;
+        --ed25519)
+            ED25519=true
+            shift
+            ;;
+        --ed448)
+            ED448=true
+            shift
+            ;;
+        --inspect)
+            INSPECT=true
+            shift
+            ;;
+        --strict)
+            STRICT=true
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        --help)
+            cat << 'EOF'
+Usage:
+    devops-sign-cert [options] COMMON_NAME
+
+Options:
+    --digest
+    --ed25519
+    --ed448
+    --inspect
+    --strict
+EOF
+            exit
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+if (( $# != 1 )); then
+    exit
+fi
+
+digest () {
+    echo '+--'
+    openssl pkey -in "${1}".key -pubout | openssl sha512
+    openssl pkey -pubin -in "${1}".pub | openssl sha512
+    openssl req -in "${1}".csr -noout -pubkey | openssl sha512
+    openssl x509 -in "${1}".crt -noout -pubkey | openssl sha512
+    echo '--+'
+}
+
+inspect () {
+    echo '+--'
+    echo -e "\n[ "${1}".key ]\n"
+    openssl pkey -in "${1}".key -noout -text
+    echo -e "\n[ "${1}".pub ]\n"
+    openssl pkey -pubin -in "${1}".pub -noout -text
+    echo -e "\n[ "${1}".csr ]\n"
+    openssl req -in "${1}".csr -noout -text
+    echo -e "\n[ "${1}".crt ]\n"
+    openssl x509 -in "${1}".crt -noout -text
+    echo '--+'
+}
+
+# [ Root CA ]
+
+#openssl genrsa -out ca.key 4096
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out ca.key
+openssl req \
+    -new \
+    -key ca.key \
+    -sha512 \
+    -subj '/O=Privacy Guard/OU=Public Key Infrastructure/CN=Root CA X1' \
+    -x509 \
+    -days 8250 \
+    -config - \
+    -extensions root_ca \
+    -out ca.crt \
+    << 'EOF'
+.include /etc/ssl/openssl.cnf
+
+[ root_ca ]
+basicConstraints=critical,CA:TRUE
+keyUsage=critical,digitalSignature,keyCertSign,cRLSign
+
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always,issuer
+EOF
+
+#openssl req \
+#    -new \
+#    -newkey rsa -pkeyopt rsa_keygen_bits:4096 -nodes -keyout ca.key \
+#    -sha512 \
+#    -subj '/O=Privacy Guard/OU=Public Key Infrastructure/CN=Root CA X1' \
+#    -x509 \
+#    -days 8250 \
+#    -config - \
+#    -extensions root_ca \
+#    -out ca.crt
+#    -out ca.crt \
+#    << 'EOF'
+#.include /etc/ssl/openssl.cnf
+#
+#[ root_ca ]
+#basicConstraints=critical,CA:TRUE
+#keyUsage=critical,digitalSignature,keyCertSign,cRLSign
+#
+#subjectKeyIdentifier=hash
+#authorityKeyIdentifier=keyid:always,issuer
+#EOF
+
+openssl pkey -pubout -in ca.key -out ca.pub
+
+openssl x509 \
+    -x509toreq \
+    -in ca.crt \
+    -signkey ca.key \
+    -sha512 \
+    -out ca.csr
+
+if [ "${INSPECT}" = 'true' ]; then
+    inspect ca
+fi
+
+if [ "${DIGEST}" = 'true' ]; then
+    digest ca
+fi
+
+# [ Intermediate CA ]
+
+if [ "${ED25519}" = 'true' ]; then
+    openssl genpkey -algorithm ED25519 -out interm.key
+elif [ "${ED448}" = 'true' ]; then
+    openssl genpkey -algorithm ED448 -out interm.key
+else
+    openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out interm.key
+fi
+
+openssl req \
+    -new \
+    -key interm.key \
+    -sha512 \
+    -subj '/O=Privacy Guard/OU=Public Key Infrastructure/CN=Intermediate CA X1' \
+    -out interm.csr
+
+#openssl req \
+#    -new \
+#    -newkey rsa -pkeyopt rsa_keygen_bits:4096 -nodes -keyout interm.key \
+#    -sha512 \
+#    -subj '/O=Privacy Guard/OU=Public Key Infrastructure/CN=Intermediate CA X1' \
+#    -out interm.csr
+
+openssl pkey -pubout -in interm.key -out interm.pub
+
+openssl x509 \
+    -req \
+    -CA ca.crt -CAkey ca.key \
+    -CAcreateserial \
+    -sha512 \
+    -in interm.csr \
+    -days 1650 \
+    -extfile - \
+    -extensions interm_ca \
+    -out interm.crt \
+    << 'EOF'
+[ interm_ca ]
+basicConstraints=critical,CA:TRUE,pathlen:0
+keyUsage=critical,digitalSignature,keyCertSign,cRLSign
+
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always,issuer
+EOF
+
+if [ "${INSPECT}" = 'true' ]; then
+    inspect interm
+fi
+
+if [ "${DIGEST}" = 'true' ]; then
+    digest interm
+fi
+
+# [ End Entity ]
+
+#openssl genrsa -out "${1}".key 4096
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out "${1}".key
+openssl req \
+    -new \
+    -key "${1}".key \
+    -sha512 \
+    -subj '/O=Privacy Guard/OU=Public Key Infrastructure/CN='"${1}" \
+    -addext 'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1' \
+    -out "${1}".csr
+
+#openssl req \
+#    -new \
+#    -newkey rsa -pkeyopt rsa_keygen_bits:4096 -nodes -keyout "${1}".key \
+#    -sha512 \
+#    -subj '/O=Privacy Guard/OU=Public Key Infrastructure/CN='"${1}" \
+#    -addext 'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1' \
+#    -out "${1}".csr
+
+openssl pkey -pubout -in "${1}".key -out "${1}".pub
+
+openssl x509 \
+    -req \
+    -CA interm.crt -CAkey interm.key \
+    -CAcreateserial \
+    -sha512 \
+    -in "${1}".csr \
+    -days 825 \
+    -extfile - \
+    -extensions end_entity \
+    -out "${1}".crt \
+    << 'EOF'
+[ end_entity ]
+basicConstraints=critical,CA:FALSE
+
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer
+subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1
+EOF
+
+if [ "${INSPECT}" = 'true' ]; then
+    inspect "${1}"
+fi
+
+if [ "${DIGEST}" = 'true' ]; then
+    digest "${1}"
+fi
+
+# [ Chain of Trust ]
+
+cat "${1}".crt interm.crt > chain.crt
+
+if [ "${STRICT}" = 'true' ]; then
+    echo '+--'
+    openssl verify -CAfile ca.crt -no-CApath -show_chain ca.crt
+    openssl verify -CAfile ca.crt -no-CApath -show_chain interm.crt
+    openssl verify -CAfile ca.crt -no-CApath -untrusted interm.crt -show_chain "${1}".crt
+    echo '--+'
+fi
+
+openssl verify -CAfile ca.crt -no-CApath -untrusted interm.crt -show_chain chain.crt

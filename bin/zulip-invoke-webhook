@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# shellcheck disable=SC1090
+source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/zulip.cfg"
+
+TEXT=''
+while read -r line; do
+    TEXT+=${line}
+    TEXT+=$'\n'
+done
+
+TEXT=$'```text\n'"${TEXT}"$'```\n'
+
+curl -sS -X POST \
+    -d 'content='"${TEXT}" \
+    -d 'subject=notice' \
+    -d 'to=no-ip' \
+    -d 'type=stream' \
+    -u "${BOT_EMAIL_ADDRESS}:${BOT_API_KEY}" \
+    'https://'"${ORGANIZATION}"'.zulipchat.com/api/v1/messages' \
+    | python3 -c '
+import json
+import sys
+
+response = json.load(sys.stdin)
+
+print(response["result"])
+        '

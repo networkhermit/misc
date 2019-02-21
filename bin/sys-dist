@@ -1,0 +1,3 @@
+#!/bin/bash
+
+awk -F '=' '/^ID=/ { print $2; exit }' /etc/os-release

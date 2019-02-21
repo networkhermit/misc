@@ -1,0 +1,13 @@
+#!/bin/bash
+
+url=$(git remote get-url origin)
+
+rm -rf .git
+
+git init
+
+git remote add origin "${url}"
+
+git add -A
+GIT_AUTHOR_DATE="$(date -u -Is)" GIT_COMMITTER_DATE="$(date -u -Is)" TZ=UTC git commit -m 'This is where it all begins...'
+git push --force --prune --set-upstream origin master

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if (( $# != 1 )); then
+    exit
+fi
+
+if [ ! -f "${1}" ]; then
+    exit
+fi
+
+convert -background transparent "${1}" -define icon:auto-resize=16,32 favicon.ico

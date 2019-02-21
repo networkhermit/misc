@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo -e '\n[ cloudflare ]\n'
+dig \
+    1dot1dot1dot1.cloudflare-dns.com a 1dot1dot1dot1.cloudflare-dns.com aaaa \
+    +short \
+    | sed 's/^/\t/'
+
+echo -e '\n[ opendns ]\n'
+dig \
+    resolver1.opendns.com a resolver1.opendns.com aaaa \
+    resolver2.opendns.com a resolver2.opendns.com aaaa \
+    resolver3.opendns.com a resolver3.opendns.com aaaa \
+    resolver4.opendns.com a resolver4.opendns.com aaaa \
+    +short \
+    | sed 's/^/\t/'
+
+echo -e '\n[ quad9 ]\n'
+dig \
+    dns.quad9.net a dns.quad9.net aaaa \
+    dns-nosec.quad9.net a dns-nosec.quad9.net aaaa \
+    +short \
+    | sed 's/^/\t/'

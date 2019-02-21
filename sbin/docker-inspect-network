@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if (( EUID != 0 )); then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+FORMAT=''
+
+FORMAT+='{{printf "%s\n\n" .Name}}'
+
+FORMAT+='{{range .IPAM.Config}}'
+FORMAT+='{{printf "\t%s\n" .Gateway}}'
+FORMAT+='{{printf "\t%s\n" .Subnet}}'
+FORMAT+='{{end}}'
+
+FORMAT+='{{range .Containers}}'
+FORMAT+='{{printf "\t%s\t\t%s\n" .IPv4Address .Name}}'
+FORMAT+='{{end}}'
+
+docker network inspect cluster --format "${FORMAT}"
+
+FORMAT='{{if .Ports}}{{printf "\t%-16s\t%s" .Names .Ports}}{{end}}'
+
+docker container ls --format "${FORMAT}" --no-trunc | awk 'NF' | sort

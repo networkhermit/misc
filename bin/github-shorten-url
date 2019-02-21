@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function shorten_url() {
+    curl -sS -X POST -F "url=${1}" -F "code=${2}" 'https://git.io'
+}
+
+#shorten_url 'https://github.com/networkhermit' vac
+#shorten_url 'https://networkhermit.github.io' sherlock
+#shorten_url 'https://github.com/camden-house' holmes
+#shorten_url 'https://camden-house.github.io' noip
+#shorten_url 'https://github.com/botval' spectre
+#shorten_url 'https://botval.github.io' kali
+
+curl -I 'https://git.io/vac'
+curl -I 'https://git.io/sherlock'
+curl -I 'https://git.io/holmes'
+curl -I 'https://git.io/noip'
+curl -I 'https://git.io/spectre'
+curl -I 'https://git.io/kali'

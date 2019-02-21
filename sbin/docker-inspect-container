@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if (( EUID != 0 )); then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+FORMAT=''
+
+FORMAT+='\n'
+FORMAT+='[ {{.Names}} ]\n'
+FORMAT+='\n'
+FORMAT+='\t- Image: {{.Image}}\n'
+FORMAT+='\t- Status: {{.Status}}\n'
+FORMAT+='\t- RunningFor: {{.RunningFor}}\n'
+FORMAT+='\t- Networks: {{.Networks}}\n'
+FORMAT+='\t- Ports: {{.Ports}}\n'
+FORMAT+='\t- Mounts: {{.Mounts}}\n'
+FORMAT+='\t- Command: {{.Command}}'
+
+docker container ls --format "${FORMAT}" --no-trunc

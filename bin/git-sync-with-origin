@@ -1,0 +1,7 @@
+#!/bin/bash
+
+url=$(git remote get-url origin)
+
+find . -mindepth 1 -delete
+
+git clone "${url}" .

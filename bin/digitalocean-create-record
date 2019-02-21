@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# shellcheck disable=SC1090
+source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/digitalocean.cfg"
+
+curl -sS -X POST \
+    -H 'Authorization: Bearer '"${AUTH_TOKEN}" \
+    -H 'Content-Type: application/json' \
+    -d @- << 'EOF' \
+    "https://api.digitalocean.com/v2/domains/${DOMAIN}/records" \
+    | python3 -m json.tool
+
+{
+    "type": "TXT",
+    "name": "@",
+    "data": "Schrodinger's Cat | Existence Precedes Essence",
+    "priority": null,
+    "port": null,
+    "ttl": 3600,
+    "weight": null,
+    "flags": null,
+    "tag": null
+}
+EOF

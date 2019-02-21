@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if (( EUID != 0 )); then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+if [ "${OSTYPE}" != 'linux-gnu' ]; then
+    echo "unknown os type: ${OSTYPE}" 1>&2
+    exit 1
+fi
+
+DISTRO=$(awk -F '=' '/^ID=/ { print $2; exit }' /etc/os-release)
+
+case "${DISTRO}" in
+    arch)
+        pacman -Syu --color auto
+        yes | pacman -Scc --color auto
+        ;;
+    kali | ubuntu)
+        apt update --list-cleanup
+        apt full-upgrade --purge
+        apt clean
+        apt autoremove --purge
+        ;;
+    *)
+        echo "unknown distro: ${DISTRO}" 1>&2
+        exit 1
+        ;;
+esac

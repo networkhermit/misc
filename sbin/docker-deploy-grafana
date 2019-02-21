@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if (( EUID != 0 )); then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+if [ -n "$(docker container ls --all --filter name='^/grafana$' --format '.')" ]; then
+    docker container stop grafana
+    docker container rm --volumes grafana
+fi
+
+docker run \
+    --detach \
+    --env 'GF_SECURITY_ADMIN_PASSWORD=Prometheus' \
+    --env 'TZ='"$(cat /etc/timezone)" \
+    --hostname xyz \
+    --ip 172.24.0.101 \
+    --label maintainer=sysadmin@local.domain \
+    --name grafana \
+    --network cluster \
+    --publish 127:3000 \
+    --restart always \
+    --volume /srv/grafana/data:/var/lib/grafana \
+    --volume /srv/grafana/grafana.ini:/etc/grafana/grafana.ini \
+    grafana/grafana
+
+docker image prune --force
+docker container logs grafana

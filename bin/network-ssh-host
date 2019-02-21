@@ -1,0 +1,3 @@
+#!/bin/bash
+
+awk '/HostName/ { print $2 }' ~/.ssh/config

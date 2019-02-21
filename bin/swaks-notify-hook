@@ -1,0 +1,34 @@
+#!/bin/bash
+
+if (( $# == 0 )); then
+    exit
+fi
+
+# shellcheck disable=SC1090
+source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/smtp.cfg"
+
+# Swiss Army Knife SMTP
+
+swaks \
+    --auth 'DIGEST-MD5,CRAM-MD5,PLAIN' \
+    --auth-password "${AUTH_PASSWORD}" \
+    --auth-user "${AUTH_USER}" \
+    --body - \
+    --ehlo 'Electronic-Frontier-Foundation' \
+    --from "${FROM}" \
+    --header "Date: $(date -u --rfc-email)" \
+    --header "Message-Id: <$(sha256sum <(date -u --rfc-3339=ns) | awk '{ print $1 }')@swaks>" \
+    --header 'Content-Transfer-Encoding: quoted-printable' \
+    --header 'Content-Type: text/plain; charset=utf-8' \
+    --header 'Subject: Sealed With A Kiss' \
+    --header 'X-Mailer: Swiss Army Knife SMTP' \
+    --hide-all \
+    --port 587 \
+    --protocol ESMTPS \
+    --server "${SERVER}" \
+    --tls-protocol tlsv1_2 \
+    --tls-verify \
+    --to "${TO}" \
+    -tls \
+    <<< "$("$@")$(date -u '+%n%n%F %T %z')"
+    #--quit-after RCPT \

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -o nounset
+set -o pipefail
+
+# shellcheck disable=SC1090
+source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/namecheap.cfg"
+
+CURRENCY_RATE=$(curl -sS -X GET 'https://free.currencyconverterapi.com/api/v5/convert?q=USD_CNY&compact=ultra' | awk -F'[{:}]' '{ print $3 }')
+PUBLIC_IP_ADDRESS=$(dig myip.opendns.com @208.67.222.222 a +short)
+REQUEST_API_METHOD='namecheap.users.getPricing'
+
+if [ -z "${CURRENCY_RATE}" ] || [ -z "${PUBLIC_IP_ADDRESS}" ]; then
+    exit
+fi
+
+for i in ${WATCH_LIST}; do
+    echo
+    echo "${i}"
+    echo
+
+    sleep 3
+
+    xmllint --xpath '//*[local-name()="Price"]/@*[name()="Price" or name()="YourPrice"]' \
+        <(
+        curl -sS -X GET \
+            -G \
+            -d ApiKey="${API_KEY}" \
+            -d ApiUser="${API_USER}" \
+            -d ClientIp="${PUBLIC_IP_ADDRESS}" \
+            -d UserName="${USER_NAME}" \
+            -d Command=${REQUEST_API_METHOD} \
+            -d ActionName=RENEW \
+            -d ProductName="${i}" \
+            -d ProductType=DOMAIN \
+            'https://api.namecheap.com/xml.response'
+        ) \
+        | xargs -n 2 | awk -v rate="${CURRENCY_RATE}" -F'[ =]' '{ printf "%.2f, %.2f\n", $2 * rate, $4 * rate }' | nl
+
+done

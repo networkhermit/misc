@@ -1,0 +1,9 @@
+# Vim swap files
+*.swp
+
+# OS images
+*.iso
+*.tar.gz
+
+# Privacy
+.privacy/

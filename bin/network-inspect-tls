@@ -1,0 +1,17 @@
+#!/bin/bash
+
+for i in "$@"; do
+    echo
+    echo "${i}"
+    echo
+
+    CERT=$(openssl s_client -connect "${i}" -servername "${i}" <<< $'\n' 2> /dev/null)
+
+    (
+    openssl x509 -noout -subject -nameopt multiline <<< "${CERT}" | awk -F' = ' '/commonName/ { print $2; exit }'
+    openssl x509 -noout -issuer -nameopt multiline <<< "${CERT}" | awk -F' = ' '/commonName/ { print $2; exit }'
+    openssl x509 -noout -dates <<< "${CERT}" | awk -F'=' '{ print $2 }' | xargs -i date -d "{}" -u '+%F %T %z'
+    openssl x509 -noout -serial <<< "${CERT}" | awk -F'=' '{ print $2 }'
+    openssl x509 -noout -fingerprint <<< "${CERT}" | awk -F'=' '{ print $2 }'
+    ) | sed 's/^/\t/'
+done

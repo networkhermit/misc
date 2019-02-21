@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if (( EUID != 0 )); then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+if [ -n "$(docker container ls --all --filter name='^/minio$' --format '.')" ]; then
+    docker container stop minio
+    docker container rm --volumes minio
+fi
+
+docker run \
+    --detach \
+    --hostname xyz \
+    --ip 172.24.0.100 \
+    --label maintainer=sysadmin@local.domain \
+    --name minio \
+    --network cluster \
+    --publish 256:9000 \
+    --restart always \
+    --volume /srv/minio:/root/.minio \
+    --volume /srv/s3:/data \
+    minio/minio server --json /data
+
+docker image prune --force
+docker container logs minio

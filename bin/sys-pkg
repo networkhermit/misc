@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ "${OSTYPE}" != 'linux-gnu' ]; then
+    echo "unknown os type: ${OSTYPE}" 1>&2
+    exit 1
+fi
+
+DISTRO=$(awk -F '=' '/^ID=/ { print $2; exit }' /etc/os-release)
+
+case "${DISTRO}" in
+    arch)
+        pacman -Qi | awk '/^Name/ { name=$3 } /^Version/ { version=$3 } /^Architecture/ { architecture=$3 } /^Installed Size/ { printf "%-14s %s-%s-%s\n", $4$5, name, version, architecture }' | sort -hr
+        ;;
+    kali | ubuntu)
+        dpkg-query --show --showformat='${Installed-Size} ${Package}_${Version}_${Architecture}\n' | sort -hr | awk '{ printf "%-14.2f %s\n", $1/1024, $2 }'
+        ;;
+    *)
+        echo "unknown distro: ${DISTRO}" 1>&2
+        exit 1
+        ;;
+esac

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if (( $# != 1 )); then
+    exit
+fi
+
+if [ ! -f "${1}" ]; then
+    exit
+fi
+
+openssl x509 \
+    -in "${1}" \
+    -noout \
+    -nameopt multiline \
+    -dates \
+    -fingerprint \
+    -issuer \
+    -serial \
+    -subject

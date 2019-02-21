@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# shellcheck disable=SC1090
+source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/zulip.cfg"
+
+export past=${past:=86400}
+
+list=$(curl -sS -X GET \
+    -G \
+    -d 'anchor=0' \
+    -d 'num_after=100' \
+    -d 'num_before=0' \
+    -u "${BOT_EMAIL_ADDRESS}:${BOT_API_KEY}" \
+    'https://'"${ORGANIZATION}"'.zulipchat.com/json/messages' \
+    | python3 -c '
+import json
+import os
+import sys
+import time
+
+response = json.load(sys.stdin)
+
+if response["result"] == "success":
+    for message in response["messages"]:
+        if message["timestamp"] < time.time() - int(os.environ["past"]):
+            print(message["id"])
+    ')
+
+if [ -z "${list}" ]; then
+    echo "ok: nil"
+    exit
+fi
+
+for i in ${list}; do
+
+    curl -sS -X DELETE \
+        -u "${ADMIN_EMAIL_ADDRESS}:${ADMIN_API_KEY}" \
+        'https://'"${ORGANIZATION}"'.zulipchat.com/api/v1/messages/'"${i}" \
+        | python3 -c '
+import json
+import sys
+
+response = json.load(sys.stdin)
+
+print(response["result"])
+        '
+
+done

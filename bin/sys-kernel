@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ "${OSTYPE}" != 'linux-gnu' ]; then
+    echo "unknown os type: ${OSTYPE}"
+    exit
+fi
+
+DISTRO=$(awk -F '=' '/^ID=/ { print $2; exit }' /etc/os-release)
+
+uname -mrv
+
+case "${DISTRO}" in
+    arch)
+        pacman -Q 'linux'
+        ;;
+    kali | ubuntu)
+        dpkg --get-selections 'linux-image-[0-9]*' | tac
+        ;;
+    *)
+        echo "unknown distro: ${DISTRO}"
+        exit
+        ;;
+esac

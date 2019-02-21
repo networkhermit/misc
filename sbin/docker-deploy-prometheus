@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if (( EUID != 0 )); then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+if [ -n "$(docker container ls --all --filter name='^/prometheus$' --format '.')" ]; then
+    docker container stop prometheus
+    docker container rm --volumes prometheus
+fi
+
+docker run \
+    --detach \
+    --hostname xyz \
+    --ip 172.24.0.221 \
+    --label maintainer=sysadmin@local.domain \
+    --name prometheus \
+    --network cluster \
+    --publish 172.24.0.1:221:9090 \
+    --restart always \
+    --volume /srv/prometheus/data:/prometheus \
+    --volume /srv/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+    prom/prometheus
+
+docker image prune --force
+docker container logs prometheus

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if (( EUID != 0 )); then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+docker image ls --format '{{.Repository}}' | xargs -n 1 docker pull
+
+docker image prune --force
+docker image ls --all
