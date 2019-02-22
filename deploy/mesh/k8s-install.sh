@@ -12,6 +12,7 @@ done
 # initialize master node
 install -d -m 700 ~/.kube
 sudo kubeadm init --apiserver-advertise-address 172.24.0.1 --pod-network-cidr 10.0.0.0/16 --service-cidr 10.96.0.0/12 --kubernetes-version "$(kubeadm version --output short)" --ignore-preflight-errors NumCPU,SystemVerification |& tee ~/.kube/log
+sudo systemctl enable kubelet.service
 
 # make kubectl work for root user
 (( EUID == 0 )) && export KUBECONFIG=/etc/kubernetes/admin.conf
@@ -22,7 +23,6 @@ sudo install -m 600 -o "$(id -u)" -g "$(id -g)" -p /etc/kubernetes/admin.conf ~/
 # install pod network add-on
 kubectl apply --filename 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml'
 kubectl --namespace kube-system delete daemonsets kube-proxy
-sudo systemctl enable kubelet.service
 
 # remove master node isolation
 kubectl taint nodes --all node-role.kubernetes.io/master-
@@ -46,7 +46,8 @@ kubectl proxy
 kubectl delete "$(kubectl get pod --namespace kube-system --output name | grep -w 'kubernetes-dashboard')" --namespace kube-system
 
 # join node to cluster
-sudo kubeadm join '<MASTER-IP>':'<MASTER-PORT>' --token '<TOKEN>' --discovery-token-ca-cert-hash sha256:'<HASH>' --ignore-preflight-errors NumCPU,SystemVerification
+install -d -m 700 ~/.kube
+sudo kubeadm join '<MASTER-IP>':'<MASTER-PORT>' --token '<TOKEN>' --discovery-token-ca-cert-hash sha256:'<HASH>' --ignore-preflight-errors NumCPU,SystemVerification |& tee ~/.kube/log
 sudo systemctl enable kubelet.service
 
 # create new token after current token expired
