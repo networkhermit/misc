@@ -6,7 +6,7 @@ set -o pipefail
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/namecheap.cfg"
 
-CURRENCY_RATE=$(curl -sS -X GET 'https://free.currencyconverterapi.com/api/v5/convert?q=USD_CNY&compact=ultra' | awk -F'[{:}]' '{ print $3 }')
+CURRENCY_RATE=$(curl -sS -X GET "https://free.currencyconverterapi.com/api/v6/convert?q=USD_CNY&compact=ultra&apiKey=${CURRENCY_CONVERTER_API_KEY}" | awk -F'[{:}]' '{ print $3 }')
 PUBLIC_IP_ADDRESS=$(dig myip.opendns.com @208.67.222.222 a +short)
 REQUEST_API_METHOD='namecheap.users.getPricing'
 
