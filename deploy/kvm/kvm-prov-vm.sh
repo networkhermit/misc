@@ -9,31 +9,31 @@ if [ $# != 2 ]; then
     exit
 fi
 
-EXTRA_ARGUMENT=''
+EXTRA_ARGUMENT=()
 
-INSTALLER_PARAMETER='--extra-args "console=ttyS0,115200n8"'
+INSTALLER_PARAMETER=(--extra-args 'console=ttyS0,115200n8 nameserver=1.0.0.1')
 
 case "${1}" in
     arch)
         IMAGE=$(find images/ -type f -name 'archlinux-*-x86_64.iso' | sort --version-sort | tail -n1)
 
-        EXTRA_ARGUMENT+='--cdrom '"${IMAGE}"
-        EXTRA_ARGUMENT+=' '
-        EXTRA_ARGUMENT+='--os-variant auto'
+        EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+        EXTRA_ARGUMENT+=(--os-variant auto)
+        ;;
+    fedora)
+        EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/29/Server/x86_64/os)
+        EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
+        EXTRA_ARGUMENT+=(--os-variant fedora29)
         ;;
     kali)
-        EXTRA_ARGUMENT+='--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64'
-        EXTRA_ARGUMENT+=' '
-        EXTRA_ARGUMENT+=${INSTALLER_PARAMETER}
-        EXTRA_ARGUMENT+=' '
-        EXTRA_ARGUMENT+='--os-variant debiantesting'
+        EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
+        EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
+        EXTRA_ARGUMENT+=(--os-variant debiantesting)
         ;;
     ubuntu)
-        EXTRA_ARGUMENT+='--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/bionic/main/installer-amd64'
-        EXTRA_ARGUMENT+=' '
-        EXTRA_ARGUMENT+=${INSTALLER_PARAMETER}
-        EXTRA_ARGUMENT+=' '
-        EXTRA_ARGUMENT+='--os-variant ubuntu18.04'
+        EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/bionic/main/installer-amd64)
+        EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
+        EXTRA_ARGUMENT+=(--os-variant ubuntu18.04)
         ;;
     *)
         echo 'unknown distro'
@@ -41,7 +41,6 @@ case "${1}" in
         ;;
 esac
 
-# shellcheck disable=SC2086
 virt-install \
     --connect qemu:///system \
     --console pty,target_type=serial \
@@ -56,4 +55,4 @@ virt-install \
     --os-type linux \
     --vcpus=2,maxvcpus=4 \
     --virt-type kvm \
-    ${EXTRA_ARGUMENT}
+    "${EXTRA_ARGUMENT[@]}"
