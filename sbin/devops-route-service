@@ -11,10 +11,13 @@ source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/route.cfg"
 ##
 
 echo iptables -t nat -I PREROUTING -p tcp --dport "${HOST_PORT}" -j DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
-echo iptables -t filter -I FORWARD -d "${GUEST_IP}" -j ACCEPT
+echo iptables -t filter -I FORWARD -p tcp -d "${GUEST_IP}" --dport "${GUEST_PORT}" -j ACCEPT
+
+echo iptables -t nat -C PREROUTING -p tcp --dport "${HOST_PORT}" -j DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
+echo iptables -t filter -C FORWARD -p tcp -d "${GUEST_IP}" --dport "${GUEST_PORT}" -j ACCEPT
 
 echo iptables -t nat -D PREROUTING -p tcp --dport "${HOST_PORT}" -j DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
-echo iptables -t filter -D FORWARD -d "${GUEST_IP}" -j ACCEPT
+echo iptables -t filter -D FORWARD -p tcp -d "${GUEST_IP}" --dport "${GUEST_PORT}" -j ACCEPT
 
 echo iptables -t nat -L PREROUTING -n -v --line-numbers
 echo iptables -t filter -L FORWARD -n -v --line-numbers
@@ -30,7 +33,19 @@ echo iptables \
 echo iptables \
     --table filter \
     --insert FORWARD \
-    --destination "${GUEST_IP}" \
+    --protocol tcp --destination "${GUEST_IP}" --dport "${GUEST_PORT}" \
+    --jump ACCEPT
+
+echo iptables \
+    --table nat \
+    --check PREROUTING \
+    --protocol tcp --dport "${HOST_PORT}" \
+    --jump DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
+
+echo iptables \
+    --table filter \
+    --check FORWARD \
+    --protocol tcp --destination "${GUEST_IP}" --dport "${GUEST_PORT}" \
     --jump ACCEPT
 
 echo iptables \
@@ -42,7 +57,7 @@ echo iptables \
 echo iptables \
     --table filter \
     --delete FORWARD \
-    --destination "${GUEST_IP}" \
+    --protocol tcp --destination "${GUEST_IP}" --dport "${GUEST_PORT}" \
     --jump ACCEPT
 
 echo iptables \
