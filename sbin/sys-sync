@@ -17,6 +17,12 @@ case "${DISTRO}" in
         pacman -Syu --color auto
         yes | pacman -Scc --color auto
         ;;
+    fedora)
+        dnf makecache
+        dnf distro-sync
+        dnf autoremove
+        dnf clean packages
+        ;;
     kali | ubuntu)
         apt update --list-cleanup
         apt full-upgrade --purge

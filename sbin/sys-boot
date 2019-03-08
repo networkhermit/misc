@@ -15,14 +15,18 @@ DISTRO=$(awk -F '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 case "${DISTRO}" in
     arch)
         mkinitcpio -p linux
+        grub-mkconfig -o /boot/grub/grub.cfg
+        ;;
+    fedora)
+        dracut --force --verbose
+        grub2-mkconfig -o /boot/grub2/grub.cfg
         ;;
     kali | ubuntu)
         update-initramfs -k all -u
+        grub-mkconfig -o /boot/grub/grub.cfg
         ;;
     *)
         echo "unknown distro: ${DISTRO}" 1>&2
         exit 1
         ;;
 esac
-
-grub-mkconfig -o /boot/grub/grub.cfg
