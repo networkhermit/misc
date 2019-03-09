@@ -15,7 +15,6 @@ sudo useradd --create-home --shell /bin/bash --uid 1000 vac
 sudo passwd vac
 sudo gpasswd --add vac sudo
 sudo groupadd --gid 64 --system sysadmin
-sudo groupmod --gid 64 sysadmin
 sudo gpasswd --add vac sysadmin
 sudo passwd --lock root
 
@@ -90,7 +89,7 @@ UseNTP=no
 EOF
 sudo systemctl enable systemd-networkd.service
 
-# change to repo source
+# change distro source
 ## arch
 sudo tee /etc/pacman.d/mirrorlist << 'EOF'
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
@@ -269,6 +268,19 @@ sudo systemctl disable --now \
     motd-news.timer \
     snapd.service
 
+# install command-not-found
+## arch
+yes | sudo pacman -S --needed pkgfile
+sudo tee -a /etc/bash.bashrc << 'EOF'
+
+[ -r /usr/share/doc/pkgfile/command-not-found.bash ] && . /usr/share/doc/pkgfile/command-not-found.bash
+EOF
+sudo systemctl enable --now pkgfile-update.timer
+## kali | ubuntu
+sudo apt install --assume-yes command-not-found < /dev/null
+sudo apt update --list-cleanup
+sudo update-command-not-found
+
 # reboot system
 sudo reboot
 ```
@@ -291,7 +303,9 @@ Arch
 
 # modify time zone
 
-# change to repo source
+# configure system network
+
+# change distro source
 
 # format disk partition
 sudo fdisk -l
@@ -341,7 +355,7 @@ EOF
 
 # configure system network
 
-# change to repo source
+# change distro source
 
 # make distro sync
 
@@ -365,12 +379,6 @@ yes | sudo pacman -S --needed grub
 # manage system service
 
 # install command-not-found
-yes | sudo pacman -S --needed pkgfile
-sudo tee -a /etc/bash.bashrc << 'EOF'
-
-[ -r /usr/share/doc/pkgfile/command-not-found.bash ] && . /usr/share/doc/pkgfile/command-not-found.bash
-EOF
-sudo systemctl enable --now pkgfile-update.timer
 
 # update system locale
 echo 'LANG=en_US.UTF-8' | sudo tee /etc/locale.conf
@@ -423,7 +431,7 @@ Fedora
 
 # configure system network
 
-# change to repo source
+# change distro source
 
 # make distro sync
 
@@ -447,6 +455,8 @@ sudo systemctl enable sshd.service
 # disable dynamic resolver
 
 # manage system service
+
+# install command-not-found
 
 # reboot system
 ```
@@ -479,7 +489,7 @@ Kali
 
 # configure system network
 
-## change debian source
+## change distro source [debian]
 sudo tee /etc/apt/sources.list << 'EOF'
 deb http://mirrors.tuna.tsinghua.edu.cn/debian stable main contrib non-free
 deb http://mirrors.tuna.tsinghua.edu.cn/debian stable-updates main contrib non-free
@@ -514,7 +524,7 @@ sudo curl -LO 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archiv
 sudo dpkg --install kali-archive-keyring_*_all.deb
 sudo rm -fv kali-archive-keyring_*_all.deb
 
-# change to repo source
+# change distro source
 
 # make distro sync
 sudo apt install --assume-yes kali-{defaults,linux-full} < /dev/null
@@ -536,9 +546,6 @@ sudo systemctl enable ssh.service
 # manage system service
 
 # install command-not-found
-sudo apt install --assume-yes command-not-found < /dev/null
-sudo apt update --list-cleanup
-sudo update-command-not-found
 
 # modify shell environment
 sudo mv -v /etc/profile.d/kali.sh{,.forbid}
@@ -579,7 +586,7 @@ Ubuntu
 
 # configure system network
 
-# change to repo source
+# change distro source
 
 # make distro sync
 
@@ -596,6 +603,8 @@ Ubuntu
 # disable dynamic resolver
 
 # manage system service
+
+# install command-not-found
 
 # reboot system
 ```
