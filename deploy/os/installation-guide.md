@@ -243,7 +243,7 @@ net.ipv4.tcp_fastopen = 3
 EOF
 
 # disable dynamic resolver
-## dhcpd
+## dhcpcd
 sudo tee -a /etc/dhcpcd.conf << 'EOF'
 
 nohook resolv.conf
@@ -257,12 +257,12 @@ make_resolv_conf() {
 }
 EOF
 sudo chmod u+x /etc/dhcp/dhclient-enter-hooks.d/no-dns
-## NetworkManager
+## networkmanager
 sudo tee /etc/NetworkManager/conf.d/no-dns.conf << 'EOF'
 [main]
 dns=none
 EOF
-## resolvconf
+## openresolv
 sudo tee -a /etc/resolvconf.conf << 'EOF'
 
 resolvconf=NO
