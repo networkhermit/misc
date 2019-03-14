@@ -20,6 +20,7 @@ sudo passwd --lock root
 
 # change hostname
 sudo hostname STEM
+sudo hostnamectl set-hostname STEM
 echo 'STEM' | sudo tee /etc/hostname
 
 # check internet connection
@@ -73,6 +74,7 @@ timedatectl status
 
 # modify time zone
 sudo ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+sudo timedatectl set-timezone Asia/Shanghai
 sudo hwclock --systohc
 
 # configure system network
@@ -214,6 +216,7 @@ sudo dracut --force --verbose
 sudo update-initramfs -k all -u
 
 # update boot loader
+cat /proc/cmdline
 sudo vim /etc/default/grub
 ## arch
 sudo grub-mkconfig -o /boot/grub/grub.cfg
@@ -241,6 +244,11 @@ EOF
 
 # disable dynamic resolver
 ## dhcpd
+sudo tee -a /etc/dhcpcd.conf << 'EOF'
+
+nohook resolv.conf
+EOF
+## isc-dhcp-client
 sudo tee /etc/dhcp/dhclient-enter-hooks.d/no-dns << 'EOF'
 #!/bin/sh
 
@@ -282,6 +290,7 @@ sudo apt update --list-cleanup
 sudo update-command-not-found
 
 # reboot system
+sudo sync
 sudo reboot
 ```
 
@@ -316,7 +325,7 @@ sudo mkfs.xfs -f -L Arch /dev/sda1
 sudo mount /dev/sda1 /mnt
 
 # bootstrap base system
-sudo pacstrap /mnt base
+sudo pacstrap /mnt base sudo vim openssh intel-ucode grub
 genfstab -U /mnt | sudo tee /mnt/etc/fstab
 sudo cp -v {,/mnt}/etc/resolv.conf
 
@@ -326,9 +335,7 @@ sudo arch-chroot /mnt
 # change root password
 
 # check sudo support
-yes | pacman -S --needed sudo
 sudo groupadd --gid 27 --system sudo
-yes | sudo pacman -S --needed vim
 sudo ln -fs /usr/{bin/vim,local/bin/vi}
 
 # add default sysadmin
@@ -362,15 +369,12 @@ EOF
 # update message of the day
 
 # modify secure shell daemon
-yes | sudo pacman -S --needed openssh
 sudo systemctl restart sshd.service
 sudo systemctl enable sshd.service
 
 # update initramfs image
-yes | sudo pacman -S --needed intel-ucode
 
 # update boot loader
-yes | sudo pacman -S --needed grub
 
 # network control
 
