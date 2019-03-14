@@ -37,6 +37,7 @@ DISTRO=$(awk -F '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 #       binutils
 #       bzip2
 #       diffutils
+#       dosfstools
 #       exa
 #       file
 #       findutils
@@ -218,6 +219,7 @@ case "${DISTRO}" in
             core/binutils \
             core/bzip2 \
             core/diffutils \
+            core/dosfstools \
             community/exa \
             core/file \
             core/findutils \
@@ -415,6 +417,7 @@ case "${DISTRO}" in
             binutils{,-doc} \
             bzip2 \
             diffutils{,-doc} \
+            dosfstools \
             file \
             findutils \
             finger \
@@ -641,6 +644,7 @@ EOF
             binutils{,-doc} \
             bzip2 \
             diffutils{,-doc} \
+            dosfstools \
             file \
             findutils \
             finger \
