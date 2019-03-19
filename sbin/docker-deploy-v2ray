@@ -5,17 +5,18 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-if [ -n "$(docker container ls --all --filter name='^/v2ray$' --format '.')" ]; then
-    docker container stop v2ray
-    docker container rm --volumes v2ray
+NAME='v2ray'
+
+if [ -n "$(docker container ls --all --filter name='^/'${NAME}'$' --format '.')" ]; then
+    docker container stop "${NAME}"
+    docker container rm --volumes "${NAME}"
 fi
 
 docker run \
     --detach \
     --hostname xyz \
-    --ip 172.24.0.128 \
     --label maintainer=sysadmin@local.domain \
-    --name v2ray \
+    --name "${NAME}" \
     --network cluster \
     --publish 6666:6666 \
     --restart always \
@@ -23,4 +24,4 @@ docker run \
     v2ray/official v2ray -config=/etc/v2ray/config.json
 
 docker image prune --force
-docker container logs v2ray
+docker container logs "${NAME}"

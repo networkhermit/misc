@@ -5,17 +5,18 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-if [ -n "$(docker container ls --all --filter name='^/minio$' --format '.')" ]; then
-    docker container stop minio
-    docker container rm --volumes minio
+NAME='minio'
+
+if [ -n "$(docker container ls --all --filter name='^/'${NAME}'$' --format '.')" ]; then
+    docker container stop "${NAME}"
+    docker container rm --volumes "${NAME}"
 fi
 
 docker run \
     --detach \
     --hostname xyz \
-    --ip 172.24.0.100 \
     --label maintainer=sysadmin@local.domain \
-    --name minio \
+    --name "${NAME}" \
     --network cluster \
     --publish 256:9000 \
     --restart always \
@@ -24,4 +25,4 @@ docker run \
     minio/minio server --json /data
 
 docker image prune --force
-docker container logs minio
+docker container logs "${NAME}"

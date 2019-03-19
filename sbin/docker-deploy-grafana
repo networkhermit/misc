@@ -5,9 +5,11 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-if [ -n "$(docker container ls --all --filter name='^/grafana$' --format '.')" ]; then
-    docker container stop grafana
-    docker container rm --volumes grafana
+NAME='grafana'
+
+if [ -n "$(docker container ls --all --filter name='^/'${NAME}'$' --format '.')" ]; then
+    docker container stop "${NAME}"
+    docker container rm --volumes "${NAME}"
 fi
 
 docker run \
@@ -15,9 +17,8 @@ docker run \
     --env 'GF_SECURITY_ADMIN_PASSWORD=Prometheus' \
     --env 'TZ='"$(cat /etc/timezone)" \
     --hostname xyz \
-    --ip 172.24.0.101 \
     --label maintainer=sysadmin@local.domain \
-    --name grafana \
+    --name "${NAME}" \
     --network cluster \
     --publish 127:3000 \
     --restart always \
@@ -26,4 +27,4 @@ docker run \
     grafana/grafana
 
 docker image prune --force
-docker container logs grafana
+docker container logs "${NAME}"

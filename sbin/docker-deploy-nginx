@@ -8,9 +8,9 @@ fi
 docker run \
     --hostname xyz \
     --label maintainer=sysadmin@local.domain \
-    --name mirror \
+    --name http-server \
     --publish 8000:80 \
     --rm \
-    --volume ${PWD}:/usr/share/nginx/html \
+    --volume "${PWD}":/usr/share/nginx/html \
     --volume /srv/nginx/default.conf:/etc/nginx/conf.d/default.conf \
     nginx

@@ -5,17 +5,18 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-if [ -n "$(docker container ls --all --filter name='^/prometheus$' --format '.')" ]; then
-    docker container stop prometheus
-    docker container rm --volumes prometheus
+NAME='prometheus'
+
+if [ -n "$(docker container ls --all --filter name='^/'${NAME}'$' --format '.')" ]; then
+    docker container stop "${NAME}"
+    docker container rm --volumes "${NAME}"
 fi
 
 docker run \
     --detach \
     --hostname xyz \
-    --ip 172.24.0.221 \
     --label maintainer=sysadmin@local.domain \
-    --name prometheus \
+    --name "${NAME}" \
     --network cluster \
     --publish 172.24.0.1:221:9090 \
     --restart always \
@@ -24,4 +25,4 @@ docker run \
     prom/prometheus
 
 docker image prune --force
-docker container logs prometheus
+docker container logs "${NAME}"

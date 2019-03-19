@@ -5,27 +5,28 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-if [ -n "$(docker container ls --all --filter name='^/coredns$' --format '.')" ]; then
-    docker container stop coredns
-    docker container rm --volumes coredns
+NAME='coredns'
+
+if [ -n "$(docker container ls --all --filter name='^/'${NAME}'$' --format '.')" ]; then
+    docker container stop "${NAME}"
+    docker container rm --volumes "${NAME}"
 fi
 
 docker run \
     --detach \
     --hostname xyz \
-    --ip 172.24.0.127 \
     --label maintainer=sysadmin@local.domain \
-    --name coredns \
+    --name "${NAME}" \
     --network cluster \
     --publish 127.0.0.1:53:53/udp \
     --publish 172.24.0.1:53:53/udp \
     --publish 172.24.0.1:9153:9153 \
     --publish 53:53/tcp \
-    --publish [::1]:53:53/udp \
+    --publish '[::1]:53:53/udp' \
     --restart always \
     --volume /srv/coredns/Corefile:/Corefile \
     --volume /srv/coredns/zones:/zones \
     coredns/coredns
 
 docker image prune --force
-docker container logs coredns
+docker container logs "${NAME}"
