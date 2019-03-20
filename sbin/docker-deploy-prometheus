@@ -18,7 +18,7 @@ docker run \
     --label maintainer=sysadmin@local.domain \
     --name "${NAME}" \
     --network cluster \
-    --publish 172.24.0.1:221:9090 \
+    --publish 172.24.0.1:9090:9090 \
     --restart always \
     --volume /srv/prometheus/data:/prometheus \
     --volume /srv/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
