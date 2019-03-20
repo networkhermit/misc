@@ -4,14 +4,14 @@
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/slack.cfg"
 
 TEXT=''
-while read -r line; do
-    TEXT+=${line}
+while IFS='' read -r LINE; do
+    TEXT+=${LINE}
     TEXT+=$'\n'
 done
 
 TEXT=$'```\n'"${TEXT}"$'```\n'
 
-TEXT=$(python3 -c 'import json; print(json.dumps("""'"${TEXT}"'"""))')
+TEXT=$(python3 -c 'import json, sys; print(json.dumps(sys.stdin.read()))' <<< "${TEXT}")
 
 curl -sS -X POST \
     -H 'Content-Type: application/json' \

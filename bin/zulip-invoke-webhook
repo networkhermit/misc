@@ -4,15 +4,15 @@
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/zulip.cfg"
 
 TEXT=''
-while read -r line; do
-    TEXT+=${line}
+while IFS='' read -r LINE; do
+    TEXT+=${LINE}
     TEXT+=$'\n'
 done
 
 TEXT=$'```text\n'"${TEXT}"$'```\n'
 
 curl -sS -X POST \
-    -d 'content='"${TEXT}" \
+    --data-urlencode 'content='"${TEXT}" \
     -d 'subject=notice' \
     -d 'to=no-ip' \
     -d 'type=stream' \
