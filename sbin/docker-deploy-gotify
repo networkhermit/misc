@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if (( EUID != 0 )); then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+NAME='gotify'
+
+if [ -n "$(docker container ls --all --filter name='^/'${NAME}'$' --format '.')" ]; then
+    docker container stop "${NAME}"
+    docker container rm --volumes "${NAME}"
+fi
+
+docker run \
+    --detach \
+    --hostname xyz \
+    --label maintainer=sysadmin@local.domain \
+    --name "${NAME}" \
+    --network cluster \
+    --publish 221:221 \
+    --restart always \
+    --volume /srv/gotify/certs:/app/certs \
+    --volume /srv/gotify/config.yml:/etc/gotify/config.yml \
+    --volume /srv/gotify/data:/app/data \
+    gotify/server
+
+docker image prune --force
+docker container logs "${NAME}"
