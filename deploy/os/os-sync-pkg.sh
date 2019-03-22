@@ -847,3 +847,15 @@ EOF
         exit 1
         ;;
 esac
+
+tee /etc/docker/daemon.json << 'EOF'
+{
+    "log-driver": "json-file",
+    "log-opts": {
+        "max-file": "10",
+        "max-size": "10m"
+    }
+}
+EOF
+
+systemctl restart docker.service
