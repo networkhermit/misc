@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if (( EUID != 0 )); then
-    echo "This script must be run as root" 1>&2
+    echo "✗ This script must be run as root" 1>&2
     exit 1
 fi
 
@@ -36,7 +36,7 @@ case "${1}" in
         EXTRA_ARGUMENT+=(--os-variant ubuntu18.04)
         ;;
     *)
-        echo 'unknown distro'
+        echo "✗ unknown distro: ‘${1}’" 1>&2
         exit
         ;;
 esac

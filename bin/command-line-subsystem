@@ -1,3 +1,5 @@
 #!/bin/bash
 
 bash --version | awk -F '[ (]' '/version/ { print $4; exit }'
+
+openssl ciphers -V | column -t

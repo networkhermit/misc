@@ -15,9 +15,11 @@ if [ -z "${CURRENCY_RATE}" ] || [ -z "${PUBLIC_IP_ADDRESS}" ]; then
 fi
 
 for i in ${WATCH_LIST}; do
-    echo
-    echo "${i}"
-    echo
+    cat << EOF
+
+${i}
+
+EOF
 
     sleep 3
 

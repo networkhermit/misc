@@ -1,9 +1,11 @@
 #!/bin/bash
 
 for i in "$@"; do
-    echo
-    echo "${i}"
-    echo
+    cat << EOF
+
+${i}
+
+EOF
 
     sleep 3
 

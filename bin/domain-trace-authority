@@ -1,8 +1,11 @@
 #!/bin/bash
 
 for i in "$@"; do
-    echo
-    echo "${i}"
-    echo
+    cat << EOF
+
+${i}
+
+EOF
+
     dig +nssearch "${i}" | awk '{ print $2, $4 }'
 done

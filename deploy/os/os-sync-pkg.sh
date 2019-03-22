@@ -1,12 +1,12 @@
 #!/bin/bash
 
 if (( EUID != 0 )); then
-    echo "This script must be run as root" 1>&2
+    echo "✗ This script must be run as root" 1>&2
     exit 1
 fi
 
 if [ "${OSTYPE}" != 'linux-gnu' ]; then
-    echo "unknown os type: ${OSTYPE}" 1>&2
+    echo "✗ unknown os type: ‘${OSTYPE}’" 1>&2
     exit 1
 fi
 
@@ -843,7 +843,7 @@ EOF
 
             ;;
     *)
-        echo "unknown distro: ${DISTRO}" 1>&2
+        echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
         exit 1
         ;;
 esac

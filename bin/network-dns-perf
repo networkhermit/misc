@@ -4,7 +4,7 @@ while (( $# > 0 )); do
     case "${1}" in
         -c|--count)
             if [ -z "${2}" ]; then
-                echo "[ERROR] Option takes an argument: '${1}'" 1>&2
+                echo "✗ option takes an argument: ‘${1}’" 1>&2
                 exit 1
             fi
             COUNT=${2}
@@ -21,7 +21,7 @@ while (( $# > 0 )); do
 done
 
 if (( $# > 0 )); then
-    echo "[ERROR] Unrecognized parameter: '${1}'" 1>&2
+    echo "✗ unrecognized parameter: ‘${1}’" 1>&2
     exit 1
 fi
 

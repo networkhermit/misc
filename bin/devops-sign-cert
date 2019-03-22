@@ -61,13 +61,13 @@ digest () {
 
 inspect () {
     echo '+--'
-    echo -e "\n[ "${1}".key ]\n"
+    echo -e "\\n[ ${1}.key ]\\n"
     openssl pkey -in "${1}".key -noout -text
-    echo -e "\n[ "${1}".pub ]\n"
+    echo -e "\\n[ ${1}.pub ]\\n"
     openssl pkey -pubin -in "${1}".pub -noout -text
-    echo -e "\n[ "${1}".csr ]\n"
+    echo -e "\\n[ ${1}.csr ]\\n"
     openssl req -in "${1}".csr -noout -text
-    echo -e "\n[ "${1}".crt ]\n"
+    echo -e "\\n[ ${1}.crt ]\\n"
     openssl x509 -in "${1}".crt -noout -text
     echo '--+'
 }

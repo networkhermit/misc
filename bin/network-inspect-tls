@@ -1,17 +1,39 @@
 #!/bin/bash
 
 for i in "$@"; do
-    echo
-    echo "${i}"
-    echo
+    CERT=''
 
-    CERT=$(openssl s_client -connect "${i}" -servername "${i}" <<< $'\n' 2> /dev/null)
+    if [ -e "${i}" ]; then
+        if [ -f "${i}" ]; then
+            if [ -r "${i}" ]; then
+                if [ -s "${i}" ]; then
+                    CERT=$(cat "${i}" 2> /dev/null)
+                else
+                    echo "✗ file is empty: ‘${i}’" 1>&2
+                    continue
+                fi
+            else
+                echo "✗ read permission not granted: ‘${i}’" 1>&2
+                continue
+            fi
+        else
+            echo "✗ not a regular file: ‘${i}’" 1>&2
+            continue
+        fi
+    else
+        CERT=$(openssl s_client -connect "${i}" < /dev/null 2> /dev/null)
+    fi
 
-    (
-    openssl x509 -noout -subject -nameopt multiline <<< "${CERT}" | awk -F' = ' '/commonName/ { print $2; exit }'
-    openssl x509 -noout -issuer -nameopt multiline <<< "${CERT}" | awk -F' = ' '/commonName/ { print $2; exit }'
-    openssl x509 -noout -dates <<< "${CERT}" | awk -F'=' '{ print $2 }' | xargs -i date -d "{}" -u '+%F %T %z'
-    openssl x509 -noout -serial <<< "${CERT}" | awk -F'=' '{ print $2 }'
-    openssl x509 -noout -fingerprint <<< "${CERT}" | awk -F'=' '{ print $2 }'
-    ) | sed 's/^/\t/'
+    if [ "${CERT}" = '' ]; then
+        echo "✗ unable to establish tls connection: ‘${i}’" 1>&2
+        continue
+    fi
+
+    cat << EOF
+
+[ ${i} ]
+
+EOF
+
+    openssl x509 -noout -text -fingerprint <<< "${CERT}"
 done
