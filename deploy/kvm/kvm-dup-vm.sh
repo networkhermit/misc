@@ -5,7 +5,7 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-if [ $# != 2 ]; then
+if (( $# != 2 )); then
     exit
 fi
 

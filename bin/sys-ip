@@ -26,7 +26,7 @@ echo "[ google ]"
 (
 dig o-o.myaddr.l.google.com @216.239.32.10 txt +short
 dig o-o.myaddr.l.google.com @216.239.34.10 txt +short
-) | awk -F '"' '{ print $2 }' | uniq
+) | awk --field-separator '"' '{ print $2 }' | uniq
 
 echo "[ ipv4 ]"
 

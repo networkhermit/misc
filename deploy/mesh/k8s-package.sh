@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # trust google cloud package signing key
-curl -L https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-curl -L https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
+curl --location https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+curl --location https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com --search-keys 54A647F9048D5688D7DA2ABE6A030B21BA07F4FB
 
 # add kubernetes repository

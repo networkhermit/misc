@@ -12,7 +12,7 @@ EOF
     WHOIS=$(whois -H "${i}")
 
     (
-    awk -F': ' '/Registrar:/ { print $2; exit }' <<< "${WHOIS}"
+    awk --field-separator ': ' '/Registrar:/ { print $2; exit }' <<< "${WHOIS}"
     awk '/Creation Date:/ { print $NF; exit }' <<< "${WHOIS}"
     awk '/Registry Expiry Date:/ { print $NF; exit }' <<< "${WHOIS}"
     awk '/Domain Status:/ { if (length($3) != 0) print $3 }' <<< "${WHOIS}"

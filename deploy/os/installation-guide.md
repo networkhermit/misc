@@ -47,7 +47,7 @@ nameserver 9.9.9.9
 EOF
 
 # configure default address selection
-sudo sed -i '\%^#precedence ::ffff:0:0/96  100$%r /dev/stdin' /etc/gai.conf << 'EOF'
+sudo sed --in-place '\%^#precedence ::ffff:0:0/96  100$%r /dev/stdin' /etc/gai.conf << 'EOF'
 
 precedence  ::1/128       50
 precedence  ::/0          40
@@ -58,11 +58,11 @@ EOF
 
 # modify default ntp server
 ## apple
-sudo sed -i '/^#NTP=$/r /dev/stdin' /etc/systemd/timesyncd.conf << 'EOF'
+sudo sed --in-place '/^#NTP=$/r /dev/stdin' /etc/systemd/timesyncd.conf << 'EOF'
 NTP=time1.apple.com time2.apple.com time3.apple.com time4.apple.com
 EOF
 ## google
-sudo sed -i '/^#NTP=$/r /dev/stdin' /etc/systemd/timesyncd.conf << 'EOF'
+sudo sed --in-place '/^#NTP=$/r /dev/stdin' /etc/systemd/timesyncd.conf << 'EOF'
 NTP=time1.google.com time2.google.com time3.google.com time4.google.com
 EOF
 sudo systemctl restart systemd-timesyncd.service
@@ -73,7 +73,7 @@ sudo timedatectl set-ntp true
 timedatectl status
 
 # modify time zone
-sudo ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+sudo ln --force --symbolic /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 sudo timedatectl set-timezone Asia/Shanghai
 sudo hwclock --systohc
 
@@ -169,8 +169,8 @@ EOF
 
 # make distro sync
 ## arch
-sudo pacman -Syu --color auto
-yes | sudo pacman -Scc --color auto
+sudo pacman --sync --refresh --sysupgrade --color auto
+yes | sudo pacman --sync --clean --clean --color auto
 ## fedora
 sudo dnf makecache
 sudo dnf distro-sync
@@ -182,7 +182,7 @@ sudo apt full-upgrade --purge
 sudo apt clean
 sudo apt autoremove --purge
 sudo find /etc -type f \( -name '*.dpkg-*' -o -name '*.ucf-*' \)
-apt list --installed | awk -F '/' '/,local]/ { print $1 }' | xargs --no-run-if-empty sudo apt purge --assume-yes
+apt list --installed | awk --field-separator '/' '/,local]/ { print $1 }' | xargs --no-run-if-empty sudo apt purge --assume-yes
 
 # update message of the day
 sudo tee /etc/motd << 'EOF'
@@ -194,13 +194,13 @@ individual files in /usr/share/doc/*/copyright.
 OS_RELEASE_ID GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
 permitted by applicable law.
 EOF
-OS_RELEASE_ID=$(awk -F '=' '/^ID=/ { print $2; exit }' /etc/os-release)
-sudo sed -i "s/OS_RELEASE_ID/${OS_RELEASE_ID^}/g" /etc/motd
+OS_RELEASE_ID=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
+sudo sed --in-place "s/OS_RELEASE_ID/${OS_RELEASE_ID^}/g" /etc/motd
 unset OS_RELEASE_ID
 
 # modify secure shell daemon
 sudo vim /etc/ssh/sshd_config
-sudo rm -v /etc/ssh/ssh_host_*_key{,.pub}
+sudo rm --verbose /etc/ssh/ssh_host_*_key{,.pub}
 declare -A host_key=(['ed25519']=256 ['rsa']=4096)
 for type in "${!host_key[@]}"; do
     sudo ssh-keygen -a 100 -b "${host_key[${type}]}" -f "/etc/ssh/ssh_host_${type}_key" -t "${type}" -C 'sysadmin@local.domain' -N ''
@@ -209,7 +209,7 @@ unset host_key
 
 # update initramfs image
 ## arch
-sudo mkinitcpio -p linux
+sudo mkinitcpio --preset linux
 ## fedora
 sudo dracut --force --verbose
 ## kali | ubuntu
@@ -219,11 +219,11 @@ sudo update-initramfs -k all -u
 cat /proc/cmdline
 sudo vim /etc/default/grub
 ## arch
-sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo grub-mkconfig --output /boot/grub/grub.cfg
 ## fedora
-sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+sudo grub2-mkconfig --output /boot/grub2/grub.cfg
 ## kali | ubuntu
-sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo grub-mkconfig --output /boot/grub/grub.cfg
 
 # network control
 sudo tee /etc/sysctl.d/network-control.conf << 'EOF'
@@ -244,7 +244,7 @@ EOF
 
 # disable dynamic resolver
 ## dhcpcd
-sudo tee -a /etc/dhcpcd.conf << 'EOF'
+sudo tee --append /etc/dhcpcd.conf << 'EOF'
 
 nohook resolv.conf
 EOF
@@ -263,7 +263,7 @@ sudo tee /etc/NetworkManager/conf.d/no-dns.conf << 'EOF'
 dns=none
 EOF
 ## openresolv
-sudo tee -a /etc/resolvconf.conf << 'EOF'
+sudo tee --append /etc/resolvconf.conf << 'EOF'
 
 resolvconf=NO
 EOF
@@ -278,8 +278,8 @@ sudo systemctl disable --now \
 
 # install command-not-found
 ## arch
-yes | sudo pacman -S --needed pkgfile
-sudo tee -a /etc/bash.bashrc << 'EOF'
+yes | sudo pacman --sync --needed pkgfile
+sudo tee --append /etc/bash.bashrc << 'EOF'
 
 [ -r /usr/share/doc/pkgfile/command-not-found.bash ] && . /usr/share/doc/pkgfile/command-not-found.bash
 EOF
@@ -317,7 +317,7 @@ Arch
 # change distro source
 
 # format disk partition
-sudo fdisk -l
+sudo fdisk --list
 sudo fdisk /dev/sda
 sudo mkfs.xfs -f -L Arch /dev/sda1
 
@@ -327,7 +327,7 @@ sudo mount /dev/sda1 /mnt
 # bootstrap base system
 sudo pacstrap /mnt base sudo vim openssh intel-ucode grub
 genfstab -U /mnt | sudo tee /mnt/etc/fstab
-sudo cp -v {,/mnt}/etc/resolv.conf
+sudo cp --verbose {,/mnt}/etc/resolv.conf
 
 # chroot into node
 sudo arch-chroot /mnt
@@ -336,7 +336,7 @@ sudo arch-chroot /mnt
 
 # check sudo support
 sudo groupadd --gid 27 --system sudo
-sudo ln -fs /usr/{bin/vim,local/bin/vi}
+sudo ln --force --symbolic /usr/{bin/vim,local/bin/vi}
 
 # add default sysadmin
 
@@ -386,11 +386,11 @@ sudo systemctl enable sshd.service
 
 # update system locale
 echo 'LANG=en_US.UTF-8' | sudo tee /etc/locale.conf
-sudo sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+sudo sed --in-place 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 sudo locale-gen
 
 # color setup for ls
-sudo tee -a /etc/bash.bashrc << 'EOF'
+sudo tee --append /etc/bash.bashrc << 'EOF'
 
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -398,11 +398,11 @@ fi
 EOF
 
 # install arch-install-scripts
-yes | sudo pacman -S --needed arch-install-scripts
+yes | sudo pacman --sync --needed arch-install-scripts
 
 # exit chroot
 exit
-sudo umount -R /mnt
+sudo umount --recursive /mnt
 
 # reboot system
 ```
@@ -443,9 +443,9 @@ Fedora
 
 # modify secure shell daemon
 sudo dnf install policycoreutils-python-utils
-sudo semanage port -a -t ssh_port_t -p tcp 321
-sudo firewall-cmd --permanent --service=ssh --add-port '321/tcp'
-sudo firewall-cmd --permanent --service=ssh --get-ports
+sudo semanage port --add --type ssh_port_t --proto tcp 321
+sudo firewall-cmd --permanent --service ssh --add-port 321/tcp
+sudo firewall-cmd --permanent --service ssh --get-ports
 sudo firewall-cmd --reload
 sudo systemctl restart sshd.service
 sudo systemctl enable sshd.service
@@ -514,7 +514,7 @@ sudo apt clean
 sudo apt autoremove --purge --assume-yes
 
 ## secure debian source
-sudo sed -i 's/http:/https:/' /etc/apt/sources.list
+sudo sed --in-place 's/http:/https:/' /etc/apt/sources.list
 
 ## make initial system upgrade
 sudo apt update --list-cleanup
@@ -524,9 +524,9 @@ sudo apt clean
 sudo apt autoremove --purge --assume-yes
 
 ## install kali archive keyring
-sudo curl -LO 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb'
+sudo curl --location --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb'
 sudo dpkg --install kali-archive-keyring_*_all.deb
-sudo rm -fv kali-archive-keyring_*_all.deb
+sudo rm --force --verbose kali-archive-keyring_*_all.deb
 
 # change distro source
 
@@ -552,12 +552,12 @@ sudo systemctl enable ssh.service
 # install command-not-found
 
 # modify shell environment
-sudo mv -v /etc/profile.d/kali.sh{,.forbid}
+sudo mv --verbose /etc/profile.d/kali.sh{,.forbid}
 
 # install default plymouth
 sudo apt install --assume-yes plymouth{,-themes} < /dev/null
 sudo plymouth-set-default-theme kali
-sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo grub-mkconfig --output /boot/grub/grub.cfg
 
 # reboot system
 ```

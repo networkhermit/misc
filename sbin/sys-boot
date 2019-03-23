@@ -10,20 +10,20 @@ if [ "${OSTYPE}" != 'linux-gnu' ]; then
     exit 1
 fi
 
-DISTRO=$(awk -F '=' '/^ID=/ { print $2; exit }' /etc/os-release)
+DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 
 case "${DISTRO}" in
     arch)
-        mkinitcpio -p linux
-        grub-mkconfig -o /boot/grub/grub.cfg
+        mkinitcpio --preset linux
+        grub-mkconfig --output /boot/grub/grub.cfg
         ;;
     fedora)
         dracut --force --verbose
-        grub2-mkconfig -o /boot/grub2/grub.cfg
+        grub2-mkconfig --output /boot/grub2/grub.cfg
         ;;
     kali | ubuntu)
         update-initramfs -k all -u
-        grub-mkconfig -o /boot/grub/grub.cfg
+        grub-mkconfig --output /boot/grub/grub.cfg
         ;;
     *)
         echo "✗ unknown distro: ‘${DISTRO}’" 1>&2

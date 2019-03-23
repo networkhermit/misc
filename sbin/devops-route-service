@@ -8,7 +8,7 @@ fi
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/route.cfg"
 
-##
+## [ short option ]
 
 echo iptables -t nat -I PREROUTING -p tcp --dport "${HOST_PORT}" -j DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
 echo iptables -t filter -I FORWARD -p tcp -d "${GUEST_IP}" --dport "${GUEST_PORT}" -j ACCEPT
@@ -22,7 +22,7 @@ echo iptables -t filter -D FORWARD -p tcp -d "${GUEST_IP}" --dport "${GUEST_PORT
 echo iptables -t nat -L PREROUTING -n -v --line-numbers
 echo iptables -t filter -L FORWARD -n -v --line-numbers
 
-####
+## [ long option ]
 
 echo iptables \
     --table nat \

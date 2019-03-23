@@ -1,9 +1,14 @@
 ```bash
-curl -LO "https://mirrors.ocf.berkeley.edu/archlinux/iso/$(date '+%Y.%m.01')/archlinux-$(date '+%Y.%m.01')-x86_64.iso"
-curl -LO "https://mirrors.ocf.berkeley.edu/archlinux/iso/$(date '+%Y.%m.01')/archlinux-bootstrap-$(date '+%Y.%m.01')-x86_64.tar.gz"
-curl -LO "https://mirrors.ocf.berkeley.edu/archlinux/iso/$(date '+%Y.%m.01')/sha1sums.txt"
+# shellcheck shell=bash
 
-curl -LO "https://mirrors.tuna.tsinghua.edu.cn/archlinux/iso/$(date '+%Y.%m.01')/archlinux-$(date '+%Y.%m.01')-x86_64.iso"
-curl -LO "https://mirrors.tuna.tsinghua.edu.cn/archlinux/iso/$(date '+%Y.%m.01')/archlinux-bootstrap-$(date '+%Y.%m.01')-x86_64.tar.gz"
-curl -LO "https://mirrors.tuna.tsinghua.edu.cn/archlinux/iso/$(date '+%Y.%m.01')/sha1sums.txt"
+## [ berkeley ]
+BASE_URL='https://mirrors.ocf.berkeley.edu/archlinux'
+## [ tsinghua ]
+BASE_URL='https://mirrors.tuna.tsinghua.edu.cn/archlinux'
+
+SNAPSHOT=$(date '+%Y.%m.01')
+curl --location --remote-name "${BASE_URL}/iso/${SNAPSHOT}/archlinux-${SNAPSHOT}-x86_64.iso"
+curl --location --remote-name "${BASE_URL}/iso/${SNAPSHOT}/archlinux-bootstrap-${SNAPSHOT}-x86_64.tar.gz"
+curl --location --remote-name "${BASE_URL}/iso/${SNAPSHOT}/sha1sums.txt"
+unset SNAPSHOT
 ```

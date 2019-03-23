@@ -63,5 +63,5 @@ kubectl get secrets --all-namespaces --output wide
 kubectl get persistentvolumeclaims --all-namespaces --output wide
 
 # display the documentation of api resources
-kubectl api-resources --no-headers | awk '{ print $1 }' | xargs -n 1 kubectl explain --recursive=true | less -N
+kubectl api-resources --no-headers | awk '{ print $1 }' | xargs --max-args 1 kubectl explain --recursive=true | less --LINE-NUMBERS
 ```

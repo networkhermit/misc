@@ -5,12 +5,12 @@ kubeadm config print init-defaults
 kubeadm config print join-defaults
 
 # pull pod network container images
-for i in $(curl -sL 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml' | awk '/\<image\>/ { print $2 }'); do
+for i in $(curl --location --silent 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml' | awk '/\<image\>/ { print $2 }'); do
     sudo docker image pull "${i}"
 done
 
 # initialize master node
-install -d -m 700 ~/.kube
+install --directory --mode 700 ~/.kube
 sudo kubeadm init --apiserver-advertise-address 172.24.0.1 --pod-network-cidr 10.0.0.0/16 --service-cidr 10.96.0.0/12 --kubernetes-version "$(kubeadm version --output short)" --ignore-preflight-errors NumCPU,SystemVerification |& tee ~/.kube/log
 sudo systemctl enable kubelet.service
 
@@ -18,7 +18,7 @@ sudo systemctl enable kubelet.service
 (( EUID == 0 )) && export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # make kubectl work for non-root user
-sudo install -m 600 -o "$(id -u)" -g "$(id -g)" -p /etc/kubernetes/admin.conf ~/.kube/config
+sudo install --mode 600 --owner "$(id -u)" --group "$(id -g)" --preserve-timestamps /etc/kubernetes/admin.conf ~/.kube/config
 
 # install pod network add-on
 kubectl apply --filename 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml'
@@ -30,7 +30,7 @@ kubectl taint nodes --all node-role.kubernetes.io/master-
 # deploy kubernetes dashboard
 kubectl apply --filename 'https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml'
 kubectl create serviceaccount cluster-admin-dashboard --namespace kube-system
-kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:cluster-admin-dashboard
+kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kube-system:cluster-admin-dashboard
 
 # verify cluster status
 kubectl cluster-info
@@ -43,10 +43,10 @@ kubectl get secret "$(kubectl get serviceaccount cluster-admin-dashboard --names
 kubectl proxy
 
 # update kubernetes dashboard
-kubectl delete "$(kubectl get pod --namespace kube-system --output name | grep -w 'kubernetes-dashboard')" --namespace kube-system
+kubectl delete "$(kubectl get pod --namespace kube-system --output name | grep --word-regexp 'kubernetes-dashboard')" --namespace kube-system
 
 # join node to cluster
-install -d -m 700 ~/.kube
+install --directory --mode 700 ~/.kube
 sudo kubeadm join '<MASTER-IP>':'<MASTER-PORT>' --token '<TOKEN>' --discovery-token-ca-cert-hash sha256:'<HASH>' --ignore-preflight-errors NumCPU,SystemVerification |& tee ~/.kube/log
 sudo systemctl enable kubelet.service
 

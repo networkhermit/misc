@@ -10,7 +10,7 @@ if [ "${OSTYPE}" != 'linux-gnu' ]; then
     exit 1
 fi
 
-DISTRO=$(awk -F '=' '/^ID=/ { print $2; exit }' /etc/os-release)
+DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 
 ##################
 # CORE
@@ -195,7 +195,7 @@ case "${DISTRO}" in
     arch)
 
         # CORE
-        pacman -S --needed \
+        pacman --sync --needed \
             core/filesystem \
             core/iana-etc \
             core/glibc \
@@ -205,7 +205,7 @@ case "${DISTRO}" in
             core/systemd{,-sysvcompat}
 
         # SHELL
-        pacman -S --needed \
+        pacman --sync --needed \
             core/bash \
             extra/bash-completion \
             extra/zsh{,-doc} \
@@ -215,7 +215,7 @@ case "${DISTRO}" in
             community/shellcheck
 
         # UTIL
-        pacman -S --needed \
+        pacman --sync --needed \
             core/binutils \
             core/bzip2 \
             core/diffutils \
@@ -249,7 +249,7 @@ case "${DISTRO}" in
             core/zstd
 
         # SYSADMIN
-        pacman -S --needed \
+        pacman --sync --needed \
             core/cronie \
             core/cryptsetup \
             extra/dkms \
@@ -284,7 +284,7 @@ case "${DISTRO}" in
             core/xfsprogs
 
         # NETWORK OPERATOR
-        pacman -S --needed \
+        pacman --sync --needed \
             extra/bind-tools \
             core/bridge-utils \
             core/ca-certificates{,-mozilla,-utils} \
@@ -326,7 +326,7 @@ case "${DISTRO}" in
             community/wireguard-{dkms,tools}
 
         # PLT
-        pacman -S --needed \
+        pacman --sync --needed \
             core/gcc \
             extra/gdb \
             extra/valgrind \
@@ -347,7 +347,7 @@ case "${DISTRO}" in
             community/rust{,-docs}
 
         # GAME
-        pacman -S --needed \
+        pacman --sync --needed \
             community/cmatrix \
             extra/cowsay \
             community/fortune-mod \
@@ -356,7 +356,7 @@ case "${DISTRO}" in
             community/sl
 
         # DevOps
-        pacman -S --needed \
+        pacman --sync --needed \
             community/ansible{,-lint} \
             community/certbot \
             extra/dnsmasq \
@@ -382,9 +382,9 @@ case "${DISTRO}" in
         systemctl enable --now \
             docker.service
 
-        pacman -Fl \
+        pacman --files --list \
             openssh \
-            | awk -F '[/ ]' '/usr\/lib\/systemd\/.*\/.*\..*/ { printf "%-24s%s\n", $1, $NF }'
+            | awk --field-separator '[/ ]' '/usr\/lib\/systemd\/.*\/.*\..*/ { printf "%-24s%s\n", $1, $NF }'
 
         ;;
     kali)
@@ -574,8 +574,8 @@ case "${DISTRO}" in
             qemu-utils \
             virtinst
 
-        curl -L 'https://download.docker.com/linux/debian/gpg' | apt-key add -
-        rm -fv /etc/apt/trusted.gpg~
+        curl --location 'https://download.docker.com/linux/debian/gpg' | apt-key add -
+        rm --force --recursive /etc/apt/trusted.gpg~
         ## docker [official]
         tee /etc/apt/sources.list.d/docker.list << 'EOF'
 deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
@@ -587,8 +587,8 @@ EOF
         apt update --list-cleanup
         apt install docker-ce
 
-        curl -L 'https://repo.saltstack.com/apt/debian/9/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
-        rm -fv /etc/apt/trusted.gpg~
+        curl --location 'https://repo.saltstack.com/apt/debian/9/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
+        rm --force --recursive /etc/apt/trusted.gpg~
         ## saltstack [official]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
 deb [arch=amd64] http://repo.saltstack.com/apt/debian/9/amd64/latest stretch main
@@ -612,7 +612,7 @@ EOF
 
         dpkg --listfiles \
             openssh-server \
-            | awk -F '[/ ]' '/\/lib\/systemd\/.*\/.*\..*/ { printf "%s\n", $NF }'
+            | awk --field-separator '[/ ]' '/\/lib\/systemd\/.*\/.*\..*/ { printf "%s\n", $NF }'
 
         ;;
     ubuntu)
@@ -801,8 +801,8 @@ EOF
             qemu-utils \
             virtinst
 
-        curl -L 'https://download.docker.com/linux/ubuntu/gpg' | apt-key add -
-        rm -fv /etc/apt/trusted.gpg~
+        curl --location 'https://download.docker.com/linux/ubuntu/gpg' | apt-key add -
+        rm --force --recursive /etc/apt/trusted.gpg~
         ## docker [official]
         tee /etc/apt/sources.list.d/docker.list << 'EOF'
 deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
@@ -814,8 +814,8 @@ EOF
         apt update --list-cleanup
         apt install docker-ce
 
-        curl -L 'https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
-        rm -fv /etc/apt/trusted.gpg~
+        curl --location 'https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
+        rm --force --recursive /etc/apt/trusted.gpg~
         ## saltstack [official]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
 deb [arch=amd64] http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main
@@ -839,7 +839,7 @@ EOF
 
         dpkg --listfiles \
             openssh-server \
-            | awk -F '[/ ]' '/\/lib\/systemd\/.*\/.*\..*/ { printf "%s\n", $NF }'
+            | awk --field-separator '[/ ]' '/\/lib\/systemd\/.*\/.*\..*/ { printf "%s\n", $NF }'
 
             ;;
     *)

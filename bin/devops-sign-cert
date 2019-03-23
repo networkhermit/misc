@@ -27,9 +27,9 @@ while (( $# > 0 )); do
             break
             ;;
         --help)
-            cat << 'EOF'
+            cat << EOF
 Usage:
-    devops-sign-cert [options] COMMON_NAME
+    ${0##*/} [options] COMMON_NAME
 
 Options:
     --digest

@@ -5,7 +5,7 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-if [ $# != 2 ]; then
+if (( $# != 2 )); then
     exit
 fi
 
@@ -15,7 +15,7 @@ INSTALLER_PARAMETER=(--extra-args 'console=ttyS0,115200n8 nameserver=1.0.0.1')
 
 case "${1}" in
     arch)
-        IMAGE=$(find images/ -type f -name 'archlinux-*-x86_64.iso' | sort --version-sort | tail -n1)
+        IMAGE=$(find images/ -type f -name 'archlinux-*-x86_64.iso' | sort --version-sort | tail --lines 1)
 
         EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
         EXTRA_ARGUMENT+=(--os-variant auto)
@@ -53,6 +53,6 @@ virt-install \
     --name "${2}" \
     --network network=default \
     --os-type linux \
-    --vcpus=2,maxvcpus=4 \
+    --vcpus 2,maxvcpus=4 \
     --virt-type kvm \
     "${EXTRA_ARGUMENT[@]}"
