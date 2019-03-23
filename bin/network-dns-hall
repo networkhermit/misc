@@ -1,12 +1,22 @@
 #!/bin/bash
 
-echo -e '\n[ cloudflare ]\n'
+cat << 'EOF'
+
+[ cloudflare ]
+
+EOF
+
 dig \
     1dot1dot1dot1.cloudflare-dns.com a 1dot1dot1dot1.cloudflare-dns.com aaaa \
     +short \
     | sed 's/^/\t/'
 
-echo -e '\n[ opendns ]\n'
+cat << 'EOF'
+
+[ opendns ]
+
+EOF
+
 dig \
     resolver1.opendns.com a resolver1.opendns.com aaaa \
     resolver2.opendns.com a resolver2.opendns.com aaaa \
@@ -15,7 +25,12 @@ dig \
     +short \
     | sed 's/^/\t/'
 
-echo -e '\n[ quad9 ]\n'
+cat << 'EOF'
+
+[ quad9 ]
+
+EOF
+
 dig \
     dns.quad9.net a dns.quad9.net aaaa \
     dns-nosec.quad9.net a dns-nosec.quad9.net aaaa \

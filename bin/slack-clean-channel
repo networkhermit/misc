@@ -5,13 +5,13 @@ source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/slack.cfg"
 
 export past=${past:=86400}
 
-list=$(curl -sS -X GET \
-    -H 'Authorization: Bearer '"${TOKEN}" \
-    -G \
-    -d 'channel='"${CHANNEL}" \
-    -d 'count=100' \
-    -d 'inclusive=true' \
-    -d 'oldest=0.000001' \
+list=$(curl --silent --show-error --request GET \
+    --header 'Authorization: Bearer '"${TOKEN}" \
+    --get \
+    --data 'channel='"${CHANNEL}" \
+    --data 'count=100' \
+    --data 'inclusive=true' \
+    --data 'oldest=0.000001' \
     'https://slack.com/api/channels.history' \
     | python3 -c '
 import json
@@ -35,10 +35,10 @@ fi
 
 for i in ${list}; do
 
-    curl -sS -X DELETE \
-        -H 'Authorization: Bearer '"${TOKEN}" \
-        -d 'channel='"${CHANNEL}" \
-        -d 'ts='"${i}" \
+    curl --silent --show-error --request DELETE \
+        --header 'Authorization: Bearer '"${TOKEN}" \
+        --data 'channel='"${CHANNEL}" \
+        --data 'ts='"${i}" \
         'https://slack.com/api/chat.delete' \
         | python3 -c '
 import json

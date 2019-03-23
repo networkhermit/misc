@@ -5,8 +5,8 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-netstat -tuwnlp
+netstat --tcp --udp --raw --listening --numeric --programs
 
 echo "=========================================="
 
-ss -tuwnlp
+ss --tcp --udp --raw --listening --numeric --processes

@@ -6,7 +6,7 @@ set -o pipefail
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/namecheap.cfg"
 
-CURRENCY_RATE=$(curl -sS -X GET "https://free.currencyconverterapi.com/api/v6/convert?q=USD_CNY&compact=ultra&apiKey=${CURRENCY_CONVERTER_API_KEY}" | awk --field-separator '[{:}]' '{ print $3 }')
+CURRENCY_RATE=$(curl --silent --show-error --request GET "https://free.currencyconverterapi.com/api/v6/convert?q=USD_CNY&compact=ultra&apiKey=${CURRENCY_CONVERTER_API_KEY}" | awk --field-separator '[{:}]' '{ print $3 }')
 PUBLIC_IP_ADDRESS=$(dig myip.opendns.com @208.67.222.222 a +short)
 REQUEST_API_METHOD='namecheap.users.getPricing'
 
@@ -25,18 +25,18 @@ EOF
 
     xmllint --xpath '//*[local-name()="Price"]/@*[name()="Price" or name()="YourPrice"]' \
         <(
-        curl -sS -X GET \
-            -G \
-            -d ApiKey="${API_KEY}" \
-            -d ApiUser="${API_USER}" \
-            -d ClientIp="${PUBLIC_IP_ADDRESS}" \
-            -d UserName="${USER_NAME}" \
-            -d Command=${REQUEST_API_METHOD} \
-            -d ActionName=RENEW \
-            -d ProductName="${i}" \
-            -d ProductType=DOMAIN \
+        curl --silent --show-error --request GET \
+            --get \
+            --data ApiKey="${API_KEY}" \
+            --data ApiUser="${API_USER}" \
+            --data ClientIp="${PUBLIC_IP_ADDRESS}" \
+            --data UserName="${USER_NAME}" \
+            --data Command=${REQUEST_API_METHOD} \
+            --data ActionName=RENEW \
+            --data ProductName="${i}" \
+            --data ProductType=DOMAIN \
             'https://api.namecheap.com/xml.response'
         ) \
-        | xargs -n 2 | awk -v rate="${CURRENCY_RATE}" --field-separator '[ =]' '{ printf "%.2f, %.2f\n", $2 * rate, $4 * rate }' | nl
+        | xargs --max-args 2 | awk --assign rate="${CURRENCY_RATE}" --field-separator '[ =]' '{ printf "%.2f, %.2f\n", $2 * rate, $4 * rate }' | nl
 
 done

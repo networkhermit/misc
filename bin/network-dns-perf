@@ -30,5 +30,5 @@ COUNT=${COUNT:=64}
 NAMESERVER=$(awk '/nameserver/ { print $2 }' /etc/resolv.conf)
 
 for i in ${NAMESERVER}; do
-    fping -c "${COUNT}" -q "${i}"
+    fping --count "${COUNT}" --quiet "${i}"
 done

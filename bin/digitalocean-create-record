@@ -3,10 +3,10 @@
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/digitalocean.cfg"
 
-curl -sS -X POST \
-    -H 'Authorization: Bearer '"${AUTH_TOKEN}" \
-    -H 'Content-Type: application/json' \
-    -d @- << 'EOF' \
+curl --silent --show-error --request POST \
+    --header 'Authorization: Bearer '"${AUTH_TOKEN}" \
+    --header 'Content-Type: application/json' \
+    --data @- << 'EOF' \
     "https://api.digitalocean.com/v2/domains/${DOMAIN}/records" \
     | python3 -m json.tool
 

@@ -38,7 +38,7 @@ func main() {
         log.Fatal(err)
     }
 
-    req.Header.Set("User-Agent", "curl/7.63.0")
+    req.Header.Set("User-Agent", "curl/7.64.0")
     req.Header.Set("Authorization", "Bearer " + auth.TOKEN)
 
     res, err := clent.Do(req)

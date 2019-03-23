@@ -19,7 +19,7 @@ dig myip.opendns.com @208.67.220.220 a +short
 
 echo "[ amazonaws ]"
 
-curl -sS 'https://checkip.amazonaws.com'
+curl --silent --show-error 'https://checkip.amazonaws.com'
 
 echo "[ google ]"
 
@@ -30,7 +30,7 @@ dig o-o.myaddr.l.google.com @216.239.34.10 txt +short
 
 echo "[ ipv4 ]"
 
-ip -4 address | awk '/\<inet\>/ { print $2 }' | sort -t '/' -k 1,1V -k 2,2n
+ip -4 address | awk '/\<inet\>/ { print $2 }' | sort --field-separator '/' --key 1,1V --key 2,2n
 
 echo "[ ipv6 ]"
 

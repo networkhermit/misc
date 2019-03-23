@@ -13,7 +13,7 @@ TEXT=$'```\n'"${TEXT}"$'```\n'
 
 TEXT=$(python3 -c 'import json, sys; print(json.dumps(sys.stdin.read()))' <<< "${TEXT}")
 
-curl -sS -X POST \
-    -H 'Content-Type: application/json' \
-    -d '{"mrkdwn": true, "text": '"${TEXT}"'}' \
+curl --silent --show-error --request POST \
+    --header 'Content-Type: application/json' \
+    --data '{"mrkdwn": true, "text": '"${TEXT}"'}' \
     "${END_POINT}"

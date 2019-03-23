@@ -11,12 +11,12 @@ done
 
 TEXT=$'```text\n'"${TEXT}"$'```\n'
 
-curl -sS -X POST \
+curl --silent --show-error --request POST \
     --data-urlencode 'content='"${TEXT}" \
-    -d 'subject=notice' \
-    -d 'to=no-ip' \
-    -d 'type=stream' \
-    -u "${BOT_EMAIL_ADDRESS}:${BOT_API_KEY}" \
+    --data 'subject=notice' \
+    --data 'to=no-ip' \
+    --data 'type=stream' \
+    --user "${BOT_EMAIL_ADDRESS}:${BOT_API_KEY}" \
     'https://'"${ORGANIZATION}"'.zulipchat.com/api/v1/messages' \
     | python3 -c '
 import json

@@ -7,11 +7,11 @@ fi
 
 DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 
-uname -mrv
+uname --machine --kernel-release --kernel-version
 
 case "${DISTRO}" in
     arch)
-        pacman -Q 'linux'
+        pacman --query 'linux'
         ;;
     kali | ubuntu)
         dpkg --get-selections 'linux-image-[0-9]*' | tac

@@ -11,7 +11,7 @@ done
 
 TEXT=$(python3 -c 'import json, sys; print(json.dumps(sys.stdin.read()))' <<< "${TEXT}")
 
-curl -sS -X POST \
-    -H 'Content-Type: application/json' \
-    -d '{"message": '"${TEXT}"', "priority": 5, "title": "notice"}' \
+curl --silent --show-error --request POST \
+    --header 'Content-Type: application/json' \
+    --data '{"message": '"${TEXT}"', "priority": 5, "title": "notice"}' \
     "${END_POINT}/message?token=${APP_TOKEN}"
