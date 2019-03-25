@@ -13,7 +13,7 @@ get_image_list () {
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8+/metrics-server-deployment.yaml' | awk '/\<image\>/ { print $2 }')
 }
 
-rebrand_image () {
+construct_image () {
     if (( $# != 2 )); then
         return 1
     fi
@@ -41,7 +41,7 @@ printf '%s\0' "${arr[@]}" | xargs --max-args 1 --null sudo docker image pull
 arr=()
 get_image_list arr
 for i in "${arr[@]}"; do
-    rebrand_image "${i}" registry.cn-shanghai.aliyuncs.com/qubit
+    construct_image "${i}" registry.cn-shanghai.aliyuncs.com/qubit
 done
 
 ## pull container images from [qingcloud]
@@ -49,7 +49,7 @@ sudo docker login --username sherlock --password-stdin dockerhub.qingcloud.com <
 arr=()
 get_image_list arr
 for i in "${arr[@]}"; do
-    rebrand_image "${i}" dockerhub.qingcloud.com/qubit
+    construct_image "${i}" dockerhub.qingcloud.com/qubit
 done
 sudo docker logout dockerhub.qingcloud.com
 
