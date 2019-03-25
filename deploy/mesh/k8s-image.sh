@@ -1,46 +1,59 @@
 #!/bin/bash
 
+get_image_list () {
+    if (( $# != 1 )); then
+        return 1
+    fi
+
+    local -n arr_ref=$1
+
+    arr_ref=()
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml' | awk '/\<image\>/ { print $2 }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8+/metrics-server-deployment.yaml' | awk '/\<image\>/ { print $2 }')
+}
+
+rebrand_image () {
+    if (( $# != 2 )); then
+        return 1
+    fi
+
+    local image
+    image=$(echo "${1}" | awk --field-separator '/' '{ print $NF }')
+
+    sudo docker image pull "${2}/${image}"
+    sudo docker image tag "${2}/${image}" "${1}"
+    sudo docker image rm "${2}/${image}"
+}
+
 # print k8s.gcr.io images kubernetes will use
-kubeadm config images list --kubernetes-version "$(kubeadm version --output short)"
-curl --location --silent 'https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml' | awk '/\<image\>/ { print $2 }'
-curl --location --silent 'https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8+/metrics-server-deployment.yaml' | awk '/\<image\>/ { print $2 }'
+arr=()
+get_image_list arr
+printf '%s\n' "${arr[@]}"
 
-# pull container images from k8s.gcr.io
+## pull container images from [gcr]
 sudo kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
-sudo docker image pull "$(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml' | awk '/\<image\>/ { print $2 }')"
-sudo docker image pull "$(curl --location --silent 'https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8+/metrics-server-deployment.yaml' | awk '/\<image\>/ { print $2 }')"
+arr=()
+get_image_list arr
+printf '%s\0' "${arr[@]}" | xargs --max-args 1 --null sudo docker image pull
 
-# pull container images from [aliyun]
-mapfile -O ${#arr[@]} -t arr < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
-mapfile -O ${#arr[@]} -t arr < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml' | awk '/\<image\>/ { print $2 }')
-mapfile -O ${#arr[@]} -t arr < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8+/metrics-server-deployment.yaml' | awk '/\<image\>/ { print $2 }')
+## pull container images from [aliyun]
+arr=()
+get_image_list arr
 for i in "${arr[@]}"; do
-    IMAGE=$(echo "${i}" | awk --field-separator '/' '{ print $2 }')
-    sudo docker image pull registry.cn-shanghai.aliyuncs.com/qubit/"${IMAGE}"
-    sudo docker image tag registry.cn-shanghai.aliyuncs.com/qubit/"${IMAGE}" "${i}"
-    sudo docker image rm registry.cn-shanghai.aliyuncs.com/qubit/"${IMAGE}"
+    rebrand_image "${i}" registry.cn-shanghai.aliyuncs.com/qubit
 done
-unset arr
 
-# pull container images from [qingcloud]
+## pull container images from [qingcloud]
 sudo docker login --username sherlock --password-stdin dockerhub.qingcloud.com <<< 'IoSiUICUCHXzJ53sF0qJqC1vNJGfTyze'
-mapfile -O ${#arr[@]} -t arr < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
-mapfile -O ${#arr[@]} -t arr < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml' | awk '/\<image\>/ { print $2 }')
-mapfile -O ${#arr[@]} -t arr < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8+/metrics-server-deployment.yaml' | awk '/\<image\>/ { print $2 }')
+arr=()
+get_image_list arr
 for i in "${arr[@]}"; do
-    IMAGE=$(echo "${i}" | awk --field-separator '/' '{ print $2 }')
-    sudo docker image pull dockerhub.qingcloud.com/qubit/"${IMAGE}"
-    sudo docker image tag dockerhub.qingcloud.com/qubit/"${IMAGE}" "${i}"
-    sudo docker image rm dockerhub.qingcloud.com/qubit/"${IMAGE}"
+    rebrand_image "${i}" dockerhub.qingcloud.com/qubit
 done
-unset arr
 sudo docker logout dockerhub.qingcloud.com
 
 # inspect container images
-mapfile -O ${#arr[@]} -t arr < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
-mapfile -O ${#arr[@]} -t arr < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml' | awk '/\<image\>/ { print $2 }')
-mapfile -O ${#arr[@]} -t arr < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8+/metrics-server-deployment.yaml' | awk '/\<image\>/ { print $2 }')
-for i in "${arr[@]}"; do
-    sudo docker image inspect --format '{{.Id}} {{.RepoTags}}' "${i}"
-done
-unset arr
+arr=()
+get_image_list arr
+printf '%s\0' "${arr[@]}" | xargs --max-args 1 --null sudo docker image inspect --format '{{.Id}} {{.RepoTags}}'

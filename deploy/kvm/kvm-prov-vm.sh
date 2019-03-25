@@ -6,7 +6,7 @@ if (( EUID != 0 )); then
 fi
 
 if (( $# != 2 )); then
-    exit
+    exit 1
 fi
 
 EXTRA_ARGUMENT=()
