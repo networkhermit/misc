@@ -4,15 +4,13 @@
 #
 # PodSpec = container manifest
 #
+# https://kubectl.docs.kubernetes.io
 # https://kubernetes.io/docs/concepts
 # https://kubernetes.io/docs/reference
-# https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13
 # https://kubernetes.io/docs/reference/glossary
 # https://kubernetes.io/docs/setup
-# https://kubernetes.io/docs/tasks
-# https://kubernetes.io/docs/tutorials
 #
-# https://git.k8s.io/community/contributors/devel/api-conventions.md
+# https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md
 #
 
 # verify uniqueness of node

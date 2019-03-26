@@ -8,8 +8,11 @@ source /etc/skel/.bashrc
 
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-    *) return;;
+    *i*)
+        ;;
+    *)
+        return
+        ;;
 esac
 
 PS1='\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
@@ -57,24 +60,24 @@ alias acp='scp -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHos
 alias ash='ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias bs='find . -type l -exec [ ! -e '\'{}\'' ] \; -print'
 alias ccat='pygmentize -g'
-alias clip='xclip -sel clip <'
+alias clip='xclip -selection clip <'
 alias d='cd - &> /dev/null'
 alias diff='diff --color=auto'
-alias e='exa -F1'
-alias ea='exa -a'
-alias el='exa -Hgl --time-style=long-iso'
+alias e='exa --classify --oneline'
+alias ea='exa --all'
+alias el='exa --links --group --long --time-style long-iso'
 alias grep='grep --color=auto'
 alias i='who'
-alias ip='ip -c'
+alias ip='ip -color=auto'
 alias json='python3 -B -W:all -m json.tool --sort-keys'
 alias k='tree'
-alias l='ls -F1'
-alias la='ls -A'
-alias le='exa --color=auto'
-alias ll='ls -hl --time-style=long-iso'
+alias l='ls --classify -1'
+alias la='ls --almost-all'
+alias le='exa --color auto'
+alias ll='ls --human-readable -l --time-style long-iso'
 alias ls='ls --color=auto'
-alias n='cd .; clear; fortune | cowsay -f www; date -u "+%F %T %z" -d "now $(((RANDOM % 2)); echo + || echo -) $RANDOM days"; history -cw; rm -f ~/.bash_history'
-alias pass='echo $(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/[:space:]" | dd bs=32 count=1 2>/dev/null)'
+alias n='cd .; clear; fortune | cowsay -f www; date --utc "+%F %T %z" --date "now $(((RANDOM % 2)); echo + || echo -) $RANDOM days"; history -cw; rm --force ~/.bash_history'
+alias pass='echo $(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr --delete "=+/[:space:]" | dd bs=32 count=1 2>/dev/null)'
 alias s='cd ..'
 alias sc='shellcheck'
 alias sha='sha256sum'
