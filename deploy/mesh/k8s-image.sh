@@ -37,6 +37,13 @@ arr=()
 get_image_list arr
 printf '%s\0' "${arr[@]}" | xargs --max-args 1 --null sudo docker image pull
 
+## pull container images from [azure]
+arr=()
+get_image_list arr
+for i in "${arr[@]}"; do
+    construct_image "${i}" gcr.azk8s.cn/google_containers
+done
+
 ## pull container images from [aliyun]
 arr=()
 get_image_list arr

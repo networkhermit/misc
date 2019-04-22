@@ -1,8 +1,16 @@
 #!/bin/bash
 
+KUBERNETES_VERSION=''
+
+if [ -n "${KUBERNETES_VERSION}" ]; then
+    for i in kube{adm,ctl,let}; do
+        K8S_PKG_VER["${i}"]=$(apt-cache madison "${i}" | grep "${KUBERNETES_VERSION}" | awk '{ print $3 }')
+    done
+fi
+
 sudo apt update --list-cleanup
 
-sudo apt install --allow-change-held-packages --assume-yes kubeadm < /dev/null
+sudo apt install --allow-change-held-packages --assume-yes kubeadm${K8S_PKG_VER:+=${K8S_PKG_VER[kubeadm]}} < /dev/null
 sudo apt-mark hold kubeadm
 
 kubeadm config images list --kubernetes-version "$(kubeadm version --output short)"
@@ -11,7 +19,7 @@ kubeadm config images list --kubernetes-version "$(kubeadm version --output shor
 sudo kubeadm upgrade plan
 sudo kubeadm upgrade apply "$(kubeadm version --output short)" --yes
 
-sudo apt install --allow-change-held-packages --assume-yes kubectl < /dev/null
+sudo apt install --allow-change-held-packages --assume-yes kubectl${K8S_PKG_VER:+=${K8S_PKG_VER[kubectl]}} < /dev/null
 sudo apt-mark hold kubectl
 
 # master node only
@@ -19,7 +27,7 @@ kubectl --namespace kube-system delete daemonsets kube-proxy
 
 kubectl drain "${HOSTNAME,,}" --delete-local-data --ignore-daemonsets
 
-sudo apt install --allow-change-held-packages --assume-yes kubelet < /dev/null
+sudo apt install --allow-change-held-packages --assume-yes kubelet${K8S_PKG_VER:+=${K8S_PKG_VER[kubelet]}} < /dev/null
 sudo apt-mark hold kubelet
 
 # worker node only

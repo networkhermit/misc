@@ -22,9 +22,21 @@ sudo tee /etc/apt/sources.list.d/kubernetes.list << 'EOF'
 deb https://mirrors.ustc.edu.cn/kubernetes/apt kubernetes-xenial main
 EOF
 
+KUBERNETES_VERSION=''
+
+if [ -n "${KUBERNETES_VERSION}" ]; then
+    for i in kube{adm,ctl,let}; do
+        K8S_PKG_VER["${i}"]=$(apt-cache madison "${i}" | grep "${KUBERNETES_VERSION}" | awk '{ print $3 }')
+    done
+fi
+
 # install kubernetes packages
 sudo apt update --list-cleanup
-sudo apt install --allow-change-held-packages --assume-yes kube{adm,ctl,let} < /dev/null
+sudo apt install --allow-change-held-packages --assume-yes \
+    kubeadm${K8S_PKG_VER:+=${K8S_PKG_VER[kubeadm]}} \
+    kubectl${K8S_PKG_VER:+=${K8S_PKG_VER[kubectl]}} \
+    kubelet${K8S_PKG_VER:+=${K8S_PKG_VER[kubelet]}} \
+    < /dev/null
 sudo apt-mark hold kube{adm,ctl,let}
 sudo apt-mark showhold
 sudo systemctl disable --now kubelet.service
