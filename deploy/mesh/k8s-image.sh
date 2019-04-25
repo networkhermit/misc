@@ -10,6 +10,7 @@ get_image_list () {
     arr_ref=()
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml' | awk '/\<image\>/ { print $2 }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/kube-state-metrics/master/kubernetes/kube-state-metrics-deployment.yaml' | awk '/\<image\>/ { print $2 }')
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8+/metrics-server-deployment.yaml' | awk '/\<image\>/ { print $2 }')
 }
 
@@ -43,22 +44,6 @@ get_image_list arr
 for i in "${arr[@]}"; do
     construct_image "${i}" gcr.azk8s.cn/google_containers
 done
-
-## pull container images from [aliyun]
-arr=()
-get_image_list arr
-for i in "${arr[@]}"; do
-    construct_image "${i}" registry.cn-shanghai.aliyuncs.com/qubit
-done
-
-## pull container images from [qingcloud]
-sudo docker login --username sherlock --password-stdin dockerhub.qingcloud.com <<< 'IoSiUICUCHXzJ53sF0qJqC1vNJGfTyze'
-arr=()
-get_image_list arr
-for i in "${arr[@]}"; do
-    construct_image "${i}" dockerhub.qingcloud.com/qubit
-done
-sudo docker logout dockerhub.qingcloud.com
 
 # inspect container images
 arr=()

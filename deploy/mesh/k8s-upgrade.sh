@@ -2,13 +2,13 @@
 
 KUBERNETES_VERSION=''
 
+sudo apt update --list-cleanup
+
 if [ -n "${KUBERNETES_VERSION}" ]; then
     for i in kube{adm,ctl,let}; do
         K8S_PKG_VER["${i}"]=$(apt-cache madison "${i}" | grep "${KUBERNETES_VERSION}" | awk '{ print $3 }')
     done
 fi
-
-sudo apt update --list-cleanup
 
 sudo apt install --allow-change-held-packages --assume-yes kubeadm${K8S_PKG_VER:+=${K8S_PKG_VER[kubeadm]}} < /dev/null
 sudo apt-mark hold kubeadm

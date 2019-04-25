@@ -13,26 +13,14 @@ transfer_image () {
     sudo docker image rm "${2}/${image}"
 }
 
-## push k8s.gcr.io images to [aliyun]
+## push k8s.gcr.io images to [${REGISTRY}]
 
-sudo docker login --username dot.fun@protonmail.com registry.cn-shanghai.aliyuncs.com
-
-arr=()
-get_image_list arr
-for i in "${arr[@]}"; do
-    transfer_image "${i}" registry.cn-shanghai.aliyuncs.com/qubit
-done
-
-sudo docker logout registry.cn-shanghai.aliyuncs.com
-
-## push k8s.gcr.io images to [qingcloud]
-
-sudo docker login --username vac dockerhub.qingcloud.com
+sudo docker login --username "${USERNAME}" "${REGISTRY}"
 
 arr=()
 get_image_list arr
 for i in "${arr[@]}"; do
-    transfer_image "${i}" dockerhub.qingcloud.com/qubit
+    transfer_image "${i}" "${REGISTRY}/${NAMESPACE}"
 done
 
-sudo docker logout dockerhub.qingcloud.com
+sudo docker logout "${REGISTRY}"

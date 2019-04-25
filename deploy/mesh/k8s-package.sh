@@ -3,35 +3,29 @@
 # trust google cloud package signing key
 ## google repository
 curl --location https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-## aliyun repository
-curl --location https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
-## ubuntu keyserver
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com --search-keys 54A647F9048D5688D7DA2ABE6A030B21BA07F4FB
+## azure repository
+curl --location https://mirror.azure.cn/kubernetes/packages/apt/doc/apt-key.gpg | sudo apt-key add -
 
 # add kubernetes repository
 ## [official]
-sudo tee /etc/apt/sources.list.d/kubernetes.list << 'EOF'
-deb https://packages.cloud.google.com/apt kubernetes-xenial main
-EOF
-## [aliyun]
-sudo tee /etc/apt/sources.list.d/kubernetes.list << 'EOF'
-deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
-EOF
+SOURCE_URI='https://packages.cloud.google.com/apt'
+## [azure]
+SOURCE_URI='https://mirror.azure.cn/kubernetes/packages/apt'
 ## [ustc]
-sudo tee /etc/apt/sources.list.d/kubernetes.list << 'EOF'
-deb https://mirrors.ustc.edu.cn/kubernetes/apt kubernetes-xenial main
+SOURCE_URI='https://mirrors.ustc.edu.cn/kubernetes/apt'
+sudo tee /etc/apt/sources.list.d/kubernetes.list << EOF
+deb ${SOURCE_URI} kubernetes-xenial main
 EOF
 
 KUBERNETES_VERSION=''
 
+# install kubernetes packages
+sudo apt update --list-cleanup
 if [ -n "${KUBERNETES_VERSION}" ]; then
     for i in kube{adm,ctl,let}; do
         K8S_PKG_VER["${i}"]=$(apt-cache madison "${i}" | grep "${KUBERNETES_VERSION}" | awk '{ print $3 }')
     done
 fi
-
-# install kubernetes packages
-sudo apt update --list-cleanup
 sudo apt install --allow-change-held-packages --assume-yes \
     kubeadm${K8S_PKG_VER:+=${K8S_PKG_VER[kubeadm]}} \
     kubectl${K8S_PKG_VER:+=${K8S_PKG_VER[kubectl]}} \
