@@ -591,7 +591,7 @@ EOF
         rm --force --recursive /etc/apt/trusted.gpg~
         ## saltstack [official]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] http://repo.saltstack.com/apt/debian/9/amd64/latest stretch main
+deb [arch=amd64] https://repo.saltstack.com/apt/debian/9/amd64/latest stretch main
 EOF
         ## saltstack [tsinghua]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
@@ -818,7 +818,7 @@ EOF
         rm --force --recursive /etc/apt/trusted.gpg~
         ## saltstack [official]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main
+deb [arch=amd64] https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main
 EOF
         ## saltstack [tsinghua]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
