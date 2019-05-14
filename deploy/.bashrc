@@ -33,6 +33,7 @@ complete -cf man
 shopt -s autocd
 shopt -s cmdhist
 shopt -s histappend
+shopt -s histverify
 
 # BASIC
 export EDITOR=vim
