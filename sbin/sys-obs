@@ -19,11 +19,9 @@ case "${DISTRO}" in
         ;;
     kali | ubuntu)
         echo '------ [ package ] ------'
-        #apt list --installed 2> /dev/null | grep --word-regexp 'local' | column -t
-        #dpkg-query --list | grep '^rc\s'
         apt list 2> /dev/null | grep --word-regexp '\(local\|residual-config\)]' | column -t
         echo '------ [ configuration ] ------'
-        find /etc -type f \( -iregex '.*\.dpkg-\(dist\|new\|old\)' -o -iregex '.*\.ucf-\(dist\|new\|old\)' \)
+        find /etc -type f \( -iregex '.*\.dpkg-\(dist\|new\|old\)' -o -iregex '.*\.ucf-\(dist\|new\|old\)' \) -print0 | sort --zero-terminated
         dpkg-query --show --showformat '${Package}\n${Conffiles}\n' | awk '/^[^ ]/{pkg=$1}/ obsolete$/{print pkg,$0}' | column -t
         ;;
     *)
