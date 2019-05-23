@@ -47,6 +47,7 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 #       grep
 #       gzip
 #       less
+#       lynx
 #       lz4
 #       lzop
 #       moreutils
@@ -228,6 +229,7 @@ case "${DISTRO}" in
             core/grep \
             core/gzip \
             core/less \
+            extra/lynx \
             core/lz4 \
             extra/lzop \
             community/moreutils \
@@ -426,6 +428,7 @@ case "${DISTRO}" in
             grep \
             gzip \
             less \
+            lynx \
             lz4 \
             lzop \
             moreutils \
@@ -653,6 +656,7 @@ EOF
             grep \
             gzip \
             less \
+            lynx \
             lz4 \
             lzop \
             moreutils \
