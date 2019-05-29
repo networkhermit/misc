@@ -420,6 +420,7 @@ case "${DISTRO}" in
             bzip2 \
             diffutils{,-doc} \
             dosfstools \
+            exa \
             file \
             findutils \
             finger \
