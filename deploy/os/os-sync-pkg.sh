@@ -389,6 +389,22 @@ case "${DISTRO}" in
             | awk --field-separator '[/ ]' '/usr\/lib\/systemd\/.*\/.*\..*/ { printf "%-24s%s\n", $1, $NF }'
 
         ;;
+    fedora)
+
+        # DevOps
+
+        ## docker [official]
+        dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+        ## docker [tsinghua]
+        dnf config-manager --add-repo https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/fedora/docker-ce.repo
+        dnf makecache
+        dnf install docker-ce
+        dnf clean packages
+
+        systemctl enable --now \
+            docker.service
+
+        ;;
     kali)
 
         # CORE

@@ -13,6 +13,7 @@ sudo EDITOR=vim visudo
 # add default sysadmin
 sudo useradd --create-home --shell /bin/bash --uid 1000 vac
 sudo passwd vac
+sudo groupadd --gid 27 --system sudo
 sudo gpasswd --add vac sudo
 sudo groupadd --gid 64 --system sysadmin
 sudo gpasswd --add vac sysadmin
@@ -100,7 +101,6 @@ EOF
 sudo tee /etc/yum.repos.d/fedora.repo << 'EOF'
 [fedora]
 name=Fedora $releasever - $basearch
-failovermethod=priority
 baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Everything/$basearch/os/
 enabled=1
 metadata_expire=7d
@@ -113,7 +113,6 @@ EOF
 sudo tee /etc/yum.repos.d/fedora-updates.repo << 'EOF'
 [updates]
 name=Fedora $releasever - $basearch - Updates
-failovermethod=priority
 baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Everything/$basearch/
 enabled=1
 repo_gpgcheck=0
@@ -126,7 +125,6 @@ EOF
 sudo tee /etc/yum.repos.d/fedora-modular.repo << 'EOF'
 [fedora-modular]
 name=Fedora Modular $releasever - $basearch
-failovermethod=priority
 baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Modular/$basearch/os/
 enabled=1
 metadata_expire=7d
