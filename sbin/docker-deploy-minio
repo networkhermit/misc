@@ -22,7 +22,7 @@ docker run \
     --restart always \
     --volume /srv/minio:/root/.minio \
     --volume /srv/s3:/data \
-    minio/minio server --json /data
+    minio/minio --json server /data
 
 docker image prune --force
 docker container logs "${NAME}"
