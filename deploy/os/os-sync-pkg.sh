@@ -346,7 +346,7 @@ case "${DISTRO}" in
             extra/php \
             extra/python{,-pip,-virtualenv} \
             extra/ruby{,-docs} \
-            community/rust{,-docs}
+            extra/rust{,-docs}
 
         # GAME
         pacman --sync --needed \
@@ -548,8 +548,8 @@ case "${DISTRO}" in
 
         # PLT
         apt install \
-            gcc{,-doc} \
-            cpp{,-doc} \
+            gcc \
+            cpp \
             gdb{,-doc} \
             valgrind \
             g++ \
@@ -674,7 +674,7 @@ EOF
             gzip \
             less \
             lynx \
-            lz4 \
+            liblz4-tool \
             lzop \
             moreutils \
             most \
@@ -698,7 +698,7 @@ EOF
         # SYSADMIN
         apt install \
             cron \
-            cryptsetup-{run,initramfs} \
+            cryptsetup{,-bin} \
             dkms \
             e2fsprogs \
             exim4-daemon-light \
