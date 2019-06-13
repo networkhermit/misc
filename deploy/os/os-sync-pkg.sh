@@ -338,8 +338,8 @@ case "${DISTRO}" in
             community/erlang-{nox,docs} \
             community/go \
             community/ghc \
-            extra/jdk10-openjdk \
-            extra/openjdk10-doc \
+            extra/jdk-openjdk \
+            extra/openjdk-doc \
             extra/sbcl \
             community/nodejs \
             extra/ocaml \
@@ -553,8 +553,8 @@ case "${DISTRO}" in
             gdb{,-doc} \
             valgrind \
             g++ \
-            clang{,-format,-6.0-doc} \
-            llvm{,-6.0-doc} \
+            clang{,-format,-7-doc} \
+            llvm{,-7-doc} \
             elixir \
             erlang-{nox,doc} \
             golang{,-doc,-src} \
