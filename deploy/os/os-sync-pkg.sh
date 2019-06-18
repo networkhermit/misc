@@ -34,9 +34,13 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 
 ##################
 # UTIL
+#       at
+#       bc
 #       binutils
 #       bzip2
+#       cpio
 #       diffutils
+#       dos2unix
 #       dosfstools
 #       exa
 #       file
@@ -55,6 +59,7 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 #       ncurses
 #       pandoc
 #       parallel
+#       pigz
 #       pygmentize
 #       readline
 #       sed
@@ -71,9 +76,13 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 
 ##################
 # SYSADMIN
+#       acl
+#       btrfs-progs
 #       cronie
 #       cryptsetup
 #       dkms
+#       dmidecode
+#       device-mapper
 #       e2fsprogs
 #       exim
 #       fakeroot
@@ -95,8 +104,10 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 #       procps
 #       psmisc
 #       shadow
+#       smartmontools
 #       strace
 #       sudo
+#       syslogd
 #       sysstat
 #       thin-provisioning-tools
 #       tmux
@@ -110,10 +121,12 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 #       bind-tools
 #       bridge-utils
 #       ca-certificates
+#       chrony
 #       curl
 #       dhcp-client
 #       dns-root-data
 #       dnstracer
+#       ethtool
 #       fping
 #       geoip
 #       hostname
@@ -140,11 +153,14 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 #       sslscan
 #       swaks
 #       tcpdump
+#       telnet
 #       testssl.sh
 #       traceroute
 #       wget
 #       whois
-#       wireguard
+#       wireless-tools
+#       wireshark
+#       wpa-supplicant
 ##################
 
 ##################
@@ -190,6 +206,7 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 #       qemu-utils
 #       salt
 #       virtinst
+#       wireguard
 ##################
 
 case "${DISTRO}" in
@@ -217,9 +234,13 @@ case "${DISTRO}" in
 
         # UTIL
         pacman --sync --needed \
+            community/at \
+            extra/bc \
             core/binutils \
             core/bzip2 \
+            extra/cpio \
             core/diffutils \
+            community/dos2unix \
             core/dosfstools \
             community/exa \
             core/file \
@@ -237,6 +258,7 @@ case "${DISTRO}" in
             core/ncurses \
             community/pandoc \
             community/parallel \
+            community/pigz \
             community/pygmentize \
             core/readline \
             core/sed \
@@ -252,9 +274,13 @@ case "${DISTRO}" in
 
         # SYSADMIN
         pacman --sync --needed \
+            core/acl \
+            core/btrfs-progs \
             core/cronie \
             core/cryptsetup \
             extra/dkms \
+            extra/dmidecode \
+            core/device-mapper \
             core/e2fsprogs \
             community/exim \
             core/fakeroot \
@@ -276,8 +302,10 @@ case "${DISTRO}" in
             core/procps-ng \
             core/psmisc \
             core/shadow \
+            extra/smartmontools \
             extra/strace \
             core/sudo \
+            extra/syslog-ng \
             community/sysstat \
             core/thin-provisioning-tools \
             community/tmux \
@@ -290,11 +318,13 @@ case "${DISTRO}" in
             extra/bind-tools \
             core/bridge-utils \
             core/ca-certificates{,-mozilla,-utils} \
+            community/chrony \
             core/curl \
             core/dhcpcd \
             extra/dhclient \
             core/dnssec-anchors \
             community/dnstracer \
+            extra/ethtool \
             extra/fping \
             extra/geoip{,-database{,-extra}} \
             core/inetutils \
@@ -325,7 +355,9 @@ case "${DISTRO}" in
             core/traceroute \
             extra/wget \
             extra/whois \
-            community/wireguard-{dkms,tools}
+            core/wireless_tools \
+            community/wireshark-cli \
+            core/wpa_supplicant
 
         # PLT
         pacman --sync --needed \
@@ -372,7 +404,8 @@ case "${DISTRO}" in
             community/libpam-google-authenticator \
             extra/qemu-headless \
             community/salt \
-            community/virt-install
+            community/virt-install \
+            community/wireguard-{dkms,tools}
 
         systemctl disable --now \
             dnsmasq.service \
@@ -386,12 +419,213 @@ case "${DISTRO}" in
 
         pacman --files --list \
             openssh \
-            | awk --field-separator '[/ ]' '/usr\/lib\/systemd\/.*\/.*\..*/ { printf "%-24s%s\n", $1, $NF }'
+            | awk --field-separator '[/ ]' '/usr\/lib\/systemd\/.+\/.+\..+[^/]$/ { printf "%-24s%s\n", $1, $NF }'
+
+        pacman --files --owns /etc/bash.bashrc
 
         ;;
     fedora)
 
+        # CORE
+        dnf install \
+            basesystem \
+            filesystem \
+            rootfiles \
+            setup \
+            glibc{,-devel} \
+            kernel{,-devel,-headers} \
+            linux-firmware \
+            coreutils \
+            util-linux \
+            systemd \
+            initscripts
+
+        # SHELL
+        dnf install \
+            bash{,-completion,-doc} \
+            zsh \
+            man-{db,pages} \
+            info \
+            vim-enhanced \
+            ShellCheck
+
+        # UTIL
+        dnf install \
+            at \
+            bc \
+            binutils \
+            bzip2 \
+            cpio \
+            diffutils \
+            dos2unix \
+            dosfstools \
+            file \
+            findutils \
+            finger \
+            gawk{,-doc} \
+            gnupg2 \
+            grep \
+            gzip \
+            less \
+            lynx \
+            lz4 \
+            lzop \
+            moreutils \
+            most \
+            ncurses{,-base} \
+            pandoc \
+            parallel \
+            pigz \
+            python3-pygments \
+            readline \
+            sed \
+            tar \
+            time \
+            tree \
+            unzip \
+            which \
+            words \
+            xz \
+            zip \
+            zstd
+
+        # SYSADMIN
+        dnf install \
+            acl \
+            btrfs-progs \
+            cronie \
+            crontabs \
+            cryptsetup \
+            dkms \
+            dmidecode \
+            device-mapper \
+            e2fsprogs \
+            exim \
+            fakeroot \
+            hdparm \
+            htop \
+            dracut \
+            irqbalance \
+            keyutils \
+            kmod \
+            libosinfo \
+            lm_sensors \
+            logrotate \
+            redhat-lsb \
+            lsof \
+            lvm2 \
+            mdadm \
+            parted \
+            pciutils \
+            procps-ng \
+            psmisc \
+            passwd \
+            shadow-utils \
+            smartmontools \
+            strace \
+            sudo \
+            rsyslog{,-doc} \
+            syslog-ng \
+            sysstat \
+            device-mapper-persistent-data \
+            tmux \
+            tzdata \
+            usbutils \
+            xfsprogs
+
+        # NETWORK OPERATOR
+        dnf install \
+            bind-utils \
+            bridge-utils \
+            ca-certificates \
+            chrony \
+            curl \
+            dhcp-client \
+            dnstracer \
+            ethtool \
+            fping \
+            GeoIP{,-GeoLite-data{,-extra}} \
+            hostname \
+            httpie \
+            iperf3 \
+            iproute{,-doc} \
+            ipset \
+            iptables \
+            iputils \
+            ipvsadm \
+            ldns-utils \
+            mosh \
+            mtr \
+            net-tools \
+            nmap-ncat \
+            nftables \
+            nikto \
+            nmap \
+            ntp{,-doc} \
+            sntp \
+            openssh{,-clients,-server} \
+            openssl \
+            rsync \
+            socat \
+            sslscan \
+            swaks \
+            tcpdump \
+            telnet \
+            testssl \
+            traceroute \
+            wget \
+            whois \
+            wireless-tools \
+            wireshark-cli \
+            wpa_supplicant
+
+        # PLT
+        dnf install \
+            gcc \
+            cpp \
+            gdb{-doc,-headless} \
+            valgrind \
+            gcc-c++ \
+            clang \
+            llvm{,-doc} \
+            elixir{,-doc} \
+            erlang{,-doc} \
+            golang{,-docs,-src} \
+            ghc \
+            java-latest-openjdk{-headless,-javadoc} \
+            sbcl \
+            nodejs{,-docs} \
+            ocaml{,-docs} \
+            php \
+            python3{,-docs,-pip,-virtualenv} \
+            ruby{,-doc} \
+            rust{,-doc,-src} \
+            cargo{,-doc}
+
+        # GAME
+        dnf install \
+            cmatrix \
+            cowsay \
+            fortune-mod \
+            neofetch \
+            screenfetch \
+            sl
+
         # DevOps
+        dnf install \
+            ansible{,-doc} \
+            certbot \
+            dnsmasq \
+            git \
+            libguestfs-tools \
+            libvirt \
+            nginx \
+            oathtool \
+            pam \
+            qemu-img \
+            salt{,-{api,cloud,master,minion,ssh,syndic}} \
+            virt-install \
+            wireguard
 
         ## docker [official]
         dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -401,8 +635,21 @@ case "${DISTRO}" in
         dnf install docker-ce
         dnf clean packages
 
+        systemctl disable --now \
+            dnsmasq.service \
+            libvirt{d,-guests}.service \
+            nginx.service \
+            qemu-kvm.service \
+            salt-{api,master,minion,syndic}.service
+
         systemctl enable --now \
             docker.service
+
+        rpm --query --list \
+            openssh-server \
+            | awk --field-separator '[/ ]' '/\/lib\/systemd\/.+\/.+\..+/ { printf "%s\n", $NF }'
+
+        rpm --query --file /etc/bashrc
 
         ;;
     kali)
@@ -432,9 +679,13 @@ case "${DISTRO}" in
 
         # UTIL
         apt install \
+            at \
+            bc \
             binutils{,-doc} \
             bzip2 \
+            cpio{,-doc} \
             diffutils{,-doc} \
+            dos2unix \
             dosfstools \
             exa \
             file \
@@ -453,6 +704,7 @@ case "${DISTRO}" in
             ncurses-{base,bin,doc} \
             pandoc \
             parallel \
+            pigz \
             python3-pygments \
             readline-{common,doc} \
             sed \
@@ -469,9 +721,13 @@ case "${DISTRO}" in
 
         # SYSADMIN
         apt install \
+            acl \
+            btrfs-progs \
             cron \
             cryptsetup-{run,initramfs} \
             dkms \
+            dmidecode \
+            dmsetup \
             e2fsprogs \
             exim4-daemon-light \
             fakeroot \
@@ -495,8 +751,11 @@ case "${DISTRO}" in
             psmisc \
             login \
             passwd \
+            smartmontools \
             strace \
             sudo \
+            rsyslog{,-doc} \
+            syslog-ng \
             sysstat \
             thin-provisioning-tools \
             tmux \
@@ -510,10 +769,12 @@ case "${DISTRO}" in
             dnsutils \
             bridge-utils \
             ca-certificates \
+            chrony \
             curl \
             isc-dhcp-client \
             dns-root-data \
             dnstracer \
+            ethtool \
             fping \
             geoip-{bin,database{,-extra}} \
             hostname \
@@ -533,6 +794,7 @@ case "${DISTRO}" in
             nikto \
             nmap \
             ntp{,-doc} \
+            sntp \
             openssh-{client,server,sftp-server} \
             openssl \
             rsync \
@@ -540,11 +802,14 @@ case "${DISTRO}" in
             sslscan \
             swaks \
             tcpdump \
+            telnet \
             testssl.sh \
             traceroute \
             wget \
             whois \
-            wireguard
+            wireless-tools \
+            wireshark{,-doc} \
+            wpasupplicant
 
         # PLT
         apt install \
@@ -592,7 +857,8 @@ case "${DISTRO}" in
             oathtool \
             libpam-{modules{,-bin},doc,google-authenticator} \
             qemu-utils \
-            virtinst
+            virtinst \
+            wireguard
 
         curl --location 'https://download.docker.com/linux/debian/gpg' | apt-key add -
         rm --force --recursive /etc/apt/trusted.gpg~
@@ -632,7 +898,9 @@ EOF
 
         dpkg --listfiles \
             openssh-server \
-            | awk --field-separator '[/ ]' '/\/lib\/systemd\/.*\/.*\..*/ { printf "%s\n", $NF }'
+            | awk --field-separator '[/ ]' '/\/lib\/systemd\/.+\/.+\..+/ { printf "%s\n", $NF }'
+
+        dpkg --search /etc/bash.bashrc
 
         ;;
     ubuntu)
@@ -661,9 +929,13 @@ EOF
 
         # UTIL
         apt install \
+            at \
+            bc \
             binutils{,-doc} \
             bzip2 \
+            cpio{,-doc} \
             diffutils{,-doc} \
+            dos2unix \
             dosfstools \
             file \
             findutils \
@@ -681,6 +953,7 @@ EOF
             ncurses-{base,bin,doc} \
             pandoc \
             parallel \
+            pigz \
             python3-pygments \
             readline-{common,doc} \
             sed \
@@ -697,9 +970,13 @@ EOF
 
         # SYSADMIN
         apt install \
+            acl \
+            btrfs-progs \
             cron \
             cryptsetup{,-bin} \
             dkms \
+            dmidecode \
+            dmsetup \
             e2fsprogs \
             exim4-daemon-light \
             fakeroot \
@@ -723,8 +1000,11 @@ EOF
             psmisc \
             login \
             passwd \
+            smartmontools \
             strace \
             sudo \
+            rsyslog{,-doc} \
+            syslog-ng \
             sysstat \
             thin-provisioning-tools \
             tmux \
@@ -738,10 +1018,12 @@ EOF
             dnsutils \
             bridge-utils \
             ca-certificates \
+            chrony \
             curl \
             isc-dhcp-client \
             dns-root-data \
             dnstracer \
+            ethtool \
             fping \
             geoip-{bin,database{,-extra}} \
             hostname \
@@ -761,6 +1043,7 @@ EOF
             nikto \
             nmap \
             ntp{,-doc} \
+            sntp \
             openssh-{client,server,sftp-server} \
             openssl \
             rsync \
@@ -768,11 +1051,14 @@ EOF
             sslscan \
             swaks \
             tcpdump \
+            telnet \
             testssl.sh \
             traceroute \
             wget \
             whois \
-            wireguard
+            wireless-tools \
+            wireshark{,-doc} \
+            wpasupplicant
 
         # PLT
         apt install \
@@ -820,7 +1106,8 @@ EOF
             oathtool \
             libpam-{modules{,-bin},doc,google-authenticator} \
             qemu-utils \
-            virtinst
+            virtinst \
+            wireguard
 
         curl --location 'https://download.docker.com/linux/ubuntu/gpg' | apt-key add -
         rm --force --recursive /etc/apt/trusted.gpg~
@@ -860,7 +1147,9 @@ EOF
 
         dpkg --listfiles \
             openssh-server \
-            | awk --field-separator '[/ ]' '/\/lib\/systemd\/.*\/.*\..*/ { printf "%s\n", $NF }'
+            | awk --field-separator '[/ ]' '/\/lib\/systemd\/.+\/.+\..+/ { printf "%s\n", $NF }'
+
+        dpkg --search /etc/bash.bashrc
 
             ;;
     *)
