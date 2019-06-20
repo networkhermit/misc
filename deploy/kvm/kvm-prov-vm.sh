@@ -59,6 +59,7 @@ case "${DISTRO}" in
 esac
 
 virt-install \
+    --autostart \
     --connect qemu:///system \
     --console char_type=pty,target_type=serial \
     --cpu host \
@@ -70,7 +71,7 @@ virt-install \
     --name "${NAME}" \
     --network model=virtio,network=default \
     --os-type linux \
+    --serial char_type=pty,target_type=isa-serial \
     --vcpus cpuset=auto,vcpus="${CPU}" \
     --virt-type kvm \
-    --autostart \
     "${EXTRA_ARGUMENT[@]}"
