@@ -99,6 +99,7 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 #       lsof
 #       lvm2
 #       mdadm
+#       numad
 #       parted
 #       pciutils
 #       procps
@@ -515,6 +516,7 @@ case "${DISTRO}" in
             lsof \
             lvm2 \
             mdadm \
+            numad \
             parted \
             pciutils \
             procps-ng \
@@ -744,6 +746,7 @@ case "${DISTRO}" in
             lsof \
             lvm2 \
             mdadm \
+            numad \
             parted{,-doc} \
             pciutils \
             procps \
@@ -993,6 +996,7 @@ EOF
             lsof \
             lvm2 \
             mdadm \
+            numad \
             parted{,-doc} \
             pciutils \
             procps \
