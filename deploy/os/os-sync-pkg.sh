@@ -86,6 +86,7 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 #       e2fsprogs
 #       exim
 #       fakeroot
+#       haveged
 #       hdparm
 #       htop
 #       initramfs-tools
@@ -104,6 +105,7 @@ DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
 #       pciutils
 #       procps
 #       psmisc
+#       rng-tools
 #       shadow
 #       smartmontools
 #       strace
@@ -411,6 +413,7 @@ case "${DISTRO}" in
         systemctl disable --now \
             dnsmasq.service \
             libvirt{d,-guests}.service \
+            virtlogd.service \
             nginx.service \
             qemu-kvm.service \
             salt-{api,master,minion,syndic}.service
@@ -627,7 +630,7 @@ case "${DISTRO}" in
             qemu-img \
             salt{,-{api,cloud,master,minion,ssh,syndic}} \
             virt-install \
-            wireguard
+            wireguard-{dkms,tools}
 
         ## docker [official]
         dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -640,6 +643,7 @@ case "${DISTRO}" in
         systemctl disable --now \
             dnsmasq.service \
             libvirt{d,-guests}.service \
+            virtlogd.service \
             nginx.service \
             qemu-kvm.service \
             salt-{api,master,minion,syndic}.service
@@ -892,6 +896,7 @@ EOF
         systemctl disable --now \
             dnsmasq.service \
             libvirt{d,-guests}.service \
+            virtlogd.service \
             nginx.service \
             qemu-kvm.service \
             salt-{api,master,minion,syndic}.service
@@ -1142,6 +1147,7 @@ EOF
         systemctl disable --now \
             dnsmasq.service \
             libvirt{d,-guests}.service \
+            virtlogd.service \
             nginx.service \
             qemu-kvm.service \
             salt-{api,master,minion,syndic}.service
@@ -1162,6 +1168,8 @@ EOF
         ;;
 esac
 
+## Docker
+
 tee /etc/docker/daemon.json << 'EOF'
 {
     "log-driver": "json-file",
@@ -1173,3 +1181,17 @@ tee /etc/docker/daemon.json << 'EOF'
 EOF
 
 systemctl restart docker.service
+
+# systemd system and service
+
+systemd-detect-virt
+systemctl get-default
+
+systemd-analyze blame --no-pager
+systemd-analyze critical-chain --no-pager
+systemd-analyze security --no-pager
+
+systemctl list-units --no-pager --type service
+systemctl list-units --no-pager --type socket
+systemctl list-units --no-pager --type timer
+systemctl list-jobs --no-pager

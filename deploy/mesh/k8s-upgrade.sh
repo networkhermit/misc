@@ -31,7 +31,7 @@ sudo apt install --allow-change-held-packages --assume-yes kubelet${K8S_PKG_VER:
 sudo apt-mark hold kubelet
 
 # worker node only
-sudo kubeadm upgrade node config --kubelet-version "$(kubelet --version | cut --delimiter ' ' --fields 2)"
+sudo kubeadm upgrade node --kubelet-version "$(kubelet --version | cut --delimiter ' ' --fields 2)"
 
 sudo systemctl restart kubelet.service
 

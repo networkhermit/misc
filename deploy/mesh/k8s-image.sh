@@ -20,7 +20,7 @@ construct_image () {
     fi
 
     local image
-    image=$(echo "${1}" | awk --field-separator '/' '{ print $NF }')
+    image=$(awk --field-separator '/' '{ print $NF }' <<< "${1}")
 
     sudo docker image pull "${2}/${image}"
     sudo docker image tag "${2}/${image}" "${1}"

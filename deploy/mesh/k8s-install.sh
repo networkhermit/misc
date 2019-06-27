@@ -18,7 +18,7 @@ sudo systemctl enable kubelet.service
 (( EUID == 0 )) && export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # make kubectl work for non-root user
-sudo install --mode 600 --owner "$(id -u)" --group "$(id -g)" --preserve-timestamps /etc/kubernetes/admin.conf ~/.kube/config
+sudo install --mode 600 --owner "$(id --user)" --group "$(id --group)" --preserve-timestamps /etc/kubernetes/admin.conf ~/.kube/config
 
 # install pod network add-on
 kubectl apply --filename 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml'

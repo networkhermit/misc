@@ -269,10 +269,16 @@ EOF
 sudo systemctl disable --now systemd-resolved.service
 
 # manage system service
+## fedora
+sudo systemctl disable --now \
+    dnf-makecache.timer
+## kali
+sudo systemctl disable --now \
+    apt-daily{,-upgrade}.timer
+## ubuntu
 sudo systemctl disable --now \
     apt-daily{,-upgrade}.timer \
-    motd-news.timer \
-    snapd.service
+    motd-news.timer
 
 # install command-not-found
 ## arch
