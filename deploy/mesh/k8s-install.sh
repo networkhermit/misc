@@ -4,20 +4,15 @@
 kubeadm config print init-defaults
 kubeadm config print join-defaults
 
-# pull pod network container images
-for i in $(curl --location --silent 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml' | awk '/\<image\>/ { print $2 }'); do
-    sudo docker image pull "${i}"
-done
-
 # initialize master node
 install --directory --mode 700 ~/.kube
 sudo kubeadm init --apiserver-advertise-address 172.24.0.1 --pod-network-cidr 10.0.0.0/16 --service-cidr 10.96.0.0/12 --kubernetes-version "$(kubeadm version --output short)" --ignore-preflight-errors NumCPU,SystemVerification |& tee ~/.kube/log
 sudo systemctl enable kubelet.service
 
-# make kubectl work for root user
+# configure kubectl authentication
+## [root user]
 (( EUID == 0 )) && export KUBECONFIG=/etc/kubernetes/admin.conf
-
-# make kubectl work for non-root user
+## [non-root user]
 sudo install --mode 600 --owner "$(id --user)" --group "$(id --group)" --preserve-timestamps /etc/kubernetes/admin.conf ~/.kube/config
 
 # install pod network add-on
@@ -33,13 +28,15 @@ kubectl create serviceaccount cluster-admin-dashboard --namespace kube-system
 kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kube-system:cluster-admin-dashboard
 
 # verify cluster status
+kubeadm config view
 kubectl cluster-info
+kubectl get configmaps --namespace kube-system kubeadm-config --output yaml
 kubectl get nodes --output wide
 kubectl get pods --all-namespaces --output wide
 
 # access kubernetes dashboard
 kubectl get secret "$(kubectl get serviceaccount cluster-admin-dashboard --namespace kube-system --output jsonpath='{.secrets[].name}')" --namespace kube-system --output jsonpath="{.data['token']}" | base64 --decode && echo
-# http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+echo 'http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy'
 kubectl proxy
 
 # update kubernetes dashboard
@@ -62,5 +59,6 @@ kubectl get nodes --output wide
 kubectl drain "${HOSTNAME,,}" --delete-local-data --force --ignore-daemonsets
 kubectl delete node "${HOSTNAME,,}"
 sudo kubeadm reset --force
+sudo ipvsadm --clear
 sudo systemctl disable --now kubelet.service
 find ~/.kube -delete

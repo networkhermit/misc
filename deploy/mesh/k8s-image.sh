@@ -5,13 +5,14 @@ get_image_list () {
         return 1
     fi
 
-    local -n arr_ref=$1
+    local -n arr_ref=${1}
 
     arr_ref=()
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml' | awk '/\<image\>/ { print $2 }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/kube-state-metrics/master/kubernetes/kube-state-metrics-deployment.yaml' | awk '/\<image\>/ { print $2 }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8+/metrics-server-deployment.yaml' | awk '/\<image\>/ { print $2 }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes/kube-state-metrics/master/kubernetes/kube-state-metrics-deployment.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --location --silent 'https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8+/metrics-server-deployment.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
 }
 
 construct_image () {
@@ -27,25 +28,17 @@ construct_image () {
     sudo docker image rm "${2}/${image}"
 }
 
-# print k8s.gcr.io images kubernetes will use
+# pull kubernetes container images
 arr=()
 get_image_list arr
 printf '%s\n' "${arr[@]}"
-
-## pull container images from [gcr]
+## [gcr]
 sudo kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
-arr=()
-get_image_list arr
 printf '%s\0' "${arr[@]}" | xargs --max-args 1 --null sudo docker image pull
-
-## pull container images from [azure]
-arr=()
-get_image_list arr
+## [azure]
 for i in "${arr[@]}"; do
     construct_image "${i}" gcr.azk8s.cn/google_containers
 done
 
 # inspect container images
-arr=()
-get_image_list arr
 printf '%s\0' "${arr[@]}" | xargs --max-args 1 --null sudo docker image inspect --format '{{.Id}} {{.RepoTags}}'
