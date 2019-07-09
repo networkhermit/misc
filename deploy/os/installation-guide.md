@@ -535,7 +535,7 @@ sudo rm --force --verbose kali-archive-keyring_*_all.deb
 # change distro source
 
 # make distro sync
-sudo apt install --assume-yes kali-{defaults,linux-full} < /dev/null
+sudo apt install --assume-yes kali-{defaults,linux-default} < /dev/null
 
 # update message of the day
 
