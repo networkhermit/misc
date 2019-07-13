@@ -31,6 +31,7 @@ sudo apt install --allow-change-held-packages --assume-yes \
     kubelet${K8S_PKG_VER:+=${K8S_PKG_VER[kubelet]}} \
     < /dev/null
 sudo apt-mark hold kube{adm,ctl,let}
+apt list kube{adm,ctl,let} --installed
 apt-mark showhold
 sudo systemctl disable --now kubelet.service
 

@@ -32,6 +32,7 @@ sudo kubeadm upgrade node --kubelet-version "$(kubelet --version | cut --delimit
 sudo systemctl restart kubelet.service
 kubectl uncordon "${HOSTNAME,,}"
 
+apt list kube{adm,ctl,let} --installed
 apt-mark showhold
 kubectl cluster-info
 kubectl get nodes --output wide

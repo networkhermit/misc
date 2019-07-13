@@ -74,7 +74,7 @@ sudo timedatectl set-ntp true
 timedatectl status
 
 # modify time zone
-sudo ln --force --symbolic /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+sudo ln --force --no-dereference --symbolic /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 sudo timedatectl set-timezone Asia/Shanghai
 sudo hwclock --systohc
 
@@ -340,7 +340,7 @@ sudo arch-chroot /mnt
 
 # check sudo support
 sudo groupadd --gid 27 --system sudo
-sudo ln --force --symbolic /usr/{bin/vim,local/bin/vi}
+sudo ln --force --no-dereference --symbolic /usr/{bin/vim,local/bin/vi}
 
 # add default sysadmin
 
