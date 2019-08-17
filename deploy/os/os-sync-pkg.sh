@@ -867,7 +867,7 @@ case "${DISTRO}" in
             virtinst \
             wireguard
 
-        curl --location 'https://download.docker.com/linux/debian/gpg' | apt-key add -
+        curl --fail --location --silent --show-error 'https://download.docker.com/linux/debian/gpg' | apt-key add -
         rm --force --recursive /etc/apt/trusted.gpg~
         ## docker [official]
         tee /etc/apt/sources.list.d/docker.list << 'EOF'
@@ -880,7 +880,7 @@ EOF
         apt update --list-cleanup
         apt install docker-ce
 
-        curl --location 'https://repo.saltstack.com/apt/debian/9/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
+        curl --fail --location --silent --show-error 'https://repo.saltstack.com/apt/debian/9/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
         rm --force --recursive /etc/apt/trusted.gpg~
         ## saltstack [official]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
@@ -1118,7 +1118,7 @@ EOF
             virtinst \
             wireguard
 
-        curl --location 'https://download.docker.com/linux/ubuntu/gpg' | apt-key add -
+        curl --fail --location --silent --show-error 'https://download.docker.com/linux/ubuntu/gpg' | apt-key add -
         rm --force --recursive /etc/apt/trusted.gpg~
         ## docker [official]
         tee /etc/apt/sources.list.d/docker.list << 'EOF'
@@ -1131,7 +1131,7 @@ EOF
         apt update --list-cleanup
         apt install docker-ce
 
-        curl --location 'https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
+        curl --fail --location --silent --show-error 'https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
         rm --force --recursive /etc/apt/trusted.gpg~
         ## saltstack [official]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'

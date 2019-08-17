@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function shorten_url() {
-    curl --silent --show-error --request POST --form "url=${1}" --form "code=${2}" 'https://git.io'
+    curl --fail --location --silent --show-error --request POST --form "url=${1}" --form "code=${2}" 'https://git.io'
 }
 
 #shorten_url 'https://github.com/networkhermit' vac

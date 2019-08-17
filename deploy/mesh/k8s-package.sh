@@ -2,9 +2,9 @@
 
 # trust google cloud package signing key
 ## google repository
-curl --location https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+curl --fail --location --silent --show-error https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 ## aliyun repository
-curl --location https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
+curl --fail --location --silent --show-error https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
 sudo rm --force --recursive /etc/apt/trusted.gpg~
 
 # add kubernetes repository

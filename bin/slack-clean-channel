@@ -5,7 +5,7 @@ source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/slack.cfg"
 
 export past=${past:=86400}
 
-list=$(curl --silent --show-error --request GET \
+list=$(curl --fail --location --silent --show-error --request GET \
     --header 'Authorization: Bearer '"${TOKEN}" \
     --get \
     --data 'channel='"${CHANNEL}" \
@@ -35,7 +35,7 @@ fi
 
 for i in ${list}; do
 
-    curl --silent --show-error --request DELETE \
+    curl --fail --location --silent --show-error --request DELETE \
         --header 'Authorization: Bearer '"${TOKEN}" \
         --data 'channel='"${CHANNEL}" \
         --data 'ts='"${i}" \

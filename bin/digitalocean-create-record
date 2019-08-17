@@ -3,7 +3,7 @@
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/digitalocean.cfg"
 
-curl --silent --show-error --request POST \
+curl --fail --location --silent --show-error --request POST \
     --header 'Authorization: Bearer '"${AUTH_TOKEN}" \
     --header 'Content-Type: application/json' \
     --data @- << 'EOF' \

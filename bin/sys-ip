@@ -19,7 +19,7 @@ dig myip.opendns.com @208.67.220.220 a +short
 
 echo "[ amazonaws ]"
 
-curl --silent --show-error 'https://checkip.amazonaws.com'
+curl --fail --location --silent --show-error 'https://checkip.amazonaws.com'
 
 echo "[ google ]"
 

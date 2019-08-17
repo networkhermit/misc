@@ -528,7 +528,7 @@ sudo apt clean
 sudo apt autoremove --purge --assume-yes
 
 ## install kali archive keyring
-sudo curl --location --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.2_all.deb'
+sudo curl --fail --location --silent --show-error --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.2_all.deb'
 sudo dpkg --install kali-archive-keyring_*_all.deb
 sudo rm --force --verbose kali-archive-keyring_*_all.deb
 
