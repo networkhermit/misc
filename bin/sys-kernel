@@ -13,11 +13,14 @@ case "${DISTRO}" in
     arch)
         pacman --query 'linux'
         ;;
+    fedora)
+        rpm --query 'kernel'
+        ;;
     kali | ubuntu)
         dpkg --get-selections 'linux-image-[0-9]*' | tac
         ;;
     *)
-        echo "✗ unknown os type: ‘${OSTYPE}’" 1>&2
+        echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
         exit
         ;;
 esac

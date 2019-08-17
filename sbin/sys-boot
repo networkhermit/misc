@@ -18,7 +18,7 @@ case "${DISTRO}" in
         grub-mkconfig --output /boot/grub/grub.cfg
         ;;
     fedora)
-        dracut --force --verbose
+        dracut --force --regenerate-all --verbose
         grub2-mkconfig --output /boot/grub2/grub.cfg
         ;;
     kali | ubuntu)

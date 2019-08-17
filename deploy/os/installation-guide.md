@@ -528,14 +528,14 @@ sudo apt clean
 sudo apt autoremove --purge --assume-yes
 
 ## install kali archive keyring
-sudo curl --location --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb'
+sudo curl --location --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.2_all.deb'
 sudo dpkg --install kali-archive-keyring_*_all.deb
 sudo rm --force --verbose kali-archive-keyring_*_all.deb
 
 # change distro source
 
 # make distro sync
-sudo apt install --assume-yes kali-{defaults,linux-default} < /dev/null
+sudo apt install --assume-yes kali-{defaults,linux-{core,default,large}} < /dev/null
 
 # update message of the day
 

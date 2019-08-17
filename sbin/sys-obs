@@ -18,7 +18,7 @@ case "${DISTRO}" in
         pacman --query --foreign | sed 's/$/ [foreign]/g' | column -t
         pacman --query --deps --unrequired | sed 's/$/ [orphan]/g' | column -t
         echo '------ [ configuration ] ------'
-        find /etc -type f -iregex '.+\.pac-\(new\|save\)' -print0 | sort --zero-terminated | tr '\0' '\n'
+        find /etc -type f -iregex '.+\.pac\(new\|save\)' -print0 | sort --zero-terminated | tr '\0' '\n'
         ;;
     fedora)
         echo '------ [ package ] ------'

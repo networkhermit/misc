@@ -18,6 +18,7 @@ case "${DISTRO}" in
         yes | pacman --sync --clean --clean --color auto
         ;;
     fedora)
+        dnf clean metadata
         dnf makecache
         dnf distro-sync
         dnf autoremove
