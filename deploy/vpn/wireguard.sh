@@ -1,19 +1,15 @@
 #!/bin/bash
 
-# https://wiki.archlinux.org/index.php/iptables
-
-sudo touch /etc/wireguard/{private,preshared}.key
-sudo chmod 600 /etc/wireguard/{private,preshared}.key
+sudo install --mode 600 /dev/null /etc/wireguard/private.key
 wg genkey | sudo tee /etc/wireguard/private.key | wg pubkey | sudo tee /etc/wireguard/public.key
+
 wg genpsk
-sudo tee /etc/wireguard/preshared.key << 'EOF'
+sudo install --mode 600 /dev/stdin /etc/wireguard/preshared.key << 'EOF'
 PRESHARED_KEY
 EOF
 
-sudo touch /etc/wireguard/wg0.conf
-sudo chmod 600 /etc/wireguard/wg0.conf
 ## [ Server ]
-sudo tee /etc/wireguard/wg0.conf << 'EOF'
+sudo install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << 'EOF'
 [Interface]
 PostUp = wg set %i private-key /etc/wireguard/private.key
 Address = 172.20.0.1/16
@@ -24,8 +20,9 @@ PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared.k
 PublicKey = PEER_PUBLIC_KEY
 AllowedIPs = 172.20.0.2/32, 192.168.0.0/16
 EOF
+
 ## [ Client ]
-sudo tee /etc/wireguard/wg0.conf << 'EOF'
+sudo install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << 'EOF'
 [Interface]
 PostUp = wg set %i private-key /etc/wireguard/private.key
 Address = 172.20.0.2/16
@@ -39,8 +36,8 @@ PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared.k
 
 [Peer]
 PublicKey = PEER_PUBLIC_KEY
-Endpoint = PEER_ENDPOINT:51820
 AllowedIPs = 172.20.0.0/16
+Endpoint = PEER_ENDPOINT:51820
 PersistentKeepalive = 15
 EOF
 
