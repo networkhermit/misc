@@ -1,19 +1,9 @@
 #!/bin/bash
 
-function shorten_url() {
+shorten_url () {
     curl --fail --location --silent --show-error --request POST --form "url=${1}" --form "code=${2}" 'https://git.io'
 }
 
 #shorten_url 'https://github.com/networkhermit' vac
-#shorten_url 'https://networkhermit.github.io' sherlock
-#shorten_url 'https://github.com/camden-house' holmes
-#shorten_url 'https://camden-house.github.io' noip
-#shorten_url 'https://github.com/botval' spectre
-#shorten_url 'https://botval.github.io' kali
 
 curl --head 'https://git.io/vac'
-curl --head 'https://git.io/sherlock'
-curl --head 'https://git.io/holmes'
-curl --head 'https://git.io/noip'
-curl --head 'https://git.io/spectre'
-curl --head 'https://git.io/kali'

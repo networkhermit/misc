@@ -1,8 +1,8 @@
 ```bash
 # shellcheck shell=bash
 
-## [ berkeley ]
-BASE_URL='https://mirrors.ocf.berkeley.edu/archlinux'
+## [ linux kernel archive ]
+BASE_URL='https://mirrors.kernel.org/archlinux'
 ## [ tsinghua ]
 BASE_URL='https://mirrors.tuna.tsinghua.edu.cn/archlinux'
 

@@ -51,6 +51,11 @@ sudo sysctl net.ipv6.conf.{all,default}.forwarding
 sudo sysctl net.ipv4.conf.{all,default}.proxy_arp
 sudo sysctl net.ipv6.conf.{all,default}.proxy_ndp
 
+sudo iptables --table nat --list-rules POSTROUTING --verbose
+sudo iptables --table filter --list-rules FORWARD --verbose
+sudo ip6tables --table nat --list-rules POSTROUTING --verbose
+sudo ip6tables --table filter --list-rules FORWARD --verbose
+
 sudo iptables --table nat --list POSTROUTING --numeric --verbose --line-numbers
 sudo iptables --table filter --list FORWARD --numeric --verbose --line-numbers
 sudo ip6tables --table nat --list POSTROUTING --numeric --verbose --line-numbers

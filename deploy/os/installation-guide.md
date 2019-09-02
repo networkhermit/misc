@@ -618,38 +618,30 @@ Ubuntu
 ```
 
 ```
-> Add `console=ttyS0,115200n8` to boot parameter list for KVM.
+> Add `console=ttyS0,115200n8` to boot parameters for KVM.
 
-# berkeley mirror
-Server = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch
+# linux kernel archive
+Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
 ```
 
 ```
-# mirror list
-https://http.kali.org/README.mirrorlist
+# archive
+deb https://archive.kali.org/kali kali-rolling main non-free contrib
+deb-src https://archive.kali.org/kali kali-rolling main non-free contrib
 
 # netboot iso
-## [official]
-https://http.kali.org/dists/kali-rolling/main/installer-amd64/current/images/netboot/mini.iso
-## [berkeley]
-https://mirrors.ocf.berkeley.edu/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/mini.iso
-## [tsinghua]
-https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/mini.iso
-
-# berkeley mirror
-deb https://mirrors.ocf.berkeley.edu/kali kali-rolling main non-free contrib
-deb-src https://mirrors.ocf.berkeley.edu/kali kali-rolling main non-free contrib
+https://archive.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/mini.iso
 ```
 
 ```
-# berkeley mirror
-deb https://mirrors.ocf.berkeley.edu/ubuntu bionic main restricted universe multiverse
-deb https://mirrors.ocf.berkeley.edu/ubuntu bionic-backports main restricted universe multiverse
-deb https://mirrors.ocf.berkeley.edu/ubuntu bionic-security main restricted universe multiverse
-deb https://mirrors.ocf.berkeley.edu/ubuntu bionic-updates main restricted universe multiverse
+# linux kernel archive
+deb https://mirrors.kernel.org/ubuntu bionic main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu bionic-backports main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu bionic-security main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu bionic-updates main restricted universe multiverse
 
-deb-src https://mirrors.ocf.berkeley.edu/ubuntu bionic main restricted universe multiverse
-deb-src https://mirrors.ocf.berkeley.edu/ubuntu bionic-backports main restricted universe multiverse
-deb-src https://mirrors.ocf.berkeley.edu/ubuntu bionic-security main restricted universe multiverse
-deb-src https://mirrors.ocf.berkeley.edu/ubuntu bionic-updates main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu bionic main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu bionic-backports main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu bionic-security main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu bionic-updates main restricted universe multiverse
 ```
