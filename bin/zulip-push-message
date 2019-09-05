@@ -14,7 +14,7 @@ TEXT=$'```text\n'"${TEXT}"$'```\n'
 curl --fail --location --silent --show-error --request POST \
     --data-urlencode 'content='"${TEXT}" \
     --data 'subject=notice' \
-    --data 'to=no-ip' \
+    --data 'to='"${STREAM_NAME}" \
     --data 'type=stream' \
     --user "${BOT_EMAIL_ADDRESS}:${BOT_API_KEY}" \
     'https://'"${ORGANIZATION}"'.zulipchat.com/api/v1/messages' \

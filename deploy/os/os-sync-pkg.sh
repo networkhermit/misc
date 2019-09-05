@@ -783,7 +783,7 @@ case "${DISTRO}" in
             dnstracer \
             ethtool \
             fping \
-            geoip-{bin,database{,-extra}} \
+            geoip-{bin,database} \
             hostname \
             httpie \
             iperf3 \

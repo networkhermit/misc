@@ -58,13 +58,12 @@ precedence ::ffff:0:0/96  100
 EOF
 
 # modify default ntp server
-## apple
-sudo sed --in-place '/^#NTP=$/r /dev/stdin' /etc/systemd/timesyncd.conf << 'EOF'
-NTP=time1.apple.com time2.apple.com time3.apple.com time4.apple.com
-EOF
-## google
-sudo sed --in-place '/^#NTP=$/r /dev/stdin' /etc/systemd/timesyncd.conf << 'EOF'
-NTP=time1.google.com time2.google.com time3.google.com time4.google.com
+## cloudflare | apple
+NTP_LIST='time.cloudflare.com time1.apple.com time2.apple.com time3.apple.com time4.apple.com'
+## cloudflare | google
+NTP_LIST='time.cloudflare.com time1.google.com time2.google.com time3.google.com time4.google.com'
+sudo sed --in-place '/^#NTP=$/r /dev/stdin' /etc/systemd/timesyncd.conf << EOF
+NTP=${NTP_LIST}
 EOF
 sudo systemctl restart systemd-timesyncd.service
 sudo systemctl enable systemd-timesyncd.service
