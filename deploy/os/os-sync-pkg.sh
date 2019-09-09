@@ -871,11 +871,11 @@ case "${DISTRO}" in
         rm --force --recursive /etc/apt/trusted.gpg~
         ## docker [official]
         tee /etc/apt/sources.list.d/docker.list << 'EOF'
-deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
+deb [arch=amd64] https://download.docker.com/linux/debian buster stable
 EOF
         ## docker [tsinghua]
         tee /etc/apt/sources.list.d/docker.list << 'EOF'
-deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian stretch stable
+deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian buster stable
 EOF
         apt update --list-cleanup
         apt install docker-ce
