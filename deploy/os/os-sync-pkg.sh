@@ -820,13 +820,13 @@ case "${DISTRO}" in
 
         # PLT
         apt install \
-            gcc \
-            cpp \
+            gcc{,-doc} \
+            cpp{,-doc} \
             gdb{,-doc} \
             valgrind \
             g++ \
-            clang{,-format,-7-doc} \
-            llvm{,-7-doc} \
+            clang{,-format,-8-doc} \
+            llvm{,-8-doc} \
             elixir \
             erlang-{nox,doc} \
             golang{,-doc,-src} \
