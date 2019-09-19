@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# review default configuration
+# review default init configuration
 kubeadm config print init-defaults
-kubeadm config print join-defaults
 
 # initialize master node
 install --directory --mode 700 ~/.kube
@@ -41,6 +40,9 @@ kubectl proxy
 
 # update kubernetes dashboard
 kubectl delete "$(kubectl get pod --namespace kube-system --output name | grep --word-regexp 'kubernetes-dashboard')" --namespace kube-system
+
+# review default join configuration
+kubeadm config print join-defaults
 
 # join node to cluster
 install --directory --mode 700 ~/.kube

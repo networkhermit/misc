@@ -18,6 +18,10 @@ hostnamectl
 ip link
 sudo cat /sys/class/dmi/id/product_uuid
 
+# ensure iptables compatibility
+update-alternatives --query iptables
+sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+
 # enable command line completion
 # shellcheck disable=SC1090
 source <(kubeadm completion bash)
