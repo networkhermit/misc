@@ -1,20 +1,21 @@
 #!/bin/bash
 
-KUBERNETES_VERSION=''
-
 sudo apt update --list-cleanup
+
+KUBERNETES_VERSION=''
 if [ -n "${KUBERNETES_VERSION}" ]; then
     for i in kube{adm,ctl,let}; do
         K8S_PKG_VER["${i}"]=$(apt-cache madison "${i}" | grep "${KUBERNETES_VERSION}" | awk '{ print $3 }')
     done
 fi
+
 sudo apt install --allow-change-held-packages --assume-yes kubeadm${K8S_PKG_VER:+=${K8S_PKG_VER[kubeadm]}} < /dev/null
 sudo apt-mark hold kubeadm
 kubeadm config images list --kubernetes-version "$(kubeadm version --output short)"
 
 # primary control plane only
 sudo kubeadm upgrade plan
-kubeadm config view | sudo kubeadm upgrade diff "$(kubeadm version --output short)" --config /dev/stdin
+sudo kubeadm upgrade diff "$(kubeadm version --output short)"
 sudo kubeadm upgrade apply "$(kubeadm version --output short)" --dry-run
 sudo kubeadm upgrade apply "$(kubeadm version --output short)" --yes
 

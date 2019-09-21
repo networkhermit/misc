@@ -28,10 +28,12 @@ construct_image () {
     sudo docker image rm "${2}/${image}"
 }
 
-# pull kubernetes container images
+# list container images
 arr=()
 get_image_list arr
 printf '%s\n' "${arr[@]}"
+
+# pull container images
 ## [gcr]
 sudo kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
 printf '%s\0' "${arr[@]}" | xargs --max-args 1 --null sudo docker image pull

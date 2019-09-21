@@ -463,6 +463,7 @@ case "${DISTRO}" in
             diffutils \
             dos2unix \
             dosfstools \
+            exa \
             file \
             findutils \
             finger \
@@ -693,7 +694,6 @@ case "${DISTRO}" in
             diffutils{,-doc} \
             dos2unix \
             dosfstools \
-            exa \
             file \
             findutils \
             finger \
