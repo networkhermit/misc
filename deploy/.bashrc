@@ -85,6 +85,8 @@ alias sha='sha256sum'
 alias v='vim'
 alias www='python3 -B -W:all -m http.server'
 
+alias sudo='sudo '
+
 alias alias='true'
 alias unalias='true'
 
