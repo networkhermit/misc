@@ -5,7 +5,7 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-docker image ls --format '{{.Repository}}' | xargs --max-args 1 docker pull
+docker image ls --filter reference='*:latest' --filter reference='*/*:latest' --filter reference='*/*/*:latest' --format '{{.Repository}}' | xargs --max-args 1 docker pull
 
 docker image prune --force
 docker image ls --all
