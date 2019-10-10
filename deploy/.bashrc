@@ -45,7 +45,7 @@ export MANPAGER=most
 export VISUAL=vim
 
 # PATH
-export PATH=~/STEM/bin:$PATH
+export PATH=$PATH:~/STEM/bin
 
 # LIBRARY
 export C_INCLUDE_PATH=~/STEM/lib/plt/c/src
