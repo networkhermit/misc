@@ -1,0 +1,45 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+cat << 'EOF'
+
+[Group]
+
+EOF
+
+sort \
+    --field-separator : \
+    --key 3,3n \
+    --stable \
+    /etc/group \
+    | cut \
+    --complement \
+    --delimiter : \
+    --field 2 \
+    | column \
+    --separator : \
+    --table \
+    --table-columns GROUP_NAME,GID,USER_LIST
+
+cat << 'EOF'
+
+[User]
+
+EOF
+
+sort \
+    --field-separator : \
+    --key 3,3n \
+    --stable \
+    /etc/passwd \
+    | cut \
+    --complement \
+    --delimiter : \
+    --field 2 \
+    | column \
+    --separator : \
+    --table \
+    --table-columns LOGIN_NAME,UID,GID,COMMENT,HOME,SHELL
