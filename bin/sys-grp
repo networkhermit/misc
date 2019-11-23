@@ -22,7 +22,7 @@ sort \
     | column \
     --separator : \
     --table \
-    --table-columns GROUP_NAME,GID,USER_LIST
+    --table-columns 'GROUP_NAME,GID,USER_LIST'
 
 cat << 'EOF'
 
@@ -42,4 +42,4 @@ sort \
     | column \
     --separator : \
     --table \
-    --table-columns LOGIN_NAME,UID,GID,COMMENT,HOME,SHELL
+    --table-columns 'LOGIN_NAME,UID,GID,COMMENT,HOME,SHELL'

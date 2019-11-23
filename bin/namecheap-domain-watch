@@ -1,10 +1,13 @@
 #!/bin/bash
 
+set -o errexit
 set -o nounset
 set -o pipefail
 
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/namecheap.cfg"
+
+sleep 15
 
 CURRENCY_RATE=$(curl --fail --location --silent --show-error --request GET "https://free.currencyconverterapi.com/api/v6/convert?q=USD_CNY&compact=ultra&apiKey=${CURRENCY_CONVERTER_API_KEY}" | awk --field-separator '[{:}]' '{ print $3 }')
 PUBLIC_IP_ADDRESS=$(dig myip.opendns.com @208.67.222.222 a +short)
@@ -15,15 +18,9 @@ if [ -z "${CURRENCY_RATE}" ] || [ -z "${PUBLIC_IP_ADDRESS}" ]; then
 fi
 
 for i in ${WATCH_LIST}; do
-    cat << EOF
+    sleep 1
 
-${i}
-
-EOF
-
-    sleep 3
-
-    xmllint --xpath '//*[local-name()="Price"]/@*[name()="Price" or name()="YourPrice"]' \
+    xmllint --xpath '//*[local-name()="Price"]/@*[name()="YourPrice"]' \
         <(
         curl --fail --location --silent --show-error --request GET \
             --get \
@@ -37,6 +34,7 @@ EOF
             --data ProductType=DOMAIN \
             'https://api.namecheap.com/xml.response'
         ) \
-        | xargs --max-args 2 | awk --assign rate="${CURRENCY_RATE}" --field-separator '[ =]' '{ printf "%.2f, %.2f\n", $2 * rate, $4 * rate }' | nl
-
-done
+        | xargs --max-args 1 --no-run-if-empty \
+        | awk --assign suffix="${i}" --assign rate="${CURRENCY_RATE}" --field-separator '=' 'BEGIN { printf suffix }; { printf ",%.2f", $2 * rate }; END { printf "\n" }'
+done \
+    | column --separator , --table --table-columns "$(echo SUFFIX {1..10} | tr ' ' ,)" --table-right "$(echo {1..10} | tr ' ' ,)"

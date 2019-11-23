@@ -36,11 +36,11 @@ printf '%s\n' "${arr[@]}"
 # pull container images
 ## [gcr]
 sudo kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
-printf '%s\0' "${arr[@]}" | xargs --max-args 1 --null sudo docker image pull
+printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null sudo docker image pull
 ## [azure]
 for i in "${arr[@]}"; do
     construct_image "${i}" gcr.azk8s.cn/google_containers
 done
 
 # inspect container images
-printf '%s\0' "${arr[@]}" | xargs --max-args 1 --null sudo docker image inspect --format '{{.Id}} {{.RepoTags}}'
+printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null sudo docker image inspect --format '{{.Id}} {{.RepoTags}}'
