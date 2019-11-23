@@ -5,7 +5,7 @@ if [ "${OSTYPE}" != 'linux-gnu' ]; then
     exit 1
 fi
 
-DISTRO=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
+DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 
 case "${DISTRO}" in
     arch)

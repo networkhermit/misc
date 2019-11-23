@@ -35,6 +35,6 @@ for i in ${WATCH_LIST}; do
             'https://api.namecheap.com/xml.response'
         ) \
         | xargs --max-args 1 --no-run-if-empty \
-        | awk --assign suffix="${i}" --assign rate="${CURRENCY_RATE}" --field-separator '=' 'BEGIN { printf suffix }; { printf ",%.2f", $2 * rate }; END { printf "\n" }'
+        | awk --assign suffix="${i}" --assign rate="${CURRENCY_RATE}" --field-separator = 'BEGIN { printf suffix }; { printf ",%.2f", $2 * rate }; END { printf "\n" }'
 done \
     | column --separator , --table --table-columns "$(echo SUFFIX {1..10} | tr ' ' ,)" --table-right "$(echo {1..10} | tr ' ' ,)"

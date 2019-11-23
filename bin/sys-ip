@@ -26,11 +26,11 @@ echo "[ google ]"
 (
 dig o-o.myaddr.l.google.com @216.239.32.10 txt +short
 dig o-o.myaddr.l.google.com @216.239.34.10 txt +short
-) | awk --field-separator '"' '{ print $2 }' | uniq
+) | tr --delete \" | uniq
 
 echo "[ ipv4 ]"
 
-ip -4 address | awk '/\<inet\>/ { print $2 }' | sort --field-separator '/' --key 1,1V --key 2,2n
+ip -4 address | awk '/\<inet\>/ { print $2 }' | sort --field-separator / --key 1,1V --key 2,2n
 
 echo "[ ipv6 ]"
 

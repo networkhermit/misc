@@ -179,7 +179,7 @@ sudo apt full-upgrade --purge
 sudo apt clean
 sudo apt autoremove --purge
 sudo find /etc -type f \( -name '*.dpkg-*' -o -name '*.ucf-*' \)
-apt list --installed | awk --field-separator '/' '/,local]/ { print $1 }' | xargs --no-run-if-empty sudo apt purge --assume-yes
+apt list --installed | awk --field-separator / '/,local]/ { print $1 }' | xargs --no-run-if-empty sudo apt purge --assume-yes
 
 # update message of the day
 sudo tee /etc/motd << 'EOF'
@@ -191,7 +191,7 @@ individual files in /usr/share/doc/*/copyright.
 OS_RELEASE_ID GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
 permitted by applicable law.
 EOF
-OS_RELEASE_ID=$(awk --field-separator '=' '/^ID=/ { print $2; exit }' /etc/os-release)
+OS_RELEASE_ID=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 sudo sed --in-place "s/OS_RELEASE_ID/${OS_RELEASE_ID^}/g" /etc/motd
 unset OS_RELEASE_ID
 
