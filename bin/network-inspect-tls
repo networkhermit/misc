@@ -29,11 +29,7 @@ for i in "$@"; do
         continue
     fi
 
-    cat << EOF
-
-[ ${i} ]
-
-EOF
+    printf '\n%s\n\n' "[ ${i} ]"
 
     openssl x509 -noout -text -fingerprint <<< "${CERT}"
 done

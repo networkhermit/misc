@@ -1,11 +1,7 @@
 #!/bin/bash
 
 for i in "$@"; do
-    cat << EOF
-
-${i}
-
-EOF
+    printf '\n%s\n\n' "${i}"
 
     sleep 3
 

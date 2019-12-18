@@ -14,7 +14,7 @@ fi
 
 docker run \
     --detach \
-    --env 'TZ='"$(cat /etc/timezone)" \
+    --env TZ="$(< /etc/timezone)" \
     --hostname xyz \
     --label maintainer=sysadmin@local.domain \
     --name "${NAME}" \

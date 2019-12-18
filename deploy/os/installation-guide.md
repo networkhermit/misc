@@ -268,6 +268,7 @@ EOF
 sudo systemctl disable --now systemd-resolved.service
 
 # manage system service
+sudo systemctl enable --now fstrim.timer
 ## fedora
 sudo systemctl disable --now \
     dnf-makecache.timer
@@ -389,7 +390,7 @@ sudo systemctl enable sshd.service
 
 # update system locale
 echo 'LANG=en_US.UTF-8' | sudo tee /etc/locale.conf
-sudo sed --in-place 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+sudo sed --in-place 's/^#\(en_US\.UTF-8 UTF-8\)/\1/' /etc/locale.gen
 sudo locale-gen
 
 # color setup for ls
@@ -464,6 +465,9 @@ sudo systemctl enable sshd.service
 # manage system service
 
 # install command-not-found
+
+# modify dnf configuration
+sudo sed --in-place 's/^\(installonly_limit\)=.*/\1=2/' /etc/dnf/dnf.conf
 
 # reboot system
 ```

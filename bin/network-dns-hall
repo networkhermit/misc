@@ -1,21 +1,13 @@
 #!/bin/bash
 
-cat << 'EOF'
-
-[ cloudflare ]
-
-EOF
+printf '\n%s\n\n' "[ cloudflare ]"
 
 dig \
     1dot1dot1dot1.cloudflare-dns.com a 1dot1dot1dot1.cloudflare-dns.com aaaa \
     +short \
     | sed 's/^/\t/'
 
-cat << 'EOF'
-
-[ opendns ]
-
-EOF
+printf '\n%s\n\n' "[ opendns ]"
 
 dig \
     resolver1.opendns.com a resolver1.opendns.com aaaa \
@@ -25,11 +17,7 @@ dig \
     +short \
     | sed 's/^/\t/'
 
-cat << 'EOF'
-
-[ quad9 ]
-
-EOF
+printf '\n%s\n\n' "[ quad9 ]"
 
 dig \
     dns.quad9.net a dns.quad9.net aaaa \

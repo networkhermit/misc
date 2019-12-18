@@ -10,6 +10,6 @@ if (( $# != 2 )); then
 fi
 
 virt-clone \
-    --file "/var/local/images/${2}.img" \
+    --file "/var/local/images/${2}.qcow2" \
     --name "${2}" \
     --original "${1}"

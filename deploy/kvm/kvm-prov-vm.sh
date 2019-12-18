@@ -63,7 +63,7 @@ virt-install \
     --connect qemu:///system \
     --console char_type=pty,target_type=serial \
     --cpu host \
-    --disk device=disk,format=qcow2,path="/var/local/images/${NAME}.img",size=40 \
+    --disk device=disk,format=qcow2,path="/var/local/images/${NAME}.qcow2",size=40 \
     --features kvm_hidden=off \
     --graphics none \
     --hvm \

@@ -61,29 +61,13 @@ digest () {
 
 inspect () {
     echo '+--'
-    cat << EOF
-
-[ ${1}.key ]
-
-EOF
+    printf '\n%s\n\n' "[ ${1}.key ]"
     openssl pkey -in "${1}".key -noout -text
-    cat << EOF
-
-[ ${1}.pub ]
-
-EOF
+    printf '\n%s\n\n' "[ ${1}.pub ]"
     openssl pkey -pubin -in "${1}".pub -noout -text
-    cat << EOF
-
-[ ${1}.csr ]
-
-EOF
+    printf '\n%s\n\n' "[ ${1}.csr ]"
     openssl req -in "${1}".csr -noout -text
-    cat << EOF
-
-[ ${1}.crt ]
-
-EOF
+    printf '\n%s\n\n' "[ ${1}.crt ]"
     openssl x509 -in "${1}".crt -noout -text
     echo '--+'
 }
@@ -256,7 +240,7 @@ fi
 
 # [ Chain of Trust ]
 
-cat "${1}".crt interm.crt > chain.crt
+cat "${1}".crt interm.crt | tee chain.crt &> /dev/null
 
 if [ "${STRICT}" = 'true' ]; then
     echo '+--'

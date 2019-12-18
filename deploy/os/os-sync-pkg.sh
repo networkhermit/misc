@@ -86,6 +86,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       e2fsprogs
 #       exim
 #       fakeroot
+#       gptfdisk
 #       haveged
 #       hdparm
 #       htop
@@ -116,6 +117,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       tmux
 #       tzdata
 #       usbutils
+#       xfsdump
 #       xfsprogs
 ##################
 
@@ -287,6 +289,8 @@ case "${DISTRO}" in
             core/e2fsprogs \
             community/exim \
             core/fakeroot \
+            extra/gptfdisk \
+            extra/haveged \
             core/hdparm \
             extra/htop \
             core/mkinitcpio{,-busybox} \
@@ -304,6 +308,7 @@ case "${DISTRO}" in
             core/pciutils \
             core/procps-ng \
             core/psmisc \
+            community/rng-tools \
             core/shadow \
             extra/smartmontools \
             extra/strace \
@@ -314,6 +319,7 @@ case "${DISTRO}" in
             community/tmux \
             core/tzdata \
             core/usbutils \
+            community/xfsdump \
             core/xfsprogs
 
         # NETWORK OPERATOR
@@ -507,6 +513,8 @@ case "${DISTRO}" in
             e2fsprogs \
             exim \
             fakeroot \
+            gdisk \
+            haveged \
             hdparm \
             htop \
             dracut \
@@ -525,6 +533,7 @@ case "${DISTRO}" in
             pciutils \
             procps-ng \
             psmisc \
+            rng-tools \
             passwd \
             shadow-utils \
             smartmontools \
@@ -537,6 +546,7 @@ case "${DISTRO}" in
             tmux \
             tzdata \
             usbutils \
+            xfsdump \
             xfsprogs
 
         # NETWORK OPERATOR
@@ -737,6 +747,8 @@ case "${DISTRO}" in
             e2fsprogs \
             exim4-daemon-light \
             fakeroot \
+            gdisk \
+            haveged \
             hdparm \
             htop \
             initramfs-tools \
@@ -756,6 +768,7 @@ case "${DISTRO}" in
             procps \
             sysvinit-utils \
             psmisc \
+            rng-tools \
             login \
             passwd \
             smartmontools \
@@ -768,6 +781,7 @@ case "${DISTRO}" in
             tmux \
             tzdata \
             usbutils \
+            xfsdump \
             xfsprogs
 
         # NETWORK OPERATOR
@@ -988,6 +1002,8 @@ EOF
             e2fsprogs \
             exim4-daemon-light \
             fakeroot \
+            gdisk \
+            haveged \
             hdparm \
             htop \
             initramfs-tools \
@@ -1007,6 +1023,7 @@ EOF
             procps \
             sysvinit-utils \
             psmisc \
+            rng-tools \
             login \
             passwd \
             smartmontools \
@@ -1019,6 +1036,7 @@ EOF
             tmux \
             tzdata \
             usbutils \
+            xfsdump \
             xfsprogs
 
         # NETWORK OPERATOR

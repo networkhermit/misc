@@ -4,11 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-cat << 'EOF'
-
-[Group]
-
-EOF
+printf '\n%s\n\n' "[ Group ]"
 
 sort \
     --field-separator : \
@@ -24,11 +20,7 @@ sort \
     --table \
     --table-columns 'GROUP_NAME,GID,USER_LIST'
 
-cat << 'EOF'
-
-[User]
-
-EOF
+printf '\n%s\n\n' "[ User ]"
 
 sort \
     --field-separator : \
