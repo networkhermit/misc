@@ -1,8 +1,25 @@
 ```bash
 # shellcheck shell=bash
 
-# list filesystems in disk image
+# reallocate kvm cpu/memory
+sudo virsh nodeinfo
+sudo virsh dominfo "${DOMAIN}"
+sudo virsh vcpucount "${DOMAIN}"
+sudo virsh memtune "${DOMAIN}"
+sudo virsh shutdown "${DOMAIN}"
+sudo virsh setvcpus "${DOMAIN}" 4 --config --maximum
+sudo virsh setvcpus "${DOMAIN}" 4 --config
+sudo virsh setmaxmem "${DOMAIN}" 8G --config
+sudo virsh setmem "${DOMAIN}" 8G --config
+sudo virsh start "${DOMAIN}"
+
+# attach/detach disk to/from kvm
+sudo virsh attach-disk "${DOMAIN}" "${SOURCE}" "${TARGET}" --persistent
+sudo virsh detach-disk "${DOMAIN}" "${TARGET}" --persistent
+
+# check filesystem usage in disk image
 virt-filesystems --add "${DISK_IMAGE}" --all --human-readable --long
+virt-df --add "${DISK_IMAGE}" --human-readable
 
 # mount disk image
 

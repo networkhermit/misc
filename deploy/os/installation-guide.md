@@ -8,7 +8,7 @@ Meta
 sudo passwd root
 
 # check sudo support
-sudo EDITOR=vim visudo
+sudo SUDO_EDITOR=vim visudo
 
 # add default sysadmin
 sudo useradd --create-home --shell /bin/bash --uid 1000 vac
@@ -18,6 +18,15 @@ sudo gpasswd --add vac sudo
 sudo groupadd --gid 64 --system sysadmin
 sudo gpasswd --add vac sysadmin
 sudo passwd --lock root
+if [ -n "${ANSIBLE_USER}" ]; then
+    sudo useradd --create-home --shell /bin/bash --uid 1024 "${ANSIBLE_USER}"
+    sudo gpasswd --add "${ANSIBLE_USER}" sudo
+    sudo gpasswd --add "${ANSIBLE_USER}" sysadmin
+    sudo install --mode 600 /dev/stdin "/etc/sudoers.d/${ANSIBLE_USER}" << EOF
+${ANSIBLE_USER} ALL=(ALL:ALL) NOPASSWD:ALL
+EOF
+    sudo passwd --lock "${ANSIBLE_USER}"
+fi
 
 # change hostname
 sudo hostname STEM
@@ -151,6 +160,10 @@ sudo tee /etc/apt/sources.list << 'EOF'
 deb https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main non-free contrib
 deb-src https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main non-free contrib
 EOF
+## manjaro
+sudo tee /etc/pacman.d/mirrorlist << 'EOF'
+Server = https://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch
+EOF
 ## ubuntu
 sudo tee /etc/apt/sources.list << 'EOF'
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic main restricted universe multiverse
@@ -165,21 +178,8 @@ deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic-updates main restrict
 EOF
 
 # make distro sync
-## arch
-sudo pacman --sync --refresh --sysupgrade --color auto
-yes | sudo pacman --sync --clean --clean --color auto
-## fedora
-sudo dnf makecache
-sudo dnf distro-sync
-sudo dnf autoremove
-sudo dnf clean packages
-## kali | ubuntu
-sudo apt update --list-cleanup
-sudo apt full-upgrade --purge
-sudo apt clean
-sudo apt autoremove --purge
-sudo find /etc -type f \( -name '*.dpkg-*' -o -name '*.ucf-*' \)
-apt list --installed | awk --field-separator / '/,local]/ { print $1 }' | xargs --no-run-if-empty sudo apt purge --assume-yes
+# reference script=sys-sync
+# reference script=sys-obs
 
 # update message of the day
 sudo tee /etc/motd << 'EOF'
@@ -205,22 +205,12 @@ done
 unset host_key
 
 # update initramfs image
-## arch
-sudo mkinitcpio --preset linux
-## fedora
-sudo dracut --force --verbose
-## kali | ubuntu
-sudo update-initramfs -k all -u
+# reference script=sys-boot
 
 # update boot loader
 cat /proc/cmdline
 sudo vim /etc/default/grub
-## arch
-sudo grub-mkconfig --output /boot/grub/grub.cfg
-## fedora
-sudo grub2-mkconfig --output /boot/grub2/grub.cfg
-## kali | ubuntu
-sudo grub-mkconfig --output /boot/grub/grub.cfg
+# reference script=sys-boot
 
 # network control
 sudo tee /etc/sysctl.d/network-control.conf << 'EOF'
@@ -281,7 +271,7 @@ sudo systemctl disable --now \
     motd-news.timer
 
 # install command-not-found
-## arch
+## arch | manjaro
 yes | sudo pacman --sync --needed pkgfile
 sudo tee --append /etc/bash.bashrc << 'EOF'
 
@@ -339,7 +329,6 @@ sudo arch-chroot /mnt
 # change root password
 
 # check sudo support
-sudo groupadd --gid 27 --system sudo
 sudo ln --force --no-dereference --symbolic /usr/{bin/vim,local/bin/vi}
 
 # add default sysadmin
@@ -412,7 +401,7 @@ sudo umount --recursive /mnt
 ```
 
 Fedora
-====
+======
 
 ```bash
 # shellcheck shell=bash
@@ -565,6 +554,63 @@ sudo mv --verbose /etc/profile.d/kali.sh{,.forbid}
 sudo apt install --assume-yes plymouth{,-themes} < /dev/null
 sudo plymouth-set-default-theme kali
 sudo grub-mkconfig --output /boot/grub/grub.cfg
+
+# reboot system
+```
+
+Manjaro
+=======
+
+```bash
+# shellcheck shell=bash
+
+# change root password
+
+# check sudo support
+sudo ln --force --no-dereference --symbolic /usr/{bin/vim,local/bin/vi}
+
+# add default sysadmin
+
+# change hostname
+
+# check internet connection
+
+# modify dns resolver
+
+# configure default address selection
+
+# modify default ntp server
+
+# update system clock
+
+# modify time zone
+
+# configure system network
+
+# change distro source
+
+# make distro sync
+
+# update message of the day
+
+# modify secure shell daemon
+sudo systemctl restart sshd.service
+sudo systemctl enable sshd.service
+
+# update initramfs image
+
+# update boot loader
+
+# network control
+
+# disable dynamic resolver
+
+# manage system service
+
+# install command-not-found
+
+# install arch-install-scripts
+yes | sudo pacman --sync --needed arch-install-scripts
 
 # reboot system
 ```

@@ -13,7 +13,7 @@ fi
 DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 
 case "${DISTRO}" in
-    arch)
+    arch | manjaro)
         echo '------ [ package ] ------'
         pacman --query --foreign | sed 's/$/ [foreign]/g' | column -t
         pacman --query --deps --unrequired | sed 's/$/ [orphan]/g' | column -t

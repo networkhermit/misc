@@ -421,7 +421,6 @@ case "${DISTRO}" in
             libvirt{d,-guests}.service \
             virtlogd.service \
             nginx.service \
-            qemu-kvm.service \
             salt-{api,master,minion,syndic}.service
 
         systemctl enable --now \
@@ -431,7 +430,7 @@ case "${DISTRO}" in
             openssh \
             | awk --field-separator '[/ ]' '/usr\/lib\/systemd\/.+\/.+\..+[^/]$/ { printf "%-24s%s\n", $1, $NF }'
 
-        pacman --files --owns /etc/bash.bashrc
+        pacman --query --owns /etc/bash.bashrc
 
         ;;
     fedora)
@@ -923,6 +922,224 @@ EOF
             | awk --field-separator '[/ ]' '/\/lib\/systemd\/.+\/.+\..+/ { printf "%s\n", $NF }'
 
         dpkg --search /etc/bash.bashrc
+
+        ;;
+    manjaro)
+
+        # CORE
+        pacman --sync --needed \
+            core/filesystem \
+            core/iana-etc \
+            core/glibc \
+            core/linux{,-api-headers,-headers,-firmware} \
+            core/coreutils \
+            core/util-linux \
+            core/systemd{,-sysvcompat}
+
+        # SHELL
+        pacman --sync --needed \
+            core/bash \
+            extra/bash-completion \
+            extra/zsh{,-doc} \
+            core/man-pages \
+            core/texinfo \
+            extra/vim \
+            community/shellcheck
+
+        # UTIL
+        pacman --sync --needed \
+            community/at \
+            extra/bc \
+            core/binutils \
+            core/bzip2 \
+            extra/cpio \
+            core/diffutils \
+            community/dos2unix \
+            core/dosfstools \
+            community/exa \
+            core/file \
+            core/findutils \
+            core/gawk \
+            core/gnupg \
+            core/grep \
+            core/gzip \
+            core/less \
+            extra/lynx \
+            core/lz4 \
+            extra/lzop \
+            community/moreutils \
+            extra/most \
+            core/ncurses \
+            community/pandoc \
+            community/parallel \
+            community/pigz \
+            community/pygmentize \
+            core/readline \
+            core/sed \
+            core/tar \
+            extra/time \
+            extra/tree \
+            extra/unzip \
+            core/which \
+            community/words \
+            core/xz \
+            extra/zip \
+            core/zstd
+
+        # SYSADMIN
+        pacman --sync --needed \
+            core/acl \
+            core/btrfs-progs \
+            core/cronie \
+            core/cryptsetup \
+            extra/dkms \
+            extra/dmidecode \
+            core/device-mapper \
+            core/e2fsprogs \
+            community/exim \
+            core/fakeroot \
+            extra/gptfdisk \
+            extra/haveged \
+            core/hdparm \
+            extra/htop \
+            core/mkinitcpio{,-busybox} \
+            extra/irqbalance \
+            core/keyutils \
+            core/kmod \
+            community/libosinfo \
+            extra/lm_sensors \
+            core/logrotate \
+            core/lsb-release \
+            extra/lsof \
+            core/lvm2 \
+            core/mdadm \
+            extra/parted \
+            core/pciutils \
+            core/procps-ng \
+            core/psmisc \
+            community/rng-tools \
+            core/shadow \
+            extra/smartmontools \
+            extra/strace \
+            core/sudo \
+            extra/syslog-ng \
+            community/sysstat \
+            core/thin-provisioning-tools \
+            community/tmux \
+            core/tzdata \
+            core/usbutils \
+            community/xfsdump \
+            core/xfsprogs
+
+        # NETWORK OPERATOR
+        pacman --sync --needed \
+            extra/bind-tools \
+            core/bridge-utils \
+            core/ca-certificates{,-mozilla,-utils} \
+            community/chrony \
+            core/curl \
+            core/dhcpcd \
+            extra/dhclient \
+            core/dnssec-anchors \
+            community/dnstracer \
+            extra/ethtool \
+            extra/fping \
+            extra/geoip{,-database{,-extra}} \
+            core/inetutils \
+            community/httpie \
+            community/iperf3 \
+            core/iproute2 \
+            extra/ipset \
+            core/iptables \
+            core/iputils \
+            community/ipvsadm \
+            core/ldns \
+            community/mosh \
+            extra/mtr \
+            core/net-tools \
+            extra/gnu-netcat \
+            extra/nftables \
+            community/nikto \
+            extra/nmap \
+            extra/ntp \
+            core/openssh \
+            core/openssl \
+            extra/rsync \
+            extra/socat \
+            community/sslscan \
+            community/swaks \
+            extra/tcpdump \
+            community/testssl.sh \
+            core/traceroute \
+            extra/wget \
+            extra/whois \
+            core/wireless_tools \
+            community/wireshark-cli \
+            core/wpa_supplicant
+
+        # PLT
+        pacman --sync --needed \
+            core/gcc \
+            extra/gdb \
+            extra/valgrind \
+            extra/clang \
+            extra/llvm \
+            community/elixir \
+            community/erlang-{nox,docs} \
+            community/go \
+            community/ghc \
+            extra/jdk-openjdk \
+            extra/openjdk-doc \
+            extra/sbcl \
+            community/nodejs \
+            extra/ocaml \
+            extra/php \
+            extra/python{,-pip,-virtualenv} \
+            extra/ruby{,-docs} \
+            extra/rust{,-docs}
+
+        # GAME
+        pacman --sync --needed \
+            community/cmatrix \
+            extra/cowsay \
+            community/fortune-mod \
+            community/neofetch \
+            community/screenfetch \
+            community/sl
+
+        # DevOps
+        pacman --sync --needed \
+            community/ansible{,-lint} \
+            community/certbot \
+            extra/dnsmasq \
+            community/docker \
+            extra/git \
+            community/libvirt \
+            extra/nginx \
+            community/nginx-mod-auth-pam \
+            community/oath-toolkit \
+            core/pam \
+            community/libpam-google-authenticator \
+            extra/qemu-headless \
+            community/salt \
+            community/virt-install \
+            community/wireguard-{dkms,tools}
+
+        systemctl disable --now \
+            dnsmasq.service \
+            libvirt{d,-guests}.service \
+            virtlogd.service \
+            nginx.service \
+            salt-{api,master,minion,syndic}.service
+
+        systemctl enable --now \
+            docker.service
+
+        pacman --files --list \
+            openssh \
+            | awk --field-separator '[/ ]' '/usr\/lib\/systemd\/.+\/.+\..+[^/]$/ { printf "%-24s%s\n", $1, $NF }'
+
+        pacman --query --owns /etc/bash.bashrc
 
         ;;
     ubuntu)
