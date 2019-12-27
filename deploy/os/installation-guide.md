@@ -22,7 +22,7 @@ if [ -n "${ANSIBLE_USER}" ]; then
     sudo useradd --create-home --shell /bin/bash --uid 1024 "${ANSIBLE_USER}"
     sudo gpasswd --add "${ANSIBLE_USER}" sudo
     sudo gpasswd --add "${ANSIBLE_USER}" sysadmin
-    sudo install --mode 600 /dev/stdin "/etc/sudoers.d/${ANSIBLE_USER}" << EOF
+    sudo SUDO_EDITOR='tee' visudo --file "/etc/sudoers.d/${ANSIBLE_USER}" << EOF
 ${ANSIBLE_USER} ALL=(ALL:ALL) NOPASSWD:ALL
 EOF
     sudo passwd --lock "${ANSIBLE_USER}"
