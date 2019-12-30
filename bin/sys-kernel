@@ -10,7 +10,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 uname --machine --kernel-release --kernel-version
 
 case "${DISTRO}" in
-    arch)
+    arch | manjaro)
         pacman --query 'linux'
         ;;
     fedora)

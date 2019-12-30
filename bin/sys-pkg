@@ -8,11 +8,20 @@ fi
 DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 
 case "${DISTRO}" in
-    arch)
-        pacman --query --info | awk '/^Name/ { name=$3 } /^Version/ { version=$3 } /^Architecture/ { architecture=$3 } /^Installed Size/ { printf "%-14s %s-%s-%s\n", $4$5, name, version, architecture }' | sort --human-numeric-sort --reverse
+    arch | manjaro)
+        pacman --query --info \
+            | awk '/^Name/ { name=$3 } /^Version/ { version=$3 } /^Architecture/ { architecture=$3 } /^Installed Size/ { printf "%-14s %s-%s-%s\n", $4$5, name, version, architecture }' \
+            | sort --human-numeric-sort --reverse
+        ;;
+    fedora)
+        rpm --query --all --queryformat '%{SIZE} %{NAME}-%{VERSION}.%{ARCH}\n' \
+            | numfmt --field 1 --format '%-14.2f' --to iec-i \
+            | sort --human-numeric-sort --reverse
         ;;
     kali | ubuntu)
-        dpkg-query --show --showformat '${Installed-Size} ${Package}_${Version}_${Architecture}\n' | sort --human-numeric-sort --reverse | awk '{ printf "%-14.2f %s\n", $1/1024, $2 }'
+        dpkg-query --show --showformat '${Installed-Size} ${Package}_${Version}_${Architecture}\n' \
+            | numfmt --field 1 --format '%-14.2f' --from-unit 1024 --to iec-i \
+            | sort --human-numeric-sort --reverse
         ;;
     *)
         echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
