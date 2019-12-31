@@ -28,7 +28,10 @@ fi
 
 bind Space:magic-space
 
-complete -cf man
+if [ ! -r /usr/share/bash-completion/bash_completion ]; then
+    complete -cf man
+    complete -cf sudo
+fi
 
 shopt -s autocd
 shopt -s histappend
@@ -37,7 +40,7 @@ shopt -s histverify
 # BASIC
 export EDITOR=vim
 export HISTCONTROL=erasedups:ignorespace
-export HISTSIZE=64
+export HISTSIZE=256
 export HISTTIMEFORMAT='%F %T '
 export LESSHISTFILE=-
 export MANPAGER=most
