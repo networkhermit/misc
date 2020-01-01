@@ -61,7 +61,7 @@ export RUBYLIB=~/STEM/lib/plt/ruby/src
 # ALIAS
 alias acp='scp -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias ash='ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-alias bs='find . -type l -exec [ ! -e '\'{}\'' ] \; -print'
+alias bs="find . -type l -exec test ! -e '{}' \; -print"
 alias ccat='pygmentize -g'
 alias clip='xclip -selection clip <'
 alias d='cd - &> /dev/null'
@@ -79,8 +79,8 @@ alias la='ls --almost-all'
 alias le='exa --color auto'
 alias ll='ls --human-readable -l --time-style long-iso'
 alias ls='ls --color=auto'
-alias n='cd .; clear; fortune | cowsay -f www; date --utc "+%F %T %z" --date "now $(((RANDOM % 2)); echo + || echo -) $RANDOM days"; history -cw; rm --force ~/.bash_history'
-alias pass='echo $(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr --delete "=+/[:space:]" | dd bs=32 count=1 2>/dev/null)'
+alias n='cd .; clear; fortune | cowsay -f www; date --utc "+%F %T %z" --date "now $(((RANDOM & 1)) && echo + || echo -) ${RANDOM} days"; history -cw; rm --force ~/.bash_history'
+alias pass='echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr --delete +/= | dd bs=32 count=1 2>/dev/null)"'
 alias s='cd ..'
 alias sc='shellcheck'
 alias sha='sha256sum'
@@ -89,8 +89,8 @@ alias www='python3 -B -W:all -m http.server'
 
 alias sudo='sudo '
 
-alias alias='true'
 alias unalias='true'
+alias alias='true'
 
 # PRIVACY
 unset HISTFILE

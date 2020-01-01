@@ -15,12 +15,12 @@ case "${DISTRO}" in
         ;;
     fedora)
         rpm --query --all --queryformat '%{SIZE} %{NAME}-%{VERSION}.%{ARCH}\n' \
-            | numfmt --field 1 --format '%-14.2f' --to iec-i \
+            | numfmt --field 1 --format '%-14.2f' --from none --to iec-i \
             | sort --human-numeric-sort --reverse
         ;;
     kali | ubuntu)
         dpkg-query --show --showformat '${Installed-Size} ${Package}_${Version}_${Architecture}\n' \
-            | numfmt --field 1 --format '%-14.2f' --from-unit 1024 --to iec-i \
+            | numfmt --field 1 --format '%-14.2f' --from none --from-unit 1024 --to iec-i \
             | sort --human-numeric-sort --reverse
         ;;
     *)
