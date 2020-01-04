@@ -46,7 +46,7 @@ kubeadm config print join-defaults
 
 # join node to cluster
 install --directory --mode 700 ~/.kube
-sudo kubeadm join '<MASTER-IP>':'<MASTER-PORT>' --token '<TOKEN>' --discovery-token-ca-cert-hash sha256:'<HASH>' --ignore-preflight-errors NumCPU,SystemVerification |& tee ~/.kube/log
+sudo kubeadm join "${CONTROL_PLANE_ENDPOINT}" --token "${TOKEN}" --discovery-token-ca-cert-hash "${HASH}" --ignore-preflight-errors NumCPU,SystemVerification |& tee ~/.kube/log
 sudo systemctl enable kubelet.service
 
 # create new token after current token expired
