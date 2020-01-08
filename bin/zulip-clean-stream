@@ -3,7 +3,7 @@
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/zulip.cfg"
 
-export past=${past:=86400}
+export MESSAGE_RETENTION=${MESSAGE_RETENTION:=86400}
 
 list=$(curl --fail --location --silent --show-error --request GET \
     --get \
@@ -22,7 +22,7 @@ response = json.load(sys.stdin)
 
 if response["result"] == "success":
     for message in response["messages"]:
-        if message["timestamp"] < time.time() - int(os.environ["past"]):
+        if message["timestamp"] < time.time() - int(os.environ["MESSAGE_RETENTION"]):
             print(message["id"])
     ')
 

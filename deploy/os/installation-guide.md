@@ -164,6 +164,15 @@ EOF
 sudo tee /etc/pacman.d/mirrorlist << 'EOF'
 Server = https://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch
 EOF
+## opensuse
+sudo zypper addrepo --check --gpgcheck --refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss tumbleweed-oss
+sudo zypper addrepo --check --gpgcheck --refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/non-oss tumbleweed-non-oss
+sudo zypper addrepo --check --gpgcheck --refresh https://download.opensuse.org/update/tumbleweed/ tumbleweed-update
+# https://build.opensuse.org/project
+# https://download.opensuse.org
+sudo zypper addrepo --check --gpgcheck --refresh https://download.opensuse.org/repositories/network/openSUSE_Tumbleweed/network.repo
+sudo zypper addrepo --check --gpgcheck --refresh https://download.opensuse.org/repositories/security/openSUSE_Tumbleweed/security.repo
+sudo zypper addrepo --check --gpgcheck --refresh https://download.opensuse.org/repositories/utilities/openSUSE_Factory/utilities.repo
 ## ubuntu
 sudo tee /etc/apt/sources.list << 'EOF'
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic main restricted universe multiverse
@@ -182,18 +191,22 @@ EOF
 # reference script=sys-obs
 
 # update message of the day
+sudo mv --no-clobber --verbose /etc/motd{,.original}
 sudo tee /etc/motd << 'EOF'
 
-The programs included with the OS_RELEASE_ID GNU/Linux system are free software;
+The programs included with the OS_RELEASE_NAME GNU/Linux system are free software;
 the exact distribution terms for each program are described in the
 individual files in /usr/share/doc/*/copyright.
 
-OS_RELEASE_ID GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+OS_RELEASE_NAME GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
 permitted by applicable law.
 EOF
-OS_RELEASE_ID=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
-sudo sed --in-place "s/OS_RELEASE_ID/${OS_RELEASE_ID^}/g" /etc/motd
-unset OS_RELEASE_ID
+# shellcheck disable=SC1090
+source <(grep '^NAME=' /etc/os-release)
+: "${NAME:=Linux}"
+OS_RELEASE_NAME=${NAME% Linux}
+sudo sed --in-place "s/OS_RELEASE_NAME/${OS_RELEASE_NAME}/g" /etc/motd
+unset NAME OS_RELEASE_NAME
 
 # modify secure shell daemon
 sudo vim /etc/ssh/sshd_config
@@ -280,8 +293,10 @@ EOF
 sudo systemctl enable --now pkgfile-update.timer
 ## kali | ubuntu
 sudo apt install --assume-yes command-not-found < /dev/null
-sudo apt update --list-cleanup
+sudo apt update
 sudo update-command-not-found
+## opensuse
+sudo zypper install command-not-found
 
 # reboot system
 sudo sync
@@ -438,6 +453,7 @@ Fedora
 sudo dnf install policycoreutils-python-utils
 sudo semanage port --add --type ssh_port_t --proto tcp 321
 sudo firewall-cmd --permanent --service ssh --add-port 321/tcp
+sudo firewall-cmd --permanent --service ssh --remove-port 22/tcp
 sudo firewall-cmd --permanent --service ssh --get-ports
 sudo firewall-cmd --reload
 sudo systemctl restart sshd.service
@@ -611,6 +627,63 @@ sudo systemctl enable sshd.service
 
 # install arch-install-scripts
 yes | sudo pacman --sync --needed arch-install-scripts
+
+# reboot system
+```
+
+openSUSE
+========
+
+```bash
+# shellcheck shell=bash
+
+# change root password
+
+# check sudo support
+
+# add default sysadmin
+
+# change hostname
+
+# check internet connection
+
+# modify dns resolver
+
+# configure default address selection
+
+# modify default ntp server
+
+# update system clock
+
+# modify time zone
+
+# configure system network
+
+# change distro source
+
+# make distro sync
+
+# update message of the day
+
+# modify secure shell daemon
+sudo firewall-cmd --permanent --service ssh --add-port 321/tcp
+sudo firewall-cmd --permanent --service ssh --remove-port 22/tcp
+sudo firewall-cmd --permanent --service ssh --get-ports
+sudo firewall-cmd --reload
+sudo systemctl restart sshd.service
+sudo systemctl enable sshd.service
+
+# update initramfs image
+
+# update boot loader
+
+# network control
+
+# disable dynamic resolver
+
+# manage system service
+
+# install command-not-found
 
 # reboot system
 ```

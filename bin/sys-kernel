@@ -2,10 +2,12 @@
 
 if [ "${OSTYPE}" != 'linux-gnu' ]; then
     echo "✗ unknown os type: ‘${OSTYPE}’" 1>&2
-    exit
+    exit 1
 fi
 
-DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
+# shellcheck disable=SC1090
+source <(grep '^ID=' /etc/os-release)
+DISTRO=${ID:-linux}
 
 uname --machine --kernel-release --kernel-version
 
@@ -18,6 +20,9 @@ case "${DISTRO}" in
         ;;
     kali | ubuntu)
         dpkg --get-selections 'linux-image-[0-9]*' | tac
+        ;;
+    opensuse*)
+        rpm --query 'kernel-default'
         ;;
     *)
         echo "✗ unknown distro: ‘${DISTRO}’" 1>&2

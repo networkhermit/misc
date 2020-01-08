@@ -10,7 +10,9 @@ if [ "${OSTYPE}" != 'linux-gnu' ]; then
     exit 1
 fi
 
-DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
+# shellcheck disable=SC1090
+source <(grep '^ID=' /etc/os-release)
+DISTRO=${ID:-linux}
 
 case "${DISTRO}" in
     arch | manjaro)
@@ -28,6 +30,10 @@ case "${DISTRO}" in
     kali | ubuntu)
         update-initramfs -k all -u
         grub-mkconfig --output /boot/grub/grub.cfg
+        ;;
+    opensuse*)
+        dracut --force --regenerate-all
+        grub2-mkconfig --output /boot/grub2/grub.cfg
         ;;
     *)
         echo "✗ unknown distro: ‘${DISTRO}’" 1>&2

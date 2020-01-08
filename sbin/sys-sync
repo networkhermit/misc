@@ -5,30 +5,69 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
+while (( $# > 0 )); do
+    case "${1}" in
+        -f|--force)
+            FORCE_SYNC=true
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+if (( $# > 0 )); then
+    echo "✗ unrecognized parameter: ‘${1}’" 1>&2
+    exit 1
+fi
+
 if [ "${OSTYPE}" != 'linux-gnu' ]; then
     echo "✗ unknown os type: ‘${OSTYPE}’" 1>&2
     exit 1
 fi
 
-DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
+# shellcheck disable=SC1090
+source <(grep '^ID=' /etc/os-release)
+DISTRO=${ID:-linux}
 
 case "${DISTRO}" in
     arch | manjaro)
-        pacman --sync --refresh --sysupgrade --color auto
-        yes | pacman --sync --clean --clean --color auto
+        if [ "${FORCE_SYNC}" = true ]; then
+            yes | pacman --sync --clean --clean
+        fi
+        pacman --sync --refresh --sysupgrade
+        yes | pacman --sync --clean --clean
         ;;
     fedora)
-        dnf clean metadata
+        if [ "${FORCE_SYNC}" = true ]; then
+            dnf clean all
+        fi
         dnf makecache
         dnf distro-sync
         dnf autoremove
         dnf clean packages
         ;;
     kali | ubuntu)
-        apt update --list-cleanup
+        if [ "${FORCE_SYNC}" = true ]; then
+            apt clean
+        fi
+        apt update
         apt full-upgrade --purge
         apt clean
         apt autoremove --purge
+        ;;
+    opensuse*)
+        if [ "${FORCE_SYNC}" = true ]; then
+            zypper clean --all
+        fi
+        zypper refresh
+        zypper dist-upgrade
+        zypper clean
         ;;
     *)
         echo "✗ unknown distro: ‘${DISTRO}’" 1>&2

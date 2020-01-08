@@ -37,7 +37,7 @@ printf '%s\n' "${arr[@]}"
 ## [gcr]
 sudo kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
 printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null sudo docker image pull
-## [azure]
+## [azure proxy]
 for i in "${arr[@]}"; do
     construct_image "${i}" gcr.azk8s.cn/google_containers
 done

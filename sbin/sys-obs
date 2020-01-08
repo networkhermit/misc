@@ -10,7 +10,9 @@ if [ "${OSTYPE}" != 'linux-gnu' ]; then
     exit 1
 fi
 
-DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
+# shellcheck disable=SC1090
+source <(grep '^ID=' /etc/os-release)
+DISTRO=${ID:-linux}
 
 case "${DISTRO}" in
     arch | manjaro)
@@ -18,22 +20,29 @@ case "${DISTRO}" in
         pacman --query --foreign | sed 's/$/ [foreign]/g' | column -t
         pacman --query --deps --unrequired | sed 's/$/ [orphan]/g' | column -t
         echo '------ [ configuration ] ------'
-        find /etc -type f -iregex '.+\.pac\(new\|save\)' -print0 | sort --zero-terminated | tr '\0' '\n'
+        find /etc -type f -iregex '.+\.\(old\|pac\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
         ;;
     fedora)
         echo '------ [ package ] ------'
         dnf --cacheonly --quiet list --extras
         dnf --cacheonly --quiet list --obsoletes
         echo '------ [ configuration ] ------'
-        find /etc -type f -iregex '.+\.rpm\(new\|save\)' -print0 | sort --zero-terminated | tr '\0' '\n'
+        find /etc -type f -iregex '.+\.\(old\|rpm\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
         ;;
     kali | ubuntu)
         echo '------ [ package ] ------'
         apt list 2> /dev/null | grep '\<\(local\|residual-config\)\]' | column -t
         apt search '\<(dummy|transitional)\>' 2> /dev/null | grep '\[installed\>' | column -t
         echo '------ [ configuration ] ------'
-        find /etc -type f \( -iregex '.+\.dpkg-\(dist\|new\|old\)' -o -iregex '.+\.ucf-\(dist\|new\|old\)' \) -print0 | sort --zero-terminated | tr '\0' '\n'
+        find /etc -type f \( -iregex '.+\.dpkg-\(dist\|new\|old\)' -o -iregex '.+\.old' -o -iregex '.+\.ucf-\(dist\|new\|old\)' \) -print0 | sort --zero-terminated | tr '\0' '\n'
         dpkg-query --show --showformat '${Package}\n${Conffiles}\n' | awk '/^[^ ]/{pkg=$1}/ obsolete$/{print pkg,$0}' | column -t
+        ;;
+    opensuse*)
+        echo '------ [ package ] ------'
+        zypper packages --orphaned
+        zypper packages --unneeded
+        echo '------ [ configuration ] ------'
+        find /etc -type f -iregex '.+\.\(old\|rpm\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
         ;;
     *)
         echo "✗ unknown distro: ‘${DISTRO}’" 1>&2

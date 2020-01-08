@@ -153,6 +153,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       ntp
 #       openssh
 #       openssl
+#       publicsuffix
 #       rsync
 #       socat
 #       sslscan
@@ -355,6 +356,7 @@ case "${DISTRO}" in
             extra/ntp \
             core/openssh \
             core/openssl \
+            extra/publicsuffix-list \
             extra/rsync \
             extra/socat \
             community/sslscan \
@@ -580,6 +582,7 @@ case "${DISTRO}" in
             sntp \
             openssh{,-clients,-server} \
             openssl \
+            publicsuffix-list \
             rsync \
             socat \
             sslscan \
@@ -817,6 +820,7 @@ case "${DISTRO}" in
             sntp \
             openssh-{client,server,sftp-server} \
             openssl \
+            publicsuffix \
             rsync \
             socat \
             sslscan \
@@ -1064,6 +1068,7 @@ EOF
             extra/ntp \
             core/openssh \
             core/openssl \
+            extra/publicsuffix-list \
             extra/rsync \
             extra/socat \
             community/sslscan \
@@ -1140,6 +1145,232 @@ EOF
             | awk --field-separator '[/ ]' '/usr\/lib\/systemd\/.+\/.+\..+[^/]$/ { printf "%-24s%s\n", $1, $NF }'
 
         pacman --query --owns /etc/bash.bashrc
+
+        ;;
+    opensuse*)
+
+        # CORE
+        zypper install \
+            aaa_base{,-extras} \
+            filesystem \
+            openSUSE-release \
+            glibc{,-devel} \
+            kernel-{default{,-devel},devel,docs} \
+            kernel-firmware-all \
+            coreutils \
+            util-linux \
+            systemd{,-sysvinit}
+
+        # SHELL
+        zypper install \
+            bash{,-completion,-doc} \
+            zsh \
+            man{,-pages} \
+            info \
+            vim \
+            ShellCheck
+
+        # UTIL
+        zypper install \
+            at \
+            bc \
+            binutils \
+            bzip2 \
+            cpio \
+            diffutils \
+            dos2unix \
+            dosfstools \
+            exa \
+            file \
+            findutils \
+            finger \
+            gawk \
+            gpg2 \
+            grep \
+            gzip \
+            less \
+            lynx \
+            lz4 \
+            lzop \
+            moreutils \
+            most \
+            ncurses-{devel,utils} \
+            pandoc \
+            gnu_parallel \
+            pigz \
+            python3-Pygments \
+            libreadline8 \
+            readline-doc \
+            sed \
+            tar \
+            time \
+            tree \
+            unzip \
+            which \
+            words \
+            xz \
+            zip \
+            zstd
+
+        # SYSADMIN
+        zypper install \
+            acl \
+            btrfsprogs \
+            cron \
+            cronie \
+            cryptsetup \
+            dkms \
+            dmidecode \
+            device-mapper \
+            e2fsprogs \
+            exim \
+            fakeroot \
+            gptfdisk \
+            haveged \
+            hdparm \
+            htop \
+            dracut \
+            irqbalance \
+            keyutils \
+            kmod \
+            libosinfo \
+            sensors \
+            logrotate \
+            lsb-release \
+            lsof \
+            lvm2 \
+            mdadm \
+            numad \
+            parted \
+            pciutils \
+            procps \
+            psmisc \
+            rng-tools \
+            shadow \
+            smartmontools \
+            strace \
+            sudo \
+            rsyslog{,-doc} \
+            syslog-ng \
+            sysstat \
+            thin-provisioning-tools \
+            tmux \
+            timezone \
+            usbutils \
+            xfsdump \
+            xfsprogs
+
+        # NETWORK OPERATOR
+        zypper install \
+            bind-utils \
+            bridge-utils \
+            ca-certificates{,-mozilla} \
+            chrony \
+            curl \
+            dhcp{,-client} \
+            dnstracer \
+            ethtool \
+            fping \
+            GeoIP{,-data} \
+            hostname \
+            python3-httpie \
+            iperf \
+            iproute2 \
+            ipset \
+            iptables \
+            iputils \
+            ipvsadm \
+            ldns \
+            mosh \
+            mtr \
+            net-tools \
+            netcat-openbsd \
+            nftables \
+            nikto \
+            nmap \
+            ntp{,-doc} \
+            openssh \
+            openssl \
+            publicsuffix \
+            rsync \
+            socat \
+            sslscan \
+            swaks \
+            tcpdump \
+            telnet \
+            traceroute \
+            wget \
+            whois \
+            wireless-tools \
+            wireshark \
+            wpa_supplicant
+
+        # PLT
+        zypper install \
+            gcc{,-info} \
+            cpp \
+            gdb \
+            valgrind \
+            gcc-c++ \
+            clang \
+            llvm{,9-doc} \
+            elixir{,-doc} \
+            erlang{,-doc} \
+            go{,-doc} \
+            ghc \
+            java-13-openjdk{-headless,-javadoc} \
+            sbcl \
+            nodejs12{,-docs} \
+            ocaml \
+            php7 \
+            python3{,-doc,-pip,-virtualenv} \
+            ruby{,2.6-doc} \
+            rust{,-doc,-src} \
+            cargo{,-doc}
+
+        # GAME
+        zypper install \
+            cmatrix \
+            cowsay \
+            fortune \
+            neofetch \
+            screenfetch \
+            sl
+
+        # DevOps
+        zypper install \
+            ansible{,-doc} \
+            python3-certbot \
+            dnsmasq \
+            git{,-doc} \
+            libguestfs0 \
+            libvirt \
+            nginx \
+            oath-toolkit \
+            pam \
+            qemu-tools \
+            salt{,-{api,cloud,master,minion,ssh,syndic}} \
+            virt-install \
+            wireguard-tools
+
+        zypper install docker
+        zypper clean
+
+        systemctl disable --now \
+            dnsmasq.service \
+            libvirt{d,-guests}.service \
+            virtlogd.service \
+            nginx.service \
+            salt-{api,master,minion,syndic}.service
+
+        systemctl enable --now \
+            docker.service
+
+        rpm --query --list \
+            openssh \
+            | awk --field-separator '[/ ]' '/\/lib\/systemd\/.+\/.+\..+/ { printf "%s\n", $NF }'
+
+        rpm --query --file /etc/bash.bashrc
 
         ;;
     ubuntu)
@@ -1290,6 +1521,7 @@ EOF
             sntp \
             openssh-{client,server,sftp-server} \
             openssl \
+            publicsuffix \
             rsync \
             socat \
             sslscan \

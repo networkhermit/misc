@@ -1,3 +1,7 @@
 #!/bin/bash
 
-awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release
+# shellcheck disable=SC1090
+source <(grep '^ID=' /etc/os-release)
+DISTRO=${ID:-linux}
+
+echo "${DISTRO}"

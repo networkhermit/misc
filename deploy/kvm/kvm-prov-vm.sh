@@ -9,7 +9,7 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-ARGC=4
+ARGC=6
 LEAST_ARGC=2
 
 if (( $# > ARGC )); then
@@ -25,6 +25,9 @@ DISTRO=${1}
 NAME=${2}
 CPU=${3:-4}
 MEMORY=${4:-8192}
+
+DISK_DIRECTORY=${5:-/var/local/images}
+DISK_SIZE=${6:-40}
 
 EXTRA_ARGUMENT=()
 
@@ -47,6 +50,11 @@ case "${DISTRO}" in
         EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
         EXTRA_ARGUMENT+=(--os-variant debiantesting)
         ;;
+    opensuse)
+        EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss)
+        EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
+        EXTRA_ARGUMENT+=(--os-variant opensusetumbleweed)
+        ;;
     ubuntu)
         EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/bionic/main/installer-amd64)
         EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
@@ -63,7 +71,7 @@ virt-install \
     --connect qemu:///system \
     --console char_type=pty,target_type=serial \
     --cpu host \
-    --disk device=disk,format=qcow2,path="/var/local/images/${NAME}.qcow2",size=40 \
+    --disk "device=disk,format=qcow2,path=${DISK_DIRECTORY}/${NAME}.qcow2,size=${DISK_SIZE}" \
     --features kvm_hidden=off \
     --graphics none \
     --hvm \

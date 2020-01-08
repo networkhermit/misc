@@ -5,7 +5,9 @@ if [ "${OSTYPE}" != 'linux-gnu' ]; then
     exit 1
 fi
 
-DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
+# shellcheck disable=SC1090
+source <(grep '^ID=' /etc/os-release)
+DISTRO=${ID:-linux}
 
 case "${DISTRO}" in
     arch | manjaro)
@@ -13,7 +15,7 @@ case "${DISTRO}" in
             | awk '/^Name/ { name=$3 } /^Version/ { version=$3 } /^Architecture/ { architecture=$3 } /^Installed Size/ { printf "%-14s %s-%s-%s\n", $4$5, name, version, architecture }' \
             | sort --human-numeric-sort --reverse
         ;;
-    fedora)
+    fedora | opensuse*)
         rpm --query --all --queryformat '%{SIZE} %{NAME}-%{VERSION}.%{ARCH}\n' \
             | numfmt --field 1 --format '%-14.2f' --from none --to iec-i \
             | sort --human-numeric-sort --reverse

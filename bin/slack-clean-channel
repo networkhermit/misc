@@ -3,7 +3,7 @@
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/slack.cfg"
 
-export past=${past:=86400}
+export MESSAGE_RETENTION=${MESSAGE_RETENTION:=86400}
 
 list=$(curl --fail --location --silent --show-error --request GET \
     --header 'Authorization: Bearer '"${TOKEN}" \
@@ -23,7 +23,7 @@ response = json.load(sys.stdin)
 
 if response["ok"]:
     for message in response["messages"]:
-        if message["ts"] < str(time.time() - int(os.environ["past"])):
+        if message["ts"] < str(time.time() - int(os.environ["MESSAGE_RETENTION"])):
             print(message["ts"])
     ' \
     | tac)
