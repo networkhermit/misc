@@ -209,7 +209,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       nginx
 #       oathtool
 #       pam
-#       qemu-utils
+#       qemu
 #       salt
 #       virtinst
 #       wireguard
@@ -223,7 +223,7 @@ case "${DISTRO}" in
             core/filesystem \
             core/iana-etc \
             core/glibc \
-            core/linux{,-api-headers,-headers,-docs,-firmware} \
+            core/linux{,-api-headers,-docs,-firmware,-headers} \
             core/coreutils \
             core/util-linux \
             core/systemd{,-sysvcompat}
@@ -378,7 +378,7 @@ case "${DISTRO}" in
             extra/clang \
             extra/llvm \
             community/elixir \
-            community/erlang-{nox,docs} \
+            community/erlang-{docs,nox} \
             community/go \
             community/ghc \
             extra/jdk-openjdk \
@@ -640,7 +640,7 @@ case "${DISTRO}" in
             nginx \
             oathtool \
             pam \
-            qemu-img \
+            qemu-{img,system-x86} \
             salt{,-{api,cloud,master,minion,ssh,syndic}} \
             virt-install \
             wireguard-{dkms,tools}
@@ -658,14 +658,14 @@ case "${DISTRO}" in
             libvirt{d,-guests}.service \
             virtlogd.service \
             nginx.service \
-            qemu-kvm.service \
             salt-{api,master,minion,syndic}.service
 
         systemctl enable --now \
             docker.service
 
-        rpm --query --list \
+        rpm --query \
             openssh-server \
+            --list \
             | awk --field-separator '[/ ]' '/\/lib\/systemd\/.+\/.+\..+/ { printf "%s\n", $NF }'
 
         rpm --query --file /etc/bashrc
@@ -679,7 +679,7 @@ case "${DISTRO}" in
             netbase \
             libc{6,6-dev,-bin,-dev-bin} \
             glibc-doc \
-            linux-{image-amd64,headers-amd64,doc} \
+            linux-{doc,headers-amd64,image-amd64} \
             firmware-linux \
             coreutils \
             util-linux \
@@ -742,7 +742,7 @@ case "${DISTRO}" in
             acl \
             btrfs-progs \
             cron \
-            cryptsetup-{run,initramfs} \
+            cryptsetup-{initramfs,run} \
             dkms \
             dmidecode \
             dmsetup \
@@ -842,16 +842,16 @@ case "${DISTRO}" in
             gdb{,-doc} \
             valgrind \
             g++ \
-            clang{,-format,-8-doc} \
+            clang{,-8-doc,-format} \
             llvm{,-8-doc} \
             elixir \
-            erlang-{nox,doc} \
+            erlang-{doc,nox} \
             golang{,-doc,-src} \
             ghc{,-doc} \
-            default-jdk-{headless,doc} \
+            default-jdk-{doc,headless} \
             sbcl{,-doc} \
             nodejs{,-doc} \
-            ocaml-{nox,doc} \
+            ocaml-{doc,nox} \
             php \
             python3{,-doc,-pip,-virtualenv} \
             ruby{,2.5-doc} \
@@ -876,11 +876,11 @@ case "${DISTRO}" in
             git{,-doc} \
             libguestfs-tools \
             libvirt-{clients,daemon-system} \
-            nginx-{full,doc} \
+            nginx-{doc,full} \
             libnginx-mod-http-{auth-pam,lua} \
             oathtool \
-            libpam-{modules{,-bin},doc,google-authenticator} \
-            qemu-utils \
+            libpam-{doc,google-authenticator,modules{,-bin}} \
+            qemu-{system-x86,utils} \
             virtinst \
             wireguard
 
@@ -915,7 +915,6 @@ EOF
             libvirt{d,-guests}.service \
             virtlogd.service \
             nginx.service \
-            qemu-kvm.service \
             salt-{api,master,minion,syndic}.service
 
         systemctl enable --now \
@@ -935,7 +934,7 @@ EOF
             core/filesystem \
             core/iana-etc \
             core/glibc \
-            core/linux{,-api-headers,-headers,-firmware} \
+            core/linux{,-api-headers,-firmware,-headers} \
             core/coreutils \
             core/util-linux \
             core/systemd{,-sysvcompat}
@@ -1090,7 +1089,7 @@ EOF
             extra/clang \
             extra/llvm \
             community/elixir \
-            community/erlang-{nox,docs} \
+            community/erlang-{docs,nox} \
             community/go \
             community/ghc \
             extra/jdk-openjdk \
@@ -1267,7 +1266,7 @@ EOF
             ca-certificates{,-mozilla} \
             chrony \
             curl \
-            dhcp{,-client} \
+            dhcp-client \
             dnstracer \
             ethtool \
             fping \
@@ -1348,7 +1347,7 @@ EOF
             nginx \
             oath-toolkit \
             pam \
-            qemu-tools \
+            qemu-{tools,x86} \
             salt{,-{api,cloud,master,minion,ssh,syndic}} \
             virt-install \
             wireguard-tools
@@ -1366,8 +1365,9 @@ EOF
         systemctl enable --now \
             docker.service
 
-        rpm --query --list \
+        rpm --query \
             openssh \
+            --list \
             | awk --field-separator '[/ ]' '/\/lib\/systemd\/.+\/.+\..+/ { printf "%s\n", $NF }'
 
         rpm --query --file /etc/bash.bashrc
@@ -1381,7 +1381,7 @@ EOF
             netbase \
             libc{6,6-dev,-bin,-dev-bin} \
             glibc-doc \
-            linux-{image-generic,headers-generic,doc,firmware} \
+            linux-{doc,firmware,headers-generic,image-generic} \
             coreutils \
             util-linux \
             bsdutils \
@@ -1543,16 +1543,16 @@ EOF
             gdb{,-doc} \
             valgrind \
             g++ \
-            clang{,-format,-6.0-doc} \
+            clang{,-6.0-doc,-format} \
             llvm{,-6.0-doc} \
             elixir \
-            erlang-{nox,doc} \
+            erlang-{doc,nox} \
             golang{,-doc,-src} \
             ghc{,-doc} \
-            default-jdk-{headless,doc} \
+            default-jdk-{doc,headless} \
             sbcl{,-doc} \
             nodejs{,-doc} \
-            ocaml-{nox,doc} \
+            ocaml-{doc,nox} \
             php \
             python3{,-doc,-pip,-virtualenv} \
             ruby{,2.5-doc} \
@@ -1577,11 +1577,11 @@ EOF
             git{,-doc} \
             libguestfs-tools \
             libvirt-{clients,daemon-system} \
-            nginx-{full,doc} \
+            nginx-{doc,full} \
             libnginx-mod-http-{auth-pam,lua} \
             oathtool \
-            libpam-{modules{,-bin},doc,google-authenticator} \
-            qemu-utils \
+            libpam-{doc,google-authenticator,modules{,-bin}} \
+            qemu-{system-x86,utils} \
             virtinst \
             wireguard
 

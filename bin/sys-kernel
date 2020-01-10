@@ -9,20 +9,26 @@ fi
 source <(grep '^ID=' /etc/os-release)
 DISTRO=${ID:-linux}
 
-uname --machine --kernel-release --kernel-version
+uname --kernel-name --kernel-release --kernel-version --machine
 
 case "${DISTRO}" in
-    arch | manjaro)
-        pacman --query 'linux'
+    arch)
+        pacman --query linux{,-api-headers,-docs,-headers}
         ;;
     fedora)
-        rpm --query 'kernel'
+        rpm --query kernel{,-devel,-headers}
         ;;
-    kali | ubuntu)
-        dpkg --get-selections 'linux-image-[0-9]*' | tac
+    kali)
+        dpkg --get-selections linux-{doc,headers,image}-[0-9]\*
+        ;;
+    manjaro)
+        pacman --query linux{,-api-headers,-headers}
         ;;
     opensuse*)
-        rpm --query 'kernel-default'
+        rpm --query kernel-{default{,-devel},devel,docs}
+        ;;
+    ubuntu)
+        dpkg --get-selections linux-{doc,headers,image}-[0-9]\*
         ;;
     *)
         echo "✗ unknown distro: ‘${DISTRO}’" 1>&2

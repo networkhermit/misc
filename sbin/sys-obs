@@ -24,8 +24,9 @@ case "${DISTRO}" in
         ;;
     fedora)
         echo '------ [ package ] ------'
-        dnf --cacheonly --quiet list --extras
-        dnf --cacheonly --quiet list --obsoletes
+        dnf --disableexcludes all --quiet list --extras
+        dnf --disableexcludes all --quiet list --obsoletes
+        dnf --disableexcludes all --quiet repoquery --duplicates
         echo '------ [ configuration ] ------'
         find /etc -type f -iregex '.+\.\(old\|rpm\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
         ;;

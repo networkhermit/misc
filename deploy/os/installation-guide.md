@@ -325,17 +325,18 @@ Arch
 
 # change distro source
 
-# format disk partition
+# manipulate disk partition
+lsblk --fs
 sudo fdisk --list
-sudo fdisk /dev/sda
-sudo mkfs.xfs -f -L Arch /dev/sda1
+sudo gdisk /dev/vda
+sudo mkfs.xfs -f -L Arch /dev/vdaX
 
 # mount file system
-sudo mount /dev/sda1 /mnt
+sudo mount /dev/vdaX /mnt
 
 # bootstrap base system
-sudo pacstrap /mnt base sudo vim openssh intel-ucode grub
-genfstab -U /mnt | sudo tee /mnt/etc/fstab
+sudo pacstrap /mnt base sudo vim openssh {amd,intel}-ucode grub
+genfstab -t PARTUUID /mnt | sudo tee /mnt/etc/fstab
 sudo cp --verbose {,/mnt}/etc/resolv.conf
 
 # chroot into node

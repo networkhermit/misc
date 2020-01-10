@@ -16,9 +16,7 @@ case "${DISTRO}" in
             | sort --human-numeric-sort --reverse
         ;;
     fedora | opensuse*)
-        rpm --query --all --queryformat '%{SIZE} %{NAME}-%{VERSION}.%{ARCH}\n' \
-            | numfmt --field 1 --format '%-14.2f' --from none --to iec-i \
-            | sort --human-numeric-sort --reverse
+        rpm --query --all --queryformat '%-14{SIZE:humaniec} %{NAME}-%{VERSION}.%{ARCH}\n'
         ;;
     kali | ubuntu)
         dpkg-query --show --showformat '${Installed-Size} ${Package}_${Version}_${Architecture}\n' \

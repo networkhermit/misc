@@ -48,7 +48,8 @@ case "${DISTRO}" in
             dnf clean all
         fi
         dnf makecache
-        dnf distro-sync
+        dnf check-update --changelogs
+        dnf upgrade
         dnf autoremove
         dnf clean packages
         ;;
