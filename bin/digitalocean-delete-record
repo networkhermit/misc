@@ -4,6 +4,6 @@
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/digitalocean.cfg"
 
 curl --fail --location --silent --show-error --request DELETE \
-    --header 'Authorization: Bearer '"${AUTH_TOKEN}" \
+    --header "Authorization: Bearer ${AUTH_TOKEN}" \
     "https://api.digitalocean.com/v2/domains/${DOMAIN}/records/${1}" \
     | python3 -m json.tool

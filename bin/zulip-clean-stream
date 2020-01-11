@@ -11,7 +11,7 @@ list=$(curl --fail --location --silent --show-error --request GET \
     --data 'num_after=100' \
     --data 'num_before=0' \
     --user "${BOT_EMAIL_ADDRESS}:${BOT_API_KEY}" \
-    'https://'"${ORGANIZATION}"'.zulipchat.com/json/messages' \
+    "https://${ORGANIZATION}.zulipchat.com/json/messages" \
     | python3 -c '
 import json
 import os
@@ -35,7 +35,7 @@ for i in ${list}; do
 
     curl --fail --location --silent --show-error --request DELETE \
         --user "${ADMIN_EMAIL_ADDRESS}:${ADMIN_API_KEY}" \
-        'https://'"${ORGANIZATION}"'.zulipchat.com/api/v1/messages/'"${i}" \
+        "https://${ORGANIZATION}.zulipchat.com/api/v1/messages/${i}" \
         | python3 -c '
 import json
 import sys

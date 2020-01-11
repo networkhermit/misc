@@ -9,7 +9,7 @@ while IFS='' read -r LINE; do
     TEXT+=$'\n'
 done
 
-TEXT=$'```\n'"${TEXT}"$'```\n'
+TEXT=$'```\n'${TEXT}$'```\n'
 
 TEXT=$(python3 -c 'import json, sys; print(json.dumps(sys.stdin.read()))' <<< "${TEXT}")
 

@@ -197,7 +197,7 @@ openssl req \
     -new \
     -key "${1}".key \
     -sha512 \
-    -subj '/O=Privacy Guard/OU=Public Key Infrastructure/CN='"${1}" \
+    -subj "/O=Privacy Guard/OU=Public Key Infrastructure/CN=${1}" \
     -addext 'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1' \
     -out "${1}".csr
 
@@ -205,7 +205,7 @@ openssl req \
 #    -new \
 #    -newkey rsa -pkeyopt rsa_keygen_bits:4096 -nodes -keyout "${1}".key \
 #    -sha512 \
-#    -subj '/O=Privacy Guard/OU=Public Key Infrastructure/CN='"${1}" \
+#    -subj "/O=Privacy Guard/OU=Public Key Infrastructure/CN=${1}" \
 #    -addext 'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1' \
 #    -out "${1}".csr
 

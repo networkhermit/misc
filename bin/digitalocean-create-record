@@ -4,7 +4,7 @@
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/digitalocean.cfg"
 
 curl --fail --location --silent --show-error --request POST \
-    --header 'Authorization: Bearer '"${AUTH_TOKEN}" \
+    --header "Authorization: Bearer ${AUTH_TOKEN}" \
     --header 'Content-Type: application/json' \
     --data @- << 'EOF' \
     "https://api.digitalocean.com/v2/domains/${DOMAIN}/records" \

@@ -6,13 +6,13 @@ source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/slack.cfg"
 export MESSAGE_RETENTION=${MESSAGE_RETENTION:=86400}
 
 list=$(curl --fail --location --silent --show-error --request GET \
-    --header 'Authorization: Bearer '"${TOKEN}" \
+    --header "Authorization: Bearer ${TOKEN}" \
     --get \
-    --data 'channel='"${GROUP}" \
-    --data 'count=100' \
+    --data "channel=${GROUP}" \
     --data 'inclusive=true' \
-    --data 'oldest=0.000001' \
-    'https://slack.com/api/groups.history' \
+    --data 'limit=100' \
+    --data 'oldest=0' \
+    'https://slack.com/api/conversations.history' \
     | python3 -c '
 import json
 import os
@@ -36,9 +36,9 @@ fi
 for i in ${list}; do
 
     curl --fail --location --silent --show-error --request DELETE \
-        --header 'Authorization: Bearer '"${TOKEN}" \
-        --data 'channel='"${GROUP}" \
-        --data 'ts='"${i}" \
+        --header "Authorization: Bearer ${TOKEN}" \
+        --data "channel=${GROUP}" \
+        --data "ts=${i}" \
         'https://slack.com/api/chat.delete' \
         | python3 -c '
 import json
