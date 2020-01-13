@@ -45,7 +45,6 @@ sudo wg-quick up wg0
 sudo systemctl enable wg-quick@wg0
 sudo wg show
 
-sudo sysctl net.ipv4.ip_forward
 sudo sysctl net.ipv4.conf.{all,default}.forwarding
 sudo sysctl net.ipv6.conf.{all,default}.forwarding
 sudo sysctl net.ipv4.conf.{all,default}.proxy_arp
