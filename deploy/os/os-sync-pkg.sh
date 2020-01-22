@@ -1350,7 +1350,7 @@ EOF
             qemu-{tools,x86} \
             salt{,-{api,cloud,master,minion,ssh,syndic}} \
             virt-install \
-            wireguard-tools
+            wireguard-{kmp-default,tools}
 
         zypper install docker
         zypper clean
