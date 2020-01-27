@@ -11,21 +11,30 @@ sudo passwd root
 sudo SUDO_EDITOR=vim visudo
 
 # add default sysadmin
-sudo useradd --create-home --shell /bin/bash --uid 1000 vac
+sudo groupadd --gid 1000 vac
+sudo useradd --create-home --gid 1000 --shell /bin/bash --uid 1000 vac
 sudo passwd vac
 sudo groupadd --gid 27 --system sudo
 sudo gpasswd --add vac sudo
-sudo groupadd --gid 64 --system sysadmin
+sudo groupadd --gid 256 --system sysadmin
 sudo gpasswd --add vac sysadmin
 sudo passwd --lock root
 if [ -n "${ANSIBLE_USER}" ]; then
-    sudo useradd --create-home --shell /bin/bash --uid 1024 "${ANSIBLE_USER}"
+    sudo groupadd --gid 727 --system "${ANSIBLE_USER}"
+    sudo useradd --create-home --gid 727 --shell /bin/bash --system --uid 727 "${ANSIBLE_USER}"
     sudo gpasswd --add "${ANSIBLE_USER}" sudo
     sudo gpasswd --add "${ANSIBLE_USER}" sysadmin
-    sudo SUDO_EDITOR='tee' visudo --file "/etc/sudoers.d/${ANSIBLE_USER}" << EOF
+    sudo SUDO_EDITOR=tee visudo --file "/etc/sudoers.d/${ANSIBLE_USER}" << EOF
 ${ANSIBLE_USER} ALL=(ALL:ALL) NOPASSWD:ALL
 EOF
     sudo passwd --lock "${ANSIBLE_USER}"
+    sudo install --directory --group "${ANSIBLE_USER}" --mode 700 --owner "${ANSIBLE_USER}" "/home/${ANSIBLE_USER}/.ssh"
+    sudo install --group "${ANSIBLE_USER}" --mode 600 --owner "${ANSIBLE_USER}" /dev/null "/home/${ANSIBLE_USER}/.ssh/authorized_keys"
+    if [ -n "${ANSIBLE_USER_DEFAULT_KEY}" ]; then
+        sudo install --group "${ANSIBLE_USER}" --mode 600 --owner "${ANSIBLE_USER}" /dev/stdin "/home/${ANSIBLE_USER}/.ssh/authorized_keys" << EOF
+$(echo ${ANSIBLE_USER_DEFAULT_KEY})
+EOF
+    fi
 fi
 
 # change hostname
@@ -165,14 +174,14 @@ sudo tee /etc/pacman.d/mirrorlist << 'EOF'
 Server = https://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch
 EOF
 ## opensuse
-sudo zypper addrepo --check --gpgcheck --refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss tumbleweed-oss
-sudo zypper addrepo --check --gpgcheck --refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/non-oss tumbleweed-non-oss
-sudo zypper addrepo --check --gpgcheck --refresh https://download.opensuse.org/update/tumbleweed/ tumbleweed-update
+sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss tumbleweed-oss
+sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/non-oss tumbleweed-non-oss
+sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/update/tumbleweed/ tumbleweed-update
 # https://build.opensuse.org/project
 # https://download.opensuse.org
-sudo zypper addrepo --check --gpgcheck --refresh https://download.opensuse.org/repositories/network/openSUSE_Tumbleweed/network.repo
-sudo zypper addrepo --check --gpgcheck --refresh https://download.opensuse.org/repositories/security/openSUSE_Tumbleweed/security.repo
-sudo zypper addrepo --check --gpgcheck --refresh https://download.opensuse.org/repositories/utilities/openSUSE_Factory/utilities.repo
+sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/network/openSUSE_Tumbleweed/network.repo
+sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/security/openSUSE_Tumbleweed/security.repo
+sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/utilities/openSUSE_Factory/utilities.repo
 ## ubuntu
 sudo tee /etc/apt/sources.list << 'EOF'
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic main restricted universe multiverse
