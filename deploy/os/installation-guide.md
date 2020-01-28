@@ -18,6 +18,7 @@ sudo groupadd --gid 27 --system sudo
 sudo gpasswd --add vac sudo
 sudo groupadd --gid 256 --system sysadmin
 sudo gpasswd --add vac sysadmin
+sudo passwd --delete root
 sudo passwd --lock root
 if [ -n "${ANSIBLE_USER}" ]; then
     sudo groupadd --gid 727 --system "${ANSIBLE_USER}"
@@ -27,6 +28,7 @@ if [ -n "${ANSIBLE_USER}" ]; then
     sudo SUDO_EDITOR=tee visudo --file "/etc/sudoers.d/${ANSIBLE_USER}" << EOF
 ${ANSIBLE_USER} ALL=(ALL:ALL) NOPASSWD:ALL
 EOF
+    sudo passwd --delete "${ANSIBLE_USER}"
     sudo passwd --lock "${ANSIBLE_USER}"
     sudo install --directory --group "${ANSIBLE_USER}" --mode 700 --owner "${ANSIBLE_USER}" "/home/${ANSIBLE_USER}/.ssh"
     sudo install --group "${ANSIBLE_USER}" --mode 600 --owner "${ANSIBLE_USER}" /dev/null "/home/${ANSIBLE_USER}/.ssh/authorized_keys"
