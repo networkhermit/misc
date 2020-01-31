@@ -403,6 +403,7 @@ case "${DISTRO}" in
         # DevOps
         pacman --sync --needed \
             community/ansible{,-lint} \
+            community/python-argcomplete \
             community/certbot \
             extra/dnsmasq \
             community/docker \
@@ -632,6 +633,7 @@ case "${DISTRO}" in
         # DevOps
         dnf install \
             ansible{,-doc} \
+            python3-argcomplete \
             certbot \
             dnsmasq \
             git \
@@ -870,6 +872,7 @@ case "${DISTRO}" in
         # DevOps
         apt install \
             ansible{,-lint} \
+            python3-argcomplete \
             certbot \
             python-certbot-doc \
             dnsmasq \
@@ -1114,6 +1117,7 @@ EOF
         # DevOps
         pacman --sync --needed \
             community/ansible{,-lint} \
+            community/python-argcomplete \
             community/certbot \
             extra/dnsmasq \
             community/docker \
@@ -1339,6 +1343,7 @@ EOF
         # DevOps
         zypper install \
             ansible{,-doc} \
+            python3-argcomplete \
             python3-certbot \
             dnsmasq \
             git{,-doc} \
@@ -1571,6 +1576,7 @@ EOF
         # DevOps
         apt install \
             ansible{,-lint} \
+            python3-argcomplete \
             certbot \
             dnsmasq \
             python-certbot-doc \
