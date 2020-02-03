@@ -4,30 +4,87 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+
 if (( EUID != 0 )); then
     echo "✗ This script must be run as root" 1>&2
     exit 1
 fi
 
-ARGC=6
-LEAST_ARGC=2
+CPU=4
+DIRECTORY=/var/local/images
+MEMORY=8192
+SIZE=40
 
-if (( $# > ARGC )); then
-    echo "✗ number of arguments exceeds limit: ‘${#}/${ARGC}’" 1>&2
-    exit 1
-elif (( $# < LEAST_ARGC )); then
-    echo "✗ too few arguments: ‘${#}/${LEAST_ARGC}’" 1>&2
+while (( $# > 0 )); do
+    case "${1}" in
+        --cpu)
+            CPU=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
+            shift 2
+            ;;
+        --directory)
+            DIRECTORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
+            shift 2
+            ;;
+        --memory)
+            MEMORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
+            shift 2
+            ;;
+        --size)
+            SIZE=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
+            shift 2
+            ;;
+        -h | --help)
+            cat << EOF
+Usage:
+    ${0##*/} [OPTION]... DISTRO NAME
+
+Optional arguments:
+    --cpu
+        number of virtual cpus to configure for the guest
+    --directory
+        directory to store the disk image
+    --memory
+        memory to allocate for the guest (unit: MiB)
+    --size
+        size of the disk image to be created
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+
+Positional arguments:
+    DISTRO
+        linux distro name (arch | fedora | kali | opensuse | ubuntu)
+    NAME
+        name of the new guest virtual machine instance
+EOF
+            shift
+            exit
+            ;;
+        -v | --version)
+            echo v0.1.0
+            shift
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+DISTRO=${1?✗ argument parsing failed: missing positional argument ‘DISTRO’}
+NAME=${2?✗ argument parsing failed: missing positional argument ‘NAME’}
+shift 2
+
+if (( $# > 0 )); then
+    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
     exit 1
 fi
-
-DISTRO=${1}
-
-NAME=${2}
-CPU=${3:-4}
-MEMORY=${4:-8192}
-
-DISK_DIRECTORY=${5:-/var/local/images}
-DISK_SIZE=${6:-40}
 
 EXTRA_ARGUMENT=()
 
@@ -71,7 +128,7 @@ virt-install \
     --connect qemu:///system \
     --console char_type=pty,target_type=serial \
     --cpu host \
-    --disk "device=disk,format=qcow2,path=${DISK_DIRECTORY}/${NAME}.qcow2,size=${DISK_SIZE}" \
+    --disk "device=disk,format=qcow2,path=${DIRECTORY}/${NAME}.qcow2,size=${SIZE}" \
     --features kvm_hidden=off \
     --graphics none \
     --hvm \

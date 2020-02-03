@@ -1,9 +1,58 @@
 #!/bin/bash
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/digitalocean.cfg"
 
+while (( $# > 0 )); do
+    case "${1}" in
+        -h | --help)
+            cat << EOF
+Usage:
+    ${0##*/} [OPTION]... RECORD
+
+Optional arguments:
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+
+Positional arguments:
+    RECORD
+        dns record identifier
+EOF
+            shift
+            exit
+            ;;
+        -v | --version)
+            echo v0.1.0
+            shift
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+RECORD=${1?✗ argument parsing failed: missing positional argument ‘RECORD’}
+shift
+
+if (( $# > 0 )); then
+    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
+    exit 1
+fi
+
 curl --fail --location --silent --show-error --request DELETE \
     --header "Authorization: Bearer ${AUTH_TOKEN}" \
-    "https://api.digitalocean.com/v2/domains/${DOMAIN}/records/${1}" \
+    "https://api.digitalocean.com/v2/domains/${DOMAIN}/records/${RECORD}" \
     | python3 -m json.tool

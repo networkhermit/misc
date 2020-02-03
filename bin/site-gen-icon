@@ -1,11 +1,57 @@
 #!/bin/bash
 
-if (( $# != 1 )); then
-    exit
+set -o errexit
+set -o nounset
+set -o pipefail
+
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+
+while (( $# > 0 )); do
+    case "${1}" in
+        -h | --help)
+            cat << EOF
+Usage:
+    ${0##*/} [OPTION]... INPUT_IMAGE
+
+Optional arguments:
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+
+Positional arguments:
+    INPUT_IMAGE
+        input image to be converted
+EOF
+            shift
+            exit
+            ;;
+        -v | --version)
+            echo v0.1.0
+            shift
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+INPUT_IMAGE=${1?✗ argument parsing failed: missing positional argument ‘INPUT_IMAGE’}
+shift
+
+if (( $# > 0 )); then
+    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
+    exit 1
 fi
 
-if [ ! -f "${1}" ]; then
-    exit
+if [ ! -f "${INPUT_IMAGE}" ]; then
+    echo "✗ not a regular file: ‘${INPUT_IMAGE}’" 1>&2
+    exit 1
 fi
 
-convert -background transparent "${1}" -define icon:auto-resize=16,32 favicon.ico
+convert -background transparent "${INPUT_IMAGE}" -define icon:auto-resize=16,32 favicon.ico

@@ -1,5 +1,47 @@
 #!/bin/bash
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+
+while (( $# > 0 )); do
+    case "${1}" in
+        -h | --help)
+            cat << EOF
+Usage:
+    ${0##*/} [OPTION]...
+
+Optional arguments:
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+EOF
+            shift
+            exit
+            ;;
+        -v | --version)
+            echo v0.1.0
+            shift
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+if (( $# > 0 )); then
+    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
+    exit 1
+fi
+
 # trust google cloud package signing key
 ## google repository
 curl --fail --location --silent --show-error https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -

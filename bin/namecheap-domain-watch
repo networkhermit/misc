@@ -4,8 +4,46 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/namecheap.cfg"
+
+while (( $# > 0 )); do
+    case "${1}" in
+        -h | --help)
+            cat << EOF
+Usage:
+    ${0##*/} [OPTION]...
+
+Optional arguments:
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+EOF
+            shift
+            exit
+            ;;
+        -v | --version)
+            echo v0.1.0
+            shift
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+if (( $# > 0 )); then
+    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
+    exit 1
+fi
 
 sleep 15
 
@@ -13,8 +51,14 @@ CURRENCY_RATE=$(curl --fail --location --silent --show-error --request GET "http
 PUBLIC_IP_ADDRESS=$(dig myip.opendns.com @208.67.222.222 a +short)
 REQUEST_API_METHOD='namecheap.users.getPricing'
 
-if [ -z "${CURRENCY_RATE}" ] || [ -z "${PUBLIC_IP_ADDRESS}" ]; then
-    exit
+if [ -z "${CURRENCY_RATE}" ]; then
+    echo "✗ unexpected error: cannot acquire the currency rate" 1>&2
+    exit 1
+fi
+
+if [ -z "${PUBLIC_IP_ADDRESS}" ]; then
+    echo "✗ unexpected error: cannot resolve the public ip address" 1>&2
+    exit 1
 fi
 
 for i in ${WATCH_LIST}; do

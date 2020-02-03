@@ -1,44 +1,76 @@
 #!/bin/bash
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+
+PUBLIC_KEY_ALGORITHM=RSA
+ENABLE_DIGEST=false
+STRICT_VERIFICATION=false
+VERBOSE=false
+
 while (( $# > 0 )); do
     case "${1}" in
+        --algorithm)
+            case "${2}" in
+                ED25519 | ED448 | RSA)
+                    PUBLIC_KEY_ALGORITHM="${2}"
+                    shift 2
+                    ;;
+                *)
+                    echo "✗ argument parsing failed: acceptable values for ‘${1}’ are ED25519 | ED448 | RSA" 1>&2
+                    exit 1
+                    ;;
+            esac
+            ;;
         --digest)
-            DIGEST=true
-            shift
-            ;;
-        --ed25519)
-            ED25519=true
-            shift
-            ;;
-        --ed448)
-            ED448=true
-            shift
-            ;;
-        --inspect)
-            INSPECT=true
+            ENABLE_DIGEST=true
             shift
             ;;
         --strict)
-            STRICT=true
+            STRICT_VERIFICATION=true
             shift
+            ;;
+        --verbose)
+            VERBOSE=true
+            shift
+            ;;
+        -h | --help)
+            cat << EOF
+Usage:
+    ${0##*/} [OPTION]... CERT_NAME
+
+Optional arguments:
+    --algorithm
+        use the specified public key algorithm (ED25519 | ED448 | RSA)
+    --digest
+        enable digest
+    --strict
+        enable strict verification
+    --verbose
+        enable verbose inspection
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+
+Positional arguments:
+    CERT_NAME
+        common name of the end certificate to be generated
+EOF
+            shift
+            exit
+            ;;
+        -v | --version)
+            echo v0.1.0
+            shift
+            exit
             ;;
         --)
             shift
             break
-            ;;
-        --help)
-            cat << EOF
-Usage:
-    ${0##*/} [options] COMMON_NAME
-
-Options:
-    --digest
-    --ed25519
-    --ed448
-    --inspect
-    --strict
-EOF
-            exit
             ;;
         *)
             break
@@ -46,8 +78,12 @@ EOF
     esac
 done
 
-if (( $# != 1 )); then
-    exit
+CERT_NAME=${1?✗ argument parsing failed: missing positional argument ‘CERT_NAME’}
+shift
+
+if (( $# > 0 )); then
+    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
+    exit 1
 fi
 
 digest () {
@@ -128,22 +164,22 @@ openssl x509 \
     -sha512 \
     -out ca.csr
 
-if [ "${INSPECT}" = 'true' ]; then
-    inspect ca
+if [ "${ENABLE_DIGEST}" = true ]; then
+    digest ca
 fi
 
-if [ "${DIGEST}" = 'true' ]; then
-    digest ca
+if [ "${VERBOSE}" = true ]; then
+    inspect ca
 fi
 
 # [ Intermediate CA ]
 
-if [ "${ED25519}" = 'true' ]; then
-    openssl genpkey -algorithm ED25519 -out interm.key
-elif [ "${ED448}" = 'true' ]; then
-    openssl genpkey -algorithm ED448 -out interm.key
+if [ "${PUBLIC_KEY_ALGORITHM}" = ED25519 ]; then
+    openssl genpkey -algorithm "${PUBLIC_KEY_ALGORITHM}" -out interm.key
+elif [ "${PUBLIC_KEY_ALGORITHM}" = ED448 ]; then
+    openssl genpkey -algorithm "${PUBLIC_KEY_ALGORITHM}" -out interm.key
 else
-    openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out interm.key
+    openssl genpkey -algorithm "${PUBLIC_KEY_ALGORITHM}" -out interm.key -pkeyopt rsa_keygen_bits:4096
 fi
 
 openssl req \
@@ -181,46 +217,46 @@ subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid:always,issuer
 EOF
 
-if [ "${INSPECT}" = 'true' ]; then
-    inspect interm
+if [ "${ENABLE_DIGEST}" = true ]; then
+    digest interm
 fi
 
-if [ "${DIGEST}" = 'true' ]; then
-    digest interm
+if [ "${VERBOSE}" = true ]; then
+    inspect interm
 fi
 
 # [ End Entity ]
 
-#openssl genrsa -out "${1}".key 4096
-openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out "${1}".key
+#openssl genrsa -out "${CERT_NAME}".key 4096
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out "${CERT_NAME}".key
 openssl req \
     -new \
-    -key "${1}".key \
+    -key "${CERT_NAME}".key \
     -sha512 \
-    -subj "/O=Privacy Guard/OU=Public Key Infrastructure/CN=${1}" \
+    -subj "/O=Privacy Guard/OU=Public Key Infrastructure/CN=${CERT_NAME}" \
     -addext 'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1' \
-    -out "${1}".csr
+    -out "${CERT_NAME}".csr
 
 #openssl req \
 #    -new \
-#    -newkey rsa -pkeyopt rsa_keygen_bits:4096 -nodes -keyout "${1}".key \
+#    -newkey rsa -pkeyopt rsa_keygen_bits:4096 -nodes -keyout "${CERT_NAME}".key \
 #    -sha512 \
-#    -subj "/O=Privacy Guard/OU=Public Key Infrastructure/CN=${1}" \
+#    -subj "/O=Privacy Guard/OU=Public Key Infrastructure/CN=${CERT_NAME}" \
 #    -addext 'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1' \
-#    -out "${1}".csr
+#    -out "${CERT_NAME}".csr
 
-openssl pkey -pubout -in "${1}".key -out "${1}".pub
+openssl pkey -pubout -in "${CERT_NAME}".key -out "${CERT_NAME}".pub
 
 openssl x509 \
     -req \
     -CA interm.crt -CAkey interm.key \
     -CAcreateserial \
     -sha512 \
-    -in "${1}".csr \
+    -in "${CERT_NAME}".csr \
     -days 825 \
     -extfile - \
     -extensions end_entity \
-    -out "${1}".crt \
+    -out "${CERT_NAME}".crt \
     << 'EOF'
 [ end_entity ]
 basicConstraints=critical,CA:FALSE
@@ -230,24 +266,24 @@ authorityKeyIdentifier=keyid,issuer
 subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1
 EOF
 
-if [ "${INSPECT}" = 'true' ]; then
-    inspect "${1}"
+if [ "${ENABLE_DIGEST}" = true ]; then
+    digest "${CERT_NAME}"
 fi
 
-if [ "${DIGEST}" = 'true' ]; then
-    digest "${1}"
+if [ "${VERBOSE}" = true ]; then
+    inspect "${CERT_NAME}"
 fi
 
 # [ Chain of Trust ]
 
-cat "${1}".crt interm.crt | tee chain.crt &> /dev/null
+cat "${CERT_NAME}".crt interm.crt | tee chain.crt &> /dev/null
 
-if [ "${STRICT}" = 'true' ]; then
+if [ "${STRICT_VERIFICATION}" = true ]; then
     echo '+--'
     openssl verify -CAfile ca.crt -no-CApath -show_chain ca.crt
     openssl verify -CAfile ca.crt -no-CApath -show_chain interm.crt
-    openssl verify -CAfile ca.crt -no-CApath -untrusted interm.crt -show_chain "${1}".crt
+    openssl verify -CAfile ca.crt -no-CApath -show_chain -untrusted interm.crt "${CERT_NAME}".crt
     echo '--+'
 fi
 
-openssl verify -CAfile ca.crt -no-CApath -untrusted interm.crt -show_chain chain.crt
+openssl verify -CAfile ca.crt -no-CApath -show_chain -untrusted interm.crt chain.crt

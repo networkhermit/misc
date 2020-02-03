@@ -1,11 +1,53 @@
 #!/bin/bash
 
-if (( $# == 0 )); then
-    exit
-fi
+set -o errexit
+set -o nounset
+set -o pipefail
+
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 # shellcheck disable=SC1090
 source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/smtp.cfg"
+
+while (( $# > 0 )); do
+    case "${1}" in
+        -h | --help)
+            cat << EOF
+Usage:
+    ${0##*/} [OPTION]... COMMAND...
+
+Optional arguments:
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+
+Positional arguments:
+    COMMAND
+        command to be executed within command substitution
+EOF
+            shift
+            exit
+            ;;
+        -v | --version)
+            echo v0.1.0
+            shift
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+if (( $# == 0 )); then
+    echo "✗ argument parsing failed: missing positional argument ‘COMMAND’" 1>&2
+    exit 1
+fi
 
 # Swiss Army Knife SMTP
 
