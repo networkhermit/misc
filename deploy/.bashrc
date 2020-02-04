@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+set -o pipefail
+
 # shellcheck disable=SC1091
 source /etc/skel/.bashrc
 
@@ -15,7 +17,7 @@ case $- in
         ;;
 esac
 
-PS1='\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+PS1='$(EXIT_STATUS=$?; if (( EXIT_STATUS != 0 )); then printf "%s :( " "${EXIT_STATUS}"; fi)\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 ###########################################################################
 
@@ -70,7 +72,7 @@ alias e='exa --classify --oneline'
 alias ea='exa --all'
 alias el='exa --links --group --long --time-style long-iso'
 alias grep='grep --color=auto'
-alias i='who'
+alias i='echo "PIPESTATUS: ${PIPESTATUS[*]}"'
 alias ip='ip -color=auto'
 alias json='python3 -B -W:all -m json.tool --sort-keys'
 alias k='tree'

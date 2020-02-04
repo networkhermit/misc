@@ -47,7 +47,11 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-docker image ls --filter reference='*:latest' --filter reference='*/*:latest' --filter reference='*/*/*:latest' --format '{{.Repository}}' | xargs --max-args 1 --no-run-if-empty docker pull
+execute_exit_hook () {
+    docker image prune --force
+    docker image ls --all
+}
 
-docker image prune --force
-docker image ls --all
+trap execute_exit_hook EXIT
+
+docker image ls --filter reference='*:latest' --filter reference='*/*:latest' --filter reference='*/*/*:latest' --format '{{.Repository}}' | xargs --max-args 1 --no-run-if-empty docker pull

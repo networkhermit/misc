@@ -59,8 +59,8 @@ DISTRO=${ID:-linux}
 case "${DISTRO}" in
     arch | manjaro)
         echo '------ [ package ] ------'
-        pacman --query --foreign || true | sed 's/$/ [foreign]/g' | column -t
-        pacman --query --deps --unrequired || true | sed 's/$/ [orphan]/g' | column -t
+        (pacman --query --foreign || true) | sed 's/$/ [foreign]/g' | column -t
+        (pacman --query --deps --unrequired || true) | sed 's/$/ [orphan]/g' | column -t
         echo '------ [ configuration ] ------'
         find /etc -type f -iregex '.+\.\(old\|pac\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
         ;;
@@ -74,8 +74,8 @@ case "${DISTRO}" in
         ;;
     kali | ubuntu)
         echo '------ [ package ] ------'
-        apt list 2> /dev/null | grep '\<\(local\|residual-config\)\]' || true | column -t
-        apt search '\<(dummy|transitional)\>' 2> /dev/null | grep '\[installed\>' || true | column -t
+        apt list 2> /dev/null | (grep '\<\(local\|residual-config\)\]' || true) | column -t
+        apt search '\<(dummy|transitional)\>' 2> /dev/null | (grep '\[installed\>' || true) | column -t
         echo '------ [ configuration ] ------'
         find /etc -type f \( -iregex '.+\.dpkg-\(dist\|new\|old\)' -o -iregex '.+\.old' -o -iregex '.+\.ucf-\(dist\|new\|old\)' \) -print0 | sort --zero-terminated | tr '\0' '\n'
         dpkg-query --show --showformat '${Package}\n${Conffiles}\n' | awk '/^[^ ]/{pkg=$1}/ obsolete$/{print pkg,$0}' | column -t
