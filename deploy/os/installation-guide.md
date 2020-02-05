@@ -21,8 +21,8 @@ sudo gpasswd --add vac sysadmin
 sudo passwd --delete root
 sudo passwd --lock root
 if [ -n "${ANSIBLE_USER}" ]; then
-    sudo groupadd --gid 727 --system "${ANSIBLE_USER}"
-    sudo useradd --create-home --gid 727 --shell /bin/bash --system --uid 727 "${ANSIBLE_USER}"
+    sudo groupadd --gid 8128 --system "${ANSIBLE_USER}"
+    sudo useradd --create-home --gid 8128 --shell /bin/bash --system --uid 8128 "${ANSIBLE_USER}"
     sudo gpasswd --add "${ANSIBLE_USER}" sudo
     sudo gpasswd --add "${ANSIBLE_USER}" sysadmin
     sudo SUDO_EDITOR=tee visudo --file "/etc/sudoers.d/${ANSIBLE_USER}" << EOF
@@ -38,6 +38,7 @@ $(echo ${ANSIBLE_USER_DEFAULT_KEY})
 EOF
     fi
 fi
+ls --directory --human-readable -l / /home/* /root
 
 # change hostname
 sudo hostname STEM
