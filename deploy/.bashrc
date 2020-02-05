@@ -17,7 +17,8 @@ case $- in
         ;;
 esac
 
-PS1='$(EXIT_STATUS=$?; if (( EXIT_STATUS != 0 )); then printf "%s :( " "${EXIT_STATUS}"; fi)\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+PS1='$(EXIT_STATUS=$?; if (( EXIT_STATUS != 0 )); then printf "%s :( " "${EXIT_STATUS}"; fi)'
+PS1=${PS1}'\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 ###########################################################################
 
@@ -49,7 +50,7 @@ export MANPAGER=most
 export VISUAL=vim
 
 # PATH
-export PATH=$PATH:~/STEM/bin
+export PATH=${PATH}:~/STEM/bin
 
 # LIBRARY
 export C_INCLUDE_PATH=~/STEM/lib/plt/c/src

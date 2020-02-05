@@ -14,9 +14,10 @@ VERBOSE=false
 while (( $# > 0 )); do
     case "${1}" in
         --algorithm)
+            : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
             case "${2}" in
                 ED25519 | ED448 | RSA)
-                    PUBLIC_KEY_ALGORITHM="${2}"
+                    PUBLIC_KEY_ALGORITHM=${2}
                     shift 2
                     ;;
                 *)
@@ -43,14 +44,14 @@ Usage:
     ${0##*/} [OPTION]... CERT_NAME
 
 Optional arguments:
-    --algorithm
-        use the specified public key algorithm (ED25519 | ED448 | RSA)
+    --algorithm ALGORITHM (ED25519 | ED448 | RSA)
+        use the specified public key algorithm (default: RSA)
     --digest
-        enable digest
+        enable digest (default: false)
     --strict
-        enable strict verification
+        enable strict verification (default: false)
     --verbose
-        enable verbose inspection
+        enable verbose inspection (default: false)
     -h, --help
         show this help message and exit
     -v, --version

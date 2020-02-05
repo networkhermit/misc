@@ -47,7 +47,7 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-if [ "${OSTYPE}" != 'linux-gnu' ]; then
+if [ "${OSTYPE}" != linux-gnu ]; then
     echo "✗ unknown os type: ‘${OSTYPE}’" 1>&2
     exit 1
 fi

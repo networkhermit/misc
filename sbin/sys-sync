@@ -26,7 +26,7 @@ Usage:
 
 Optional arguments:
     -f, --force
-        force synchronization of package metadata
+        force synchronization of package metadata (default: false)
     -h, --help
         show this help message and exit
     -v, --version
@@ -55,7 +55,7 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-if [ "${OSTYPE}" != 'linux-gnu' ]; then
+if [ "${OSTYPE}" != linux-gnu ]; then
     echo "✗ unknown os type: ‘${OSTYPE}’" 1>&2
     exit 1
 fi
@@ -67,10 +67,10 @@ DISTRO=${ID:-linux}
 case "${DISTRO}" in
     arch | manjaro)
         if [ "${FORCE_SYNC}" = true ]; then
-            yes | pacman --sync --clean --clean
+            (yes || true) | pacman --sync --clean --clean
         fi
         pacman --sync --refresh --sysupgrade
-        yes | pacman --sync --clean --clean
+        (yes || true) | pacman --sync --clean --clean
         ;;
     fedora)
         if [ "${FORCE_SYNC}" = true ]; then

@@ -40,14 +40,14 @@ Usage:
     ${0##*/} [OPTION]... DISTRO NAME
 
 Optional arguments:
-    --cpu
-        number of virtual cpus to configure for the guest
-    --directory
-        directory to store the disk image
-    --memory
-        memory to allocate for the guest (unit: MiB)
-    --size
-        size of the disk image to be created
+    --cpu N
+        number of virtual cpus to configure for the guest (default: 4)
+    --directory DIRECTORY
+        directory to store the disk image (default: /var/local/images)
+    --memory N (MiB)
+        memory to allocate for the guest (default: 8192)
+    --size N (GiB)
+        size of the disk image to be created (default: 40)
     -h, --help
         show this help message and exit
     -v, --version

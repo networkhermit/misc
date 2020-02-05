@@ -25,8 +25,8 @@ Usage:
     ${0##*/} [OPTION]... SOURCE TARGET
 
 Optional arguments:
-    --directory
-        directory to store the disk image
+    --directory DIRECTORY
+        directory to store the disk image (default: /var/local/images)
     -h, --help
         show this help message and exit
     -v, --version

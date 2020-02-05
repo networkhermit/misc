@@ -20,8 +20,8 @@ Usage:
     ${0##*/} [OPTION]...
 
 Optional arguments:
-    -c, --count
-        number of request packets to send
+    -c, --count N
+        number of request packets to send (default: 64)
     -h, --help
         show this help message and exit
     -v, --version

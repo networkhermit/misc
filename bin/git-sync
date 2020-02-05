@@ -6,14 +6,22 @@ set -o pipefail
 
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
+FORCE_SYNC=false
+
 while (( $# > 0 )); do
     case "${1}" in
+        --force)
+            FORCE_SYNC=true
+            shift
+            ;;
         -h | --help)
             cat << EOF
 Usage:
     ${0##*/} [OPTION]...
 
 Optional arguments:
+    --force
+        force repository synchronization (default: false)
     -h, --help
         show this help message and exit
     -v, --version
@@ -42,8 +50,10 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-url=$(git remote get-url origin)
-
-find . -mindepth 1 -delete
-
-git clone "${url}" .
+if [ "${FORCE_SYNC}" = true ]; then
+    url=$(git remote get-url origin)
+    find . -mindepth 1 -delete
+    git clone "${url}" .
+else
+    git pull
+fi

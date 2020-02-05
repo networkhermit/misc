@@ -38,7 +38,7 @@ func main() {
         log.Fatal(err)
     }
 
-    req.Header.Set("User-Agent", "command-line")
+    req.Header.Set("User-Agent", "Krypton")
     req.Header.Set("Authorization", "Bearer " + auth.TOKEN)
 
     res, err := clent.Do(req)

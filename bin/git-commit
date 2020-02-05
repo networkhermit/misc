@@ -6,14 +6,22 @@ set -o pipefail
 
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
+ROOT_COMMIT=false
+
 while (( $# > 0 )); do
     case "${1}" in
+        --root-commit)
+            ROOT_COMMIT=true
+            shift
+            ;;
         -h | --help)
             cat << EOF
 Usage:
     ${0##*/} [OPTION]...
 
 Optional arguments:
+    --root-commit
+        force root commit (default: false)
     -h, --help
         show this help message and exit
     -v, --version
@@ -42,14 +50,13 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-url=$(git remote get-url origin)
+if [ "${ROOT_COMMIT}" = true ]; then
+    url=$(git remote get-url origin)
+    rm --force --recursive .git
+    git init
+    git remote add origin "${url}"
+    git add --all
+fi
 
-rm --force --recursive .git
-
-git init
-
-git remote add origin "${url}"
-
-git add --all
 GIT_AUTHOR_DATE="$(date --utc --iso-8601=s)" GIT_COMMITTER_DATE="$(date --utc --iso-8601=s)" TZ=UTC git commit --message 'This is where it all begins...'
 git push --force --prune --set-upstream origin master

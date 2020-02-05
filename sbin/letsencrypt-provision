@@ -16,7 +16,7 @@ while (( $# > 0 )); do
         -h | --help)
             cat << EOF
 Usage:
-    ${0##*/} [OPTION]... DOMAIN
+    ${0##*/} [OPTION]... MODE DOMAIN
 
 Optional arguments:
     -h, --help
@@ -25,6 +25,8 @@ Optional arguments:
         output version information and exit
 
 Positional arguments:
+    MODE (request | revoke)
+        certificate provision mode
     DOMAIN
         domain name to apply
 EOF
@@ -46,18 +48,35 @@ EOF
     esac
 done
 
-DOMAIN=${1?✗ argument parsing failed: missing positional argument ‘DOMAIN’}
-shift
+: "${1?✗ argument parsing failed: missing positional argument ‘MODE’}"
+case "${1}" in
+    request | revoke)
+        MODE=${1}
+        ;;
+    *)
+        echo "✗ argument parsing failed: acceptable values for ‘MODE’ are request | revoke" 1>&2
+        exit 1
+        ;;
+esac
+DOMAIN=${2?✗ argument parsing failed: missing positional argument ‘DOMAIN’}
+shift 2
 
 if (( $# > 0 )); then
     echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
     exit 1
 fi
 
-certbot certonly \
-    --domains "${DOMAIN}" \
-    --manual \
-    --manual-public-ip-logging-ok \
-    --preferred-challenges dns \
-    --renew-by-default \
-    --rsa-key-size 4096
+if [ "${MODE}" = request ]; then
+    certbot certonly \
+        --domains "${DOMAIN}" \
+        --manual \
+        --manual-public-ip-logging-ok \
+        --preferred-challenges dns \
+        --renew-by-default \
+        --rsa-key-size 4096
+else
+    certbot revoke \
+        --cert-path "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem" \
+        --delete-after-revoke \
+        --reason superseded
+fi

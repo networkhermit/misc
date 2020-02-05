@@ -11,14 +11,31 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
+REGISTRY=gcr
+
 while (( $# > 0 )); do
     case "${1}" in
+        --registry)
+            : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
+            case "${2}" in
+                gcr | azure-proxy)
+                    REGISTRY=${2}
+                    shift 2
+                    ;;
+                *)
+                    echo "✗ argument parsing failed: acceptable values for ‘${1}’ are gcr | azure-proxy" 1>&2
+                    exit 1
+                    ;;
+            esac
+            ;;
         -h | --help)
             cat << EOF
 Usage:
     ${0##*/} [OPTION]...
 
 Optional arguments:
+    --registry REGISTRY (gcr | azure-proxy)
+        container registry to pull images from (default: gcr)
     -h, --help
         show this help message and exit
     -v, --version
@@ -81,13 +98,14 @@ get_image_list arr
 printf '%s\n' "${arr[@]}"
 
 # pull container images
-## [gcr]
-kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
-printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null docker image pull
-## [azure proxy]
-for i in "${arr[@]}"; do
-    construct_image "${i}" gcr.azk8s.cn/google_containers
-done
+if [ "${REGISTRY}" = gcr ]; then
+    kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
+    printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null docker image pull
+else
+    for i in "${arr[@]}"; do
+        construct_image "${i}" gcr.azk8s.cn/google_containers
+    done
+fi
 
 # inspect container images
 printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null docker image inspect --format '{{.Id}} {{.RepoTags}}'

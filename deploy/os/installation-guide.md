@@ -296,7 +296,7 @@ sudo systemctl disable --now \
 
 # install command-not-found
 ## arch | manjaro
-yes | sudo pacman --sync --needed pkgfile
+(yes || true) | sudo pacman --sync --needed pkgfile
 sudo tee --append /etc/bash.bashrc << 'EOF'
 
 [ -r /usr/share/doc/pkgfile/command-not-found.bash ] && . /usr/share/doc/pkgfile/command-not-found.bash
@@ -418,7 +418,7 @@ fi
 EOF
 
 # install arch-install-scripts
-yes | sudo pacman --sync --needed arch-install-scripts
+(yes || true) | sudo pacman --sync --needed arch-install-scripts
 
 # exit chroot
 exit
@@ -638,7 +638,7 @@ sudo systemctl enable sshd.service
 # install command-not-found
 
 # install arch-install-scripts
-yes | sudo pacman --sync --needed arch-install-scripts
+(yes || true) | sudo pacman --sync --needed arch-install-scripts
 
 # reboot system
 ```
