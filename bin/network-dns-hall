@@ -11,13 +11,17 @@ while (( $# > 0 )); do
         -h | --help)
             cat << EOF
 Usage:
-    ${0##*/} [OPTION]...
+    ${0##*/} [OPTION]... VENDOR
 
 Optional arguments:
     -h, --help
         show this help message and exit
     -v, --version
         output version information and exit
+
+Positional arguments:
+    VENDOR (cloudflare | opendns | quad9)
+        dns vendor name
 EOF
             shift
             exit
@@ -37,32 +41,37 @@ EOF
     esac
 done
 
+: "${1?✗ argument parsing failed: missing positional argument ‘VENDOR’}"
+case "${1}" in
+    cloudflare | opendns | quad9)
+        VENDOR=${1}
+        ;;
+    *)
+        echo "✗ argument parsing failed: acceptable values for ‘VENDOR’ are cloudflare | opendns | quad9" 1>&2
+        exit 1
+        ;;
+esac
+shift
+
 if (( $# > 0 )); then
     echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
     exit 1
 fi
 
-printf '\n%s\n\n' "[ cloudflare ]"
-
-dig \
-    1dot1dot1dot1.cloudflare-dns.com a 1dot1dot1dot1.cloudflare-dns.com aaaa \
-    +short \
-    | sed 's/^/\t/'
-
-printf '\n%s\n\n' "[ opendns ]"
-
-dig \
-    resolver1.opendns.com a resolver1.opendns.com aaaa \
-    resolver2.opendns.com a resolver2.opendns.com aaaa \
-    resolver3.opendns.com a resolver3.opendns.com aaaa \
-    resolver4.opendns.com a resolver4.opendns.com aaaa \
-    +short \
-    | sed 's/^/\t/'
-
-printf '\n%s\n\n' "[ quad9 ]"
-
-dig \
-    dns.quad9.net a dns.quad9.net aaaa \
-    dns-nosec.quad9.net a dns-nosec.quad9.net aaaa \
-    +short \
-    | sed 's/^/\t/'
+if [ "${VENDOR}" = cloudflare ]; then
+    dig \
+        1dot1dot1dot1.cloudflare-dns.com a 1dot1dot1dot1.cloudflare-dns.com aaaa \
+        +short
+elif [ "${VENDOR}" = opendns ]; then
+    dig \
+        resolver1.opendns.com a resolver1.opendns.com aaaa \
+        resolver2.opendns.com a resolver2.opendns.com aaaa \
+        resolver3.opendns.com a resolver3.opendns.com aaaa \
+        resolver4.opendns.com a resolver4.opendns.com aaaa \
+        +short
+else
+    dig \
+        dns.quad9.net a dns.quad9.net aaaa \
+        dns-nosec.quad9.net a dns-nosec.quad9.net aaaa \
+        +short
+fi

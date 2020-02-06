@@ -1,0 +1,80 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+
+if (( EUID != 0 )); then
+    echo '✗ This script must be run as root' 1>&2
+    exit 1
+fi
+
+while (( $# > 0 )); do
+    case "${1}" in
+        -h | --help)
+            cat << EOF
+Usage:
+    ${0##*/} [OPTION]... ALIAS
+
+Optional arguments:
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+
+Positional arguments:
+    ALIAS (netstat | iptables | ip6tables | ss)
+        diagnostic launcher name
+EOF
+            shift
+            exit
+            ;;
+        -v | --version)
+            echo v0.1.0
+            shift
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+: "${1?✗ argument parsing failed: missing positional argument ‘ALIAS’}"
+case "${1}" in
+    netstat | iptables | ip6tables | ss)
+        ALIAS=${1}
+        ;;
+    *)
+        echo "✗ argument parsing failed: acceptable values for ‘ALIAS’ are netstat | iptables | ip6tables | ss" 1>&2
+        exit 1
+        ;;
+esac
+shift
+
+if (( $# > 0 )); then
+    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
+    exit 1
+fi
+
+separator=----------------------------------------------------------------
+
+if [ "${ALIAS}" = netstat ]; then
+    netstat --tcp --udp --raw --listening --numeric --programs
+elif [ "${ALIAS}" = iptables ]; then
+    iptables --table filter --list --numeric --verbose --line-numbers
+    printf '\n%s\n\n' "${separator}"
+    iptables --table nat --list --numeric --verbose --line-numbers
+elif [ "${ALIAS}" = ip6tables ]; then
+    ip6tables --table filter --list --numeric --verbose --line-numbers
+    printf '\n%s\n\n' "${separator}"
+    ip6tables --table nat --list --numeric --verbose --line-numbers
+else
+    ss --tcp --udp --raw --listening --numeric --processes
+fi

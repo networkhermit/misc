@@ -73,7 +73,7 @@ if response["ok"]:
     | tac)
 
 if [ -z "${list}" ]; then
-    echo "ok: nil"
+    echo 'ok: nil'
     exit
 fi
 

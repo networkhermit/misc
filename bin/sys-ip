@@ -42,11 +42,11 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-echo "[ route ]"
+echo '[ route ]'
 
 ip route get 1.1.1.1 | awk '{ print $7; exit }'
 
-echo "[ opendns ]"
+echo '[ opendns ]'
 
 (
 dig myip.opendns.com @208.67.222.222 a +short
@@ -59,21 +59,21 @@ dig myip.opendns.com @208.67.220.220 a +short
 #host -t a myip.opendns.com 208.67.222.222
 #host -t a myip.opendns.com 208.67.220.220
 
-echo "[ amazonaws ]"
+echo '[ amazonaws ]'
 
 curl --fail --location --silent --show-error 'https://checkip.amazonaws.com'
 
-echo "[ google ]"
+echo '[ google ]'
 
 (
 dig o-o.myaddr.l.google.com @216.239.32.10 txt +short
 dig o-o.myaddr.l.google.com @216.239.34.10 txt +short
 ) | tr --delete \" | uniq
 
-echo "[ ipv4 ]"
+echo '[ ipv4 ]'
 
 ip -4 address | awk '/\<inet\>/ { print $2 }' | sort --field-separator / --key 1,1V --key 2,2n
 
-echo "[ ipv6 ]"
+echo '[ ipv6 ]'
 
 ip -6 address | awk '/\<inet6\>/ { print $2 }' | sort

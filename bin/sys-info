@@ -1,0 +1,94 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+
+while (( $# > 0 )); do
+    case "${1}" in
+        -h | --help)
+            cat << EOF
+Usage:
+    ${0##*/} [OPTION]... MANIFEST
+
+Optional arguments:
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+
+Positional arguments:
+    MANIFEST (distro | group | user)
+        manifest name
+EOF
+            shift
+            exit
+            ;;
+        -v | --version)
+            echo v0.1.0
+            shift
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+: "${1?✗ argument parsing failed: missing positional argument ‘MANIFEST’}"
+case "${1}" in
+    distro | group | user)
+        MANIFEST=${1}
+        ;;
+    *)
+        echo "✗ argument parsing failed: acceptable values for ‘MANIFEST’ are distro | group | user" 1>&2
+        exit 1
+        ;;
+esac
+shift
+
+if (( $# > 0 )); then
+    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
+    exit 1
+fi
+
+if [ "${MANIFEST}" = distro ]; then
+    # shellcheck disable=SC1090
+    source <(grep '^ID=' /etc/os-release)
+    DISTRO=${ID:-linux}
+    echo "${DISTRO}"
+elif [ "${MANIFEST}" = group ]; then
+    sort \
+        --field-separator : \
+        --key 3,3n \
+        --stable \
+        /etc/group \
+        | cut \
+        --complement \
+        --delimiter : \
+        --field 2 \
+        | column \
+        --separator : \
+        --table \
+        --table-columns 'GROUP_NAME,GID,USER_LIST'
+else
+    sort \
+        --field-separator : \
+        --key 3,3n \
+        --stable \
+        /etc/passwd \
+        | cut \
+        --complement \
+        --delimiter : \
+        --field 2 \
+        | column \
+        --separator : \
+        --table \
+        --table-columns 'LOGIN_NAME,UID,GID,COMMENT,HOME,SHELL'
+fi

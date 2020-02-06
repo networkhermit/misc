@@ -11,13 +11,17 @@ while (( $# > 0 )); do
         -h | --help)
             cat << EOF
 Usage:
-    ${0##*/} [OPTION]...
+    ${0##*/} [OPTION]... HOST
 
 Optional arguments:
     -h, --help
         show this help message and exit
     -v, --version
         output version information and exit
+
+Positional arguments:
+    HOST
+        ssh host name
 EOF
             shift
             exit
@@ -37,12 +41,15 @@ EOF
     esac
 done
 
+HOST=${1?✗ argument parsing failed: missing positional argument ‘HOST’}
+shift
+
 if (( $# > 0 )); then
     echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
     exit 1
 fi
 
-ssh -T network << 'EOF'
+ssh -T "${HOST}" << 'EOF'
     for i in {1..8}; do
         echo "${i}"
     done

@@ -6,6 +6,11 @@ set -o pipefail
 
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
+if (( EUID != 0 )); then
+    echo '✗ This script must be run as root' 1>&2
+    exit 1
+fi
+
 while (( $# > 0 )); do
     case "${1}" in
         -h | --help)
@@ -42,34 +47,8 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-printf '\n%s\n\n' "[ Group ]"
-
-sort \
-    --field-separator : \
-    --key 3,3n \
-    --stable \
-    /etc/group \
-    | cut \
-    --complement \
-    --delimiter : \
-    --field 2 \
-    | column \
-    --separator : \
-    --table \
-    --table-columns 'GROUP_NAME,GID,USER_LIST'
-
-printf '\n%s\n\n' "[ User ]"
-
-sort \
-    --field-separator : \
-    --key 3,3n \
-    --stable \
-    /etc/passwd \
-    | cut \
-    --complement \
-    --delimiter : \
-    --field 2 \
-    | column \
-    --separator : \
-    --table \
-    --table-columns 'LOGIN_NAME,UID,GID,COMMENT,HOME,SHELL'
+docker network create \
+    --driver=bridge \
+    --gateway=172.24.0.1 \
+    --subnet=172.24.0.0/16 \
+    cluster

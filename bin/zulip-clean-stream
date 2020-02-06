@@ -71,7 +71,7 @@ if response["result"] == "success":
     ')
 
 if [ -z "${list}" ]; then
-    echo "ok: nil"
+    echo 'ok: nil'
     exit
 fi
 

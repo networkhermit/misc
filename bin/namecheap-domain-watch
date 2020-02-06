@@ -52,12 +52,12 @@ PUBLIC_IP_ADDRESS=$(dig myip.opendns.com @208.67.222.222 a +short)
 REQUEST_API_METHOD='namecheap.users.getPricing'
 
 if [ -z "${CURRENCY_RATE}" ]; then
-    echo "✗ unexpected error: cannot acquire the currency rate" 1>&2
+    echo '✗ unexpected error: cannot acquire the currency rate' 1>&2
     exit 1
 fi
 
 if [ -z "${PUBLIC_IP_ADDRESS}" ]; then
-    echo "✗ unexpected error: cannot resolve the public ip address" 1>&2
+    echo '✗ unexpected error: cannot resolve the public ip address' 1>&2
     exit 1
 fi
 

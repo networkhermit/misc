@@ -11,13 +11,17 @@ while (( $# > 0 )); do
         -h | --help)
             cat << EOF
 Usage:
-    ${0##*/} [OPTION]...
+    ${0##*/} [OPTION]... SSH_CONFIG
 
 Optional arguments:
     -h, --help
         show this help message and exit
     -v, --version
         output version information and exit
+
+Positional arguments:
+    SSH_CONFIG
+        ssh configuration file
 EOF
             shift
             exit
@@ -37,9 +41,12 @@ EOF
     esac
 done
 
+SSH_CONFIG=${1?✗ argument parsing failed: missing positional argument ‘SSH_CONFIG’}
+shift
+
 if (( $# > 0 )); then
     echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
     exit 1
 fi
 
-awk '/HostName/ { print $2 }' ~/.ssh/config
+awk --assign IGNORECASE=1 '/HostName/ { print $2 }' "${SSH_CONFIG}"

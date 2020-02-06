@@ -1,0 +1,79 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+
+while (( $# > 0 )); do
+    case "${1}" in
+        -h | --help)
+            cat << EOF
+Usage:
+    ${0##*/} [OPTION]... MANIFEST DOMAIN...
+
+Optional arguments:
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+
+Positional arguments:
+    MANIFEST (authority | whois)
+        manifest name
+    DOMAIN
+        domain name to be queried
+EOF
+            shift
+            exit
+            ;;
+        -v | --version)
+            echo v0.1.0
+            shift
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+: "${1?✗ argument parsing failed: missing positional argument ‘MANIFEST’}"
+case "${1}" in
+    authority | whois)
+        MANIFEST=${1}
+        ;;
+    *)
+        echo "✗ argument parsing failed: acceptable values for ‘MANIFEST’ are authority | whois" 1>&2
+        exit 1
+        ;;
+esac
+shift
+
+if [ "${MANIFEST}" = authority ]; then
+    for i in "$@"; do
+        printf '\n%s\n\n' "${i}"
+
+        dig +nssearch "${i}" | awk '{ print $2, $4 }'
+    done
+else
+    for i in "$@"; do
+        printf '\n%s\n\n' "${i}"
+
+        sleep 3
+
+        WHOIS=$(whois -H "${i}")
+
+        (
+        awk --field-separator ': ' '/Registrar:/ { print $2; exit }' <<< "${WHOIS}"
+        awk '/Creation Date:/ { print $NF; exit }' <<< "${WHOIS}"
+        awk '/Registry Expiry Date:/ { print $NF; exit }' <<< "${WHOIS}"
+        awk '/Domain Status:/ { if (length($3) != 0) print $3 }' <<< "${WHOIS}"
+        ) | sed 's/^/\t/'
+    done
+fi
