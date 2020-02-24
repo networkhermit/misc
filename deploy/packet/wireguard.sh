@@ -47,10 +47,6 @@ sudo install --directory --mode 700 /etc/wireguard
 sudo install --mode 600 /dev/null /etc/wireguard/private.key
 wg genkey | sudo tee /etc/wireguard/private.key | wg pubkey | sudo tee /etc/wireguard/public.key
 
-sudo install --mode 600 /dev/stdin /etc/wireguard/preshared-key/172.20.0.X-172.20.0.Y.key << EOF
-$(wg genpsk)
-EOF
-
 ## [ Server ]
 sudo install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << 'EOF'
 [Interface]
@@ -81,12 +77,12 @@ sudo install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << 'EOF'
 [Interface]
 PostUp = wg set %i private-key /etc/wireguard/private.key
 Address = 172.20.0.Y/16
-PostUp = iptables --table nat --insert POSTROUTING --out-interface wlan0 --jump MASQUERADE
-PostUp = iptables --table filter --insert FORWARD --in-interface wlan0 --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
-PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface wlan0 --jump ACCEPT
-PreDown = iptables --table nat --delete POSTROUTING --out-interface wlan0 --jump MASQUERADE || true
-PreDown = iptables --table filter --delete FORWARD --in-interface wlan0 --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT || true
-PreDown = iptables --table filter --delete FORWARD --in-interface %i --out-interface wlan0 --jump ACCEPT || true
+#PostUp = iptables --table nat --insert POSTROUTING --out-interface wlan0 --jump MASQUERADE
+#PostUp = iptables --table filter --insert FORWARD --in-interface wlan0 --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
+#PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface wlan0 --jump ACCEPT
+#PreDown = iptables --table nat --delete POSTROUTING --out-interface wlan0 --jump MASQUERADE || true
+#PreDown = iptables --table filter --delete FORWARD --in-interface wlan0 --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT || true
+#PreDown = iptables --table filter --delete FORWARD --in-interface %i --out-interface wlan0 --jump ACCEPT || true
 PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared-key/172.20.0.Y-172.20.0.X.key
 
 [Peer]
@@ -95,6 +91,14 @@ AllowedIPs = 172.20.0.X/32, 172.20.0.0/16
 Endpoint = PEER_ENDPOINT:51820
 PersistentKeepalive = 15
 EOF
+
+sudo install --directory --mode 700 /etc/wireguard/preshared-key
+PAIR=( 172.20.0.X-172.20.0.Y )
+for i in "${PAIR[@]}"; do
+    sudo install --mode 600 /dev/stdin "/etc/wireguard/preshared-key/${i}.key" << EOF
+$(wg genpsk)
+EOF
+done
 
 sudo wg-quick down wg0
 sudo wg-quick up wg0
