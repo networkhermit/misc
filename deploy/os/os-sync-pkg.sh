@@ -459,7 +459,7 @@ case "${DISTRO}" in
             extra/qemu-headless \
             community/salt \
             community/virt-install \
-            community/wireguard-{dkms,tools}
+            extra/wireguard-{dkms,tools}
 
         systemctl disable --now \
             dnsmasq.service \
@@ -1173,7 +1173,7 @@ EOF
             extra/qemu-headless \
             community/salt \
             community/virt-install \
-            community/wireguard-{dkms,tools}
+            extra/wireguard-{dkms,tools}
 
         systemctl disable --now \
             dnsmasq.service \

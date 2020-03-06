@@ -11,15 +11,13 @@ sudo passwd root
 sudo SUDO_EDITOR=vim visudo
 
 # add default sysadmin
+sudo groupadd --gid 27 --system sudo
+sudo groupadd --gid 256 --system sysadmin
 sudo groupadd --gid 1000 vac
 sudo useradd --create-home --gid 1000 --shell /bin/bash --uid 1000 vac
-sudo passwd vac
-sudo groupadd --gid 27 --system sudo
 sudo gpasswd --add vac sudo
-sudo groupadd --gid 256 --system sysadmin
 sudo gpasswd --add vac sysadmin
-sudo passwd --delete root
-sudo passwd --lock root
+sudo passwd vac
 if [ -n "${ANSIBLE_USER}" ]; then
     sudo groupadd --gid 8128 --system "${ANSIBLE_USER}"
     sudo useradd --create-home --gid 8128 --shell /bin/bash --system --uid 8128 "${ANSIBLE_USER}"
@@ -39,6 +37,8 @@ EOF
     fi
 fi
 ls --directory --human-readable -l / /home/* /root
+sudo passwd --delete root
+sudo passwd --lock root
 
 # change hostname
 sudo hostname STEM
@@ -80,12 +80,13 @@ EOF
 
 # modify default ntp server
 ## cloudflare | apple
-NTP_LIST='time.cloudflare.com time1.apple.com time2.apple.com time3.apple.com time4.apple.com'
+: "${NTP_LIST:=time.cloudflare.com time1.apple.com time2.apple.com time3.apple.com time4.apple.com}"
 ## cloudflare | google
-NTP_LIST='time.cloudflare.com time1.google.com time2.google.com time3.google.com time4.google.com'
+: "${NTP_LIST:=time.cloudflare.com time1.google.com time2.google.com time3.google.com time4.google.com}"
 sudo sed --in-place '/^#NTP=$/r /dev/stdin' /etc/systemd/timesyncd.conf << EOF
 NTP=${NTP_LIST}
 EOF
+unset NTP_LIST
 sudo systemctl restart systemd-timesyncd.service
 sudo systemctl enable systemd-timesyncd.service
 
@@ -99,9 +100,10 @@ sudo timedatectl set-timezone Asia/Shanghai
 sudo hwclock --systohc
 
 # configure system network
-sudo tee /etc/systemd/network/10-eth0.network << 'EOF'
+: "${DEVICE:=eth0}"
+sudo tee "/etc/systemd/network/10-${DEVICE}.network" << EOF
 [Match]
-Name=eth0
+Name=${DEVICE}
 
 [Network]
 DHCP=yes
@@ -109,7 +111,17 @@ DHCP=yes
 [DHCP]
 UseDNS=no
 UseNTP=no
+
+#[Address]
+#Address=192.168.0.10/16
+
+#[Route]
+#Gateway=192.168.0.1
+
+#[Address]
+#Address=fd00::/8
 EOF
+unset DEVICE
 sudo systemctl enable systemd-networkd.service
 
 # change distro source
@@ -222,6 +234,7 @@ unset NAME OS_RELEASE_NAME
 
 # modify secure shell daemon
 sudo vim /etc/ssh/sshd_config
+sudo sshd -T | sort | less
 sudo rm --verbose /etc/ssh/ssh_host_*_key{,.pub}
 declare -A host_key=(['ed25519']=256 ['rsa']=4096)
 for type in "${!host_key[@]}"; do
@@ -347,7 +360,7 @@ sudo mkfs.xfs -f -L Arch /dev/vdaX
 sudo mount /dev/vdaX /mnt
 
 # bootstrap base system
-sudo pacstrap /mnt base linux sudo vim openssh {amd,intel}-ucode grub
+sudo pacstrap /mnt base linux{,-firmware} sudo vim openssh {amd,intel}-ucode grub efibootmgr
 genfstab -t PARTUUID /mnt | sudo tee /mnt/etc/fstab
 sudo cp --verbose {,/mnt}/etc/resolv.conf
 
