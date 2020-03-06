@@ -347,7 +347,7 @@ sudo mkfs.xfs -f -L Arch /dev/vdaX
 sudo mount /dev/vdaX /mnt
 
 # bootstrap base system
-sudo pacstrap /mnt base sudo vim openssh {amd,intel}-ucode grub
+sudo pacstrap /mnt base linux sudo vim openssh {amd,intel}-ucode grub
 genfstab -t PARTUUID /mnt | sudo tee /mnt/etc/fstab
 sudo cp --verbose {,/mnt}/etc/resolv.conf
 

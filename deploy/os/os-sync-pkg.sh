@@ -275,7 +275,7 @@ case "${DISTRO}" in
             core/bash \
             extra/bash-completion \
             extra/zsh{,-doc} \
-            core/man-pages \
+            core/man-{db,pages} \
             core/texinfo \
             extra/vim \
             community/shellcheck
@@ -989,7 +989,7 @@ EOF
             core/bash \
             extra/bash-completion \
             extra/zsh{,-doc} \
-            core/man-pages \
+            core/man-{db,pages} \
             core/texinfo \
             extra/vim \
             community/shellcheck
