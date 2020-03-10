@@ -307,7 +307,7 @@ case "${DISTRO}" in
             community/pandoc \
             community/parallel \
             community/pigz \
-            community/pygmentize \
+            community/python-pygments \
             core/readline \
             core/sed \
             core/tar \
@@ -1021,7 +1021,7 @@ EOF
             community/pandoc \
             community/parallel \
             community/pigz \
-            community/pygmentize \
+            community/python-pygments \
             core/readline \
             core/sed \
             core/tar \
