@@ -487,7 +487,7 @@ case "${DISTRO}" in
             rootfiles \
             setup \
             glibc{,-devel} \
-            kernel{,-devel,-headers} \
+            kernel{,-core,-devel,-headers} \
             linux-firmware \
             coreutils \
             util-linux \
@@ -942,15 +942,15 @@ EOF
         apt update --list-cleanup
         apt install docker-ce
 
-        curl --fail --location --silent --show-error 'https://repo.saltstack.com/apt/debian/9/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
+        curl --fail --location --silent --show-error 'https://repo.saltstack.com/py3/debian/10/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
         rm --force --recursive /etc/apt/trusted.gpg~
         ## saltstack [official]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] https://repo.saltstack.com/apt/debian/9/amd64/latest stretch main
+deb [arch=amd64] https://repo.saltstack.com/py3/debian/10/amd64/latest buster main
 EOF
         ## saltstack [tsinghua]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/saltstack/apt/debian/9/amd64/latest stretch main
+deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/saltstack/py3/debian/10/amd64/latest buster main
 EOF
         apt update --list-cleanup
         apt install salt-{api,cloud,master,minion,ssh,syndic}
@@ -1646,15 +1646,15 @@ EOF
         apt update --list-cleanup
         apt install docker-ce
 
-        curl --fail --location --silent --show-error 'https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
+        curl --fail --location --silent --show-error 'https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
         rm --force --recursive /etc/apt/trusted.gpg~
         ## saltstack [official]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main
+deb [arch=amd64] https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest bionic main
 EOF
         ## saltstack [tsinghua]
         tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/saltstack/apt/ubuntu/18.04/amd64/latest bionic main
+deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/saltstack/py3/ubuntu/18.04/amd64/latest bionic main
 EOF
         apt update --list-cleanup
         apt install salt-{api,cloud,master,minion,ssh,syndic}

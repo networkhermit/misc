@@ -58,7 +58,7 @@ case "${DISTRO}" in
         pacman --query linux{,-api-headers,-docs,-headers}
         ;;
     fedora)
-        rpm --query kernel{,-devel,-headers}
+        rpm --query kernel{,-core,-devel,-headers}
         ;;
     kali)
         dpkg --get-selections linux-{doc,headers,image}-[0-9]\*
