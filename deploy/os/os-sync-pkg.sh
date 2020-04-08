@@ -886,8 +886,8 @@ case "${DISTRO}" in
             gdb{,-doc} \
             valgrind \
             g++ \
-            clang{,-8-doc,-format} \
-            llvm{,-8-doc} \
+            clang{,-9-doc,-format} \
+            llvm{,-9-doc} \
             elixir \
             erlang-{doc,nox} \
             golang{,-doc,-src} \

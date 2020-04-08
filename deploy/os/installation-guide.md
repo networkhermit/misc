@@ -183,6 +183,9 @@ EOF
 sudo tee /etc/apt/sources.list << 'EOF'
 deb https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main non-free contrib
 deb-src https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main non-free contrib
+
+#deb https://kali.download/kali kali-rolling main non-free contrib
+#deb-src https://kali.download/kali kali-rolling main non-free contrib
 EOF
 ## manjaro
 sudo tee /etc/pacman.d/mirrorlist << 'EOF'
@@ -229,11 +232,36 @@ EOF
 source <(grep '^NAME=' /etc/os-release)
 : "${NAME:=Linux}"
 OS_RELEASE_NAME=${NAME% Linux}
-sudo sed --in-place "s/OS_RELEASE_NAME/${OS_RELEASE_NAME}/g" /etc/motd
+OS_RELEASE_NAME=${OS_RELEASE_NAME% GNU/Linux}
+sudo sed --in-place "s%OS_RELEASE_NAME%${OS_RELEASE_NAME}%g" /etc/motd
 unset NAME OS_RELEASE_NAME
 
 # modify secure shell daemon
-sudo vim /etc/ssh/sshd_config
+sudo mkdir --parents --verbose /etc/ssh/sshd_config.d
+sudo tee /etc/ssh/sshd_config.d/local.conf << 'EOF'
+Port 321
+
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-256
+PubkeyAcceptedKeyTypes ssh-ed25519-cert-v01@openssh.com,ssh-ed25519,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-256
+
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+KexAlgorithms curve25519-sha256,diffie-hellman-group18-sha512,diffie-hellman-group16-sha512,diffie-hellman-group14-sha256,diffie-hellman-group-exchange-sha256
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com
+
+LogLevel VERBOSE
+
+AllowGroups sysadmin
+
+LoginGraceTime 42s
+PermitRootLogin no
+
+PasswordAuthentication no
+
+ClientAliveInterval 20
+EOF
 sudo sshd -T | sort | less
 sudo rm --verbose /etc/ssh/ssh_host_*_key{,.pub}
 declare -A host_key=(['ed25519']=256 ['rsa']=4096)
@@ -562,7 +590,7 @@ sudo apt clean
 sudo apt autoremove --purge --assume-yes
 
 ## install kali archive keyring
-sudo curl --fail --location --silent --show-error --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.2_all.deb'
+sudo curl --fail --location --silent --show-error --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2020.2_all.deb'
 sudo dpkg --install kali-archive-keyring_*_all.deb
 sudo rm --force --verbose kali-archive-keyring_*_all.deb
 
