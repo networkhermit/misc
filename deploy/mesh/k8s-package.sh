@@ -52,8 +52,8 @@ sudo rm --force --recursive /etc/apt/trusted.gpg~
 # add kubernetes repository
 ## [official]
 SOURCE_URI='https://packages.cloud.google.com/apt'
-## [aliyun]
-SOURCE_URI='https://mirrors.aliyun.com/kubernetes/apt'
+## [tsinghua tuna]
+SOURCE_URI='https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt'
 sudo tee /etc/apt/sources.list.d/kubernetes.list << EOF
 deb ${SOURCE_URI} kubernetes-xenial main
 EOF

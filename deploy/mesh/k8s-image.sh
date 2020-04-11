@@ -18,12 +18,12 @@ while (( $# > 0 )); do
         --registry)
             : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
             case "${2}" in
-                gcr | azure-proxy)
+                gcr | azure-proxy | aliyun-registry)
                     REGISTRY=${2}
                     shift 2
                     ;;
                 *)
-                    echo "✗ argument parsing failed: acceptable values for ‘${1}’ are gcr | azure-proxy" 1>&2
+                    echo "✗ argument parsing failed: acceptable values for ‘${1}’ are gcr | azure-proxy | aliyun-registry" 1>&2
                     exit 1
                     ;;
             esac
@@ -34,7 +34,7 @@ Usage:
     ${0##*/} [OPTION]...
 
 Optional arguments:
-    --registry REGISTRY (gcr | azure-proxy)
+    --registry REGISTRY (gcr | azure-proxy | aliyun-registry)
         container registry to pull images from (default: gcr)
     -h, --help
         show this help message and exit
@@ -101,9 +101,13 @@ printf '%s\n' "${arr[@]}"
 if [ "${REGISTRY}" = gcr ]; then
     kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
     printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null docker image pull
-else
+elif [ "${REGISTRY}" = azure-proxy ]; then
     for i in "${arr[@]}"; do
         construct_image "${i}" gcr.azk8s.cn/google_containers
+    done
+else
+    for i in "${arr[@]}"; do
+        construct_image "${i}" registry.aliyuncs.com/google_containers
     done
 fi
 
