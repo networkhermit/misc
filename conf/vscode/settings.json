@@ -1,0 +1,13 @@
+{
+    "editor.fontFamily": "Operator Mono Medium",
+    "editor.fontSize": 24,
+    "editor.scrollBeyondLastLine": false,
+    "extensions.ignoreRecommendations": true,
+    "files.eol": "\n",
+    "git.enabled": false,
+    "window.menuBarVisibility": "toggle",
+    "window.restoreWindows": "none",
+    "workbench.activityBar.visible": true,
+    "workbench.commandPalette.history": 0,
+    "workbench.startupEditor": "newUntitledFile"
+}

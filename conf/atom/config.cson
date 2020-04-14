@@ -1,0 +1,19 @@
+"*":
+  core:
+    autoHideMenuBar: true
+    automaticallyUpdate: false
+    reopenProjectMenuCount: 0
+    restorePreviousWindowsOnStart: "no"
+    telemetryConsent: "limited"
+  editor:
+    fontFamily: "Operator Mono Medium"
+    fontSize: 24
+    invisibles: {}
+    lineHeight: 1.25
+    tabLength: 4
+    tabType: "soft"
+    zoomFontWhenCtrlScrolling: false
+  "exception-reporting":
+    userId: "ffffffff-ffff-ffff-ffff-ffffffffffff"
+  welcome:
+    showOnStartup: false

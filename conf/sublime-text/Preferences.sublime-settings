@@ -1,0 +1,14 @@
+{
+    "default_line_ending": "unix",
+    "font_face": "Operator Mono Medium",
+    "font_size": 18,
+    "ignored_packages": [],
+    "scroll_past_end": false,
+    "show_encoding": true,
+    "show_line_endings": true,
+    "spell_check": true,
+    "theme": "Adaptive.sublime-theme",
+    "translate_tabs_to_spaces": true,
+    "vintage_ctrl_keys": true,
+    "vintage_start_in_command_mode": true
+}
