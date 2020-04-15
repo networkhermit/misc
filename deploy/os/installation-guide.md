@@ -777,6 +777,8 @@ Ubuntu
 # update message of the day
 
 # modify secure shell daemon
+sudo systemctl restart ssh.service
+sudo systemctl enable ssh.service
 
 # update initramfs image
 
