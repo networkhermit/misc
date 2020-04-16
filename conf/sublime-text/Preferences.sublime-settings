@@ -1,5 +1,6 @@
 {
     "default_line_ending": "unix",
+    "ensure_newline_at_eof_on_save": true,
     "font_face": "Operator Mono Medium",
     "font_size": 18,
     "ignored_packages": [],
