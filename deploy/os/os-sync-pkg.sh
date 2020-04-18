@@ -71,6 +71,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       man-pages
 #       info
 #       vim
+#       emacs
 #       \shellcheck
 ##################
 
@@ -278,6 +279,7 @@ case "${DISTRO}" in
             core/man-{db,pages} \
             core/texinfo \
             extra/vim \
+            extra/emacs \
             community/shellcheck
 
         # UTIL
@@ -501,6 +503,7 @@ case "${DISTRO}" in
             man-{db,pages} \
             info \
             vim-enhanced \
+            emacs \
             ShellCheck
 
         # UTIL
@@ -738,6 +741,7 @@ case "${DISTRO}" in
             manpages{,-dev} \
             info \
             vim{,-doc} \
+            emacs \
             shellcheck
 
         # UTIL
@@ -992,6 +996,7 @@ EOF
             core/man-{db,pages} \
             core/texinfo \
             extra/vim \
+            extra/emacs \
             community/shellcheck
 
         # UTIL
@@ -1213,6 +1218,7 @@ EOF
             man{,-pages} \
             info \
             vim \
+            emacs \
             ShellCheck
 
         # UTIL
@@ -1442,6 +1448,7 @@ EOF
             manpages{,-dev} \
             info \
             vim{,-doc} \
+            emacs \
             shellcheck
 
         # UTIL
