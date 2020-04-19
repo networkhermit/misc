@@ -56,6 +56,7 @@ export PATH=${PATH}:~/STEM/bin
 export C_INCLUDE_PATH=~/STEM/lib/plt/c/src
 export CPLUS_INCLUDE_PATH=~/STEM/lib/plt/c++/src
 export GOPATH=~/STEM/lib/plt/go
+export LISP_PATH=~/STEM/lib/plt/lisp/src
 export CLASSPATH=.:~/STEM/lib/plt/java/src
 export NODE_PATH=~/STEM/lib/plt/nodejs/src
 export PYTHONPATH=~/STEM/lib/plt/python/src
