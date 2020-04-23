@@ -1470,7 +1470,7 @@ EOF
             gzip \
             less \
             lynx \
-            liblz4-tool \
+            lz4 \
             lzop \
             moreutils \
             most \
@@ -1544,7 +1544,7 @@ EOF
         # NETWORK OPERATOR
         apt install \
             bind9-host \
-            dnsutils \
+            bind9-dnsutils \
             bridge-utils \
             ca-certificates \
             chrony \
@@ -1554,7 +1554,7 @@ EOF
             dnstracer \
             ethtool \
             fping \
-            geoip-{bin,database{,-extra}} \
+            geoip-{bin,database} \
             hostname \
             httpie \
             iperf3 \
@@ -1597,8 +1597,8 @@ EOF
             gdb{,-doc} \
             valgrind \
             g++ \
-            clang{,-6.0-doc,-format} \
-            llvm{,-6.0-doc} \
+            clang{,-10-doc,-format} \
+            llvm{,-10-doc} \
             elixir \
             erlang-{doc,nox} \
             golang{,-doc,-src} \
@@ -1609,7 +1609,7 @@ EOF
             ocaml-{doc,nox} \
             php \
             python3{,-doc,-pip,-virtualenv} \
-            ruby{,2.5-doc} \
+            ruby{,2.7-doc} \
             rust{c,-doc,-src} \
             cargo{,-doc}
 

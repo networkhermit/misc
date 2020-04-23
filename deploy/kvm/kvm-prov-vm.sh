@@ -113,9 +113,9 @@ case "${DISTRO}" in
         EXTRA_ARGUMENT+=(--os-variant opensusetumbleweed)
         ;;
     ubuntu)
-        EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/bionic/main/installer-amd64)
+        EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/focal/main/installer-amd64)
         EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-        EXTRA_ARGUMENT+=(--os-variant ubuntu18.04)
+        EXTRA_ARGUMENT+=(--os-variant ubuntu20.04)
         ;;
     *)
         echo "✗ unknown distro: ‘${DISTRO}’" 1>&2

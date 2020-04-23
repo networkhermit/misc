@@ -202,15 +202,15 @@ sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.or
 sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/utilities/openSUSE_Factory/utilities.repo
 ## ubuntu
 sudo tee /etc/apt/sources.list << 'EOF'
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic-backports main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic-security main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic-updates main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-backports main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-security main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-updates main restricted universe multiverse
 
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic main restricted universe multiverse
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic-backports main restricted universe multiverse
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic-security main restricted universe multiverse
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu bionic-updates main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-backports main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-security main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-updates main restricted universe multiverse
 EOF
 
 # make distro sync
@@ -813,13 +813,13 @@ https://archive.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/im
 
 ```
 # linux kernel archive
-deb https://mirrors.kernel.org/ubuntu bionic main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu bionic-backports main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu bionic-security main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu bionic-updates main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu focal main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu focal-backports main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu focal-security main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu focal-updates main restricted universe multiverse
 
-deb-src https://mirrors.kernel.org/ubuntu bionic main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu bionic-backports main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu bionic-security main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu bionic-updates main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu focal main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu focal-backports main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu focal-security main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu focal-updates main restricted universe multiverse
 ```
