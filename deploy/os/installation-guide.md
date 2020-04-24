@@ -105,6 +105,9 @@ sudo tee "/etc/systemd/network/10-${DEVICE}.network" << EOF
 [Match]
 Name=${DEVICE}
 
+[Link]
+RequiredForOnline=no
+
 [Network]
 DHCP=yes
 
