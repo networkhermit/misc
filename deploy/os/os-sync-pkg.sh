@@ -836,8 +836,7 @@ case "${DISTRO}" in
 
         # NETWORK OPERATOR
         apt install \
-            bind9-host \
-            dnsutils \
+            bind9-{dnsutils,host} \
             bridge-utils \
             ca-certificates \
             chrony \
@@ -1543,8 +1542,7 @@ EOF
 
         # NETWORK OPERATOR
         apt install \
-            bind9-host \
-            bind9-dnsutils \
+            bind9-{dnsutils,host} \
             bridge-utils \
             ca-certificates \
             chrony \
