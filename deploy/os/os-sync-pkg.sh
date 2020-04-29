@@ -611,7 +611,7 @@ case "${DISTRO}" in
             hostname \
             httpie \
             iperf3 \
-            iproute{,-doc} \
+            iproute \
             ipset \
             iptables \
             iputils \
@@ -901,7 +901,7 @@ case "${DISTRO}" in
             ocaml-{doc,nox} \
             php \
             python3{,-doc,-pip,-virtualenv} \
-            ruby{,2.5-doc} \
+            ruby{,2.7-doc} \
             rust{c,-doc,-src} \
             cargo{,-doc}
 
