@@ -1362,13 +1362,13 @@ EOF
             gdb \
             valgrind \
             gcc-c++ \
-            clang \
-            llvm{,9-doc} \
+            clang{,10-doc} \
+            llvm{,10-doc} \
             elixir{,-doc} \
             erlang{,-doc} \
             go{,-doc} \
             ghc \
-            java-13-openjdk{-headless,-javadoc} \
+            java-14-openjdk{-headless,-javadoc} \
             sbcl \
             nodejs12{,-docs} \
             ocaml \
