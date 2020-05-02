@@ -77,7 +77,6 @@ case "${DISTRO}" in
             dnf clean all
         fi
         dnf makecache
-        dnf check-update || true
         dnf check-update --changelogs || true
         dnf upgrade
         dnf autoremove
