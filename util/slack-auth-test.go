@@ -9,11 +9,12 @@ import (
 )
 
 type config struct {
-    TOKEN string `json: "token"`
+    SCHEME string `json:"scheme"`
+    TOKEN string `json:"token"`
 }
 
 type object struct {
-    OK bool `json: "ok"`
+    OK bool `json:"ok"`
 }
 
 func main() {
@@ -30,8 +31,7 @@ func main() {
 
     url := "https://slack.com/api/auth.test"
 
-    clent := http.Client{
-    }
+    clent := http.Client{}
 
     req, err := http.NewRequest(http.MethodGet, url, nil)
     if err != nil {
@@ -39,7 +39,7 @@ func main() {
     }
 
     req.Header.Set("User-Agent", "Krypton")
-    req.Header.Set("Authorization", "Bearer " + auth.TOKEN)
+    req.Header.Set("Authorization", fmt.Sprintf("%s %s", auth.SCHEME, auth.TOKEN))
 
     res, err := clent.Do(req)
     if err != nil {
