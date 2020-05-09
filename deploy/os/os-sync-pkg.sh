@@ -1370,11 +1370,11 @@ EOF
             ghc \
             java-14-openjdk{-headless,-javadoc} \
             sbcl \
-            nodejs12{,-docs} \
+            nodejs14{,-docs} \
             ocaml \
             php7 \
             python3{,-doc,-pip,-virtualenv} \
-            ruby{,2.6-doc} \
+            ruby{,2.7-doc} \
             rust{,-doc,-src} \
             cargo{,-doc}
 
