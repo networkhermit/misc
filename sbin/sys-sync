@@ -15,12 +15,12 @@ FORCE_SYNC=false
 
 while (( $# > 0 )); do
     case "${1}" in
-        -f | --force)
-            FORCE_SYNC=true
-            shift
-            ;;
-        -h | --help)
-            cat << EOF
+    -f | --force)
+        FORCE_SYNC=true
+        shift
+        ;;
+    -h | --help)
+        cat << EOF
 Usage:
     ${0##*/} [OPTION]...
 
@@ -32,21 +32,21 @@ Optional arguments:
     -v, --version
         output version information and exit
 EOF
-            shift
-            exit
-            ;;
-        -v | --version)
-            echo v0.1.0
-            shift
-            exit
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            break
-            ;;
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 
@@ -65,45 +65,45 @@ source <(grep '^ID=' /etc/os-release)
 DISTRO=${ID:-linux}
 
 case "${DISTRO}" in
-    arch | manjaro)
-        if [ "${FORCE_SYNC}" = true ]; then
-            (yes || true) | pacman --sync --clean --clean
-        fi
-        pacman --sync --refresh --sysupgrade
+arch | manjaro)
+    if [ "${FORCE_SYNC}" = true ]; then
         (yes || true) | pacman --sync --clean --clean
-        ;;
-    fedora)
-        if [ "${FORCE_SYNC}" = true ]; then
-            dnf clean all
-        fi
-        dnf makecache
-        dnf check-update --changelogs || true
-        dnf upgrade
-        dnf autoremove
-        dnf clean packages
-        ;;
-    kali | ubuntu)
-        if [ "${FORCE_SYNC}" = true ]; then
-            apt clean
-        fi
-        apt update
-        apt list --upgradable
-        apt full-upgrade --purge
+    fi
+    pacman --sync --refresh --sysupgrade
+    (yes || true) | pacman --sync --clean --clean
+    ;;
+fedora)
+    if [ "${FORCE_SYNC}" = true ]; then
+        dnf clean all
+    fi
+    dnf makecache
+    dnf check-update --changelogs || true
+    dnf upgrade
+    dnf autoremove
+    dnf clean packages
+    ;;
+kali | ubuntu)
+    if [ "${FORCE_SYNC}" = true ]; then
         apt clean
-        apt autoremove --purge
-        ;;
-    opensuse*)
-        if [ "${FORCE_SYNC}" = true ]; then
-            zypper clean --all
-        fi
-        zypper refresh
-        zypper list-updates
-        zypper dist-upgrade
-        zypper purge-kernels
-        zypper clean
-        ;;
-    *)
-        echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
-        exit 1
-        ;;
+    fi
+    apt update
+    apt list --upgradable
+    apt full-upgrade --purge
+    apt clean
+    apt autoremove --purge
+    ;;
+opensuse*)
+    if [ "${FORCE_SYNC}" = true ]; then
+        zypper clean --all
+    fi
+    zypper refresh
+    zypper list-updates
+    zypper dist-upgrade
+    zypper purge-kernels
+    zypper clean
+    ;;
+*)
+    echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
+    exit 1
+    ;;
 esac

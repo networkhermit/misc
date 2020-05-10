@@ -8,8 +8,8 @@ trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 while (( $# > 0 )); do
     case "${1}" in
-        -h | --help)
-            cat << EOF
+    -h | --help)
+        cat << EOF
 Usage:
     ${0##*/} [OPTION]... MANIFEST
 
@@ -23,33 +23,33 @@ Positional arguments:
     MANIFEST (distro | group | user)
         manifest name
 EOF
-            shift
-            exit
-            ;;
-        -v | --version)
-            echo v0.1.0
-            shift
-            exit
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            break
-            ;;
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 
 : "${1?✗ argument parsing failed: missing positional argument ‘MANIFEST’}"
 case "${1}" in
-    distro | group | user)
-        MANIFEST=${1}
-        ;;
-    *)
-        echo "✗ argument parsing failed: acceptable values for ‘MANIFEST’ are distro | group | user" 1>&2
-        exit 1
-        ;;
+distro | group | user)
+    MANIFEST=${1}
+    ;;
+*)
+    echo "✗ argument parsing failed: acceptable values for ‘MANIFEST’ are distro | group | user" 1>&2
+    exit 1
+    ;;
 esac
 shift
 
@@ -58,12 +58,14 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-if [ "${MANIFEST}" = distro ]; then
+case "${MANIFEST}" in
+distro)
     # shellcheck disable=SC1090
     source <(grep '^ID=' /etc/os-release)
     DISTRO=${ID:-linux}
     echo "${DISTRO}"
-elif [ "${MANIFEST}" = group ]; then
+    ;;
+group)
     sort \
         --field-separator : \
         --key 3,3n \
@@ -77,7 +79,8 @@ elif [ "${MANIFEST}" = group ]; then
         --separator : \
         --table \
         --table-columns 'GROUP_NAME,GID,USER_LIST'
-else
+    ;;
+*)
     sort \
         --field-separator : \
         --key 3,3n \
@@ -91,4 +94,5 @@ else
         --separator : \
         --table \
         --table-columns 'LOGIN_NAME,UID,GID,COMMENT,HOME,SHELL'
-fi
+    ;;
+esac

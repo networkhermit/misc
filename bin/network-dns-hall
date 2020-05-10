@@ -8,8 +8,8 @@ trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 while (( $# > 0 )); do
     case "${1}" in
-        -h | --help)
-            cat << EOF
+    -h | --help)
+        cat << EOF
 Usage:
     ${0##*/} [OPTION]... VENDOR
 
@@ -23,33 +23,33 @@ Positional arguments:
     VENDOR (cloudflare | opendns | quad9)
         dns vendor name
 EOF
-            shift
-            exit
-            ;;
-        -v | --version)
-            echo v0.1.0
-            shift
-            exit
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            break
-            ;;
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 
 : "${1?✗ argument parsing failed: missing positional argument ‘VENDOR’}"
 case "${1}" in
-    cloudflare | opendns | quad9)
-        VENDOR=${1}
-        ;;
-    *)
-        echo "✗ argument parsing failed: acceptable values for ‘VENDOR’ are cloudflare | opendns | quad9" 1>&2
-        exit 1
-        ;;
+cloudflare | opendns | quad9)
+    VENDOR=${1}
+    ;;
+*)
+    echo "✗ argument parsing failed: acceptable values for ‘VENDOR’ are cloudflare | opendns | quad9" 1>&2
+    exit 1
+    ;;
 esac
 shift
 
@@ -58,20 +58,24 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-if [ "${VENDOR}" = cloudflare ]; then
+case "${VENDOR}" in
+cloudflare)
     dig \
         1dot1dot1dot1.cloudflare-dns.com a 1dot1dot1dot1.cloudflare-dns.com aaaa \
         +short
-elif [ "${VENDOR}" = opendns ]; then
+    ;;
+opendns)
     dig \
         resolver1.opendns.com a resolver1.opendns.com aaaa \
         resolver2.opendns.com a resolver2.opendns.com aaaa \
         resolver3.opendns.com a resolver3.opendns.com aaaa \
         resolver4.opendns.com a resolver4.opendns.com aaaa \
         +short
-else
+    ;;
+*)
     dig \
         dns.quad9.net a dns.quad9.net aaaa \
         dns-nosec.quad9.net a dns-nosec.quad9.net aaaa \
         +short
-fi
+    ;;
+esac

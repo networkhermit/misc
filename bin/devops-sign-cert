@@ -13,33 +13,33 @@ VERBOSE=false
 
 while (( $# > 0 )); do
     case "${1}" in
-        --algorithm)
-            : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
-            case "${2}" in
-                ED25519 | ED448 | RSA)
-                    PUBLIC_KEY_ALGORITHM=${2}
-                    shift 2
-                    ;;
-                *)
-                    echo "✗ argument parsing failed: acceptable values for ‘${1}’ are ED25519 | ED448 | RSA" 1>&2
-                    exit 1
-                    ;;
-            esac
+    --algorithm)
+        : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
+        case "${2}" in
+        ED25519 | ED448 | RSA)
+            PUBLIC_KEY_ALGORITHM=${2}
+            shift 2
             ;;
-        --digest)
-            ENABLE_DIGEST=true
-            shift
+        *)
+            echo "✗ argument parsing failed: acceptable values for ‘${1}’ are ED25519 | ED448 | RSA" 1>&2
+            exit 1
             ;;
-        --strict)
-            STRICT_VERIFICATION=true
-            shift
-            ;;
-        --verbose)
-            VERBOSE=true
-            shift
-            ;;
-        -h | --help)
-            cat << EOF
+        esac
+        ;;
+    --digest)
+        ENABLE_DIGEST=true
+        shift
+        ;;
+    --strict)
+        STRICT_VERIFICATION=true
+        shift
+        ;;
+    --verbose)
+        VERBOSE=true
+        shift
+        ;;
+    -h | --help)
+        cat << EOF
 Usage:
     ${0##*/} [OPTION]... CERT_NAME
 
@@ -61,21 +61,21 @@ Positional arguments:
     CERT_NAME
         common name of the end certificate to be generated
 EOF
-            shift
-            exit
-            ;;
-        -v | --version)
-            echo v0.1.0
-            shift
-            exit
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            break
-            ;;
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 
@@ -175,13 +175,17 @@ fi
 
 # [ Intermediate CA ]
 
-if [ "${PUBLIC_KEY_ALGORITHM}" = ED25519 ]; then
+case "${PUBLIC_KEY_ALGORITHM}" in
+ED25519)
     openssl genpkey -algorithm "${PUBLIC_KEY_ALGORITHM}" -out interm.key
-elif [ "${PUBLIC_KEY_ALGORITHM}" = ED448 ]; then
+    ;;
+ED448)
     openssl genpkey -algorithm "${PUBLIC_KEY_ALGORITHM}" -out interm.key
-else
+    ;;
+*)
     openssl genpkey -algorithm "${PUBLIC_KEY_ALGORITHM}" -out interm.key -pkeyopt rsa_keygen_bits:4096
-fi
+    ;;
+esac
 
 openssl req \
     -new \

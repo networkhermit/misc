@@ -15,21 +15,21 @@ REGISTRY=gcr
 
 while (( $# > 0 )); do
     case "${1}" in
-        --registry)
-            : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
-            case "${2}" in
-                gcr | azure-proxy | aliyun-registry)
-                    REGISTRY=${2}
-                    shift 2
-                    ;;
-                *)
-                    echo "✗ argument parsing failed: acceptable values for ‘${1}’ are gcr | azure-proxy | aliyun-registry" 1>&2
-                    exit 1
-                    ;;
-            esac
+    --registry)
+        : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
+        case "${2}" in
+        gcr | azure-proxy | aliyun-registry)
+            REGISTRY=${2}
+            shift 2
             ;;
-        -h | --help)
-            cat << EOF
+        *)
+            echo "✗ argument parsing failed: acceptable values for ‘${1}’ are gcr | azure-proxy | aliyun-registry" 1>&2
+            exit 1
+            ;;
+        esac
+        ;;
+    -h | --help)
+        cat << EOF
 Usage:
     ${0##*/} [OPTION]...
 
@@ -41,21 +41,21 @@ Optional arguments:
     -v, --version
         output version information and exit
 EOF
-            shift
-            exit
-            ;;
-        -v | --version)
-            echo v0.1.0
-            shift
-            exit
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            break
-            ;;
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 
@@ -98,18 +98,22 @@ get_image_list arr
 printf '%s\n' "${arr[@]}"
 
 # pull container images
-if [ "${REGISTRY}" = gcr ]; then
+case "${REGISTRY}" in
+gcr)
     kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
     printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null docker image pull
-elif [ "${REGISTRY}" = azure-proxy ]; then
+    ;;
+azure-proxy)
     for i in "${arr[@]}"; do
         construct_image "${i}" gcr.azk8s.cn/google_containers
     done
-else
+    ;;
+*)
     for i in "${arr[@]}"; do
         construct_image "${i}" registry.aliyuncs.com/google_containers
     done
-fi
+    ;;
+esac
 
 # inspect container images
 printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null docker image inspect --format '{{.Id}} {{.RepoTags}}'

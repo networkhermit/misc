@@ -8,8 +8,8 @@ trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 while (( $# > 0 )); do
     case "${1}" in
-        -h | --help)
-            cat << EOF
+    -h | --help)
+        cat << EOF
 Usage:
     ${0##*/} [OPTION]...
 
@@ -19,21 +19,21 @@ Optional arguments:
     -v, --version
         output version information and exit
 EOF
-            shift
-            exit
-            ;;
-        -v | --version)
-            echo v0.1.0
-            shift
-            exit
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            break
-            ;;
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 

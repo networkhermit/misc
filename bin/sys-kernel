@@ -8,8 +8,8 @@ trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 while (( $# > 0 )); do
     case "${1}" in
-        -h | --help)
-            cat << EOF
+    -h | --help)
+        cat << EOF
 Usage:
     ${0##*/} [OPTION]...
 
@@ -19,21 +19,21 @@ Optional arguments:
     -v, --version
         output version information and exit
 EOF
-            shift
-            exit
-            ;;
-        -v | --version)
-            echo v0.1.0
-            shift
-            exit
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            break
-            ;;
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 
@@ -54,26 +54,26 @@ DISTRO=${ID:-linux}
 uname --kernel-name --kernel-release --kernel-version --machine
 
 case "${DISTRO}" in
-    arch)
-        pacman --query linux{,-api-headers,-docs,-headers}
-        ;;
-    fedora)
-        rpm --query kernel{,-core,-devel,-headers}
-        ;;
-    kali)
-        dpkg --get-selections linux-{doc,headers,image}-[0-9]\*
-        ;;
-    manjaro)
-        pacman --query linux{,-api-headers,-headers}
-        ;;
-    opensuse*)
-        rpm --query kernel-{default{,-devel},devel,docs}
-        ;;
-    ubuntu)
-        dpkg --get-selections linux-{doc,headers,image}-[0-9]\*
-        ;;
-    *)
-        echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
-        exit
-        ;;
+arch)
+    pacman --query linux{,-api-headers,-docs,-headers}
+    ;;
+fedora)
+    rpm --query kernel{,-core,-devel,-headers}
+    ;;
+kali)
+    dpkg --get-selections linux-{doc,headers,image}-[0-9]\*
+    ;;
+manjaro)
+    pacman --query linux{,-api-headers,-headers}
+    ;;
+opensuse*)
+    rpm --query kernel-{default{,-devel},devel,docs}
+    ;;
+ubuntu)
+    dpkg --get-selections linux-{doc,headers,image}-[0-9]\*
+    ;;
+*)
+    echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
+    exit
+    ;;
 esac

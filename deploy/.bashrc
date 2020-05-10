@@ -10,11 +10,11 @@ source /etc/skel/.bashrc
 
 # If not running interactively, don't do anything
 case $- in
-    *i*)
-        ;;
-    *)
-        return
-        ;;
+*i*)
+    ;;
+*)
+    return
+    ;;
 esac
 
 PS1='$(EXIT_STATUS=$?; if (( EXIT_STATUS != 0 )); then printf "%s :( " "${EXIT_STATUS}"; fi)'

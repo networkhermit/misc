@@ -15,12 +15,12 @@ DIRECTORY=/var/local/images
 
 while (( $# > 0 )); do
     case "${1}" in
-        --directory)
-            DIRECTORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
-            shift 2
-            ;;
-        -h | --help)
-            cat << EOF
+    --directory)
+        DIRECTORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
+        shift 2
+        ;;
+    -h | --help)
+        cat << EOF
 Usage:
     ${0##*/} [OPTION]... SOURCE TARGET
 
@@ -38,21 +38,21 @@ Positional arguments:
     TARGET
         name of the new guest virtual machine instance
 EOF
-            shift
-            exit
-            ;;
-        -v | --version)
-            echo v0.1.0
-            shift
-            exit
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            break
-            ;;
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 

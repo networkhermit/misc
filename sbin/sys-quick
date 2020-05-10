@@ -13,8 +13,8 @@ fi
 
 while (( $# > 0 )); do
     case "${1}" in
-        -h | --help)
-            cat << EOF
+    -h | --help)
+        cat << EOF
 Usage:
     ${0##*/} [OPTION]... ALIAS
 
@@ -28,33 +28,33 @@ Positional arguments:
     ALIAS (netstat | iptables | ip6tables | ss)
         diagnostic launcher name
 EOF
-            shift
-            exit
-            ;;
-        -v | --version)
-            echo v0.1.0
-            shift
-            exit
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            break
-            ;;
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 
 : "${1?✗ argument parsing failed: missing positional argument ‘ALIAS’}"
 case "${1}" in
-    netstat | iptables | ip6tables | ss)
-        ALIAS=${1}
-        ;;
-    *)
-        echo "✗ argument parsing failed: acceptable values for ‘ALIAS’ are netstat | iptables | ip6tables | ss" 1>&2
-        exit 1
-        ;;
+netstat | iptables | ip6tables | ss)
+    ALIAS=${1}
+    ;;
+*)
+    echo "✗ argument parsing failed: acceptable values for ‘ALIAS’ are netstat | iptables | ip6tables | ss" 1>&2
+    exit 1
+    ;;
 esac
 shift
 
@@ -65,16 +65,21 @@ fi
 
 separator=----------------------------------------------------------------
 
-if [ "${ALIAS}" = netstat ]; then
+case "${ALIAS}" in
+netstat)
     netstat --tcp --udp --raw --listening --numeric --programs
-elif [ "${ALIAS}" = iptables ]; then
+    ;;
+iptables)
     iptables --table filter --list --numeric --verbose --line-numbers
     printf '\n%s\n\n' "${separator}"
     iptables --table nat --list --numeric --verbose --line-numbers
-elif [ "${ALIAS}" = ip6tables ]; then
+    ;;
+ip6tables)
     ip6tables --table filter --list --numeric --verbose --line-numbers
     printf '\n%s\n\n' "${separator}"
     ip6tables --table nat --list --numeric --verbose --line-numbers
-else
+    ;;
+*)
     ss --tcp --udp --raw --listening --numeric --processes
-fi
+    ;;
+esac

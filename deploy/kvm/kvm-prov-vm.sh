@@ -18,24 +18,24 @@ SIZE=40
 
 while (( $# > 0 )); do
     case "${1}" in
-        --cpu)
-            CPU=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
-            shift 2
-            ;;
-        --directory)
-            DIRECTORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
-            shift 2
-            ;;
-        --memory)
-            MEMORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
-            shift 2
-            ;;
-        --size)
-            SIZE=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
-            shift 2
-            ;;
-        -h | --help)
-            cat << EOF
+    --cpu)
+        CPU=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
+        shift 2
+        ;;
+    --directory)
+        DIRECTORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
+        shift 2
+        ;;
+    --memory)
+        MEMORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
+        shift 2
+        ;;
+    --size)
+        SIZE=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
+        shift 2
+        ;;
+    -h | --help)
+        cat << EOF
 Usage:
     ${0##*/} [OPTION]... DISTRO NAME
 
@@ -59,21 +59,21 @@ Positional arguments:
     NAME
         name of the new guest virtual machine instance
 EOF
-            shift
-            exit
-            ;;
-        -v | --version)
-            echo v0.1.0
-            shift
-            exit
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            break
-            ;;
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
     esac
 done
 
@@ -91,36 +91,36 @@ EXTRA_ARGUMENT=()
 INSTALLER_PARAMETER=(--extra-args 'console=ttyS0,115200n8 nameserver=1.0.0.1')
 
 case "${DISTRO}" in
-    arch)
-        IMAGE=$(find images/ -type f -name 'archlinux-*-x86_64.iso' | sort --version-sort | tail --lines 1)
+arch)
+    IMAGE=$(find images/ -type f -name 'archlinux-*-x86_64.iso' | sort --version-sort | tail --lines 1)
 
-        EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
-        EXTRA_ARGUMENT+=(--os-variant auto)
-        ;;
-    fedora)
-        EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/32/Server/x86_64/os)
-        EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-        EXTRA_ARGUMENT+=(--os-variant fedora32)
-        ;;
-    kali)
-        EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
-        EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-        EXTRA_ARGUMENT+=(--os-variant debiantesting)
-        ;;
-    opensuse)
-        EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss)
-        EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-        EXTRA_ARGUMENT+=(--os-variant opensusetumbleweed)
-        ;;
-    ubuntu)
-        EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/focal/main/installer-amd64)
-        EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-        EXTRA_ARGUMENT+=(--os-variant ubuntu20.04)
-        ;;
-    *)
-        echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
-        exit
-        ;;
+    EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+    EXTRA_ARGUMENT+=(--os-variant auto)
+    ;;
+fedora)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/32/Server/x86_64/os)
+    EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
+    EXTRA_ARGUMENT+=(--os-variant fedora32)
+    ;;
+kali)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
+    EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
+    EXTRA_ARGUMENT+=(--os-variant debiantesting)
+    ;;
+opensuse)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss)
+    EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
+    EXTRA_ARGUMENT+=(--os-variant opensusetumbleweed)
+    ;;
+ubuntu)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/focal/main/installer-amd64)
+    EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
+    EXTRA_ARGUMENT+=(--os-variant ubuntu20.04)
+    ;;
+*)
+    echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
+    exit
+    ;;
 esac
 
 virt-install \
