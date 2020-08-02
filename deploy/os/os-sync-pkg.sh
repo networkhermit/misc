@@ -370,7 +370,7 @@ arch)
     # NETWORK OPERATOR
     pacman --sync --needed \
         extra/bind-tools \
-        core/bridge-utils \
+        extra/bridge-utils \
         core/ca-certificates{,-mozilla,-utils} \
         community/chrony \
         core/curl \
@@ -1092,7 +1092,7 @@ manjaro)
     # NETWORK OPERATOR
     pacman --sync --needed \
         extra/bind-tools \
-        core/bridge-utils \
+        extra/bridge-utils \
         core/ca-certificates{,-mozilla,-utils} \
         community/chrony \
         core/curl \
