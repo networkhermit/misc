@@ -265,13 +265,13 @@ PasswordAuthentication no
 
 ClientAliveInterval 20
 EOF
-sudo sshd -T | sort | less
-sudo rm --verbose /etc/ssh/ssh_host_*_key{,.pub}
+sudo rm --force --verbose /etc/ssh/ssh_host_*_key{,.pub}
 declare -A host_key=(['ed25519']=256 ['rsa']=4096)
 for type in "${!host_key[@]}"; do
     sudo ssh-keygen -a 100 -b "${host_key[${type}]}" -f "/etc/ssh/ssh_host_${type}_key" -t "${type}" -C 'sysadmin@local.domain' -N ''
 done
 unset host_key
+sudo sshd -T | sort | less
 
 # update initramfs image
 # reference script=sys-boot
