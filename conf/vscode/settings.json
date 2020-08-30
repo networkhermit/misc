@@ -8,6 +8,9 @@
     "task.quickOpen.history": 0,
     "telemetry.enableCrashReporter": false,
     "telemetry.enableTelemetry": false,
+    "terminal.integrated.commandsToSkipShell": [
+        "-workbench.action.quickOpen"
+    ],
     "update.mode": "manual",
     "vim.history": 1,
     "window.menuBarVisibility": "toggle",
