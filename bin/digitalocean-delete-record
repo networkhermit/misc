@@ -7,7 +7,7 @@ set -o pipefail
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 # shellcheck disable=SC1090
-source "$(git rev-parse --show-toplevel)/.privacy/digitalocean.cfg"
+source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/.privacy/digitalocean.cfg"
 
 while (( $# > 0 )); do
     case ${1} in

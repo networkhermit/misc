@@ -17,7 +17,7 @@ PEER_LIST=( 172.20.0.{A..F} )
 PORT=51820
 
 # shellcheck disable=SC1090
-source "$(git rev-parse --show-toplevel)/.privacy/wireguard.cfg"
+source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/.privacy/wireguard.cfg"
 
 PAIR=()
 for i in "${PEER_LIST[@]}"; do
