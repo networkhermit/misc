@@ -64,7 +64,7 @@ kubectl --namespace kube-system delete daemonsets kube-proxy
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
 # deploy kubernetes dashboard
-kubectl apply --filename 'https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml'
+kubectl apply --filename 'https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.4/aio/deploy/recommended.yaml'
 kubectl create serviceaccount cluster-admin-dashboard --namespace kube-system
 kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kube-system:cluster-admin-dashboard
 

@@ -73,10 +73,11 @@ get_image_list () {
 
     arr_ref=()
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.4/aio/deploy/recommended.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/kubernetes/kube-state-metrics/master/examples/standard/deployment.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/kubernetes-sigs/metrics-server/v0.3.6/deploy/1.8%2B/metrics-server-deployment.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/kubernetes-sigs/metrics-server/v0.3.7/deploy/1.8%2B/metrics-server-deployment.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
 }
 
 construct_image () {
