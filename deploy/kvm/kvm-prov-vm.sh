@@ -17,7 +17,7 @@ MEMORY=8192
 SIZE=40
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     --cpu)
         CPU=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
         shift 2
@@ -90,7 +90,7 @@ EXTRA_ARGUMENT=()
 
 INSTALLER_PARAMETER=(--extra-args 'console=ttyS0,115200n8 nameserver=1.0.0.1')
 
-case "${DISTRO}" in
+case ${DISTRO} in
 arch)
     IMAGE=$(find images/ -type f -name 'archlinux-*-x86_64.iso' | sort --version-sort | tail --lines 1)
 

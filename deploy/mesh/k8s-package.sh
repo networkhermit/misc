@@ -7,7 +7,7 @@ set -o pipefail
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:
@@ -51,14 +51,14 @@ sudo rm --force --recursive /etc/apt/trusted.gpg~
 
 # add kubernetes repository
 ## [official]
-SOURCE_URI='https://packages.cloud.google.com/apt'
+SOURCE_URI=https://packages.cloud.google.com/apt
 ## [tsinghua tuna]
-SOURCE_URI='https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt'
+SOURCE_URI=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt
 sudo tee /etc/apt/sources.list.d/kubernetes.list << EOF
 deb ${SOURCE_URI} kubernetes-xenial main
 EOF
 
-KUBERNETES_VERSION=''
+KUBERNETES_VERSION=
 
 # install kubernetes packages
 sudo apt update --list-cleanup

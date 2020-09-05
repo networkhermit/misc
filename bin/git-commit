@@ -9,7 +9,7 @@ trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 ROOT_COMMIT=false
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     --root-commit)
         ROOT_COMMIT=true
         shift
@@ -58,5 +58,5 @@ if [ "${ROOT_COMMIT}" = true ]; then
     git add --all
 fi
 
-GIT_AUTHOR_DATE="$(date --utc --iso-8601=s)" GIT_COMMITTER_DATE="$(date --utc --iso-8601=s)" TZ=UTC git commit --message 'This is where it all begins...'
+GIT_AUTHOR_DATE=$(date --utc --iso-8601=s) GIT_COMMITTER_DATE=$(date --utc --iso-8601=s) TZ=UTC git commit --message 'This is where it all begins...'
 git push --force --prune --set-upstream origin master

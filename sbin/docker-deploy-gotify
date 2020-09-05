@@ -12,7 +12,7 @@ if (( EUID != 0 )); then
 fi
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:

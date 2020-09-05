@@ -6,14 +6,40 @@ set -o pipefail
 
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
+if (( EUID != 0 )); then
+    echo '✗ This script must be run as root' 1>&2
+    exit 1
+fi
+
+IP_ADDRESS=172.20.0.X
+CIDR_SUFFIX=16
+PEER_LIST=( 172.20.0.{A..F} )
+PORT=51820
+
+# shellcheck disable=SC1090
+source "$(git rev-parse --show-toplevel)/.privacy/wireguard.cfg"
+
+PAIR=()
+for i in "${PEER_LIST[@]}"; do
+    PAIR+=( "${IP_ADDRESS}-${i}" )
+done
+
+SERVER_MODE=false
+
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
+    -s | --server)
+        SERVER_MODE=true
+        shift
+        ;;
     -h | --help)
         cat << EOF
 Usage:
     ${0##*/} [OPTION]...
 
 Optional arguments:
+    -s, --server
+        use server mode (default: false)
     -h, --help
         show this help message and exit
     -v, --version
@@ -42,86 +68,79 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-sudo install --directory --mode 700 /etc/wireguard
+if [ -d /etc/wireguard ]; then
+    for i in "${PEER_LIST[@]}"; do
+        ping -c 4 "${i}"
+    done
+    exit
+fi
 
-sudo install --mode 600 /dev/null /etc/wireguard/private.key
-wg genkey | sudo tee /etc/wireguard/private.key | wg pubkey | sudo tee /etc/wireguard/public.key
+install --directory --mode 700 /etc/wireguard
 
-## [ Server ]
-sudo install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << 'EOF'
+install --mode 600 /dev/null /etc/wireguard/private.key
+wg genkey | tee /etc/wireguard/private.key | wg pubkey | tee /etc/wireguard/public.key
+
+install --directory --mode 700 /etc/wireguard/preshared-key
+
+for i in "${PAIR[@]}"; do
+    install --mode 600 /dev/stdin "/etc/wireguard/preshared-key/${i}.key" << EOF
+$(wg genpsk)
+EOF
+done
+
+if [ "${SERVER_MODE}" = true ]; then
+    install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << EOF
 [Interface]
 PostUp = wg set %i private-key /etc/wireguard/private.key
-Address = 172.20.0.X/16
-ListenPort = 51820
+Address = ${IP_ADDRESS}/${CIDR_SUFFIX}
+ListenPort = ${PORT}
 PostUp = iptables --table nat --insert POSTROUTING --out-interface %i --jump MASQUERADE
 PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
 PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface %i --jump ACCEPT
 PreDown = iptables --table nat --delete POSTROUTING --out-interface %i --jump MASQUERADE || true
 PreDown = iptables --table filter --delete FORWARD --in-interface %i --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT || true
 PreDown = iptables --table filter --delete FORWARD --in-interface %i --out-interface %i --jump ACCEPT || true
-PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared-key/172.20.0.X-172.20.0.Y.key
+PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared-key/${IP_ADDRESS}-${PEER_LIST[0]}.key
 
 [Peer]
 PublicKey = PEER_PUBLIC_KEY
-AllowedIPs = 172.20.0.Y/32, 192.168.0.0/16
+#AllowedIPs = ${PEER_LIST[0]}/32, 192.168.0.0/16
+AllowedIPs = ${PEER_LIST[0]}/32
+#Endpoint = PEER_ENDPOINT:${PORT}
+#PersistentKeepalive = 15
 EOF
-
-: << 'EOF'
-sudo firewall-cmd --permanent --new-service wireguard
-sudo firewall-cmd --permanent --service wireguard --add-port 51820/udp
-sudo firewall-cmd --permanent --service wireguard --get-ports
-sudo firewall-cmd --permanent --add-service wireguard --zone FedoraServer
-sudo firewall-cmd --permanent --add-masquerade --zone FedoraServer
-sudo firewall-cmd --reload
-EOF
-
-## [ Client ]
-sudo install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << 'EOF'
+else
+    install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << EOF
 [Interface]
 PostUp = wg set %i private-key /etc/wireguard/private.key
-Address = 172.20.0.Y/16
+Address = ${IP_ADDRESS}/${CIDR_SUFFIX}
 #PostUp = iptables --table nat --insert POSTROUTING --out-interface wlan0 --jump MASQUERADE
 #PostUp = iptables --table filter --insert FORWARD --in-interface wlan0 --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
 #PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface wlan0 --jump ACCEPT
 #PreDown = iptables --table nat --delete POSTROUTING --out-interface wlan0 --jump MASQUERADE || true
 #PreDown = iptables --table filter --delete FORWARD --in-interface wlan0 --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT || true
 #PreDown = iptables --table filter --delete FORWARD --in-interface %i --out-interface wlan0 --jump ACCEPT || true
-PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared-key/172.20.0.Y-172.20.0.X.key
+PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared-key/${IP_ADDRESS}-${PEER_LIST[0]}.key
 
 [Peer]
 PublicKey = PEER_PUBLIC_KEY
-AllowedIPs = 172.20.0.X/32, 172.20.0.0/16
-Endpoint = PEER_ENDPOINT:51820
+#AllowedIPs = ${PEER_LIST[0]}/32
+AllowedIPs = 172.20.0.0/${CIDR_SUFFIX}
+Endpoint = PEER_ENDPOINT:${PORT}
 PersistentKeepalive = 15
 EOF
+fi
 
-sudo install --directory --mode 700 /etc/wireguard/preshared-key
-
-PAIR=( 172.20.0.X-172.20.0.Y )
-for i in "${PAIR[@]}"; do
-    sudo install --mode 600 /dev/stdin "/etc/wireguard/preshared-key/${i}.key" << EOF
-$(wg genpsk)
+: << EOF
+firewall-cmd --permanent --new-service wireguard
+firewall-cmd --permanent --service wireguard --add-port ${PORT}/udp
+firewall-cmd --permanent --service wireguard --get-ports
+firewall-cmd --permanent --add-service wireguard --zone FedoraServer
+firewall-cmd --permanent --add-masquerade --zone FedoraServer
+firewall-cmd --reload
 EOF
-done
 
-sudo wg-quick down wg0
-sudo wg-quick up wg0
-sudo systemctl enable wg-quick@wg0.service
-sudo wg show
-
-sudo sysctl net.ipv4.conf.{all,default}.forwarding
-sudo sysctl net.ipv6.conf.{all,default}.forwarding
-sudo sysctl net.ipv4.conf.{all,default}.proxy_arp
-sudo sysctl net.ipv6.conf.{all,default}.proxy_ndp
-
-: << 'EOF'
-sudo iptables --table nat --list-rules POSTROUTING --verbose
-sudo iptables --table filter --list-rules FORWARD --verbose
-sudo ip6tables --table nat --list-rules POSTROUTING --verbose
-sudo ip6tables --table filter --list-rules FORWARD --verbose
-
-sudo iptables --table nat --list POSTROUTING --numeric --verbose --line-numbers
-sudo iptables --table filter --list FORWARD --numeric --verbose --line-numbers
-sudo ip6tables --table nat --list POSTROUTING --numeric --verbose --line-numbers
-sudo ip6tables --table filter --list FORWARD --numeric --verbose --line-numbers
-EOF
+wg-quick down wg0
+wg-quick up wg0
+systemctl enable wg-quick@wg0.service
+wg show

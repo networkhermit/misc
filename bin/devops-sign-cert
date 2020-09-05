@@ -12,10 +12,10 @@ STRICT_VERIFICATION=false
 VERBOSE=false
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     --algorithm)
         : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
-        case "${2}" in
+        case ${2} in
         ED25519 | ED448 | RSA)
             PUBLIC_KEY_ALGORITHM=${2}
             shift 2
@@ -175,7 +175,7 @@ fi
 
 # [ Intermediate CA ]
 
-case "${PUBLIC_KEY_ALGORITHM}" in
+case ${PUBLIC_KEY_ALGORITHM} in
 ED25519)
     openssl genpkey -algorithm "${PUBLIC_KEY_ALGORITHM}" -out interm.key
     ;;

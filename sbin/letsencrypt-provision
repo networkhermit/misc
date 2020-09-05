@@ -12,7 +12,7 @@ if (( EUID != 0 )); then
 fi
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:
@@ -49,7 +49,7 @@ EOF
 done
 
 : "${1?✗ argument parsing failed: missing positional argument ‘MODE’}"
-case "${1}" in
+case ${1} in
 request | revoke)
     MODE=${1}
     ;;

@@ -32,7 +32,7 @@ EOF
     sudo install --group "${ANSIBLE_USER}" --mode 600 --owner "${ANSIBLE_USER}" /dev/null "/home/${ANSIBLE_USER}/.ssh/authorized_keys"
     if [ -n "${ANSIBLE_USER_DEFAULT_KEY}" ]; then
         sudo install --group "${ANSIBLE_USER}" --mode 600 --owner "${ANSIBLE_USER}" /dev/stdin "/home/${ANSIBLE_USER}/.ssh/authorized_keys" << EOF
-$(echo ${ANSIBLE_USER_DEFAULT_KEY})
+${ANSIBLE_USER_DEFAULT_KEY}
 EOF
     fi
 fi

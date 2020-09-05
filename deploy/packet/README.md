@@ -4,6 +4,23 @@ iptables/ip6tables
 ```bash
 # shellcheck shell=bash
 
+# Inspect Firewall Status
+
+sysctl net.ipv4.conf.{all,default}.forwarding
+sysctl net.ipv6.conf.{all,default}.forwarding
+sysctl net.ipv4.conf.{all,default}.proxy_arp
+sysctl net.ipv6.conf.{all,default}.proxy_ndp
+
+iptables --table nat --list-rules POSTROUTING --verbose
+iptables --table filter --list-rules FORWARD --verbose
+ip6tables --table nat --list-rules POSTROUTING --verbose
+ip6tables --table filter --list-rules FORWARD --verbose
+
+iptables --table nat --list POSTROUTING --numeric --verbose --line-numbers
+iptables --table filter --list FORWARD --numeric --verbose --line-numbers
+ip6tables --table nat --list POSTROUTING --numeric --verbose --line-numbers
+ip6tables --table filter --list FORWARD --numeric --verbose --line-numbers
+
 # Forwarding Incoming Connection
 
 ## [ short option ]

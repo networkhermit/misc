@@ -7,7 +7,7 @@ set -o pipefail
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:
@@ -44,7 +44,7 @@ fi
 
 sudo apt update --list-cleanup
 
-KUBERNETES_VERSION=''
+KUBERNETES_VERSION=
 if [ -n "${KUBERNETES_VERSION}" ]; then
     for i in kube{adm,ctl,let}; do
         K8S_PKG_VER["${i}"]=$(apt-cache madison "${i}" | grep "${KUBERNETES_VERSION}" | awk '{ print $3 }')

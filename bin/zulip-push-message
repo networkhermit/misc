@@ -7,10 +7,10 @@ set -o pipefail
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 # shellcheck disable=SC1090
-source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/zulip.cfg"
+source "$(git rev-parse --show-toplevel)/.privacy/zulip.cfg"
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:
@@ -45,8 +45,8 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-TEXT=''
-while IFS='' read -r LINE; do
+TEXT=
+while IFS= read -r LINE; do
     TEXT+=${LINE}
     TEXT+=$'\n'
 done

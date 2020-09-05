@@ -12,7 +12,7 @@ if (( EUID != 0 )); then
 fi
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:
@@ -258,7 +258,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       wireguard
 ##################
 
-case "${DISTRO}" in
+case ${DISTRO} in
 arch)
 
     # CORE

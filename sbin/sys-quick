@@ -12,7 +12,7 @@ if (( EUID != 0 )); then
 fi
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:
@@ -47,7 +47,7 @@ EOF
 done
 
 : "${1?✗ argument parsing failed: missing positional argument ‘ALIAS’}"
-case "${1}" in
+case ${1} in
 netstat | iptables | ip6tables | ss)
     ALIAS=${1}
     ;;
@@ -65,7 +65,7 @@ fi
 
 separator=----------------------------------------------------------------
 
-case "${ALIAS}" in
+case ${ALIAS} in
 netstat)
     netstat --tcp --udp --raw --listening --numeric --programs
     ;;

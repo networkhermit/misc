@@ -12,7 +12,7 @@ if (( EUID != 0 )); then
 fi
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:
@@ -56,7 +56,7 @@ fi
 source <(grep '^ID=' /etc/os-release)
 DISTRO=${ID:-linux}
 
-case "${DISTRO}" in
+case ${DISTRO} in
 arch | manjaro)
     echo '------ [ package ] ------'
     (pacman --query --foreign || true) | sed 's/$/ [foreign]/g' | column -t

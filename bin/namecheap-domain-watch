@@ -7,10 +7,10 @@ set -o pipefail
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 # shellcheck disable=SC1090
-source "$(dirname "$(dirname "$(realpath "${0}")")")/.privacy/namecheap.cfg"
+source "$(git rev-parse --show-toplevel)/.privacy/namecheap.cfg"
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:
@@ -47,9 +47,9 @@ fi
 
 sleep 15
 
-CURRENCY_RATE=$(curl --fail --location --silent --show-error --request GET "https://free.currencyconverterapi.com/api/v6/convert?q=USD_CNY&compact=ultra&apiKey=${CURRENCY_CONVERTER_API_KEY}" | awk --field-separator '[{:}]' '{ print $3 }')
+CURRENCY_RATE=$(curl --fail --location --silent --show-error --request GET "https://free.currconv.com/api/v7/convert?q=USD_CNY&compact=ultra&apiKey=${CURRENCY_CONVERTER_API_KEY}" | awk --field-separator '[{:}]' '{ print $3 }')
 PUBLIC_IP_ADDRESS=$(dig myip.opendns.com @208.67.222.222 a +short)
-REQUEST_API_METHOD='namecheap.users.getPricing'
+REQUEST_API_METHOD=namecheap.users.getPricing
 
 if [ -z "${CURRENCY_RATE}" ]; then
     echo '✗ unexpected error: cannot acquire the currency rate' 1>&2

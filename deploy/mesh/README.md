@@ -68,5 +68,5 @@ kubectl get persistentvolumeclaims --all-namespaces --output wide
 kubectl api-resources --no-headers | awk '{ print $1 }' | xargs --max-args 1 --no-run-if-empty kubectl explain --recursive=true | less --LINE-NUMBERS
 
 # list all container images running in a cluster
-kubectl get pods  --all-namespaces --output jsonpath='{.items[*].spec.containers[*].image}' | tr --squeeze-repeats '[[:space:]]' '\n' | sort | uniq
+kubectl get pods  --all-namespaces --output jsonpath='{.items[*].spec.containers[*].image}' | tr --squeeze-repeats '[:space:]' '\n' | sort | uniq
 ```

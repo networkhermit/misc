@@ -7,7 +7,7 @@ set -o pipefail
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:

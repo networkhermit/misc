@@ -14,10 +14,10 @@ fi
 REGISTRY=gcr
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     --registry)
         : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
-        case "${2}" in
+        case ${2} in
         gcr | azure-proxy | aliyun-registry)
             REGISTRY=${2}
             shift 2
@@ -98,7 +98,7 @@ get_image_list arr
 printf '%s\n' "${arr[@]}"
 
 # pull container images
-case "${REGISTRY}" in
+case ${REGISTRY} in
 gcr)
     kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
     printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null docker image pull

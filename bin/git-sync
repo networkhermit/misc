@@ -9,7 +9,7 @@ trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 FORCE_SYNC=false
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     --force)
         FORCE_SYNC=true
         shift

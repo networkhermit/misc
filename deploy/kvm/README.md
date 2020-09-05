@@ -2,9 +2,9 @@
 # shellcheck shell=bash
 
 ## [ linux kernel archive ]
-BASE_URL='https://mirrors.kernel.org/archlinux'
+BASE_URL=https://mirrors.kernel.org/archlinux
 ## [ tsinghua ]
-BASE_URL='https://mirrors.tuna.tsinghua.edu.cn/archlinux'
+BASE_URL=https://mirrors.tuna.tsinghua.edu.cn/archlinux
 
 SNAPSHOT=$(date '+%Y.%m.01')
 

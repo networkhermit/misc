@@ -7,7 +7,7 @@ set -o pipefail
 trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -h | --help)
         cat << EOF
 Usage:
@@ -53,7 +53,7 @@ DISTRO=${ID:-linux}
 
 uname --kernel-name --kernel-release --kernel-version --machine
 
-case "${DISTRO}" in
+case ${DISTRO} in
 arch)
     pacman --query linux{,-api-headers,-docs,-headers}
     ;;

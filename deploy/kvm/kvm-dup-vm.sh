@@ -14,7 +14,7 @@ fi
 DIRECTORY=/var/local/images
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     --directory)
         DIRECTORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
         shift 2

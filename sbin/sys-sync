@@ -14,7 +14,7 @@ fi
 FORCE_SYNC=false
 
 while (( $# > 0 )); do
-    case "${1}" in
+    case ${1} in
     -f | --force)
         FORCE_SYNC=true
         shift
@@ -64,7 +64,7 @@ fi
 source <(grep '^ID=' /etc/os-release)
 DISTRO=${ID:-linux}
 
-case "${DISTRO}" in
+case ${DISTRO} in
 arch | manjaro)
     if [ "${FORCE_SYNC}" = true ]; then
         (yes || true) | pacman --sync --clean --clean
