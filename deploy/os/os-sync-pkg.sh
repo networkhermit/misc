@@ -1704,11 +1704,15 @@ esac
 
 tee /etc/docker/daemon.json << 'EOF'
 {
+    "exec-opts": [
+        "native.cgroupdriver=systemd"
+    ],
     "log-driver": "json-file",
     "log-opts": {
         "max-file": "10",
         "max-size": "10m"
-    }
+    },
+    "storage-driver": "overlay2"
 }
 EOF
 
