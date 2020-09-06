@@ -87,6 +87,7 @@ sudo sed --in-place '/^#NTP=$/r /dev/stdin' /etc/systemd/timesyncd.conf << EOF
 NTP=${NTP_LIST}
 EOF
 unset NTP_LIST
+systemd-analyze cat-config systemd/timesyncd.conf --no-pager
 sudo systemctl restart systemd-timesyncd.service
 sudo systemctl enable systemd-timesyncd.service
 
@@ -328,6 +329,8 @@ sudo systemctl disable --now systemd-resolved.service
 
 # manage system service
 sudo systemctl enable --now fstrim.timer
+## arch | manjaro
+sudo systemctl enable --now cronie.service
 ## fedora
 sudo systemctl disable --now \
     dnf-makecache.timer
@@ -336,6 +339,7 @@ sudo systemctl disable --now \
     apt-daily{,-upgrade}.timer
 ## ubuntu
 sudo systemctl disable --now \
+    snapd{,.seeded}.service \
     apt-daily{,-upgrade}.timer \
     motd-news.timer
 
