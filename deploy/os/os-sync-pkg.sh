@@ -186,6 +186,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       iputils
 #       ipvsadm
 #       ldnsutils
+#       mitmproxy
 #       mosh
 #       mtr
 #       net-tools
@@ -243,6 +244,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 ##################
 # DevOps
 #       ansible
+#       caddy
 #       certbot
 #       dnsmasq
 #       docker
@@ -251,6 +253,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       libvirt
 #       nginx
 #       oathtool
+#       osquery
 #       pam
 #       qemu
 #       salt
@@ -390,6 +393,7 @@ arch)
         core/iputils \
         community/ipvsadm \
         core/ldns \
+        community/mitmproxy \
         community/mosh \
         extra/mtr \
         core/net-tools \
@@ -458,6 +462,7 @@ arch)
         extra/nginx \
         community/nginx-mod-auth-pam \
         community/oath-toolkit \
+        community/osquery \
         core/pam \
         community/libpam-google-authenticator \
         extra/qemu-headless \
@@ -683,6 +688,7 @@ fedora)
     dnf install \
         ansible{,-doc} \
         python3-argcomplete \
+        caddy \
         certbot \
         dnsmasq \
         git \
@@ -860,6 +866,7 @@ kali)
         iputils-{arping,ping,tracepath} \
         ipvsadm \
         ldnsutils \
+        mitmproxy \
         mosh \
         mtr-tiny \
         net-tools \
@@ -1112,6 +1119,7 @@ manjaro)
         core/iputils \
         community/ipvsadm \
         core/ldns \
+        community/mitmproxy \
         community/mosh \
         extra/mtr \
         core/net-tools \
@@ -1180,6 +1188,7 @@ manjaro)
         extra/nginx \
         community/nginx-mod-auth-pam \
         community/oath-toolkit \
+        community/osquery \
         core/pam \
         community/libpam-google-authenticator \
         extra/qemu-headless \
@@ -1339,6 +1348,7 @@ opensuse*)
         iputils \
         ipvsadm \
         ldns \
+        python3-mitmproxy \
         mosh \
         mtr \
         net-tools \
@@ -1572,6 +1582,7 @@ ubuntu)
         iputils-{arping,ping,tracepath} \
         ipvsadm \
         ldnsutils \
+        mitmproxy \
         mosh \
         mtr-tiny \
         net-tools \
