@@ -59,8 +59,8 @@ DISTRO=${ID:-linux}
 case ${DISTRO} in
 arch | manjaro)
     echo '------ [ package ] ------'
-    (pacman --query --foreign || true) | sed 's/$/ [foreign]/g' | column -t
-    (pacman --query --deps --unrequired || true) | sed 's/$/ [orphan]/g' | column -t
+    (pacman --query --foreign || true) | sed 's/$/ [foreign]/' | column -t
+    (pacman --query --deps --unrequired || true) | sed 's/$/ [orphan]/' | column -t
     echo '------ [ configuration ] ------'
     find /etc -type f -iregex '.+\.\(old\|pac\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
     ;;
