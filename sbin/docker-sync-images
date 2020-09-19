@@ -54,4 +54,12 @@ execute_exit_hook () {
 
 trap execute_exit_hook EXIT
 
-docker image ls --filter reference='*:latest' --filter reference='*/*:latest' --filter reference='*/*/*:latest' --format '{{.Repository}}' | xargs --max-args 1 --no-run-if-empty docker pull
+docker image ls \
+    --filter reference='*:latest' \
+    --filter reference='*/*:latest' \
+    --filter reference='*/*/*:latest' \
+    --filter reference='*:release' \
+    --filter reference='*/*:release' \
+    --filter reference='*/*/*:release' \
+    --format '{{.Repository}}:{{.Tag}}' \
+    | xargs --max-args 1 --no-run-if-empty docker pull
