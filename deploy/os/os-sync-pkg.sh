@@ -478,7 +478,8 @@ arch)
         salt-{api,master,minion,syndic}.service
 
     systemctl enable --now \
-        docker.service
+        docker.service \
+        osqueryd.service
 
     pacman --files --list \
         openssh \
@@ -501,6 +502,7 @@ fedora)
         coreutils \
         util-linux \
         systemd \
+        chkconfig \
         initscripts
 
     # SHELL
@@ -710,7 +712,14 @@ fedora)
     dnf install docker-ce
     dnf clean packages
 
+    curl --fail --location --silent --show-error https://pkg.osquery.io/rpm/GPG | tee /etc/pki/rpm-gpg/RPM-GPG-KEY-osquery
+    dnf config-manager --add-repo https://pkg.osquery.io/rpm/osquery-s3-rpm.repo
+    dnf makecache
+    dnf install osquery
+    dnf clean packages
+
     systemctl disable --now \
+        caddy.service \
         dnsmasq.service \
         libvirt{d,-guests}.service \
         virtlogd.service \
@@ -718,7 +727,8 @@ fedora)
         salt-{api,master,minion,syndic}.service
 
     systemctl enable --now \
-        docker.service
+        docker.service \
+        osqueryd.service
 
     rpm --query \
         openssh-server \
@@ -945,7 +955,7 @@ kali)
         virtinst \
         wireguard
 
-    curl --fail --location --silent --show-error 'https://download.docker.com/linux/debian/gpg' | apt-key add -
+    curl --fail --location --silent --show-error https://download.docker.com/linux/debian/gpg | apt-key add -
     rm --force --recursive /etc/apt/trusted.gpg~
     ## docker [official]
     tee /etc/apt/sources.list.d/docker.list << 'EOF'
@@ -958,7 +968,7 @@ EOF
     apt update --list-cleanup
     apt install docker-ce
 
-    curl --fail --location --silent --show-error 'https://repo.saltstack.com/py3/debian/10/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
+    curl --fail --location --silent --show-error https://repo.saltstack.com/py3/debian/10/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
     rm --force --recursive /etc/apt/trusted.gpg~
     ## saltstack [official]
     tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
@@ -971,6 +981,14 @@ EOF
     apt update --list-cleanup
     apt install salt-{api,cloud,master,minion,ssh,syndic}
 
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
+    rm --force --recursive /etc/apt/trusted.gpg~
+    tee /etc/apt/sources.list.d/osquery.list << 'EOF'
+deb [arch=amd64] https://pkg.osquery.io/deb deb main
+EOF
+    apt update --list-cleanup
+    apt install osquery
+
     systemctl disable --now \
         dnsmasq.service \
         libvirt{d,-guests}.service \
@@ -979,7 +997,8 @@ EOF
         salt-{api,master,minion,syndic}.service
 
     systemctl enable --now \
-        docker.service
+        docker.service \
+        osqueryd.service
 
     dpkg --listfiles \
         openssh-server \
@@ -1204,7 +1223,8 @@ manjaro)
         salt-{api,master,minion,syndic}.service
 
     systemctl enable --now \
-        docker.service
+        docker.service \
+        osqueryd.service
 
     pacman --files --list \
         openssh \
@@ -1413,6 +1433,7 @@ opensuse*)
         python3-argcomplete \
         python3-certbot \
         dnsmasq \
+        docker \
         git{,-doc} \
         libguestfs0 \
         libvirt \
@@ -1424,9 +1445,6 @@ opensuse*)
         virt-install \
         wireguard-{kmp-default,tools}
 
-    zypper install docker
-    zypper clean
-
     systemctl disable --now \
         dnsmasq.service \
         libvirt{d,-guests}.service \
@@ -1435,7 +1453,8 @@ opensuse*)
         salt-{api,master,minion,syndic}.service
 
     systemctl enable --now \
-        docker.service
+        docker.service \
+        osqueryd.service
 
     rpm --query \
         openssh \
@@ -1661,7 +1680,7 @@ ubuntu)
         virtinst \
         wireguard
 
-    curl --fail --location --silent --show-error 'https://download.docker.com/linux/ubuntu/gpg' | apt-key add -
+    curl --fail --location --silent --show-error https://download.docker.com/linux/ubuntu/gpg | apt-key add -
     rm --force --recursive /etc/apt/trusted.gpg~
     ## docker [official]
     tee /etc/apt/sources.list.d/docker.list << 'EOF'
@@ -1674,7 +1693,7 @@ EOF
     apt update --list-cleanup
     apt install docker-ce
 
-    curl --fail --location --silent --show-error 'https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub' | apt-key add -
+    curl --fail --location --silent --show-error https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
     rm --force --recursive /etc/apt/trusted.gpg~
     ## saltstack [official]
     tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
@@ -1687,6 +1706,14 @@ EOF
     apt update --list-cleanup
     apt install salt-{api,cloud,master,minion,ssh,syndic}
 
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
+    rm --force --recursive /etc/apt/trusted.gpg~
+    tee /etc/apt/sources.list.d/osquery.list << 'EOF'
+deb [arch=amd64] https://pkg.osquery.io/deb deb main
+EOF
+    apt update --list-cleanup
+    apt install osquery
+
     systemctl disable --now \
         dnsmasq.service \
         libvirt{d,-guests}.service \
@@ -1696,7 +1723,8 @@ EOF
         salt-{api,master,minion,syndic}.service
 
     systemctl enable --now \
-        docker.service
+        docker.service \
+        osqueryd.service
 
     dpkg --listfiles \
         openssh-server \
