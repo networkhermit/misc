@@ -25,13 +25,13 @@ ip6tables --table filter --list FORWARD --numeric --verbose --line-numbers
 
 ## [ short option ]
 
-iptables -t nat -I PREROUTING -p tcp --dport "${HOST_PORT}" -j DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
+iptables -t nat -I PREROUTING -p tcp --dport "${HOST_PORT}" -j DNAT --to-destination "${GUEST_IP}":"${GUEST_PORT}"
 iptables -t filter -I FORWARD -p tcp -d "${GUEST_IP}" --dport "${GUEST_PORT}" -j ACCEPT
 
-iptables -t nat -C PREROUTING -p tcp --dport "${HOST_PORT}" -j DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
+iptables -t nat -C PREROUTING -p tcp --dport "${HOST_PORT}" -j DNAT --to-destination "${GUEST_IP}":"${GUEST_PORT}"
 iptables -t filter -C FORWARD -p tcp -d "${GUEST_IP}" --dport "${GUEST_PORT}" -j ACCEPT
 
-iptables -t nat -D PREROUTING -p tcp --dport "${HOST_PORT}" -j DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
+iptables -t nat -D PREROUTING -p tcp --dport "${HOST_PORT}" -j DNAT --to-destination "${GUEST_IP}":"${GUEST_PORT}"
 iptables -t filter -D FORWARD -p tcp -d "${GUEST_IP}" --dport "${GUEST_PORT}" -j ACCEPT
 
 iptables -t nat -L PREROUTING -n -v --line-numbers
@@ -42,37 +42,37 @@ iptables -t filter -L FORWARD -n -v --line-numbers
 iptables \
     --table nat \
     --insert PREROUTING \
-    --protocol tcp --dport "${HOST_PORT}" \
-    --jump DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
+    --protocol tcp --destination-port "${HOST_PORT}" \
+    --jump DNAT --to-destination "${GUEST_IP}":"${GUEST_PORT}"
 
 iptables \
     --table filter \
     --insert FORWARD \
-    --protocol tcp --destination "${GUEST_IP}" --dport "${GUEST_PORT}" \
+    --protocol tcp --destination "${GUEST_IP}" --destination-port "${GUEST_PORT}" \
     --jump ACCEPT
 
 iptables \
     --table nat \
     --check PREROUTING \
-    --protocol tcp --dport "${HOST_PORT}" \
-    --jump DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
+    --protocol tcp --destination-port "${HOST_PORT}" \
+    --jump DNAT --to-destination "${GUEST_IP}":"${GUEST_PORT}"
 
 iptables \
     --table filter \
     --check FORWARD \
-    --protocol tcp --destination "${GUEST_IP}" --dport "${GUEST_PORT}" \
+    --protocol tcp --destination "${GUEST_IP}" --destination-port "${GUEST_PORT}" \
     --jump ACCEPT
 
 iptables \
     --table nat \
     --delete PREROUTING \
-    --protocol tcp --dport "${HOST_PORT}" \
-    --jump DNAT --to "${GUEST_IP}":"${GUEST_PORT}"
+    --protocol tcp --destination-port "${HOST_PORT}" \
+    --jump DNAT --to-destination "${GUEST_IP}":"${GUEST_PORT}"
 
 iptables \
     --table filter \
     --delete FORWARD \
-    --protocol tcp --destination "${GUEST_IP}" --dport "${GUEST_PORT}" \
+    --protocol tcp --destination "${GUEST_IP}" --destination-port "${GUEST_PORT}" \
     --jump ACCEPT
 
 iptables \
