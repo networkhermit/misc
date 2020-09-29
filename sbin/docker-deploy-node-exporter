@@ -62,7 +62,7 @@ docker run \
     --pid 'host' \
     --restart always \
     --volume '/:/host:ro,rslave' \
-    prom/node-exporter --path.rootfs '/host' --web.listen-address '172.24.0.1:10101'
+    prom/node-exporter --path.rootfs '/host' --web.listen-address '172.24.0.1:9100'
 
 docker image prune --force
 docker container logs "${NAME}"
