@@ -47,7 +47,7 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-NAME=prometheus
+NAME=alertmanager
 
 if [ -n "$(docker container ls --all --filter name='^/'${NAME}'$' --format '.')" ]; then
     docker container stop "${NAME}"
@@ -60,12 +60,11 @@ docker run \
     --label maintainer=sysadmin@local.domain \
     --name "${NAME}" \
     --network cluster \
-    --publish 172.24.0.1:9090:9090 \
+    --publish 172.24.0.1:9093:9093 \
     --restart always \
-    --volume /srv/prometheus/data:/prometheus \
-    --volume /srv/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
-    --volume /srv/prometheus/conf.d:/etc/prometheus/conf.d \
-    prom/prometheus
+    --volume /srv/alertmanager/data:/alertmanager \
+    --volume /srv/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml \
+    quay.io/prometheus/alertmanager
 
 docker image prune --force
 docker container logs "${NAME}"
