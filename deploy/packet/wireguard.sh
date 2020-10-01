@@ -140,7 +140,4 @@ firewall-cmd --permanent --add-masquerade --zone FedoraServer
 firewall-cmd --reload
 EOF
 
-wg-quick down wg0
-wg-quick up wg0
 systemctl enable wg-quick@wg0.service
-wg show
