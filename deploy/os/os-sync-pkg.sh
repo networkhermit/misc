@@ -104,6 +104,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       parallel
 #       pigz
 #       pygmentize
+#       qrencode
 #       readline
 #       sed
 #       tar
@@ -313,6 +314,7 @@ arch)
         community/parallel \
         community/pigz \
         community/python-pygments \
+        extra/qrencode \
         core/readline \
         core/sed \
         core/tar \
@@ -544,6 +546,7 @@ fedora)
         parallel \
         pigz \
         python3-pygments \
+        qrencode \
         readline \
         sed \
         tar \
@@ -792,6 +795,7 @@ kali)
         parallel \
         pigz \
         python3-pygments \
+        qrencode \
         readline-{common,doc} \
         sed \
         tar \
@@ -1058,6 +1062,7 @@ manjaro)
         community/parallel \
         community/pigz \
         community/python-pygments \
+        extra/qrencode \
         core/readline \
         core/sed \
         core/tar \
@@ -1287,6 +1292,7 @@ opensuse*)
         pigz \
         python3-Pygments \
         libreadline8 \
+        qrencode \
         readline-doc \
         sed \
         tar \
@@ -1517,6 +1523,7 @@ ubuntu)
         parallel \
         pigz \
         python3-pygments \
+        qrencode \
         readline-{common,doc} \
         sed \
         tar \
