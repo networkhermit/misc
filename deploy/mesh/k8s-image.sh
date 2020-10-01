@@ -73,7 +73,7 @@ get_image_list () {
 
     arr_ref=()
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/cilium/cilium/1.8.3/install/kubernetes/quick-install.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/cilium/cilium/1.8.4/install/kubernetes/quick-install.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr --delete '\n')" | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')

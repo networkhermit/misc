@@ -57,8 +57,11 @@ sudo systemctl enable kubelet.service
 sudo install --group "$(id --group)" --mode 600 --owner "$(id --user)" --preserve-timestamps /etc/kubernetes/admin.conf ~/.kube/config
 
 # install pod network add-on
-kubectl apply --filename 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml'
-kubectl --namespace kube-system delete daemonsets kube-proxy
+## cilium
+kubectl apply --filename 'https://raw.githubusercontent.com/cilium/cilium/1.8.4/install/kubernetes/quick-install.yaml'
+## kuberouter
+#kubectl apply --filename 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml'
+#kubectl --namespace kube-system delete daemonsets kube-proxy
 
 # remove master node isolation
 kubectl taint nodes --all node-role.kubernetes.io/master-
