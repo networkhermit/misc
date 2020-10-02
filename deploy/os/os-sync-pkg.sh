@@ -183,7 +183,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       iperf3
 #       iproute2
 #       ipset
-#       iptables
+#       iptables-nft
 #       iputils
 #       ipvsadm
 #       ldnsutils
@@ -391,7 +391,7 @@ arch)
         community/iperf3 \
         core/iproute2 \
         extra/ipset \
-        core/iptables \
+        core/iptables-nft \
         core/iputils \
         community/ipvsadm \
         core/ldns \
@@ -625,7 +625,7 @@ fedora)
         iperf3 \
         iproute \
         ipset \
-        iptables \
+        iptables-nft \
         iputils \
         ipvsadm \
         ldns-utils \
@@ -1139,7 +1139,7 @@ manjaro)
         community/iperf3 \
         core/iproute2 \
         extra/ipset \
-        core/iptables \
+        core/iptables-nft \
         core/iputils \
         community/ipvsadm \
         core/ldns \
@@ -1370,7 +1370,7 @@ opensuse*)
         iperf \
         iproute2 \
         ipset \
-        iptables \
+        iptables-backend-nft \
         iputils \
         ipvsadm \
         ldns \
