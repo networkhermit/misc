@@ -11,9 +11,9 @@ if (( EUID != 0 )); then
     exit 1
 fi
 
-IP_ADDRESS=172.20.0.X
-CIDR_SUFFIX=16
-PEER_LIST=( 172.20.0.{A..F} )
+IP_ADDRESS=172.20.0.10/16
+SUBNET=172.20.0.0/16
+PEER_LIST=( 172.20.0.{10..15} )
 PORT=51820
 
 # shellcheck disable=SC1090
@@ -21,7 +21,7 @@ source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/.p
 
 PAIR=()
 for i in "${PEER_LIST[@]}"; do
-    PAIR+=( "${IP_ADDRESS}-${i}" )
+    PAIR+=( "${IP_ADDRESS%/*}-${i}" )
 done
 
 SERVER_MODE=false
@@ -92,15 +92,13 @@ if [ "${SERVER_MODE}" = true ]; then
     install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << EOF
 [Interface]
 PostUp = wg set %i private-key /etc/wireguard/private.key
-Address = ${IP_ADDRESS}/${CIDR_SUFFIX}
+Address = ${IP_ADDRESS}
 ListenPort = ${PORT}
-PostUp = iptables --table nat --insert POSTROUTING --out-interface %i --jump MASQUERADE
-PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
+PostUp = iptables --table nat --insert POSTROUTING --source ${SUBNET} --out-interface %i --jump MASQUERADE
 PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface %i --jump ACCEPT
-PreDown = iptables --table nat --delete POSTROUTING --out-interface %i --jump MASQUERADE || true
-PreDown = iptables --table filter --delete FORWARD --in-interface %i --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT || true
+PreDown = iptables --table nat --delete POSTROUTING --source ${SUBNET} --out-interface %i --jump MASQUERADE || true
 PreDown = iptables --table filter --delete FORWARD --in-interface %i --out-interface %i --jump ACCEPT || true
-PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared-key/${IP_ADDRESS}-${PEER_LIST[0]}.key
+PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared-key/${IP_ADDRESS%/*}-${PEER_LIST[0]}.key
 
 [Peer]
 PublicKey = PEER_PUBLIC_KEY
@@ -113,19 +111,19 @@ else
     install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << EOF
 [Interface]
 PostUp = wg set %i private-key /etc/wireguard/private.key
-Address = ${IP_ADDRESS}/${CIDR_SUFFIX}
-#PostUp = iptables --table nat --insert POSTROUTING --out-interface wlan0 --jump MASQUERADE
+Address = ${IP_ADDRESS}
+#PostUp = iptables --table nat --insert POSTROUTING --source ${SUBNET} --out-interface wlan0 --jump MASQUERADE
 #PostUp = iptables --table filter --insert FORWARD --in-interface wlan0 --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
 #PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface wlan0 --jump ACCEPT
-#PreDown = iptables --table nat --delete POSTROUTING --out-interface wlan0 --jump MASQUERADE || true
+#PreDown = iptables --table nat --delete POSTROUTING --source ${SUBNET} --out-interface wlan0 --jump MASQUERADE || true
 #PreDown = iptables --table filter --delete FORWARD --in-interface wlan0 --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT || true
 #PreDown = iptables --table filter --delete FORWARD --in-interface %i --out-interface wlan0 --jump ACCEPT || true
-PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared-key/${IP_ADDRESS}-${PEER_LIST[0]}.key
+PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared-key/${IP_ADDRESS%/*}-${PEER_LIST[0]}.key
 
 [Peer]
 PublicKey = PEER_PUBLIC_KEY
 #AllowedIPs = ${PEER_LIST[0]}/32
-AllowedIPs = 172.20.0.0/${CIDR_SUFFIX}
+AllowedIPs = ${SUBNET}
 Endpoint = PEER_ENDPOINT:${PORT}
 PersistentKeepalive = 15
 EOF
