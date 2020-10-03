@@ -68,8 +68,8 @@ kubectl taint nodes --all node-role.kubernetes.io/master-
 
 # deploy kubernetes dashboard
 kubectl apply --filename 'https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.4/aio/deploy/recommended.yaml'
-kubectl create serviceaccount cluster-admin-dashboard --namespace kube-system
-kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kube-system:cluster-admin-dashboard
+kubectl create serviceaccount cluster-admin-dashboard --namespace kubernetes-dashboard
+kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kubernetes-dashboard:cluster-admin-dashboard
 
 # verify cluster status
 kubeadm config view
