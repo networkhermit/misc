@@ -43,11 +43,14 @@ if (( $# > 0 )); then
 fi
 
 # trust google cloud package signing key
+GPG_HOME_DIR=$(mktemp --directory)
 ## google repository
-curl --fail --location --silent --show-error https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+curl --fail --location --silent --show-error https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:kubernetes.gpg --import
 ## aliyun repository
-curl --fail --location --silent --show-error https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
-sudo rm --force --recursive /etc/apt/trusted.gpg~
+curl --fail --location --silent --show-error https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:kubernetes.gpg --import
+sudo install --mode 644 "${GPG_HOME_DIR}/kubernetes.gpg" /etc/apt/trusted.gpg.d
+rm --force --recursive "${GPG_HOME_DIR}"
+unset GPG_HOME_DIR
 
 # add kubernetes repository
 ## [official]

@@ -154,6 +154,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       shadow
 #       smartmontools
 #       strace
+#       sysdig
 #       sudo
 #       syslogd
 #       sysstat
@@ -362,6 +363,7 @@ arch)
         core/shadow \
         extra/smartmontools \
         extra/strace \
+        community/sysdig \
         core/sudo \
         extra/syslog-ng \
         community/sysstat \
@@ -607,6 +609,11 @@ fedora)
         usbutils \
         xfsdump \
         xfsprogs
+
+    dnf config-manager --add-repo http://download.sysdig.com/stable/rpm/draios.repo
+    dnf makecache
+    dnf install sysdig
+    dnf clean packages
 
     # NETWORK OPERATOR
     dnf install \
@@ -858,6 +865,17 @@ kali)
         xfsdump \
         xfsprogs
 
+    GPG_HOME_DIR=$(mktemp --directory)
+    curl --fail --location --silent --show-error https://download.sysdig.com/DRAIOS-GPG-KEY.public | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:sysdig.gpg --import
+    install --mode 644 "${GPG_HOME_DIR}/sysdig.gpg" /etc/apt/trusted.gpg.d
+    rm --force --recursive "${GPG_HOME_DIR}"
+    unset GPG_HOME_DIR
+    tee /etc/apt/sources.list.d/osquery.list << EOF
+deb https://download.sysdig.com/stable/deb stable-$(ARCH)/
+EOF
+    apt update --list-cleanup
+    apt install sysdig
+
     # NETWORK OPERATOR
     apt install \
         bind9-{dnsutils,host} \
@@ -959,8 +977,11 @@ kali)
         virtinst \
         wireguard
 
-    curl --fail --location --silent --show-error https://download.docker.com/linux/debian/gpg | apt-key add -
-    rm --force --recursive /etc/apt/trusted.gpg~
+    GPG_HOME_DIR=$(mktemp --directory)
+    curl --fail --location --silent --show-error https://download.docker.com/linux/debian/gpg | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:docker.gpg --import
+    install --mode 644 "${GPG_HOME_DIR}/docker.gpg" /etc/apt/trusted.gpg.d
+    rm --force --recursive "${GPG_HOME_DIR}"
+    unset GPG_HOME_DIR
     ## docker [official]
     tee /etc/apt/sources.list.d/docker.list << 'EOF'
 deb [arch=amd64] https://download.docker.com/linux/debian buster stable
@@ -972,8 +993,11 @@ EOF
     apt update --list-cleanup
     apt install docker-ce
 
-    curl --fail --location --silent --show-error https://repo.saltstack.com/py3/debian/10/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
-    rm --force --recursive /etc/apt/trusted.gpg~
+    GPG_HOME_DIR=$(mktemp --directory)
+    curl --fail --location --silent --show-error https://repo.saltstack.com/py3/debian/10/amd64/latest/SALTSTACK-GPG-KEY.pub | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:saltstack.gpg --import
+    install --mode 644 "${GPG_HOME_DIR}/saltstack.gpg" /etc/apt/trusted.gpg.d
+    rm --force --recursive "${GPG_HOME_DIR}"
+    unset GPG_HOME_DIR
     ## saltstack [official]
     tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
 deb [arch=amd64] https://repo.saltstack.com/py3/debian/10/amd64/latest buster main
@@ -985,8 +1009,11 @@ EOF
     apt update --list-cleanup
     apt install salt-{api,cloud,master,minion,ssh,syndic}
 
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
-    rm --force --recursive /etc/apt/trusted.gpg~
+    GPG_HOME_DIR=$(mktemp --directory)
+    gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:osquery.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
+    install --mode 644 "${GPG_HOME_DIR}/osquery.gpg" /etc/apt/trusted.gpg.d
+    rm --force --recursive "${GPG_HOME_DIR}"
+    unset GPG_HOME_DIR
     tee /etc/apt/sources.list.d/osquery.list << 'EOF'
 deb [arch=amd64] https://pkg.osquery.io/deb deb main
 EOF
@@ -1110,6 +1137,7 @@ manjaro)
         core/shadow \
         extra/smartmontools \
         extra/strace \
+        community/sysdig \
         core/sudo \
         extra/syslog-ng \
         community/sysstat \
@@ -1342,6 +1370,7 @@ opensuse*)
         shadow \
         smartmontools \
         strace \
+        sysdig \
         sudo \
         rsyslog{,-doc} \
         syslog-ng \
@@ -1575,6 +1604,7 @@ ubuntu)
         passwd \
         smartmontools \
         strace \
+        sysdig \
         sudo \
         rsyslog{,-doc} \
         syslog-ng \
@@ -1687,8 +1717,11 @@ ubuntu)
         virtinst \
         wireguard
 
-    curl --fail --location --silent --show-error https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-    rm --force --recursive /etc/apt/trusted.gpg~
+    GPG_HOME_DIR=$(mktemp --directory)
+    curl --fail --location --silent --show-error https://download.docker.com/linux/ubuntu/gpg | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:docker.gpg --import
+    install --mode 644 "${GPG_HOME_DIR}/docker.gpg" /etc/apt/trusted.gpg.d
+    rm --force --recursive "${GPG_HOME_DIR}"
+    unset GPG_HOME_DIR
     ## docker [official]
     tee /etc/apt/sources.list.d/docker.list << 'EOF'
 deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
@@ -1700,8 +1733,11 @@ EOF
     apt update --list-cleanup
     apt install docker-ce
 
-    curl --fail --location --silent --show-error https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
-    rm --force --recursive /etc/apt/trusted.gpg~
+    GPG_HOME_DIR=$(mktemp --directory)
+    curl --fail --location --silent --show-error https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:saltstack.gpg --import
+    install --mode 644 "${GPG_HOME_DIR}/saltstack.gpg" /etc/apt/trusted.gpg.d
+    rm --force --recursive "${GPG_HOME_DIR}"
+    unset GPG_HOME_DIR
     ## saltstack [official]
     tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
 deb [arch=amd64] https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest bionic main
@@ -1713,8 +1749,11 @@ EOF
     apt update --list-cleanup
     apt install salt-{api,cloud,master,minion,ssh,syndic}
 
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
-    rm --force --recursive /etc/apt/trusted.gpg~
+    GPG_HOME_DIR=$(mktemp --directory)
+    gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:osquery.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
+    install --mode 644 "${GPG_HOME_DIR}/osquery.gpg" /etc/apt/trusted.gpg.d
+    rm --force --recursive "${GPG_HOME_DIR}"
+    unset GPG_HOME_DIR
     tee /etc/apt/sources.list.d/osquery.list << 'EOF'
 deb [arch=amd64] https://pkg.osquery.io/deb deb main
 EOF
