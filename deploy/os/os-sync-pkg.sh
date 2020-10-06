@@ -78,21 +78,28 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 ##################
 # UTIL
 #       at
+#       bat
 #       bc
 #       binutils
 #       bzip2
+#       colordiff
 #       cpio
 #       diffutils
 #       dos2unix
 #       dosfstools
 #       exa
+#       fd
 #       file
 #       findutils
 #       finger
+#       fzf
 #       gawk
 #       gnupg
 #       grep
 #       gzip
+#       hexyl
+#       hyperfine
+#       jq
 #       less
 #       lynx
 #       lz4
@@ -106,8 +113,10 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       pygmentize
 #       qrencode
 #       readline
+#       ripgrep
 #       sed
 #       tar
+#       the_silver_searcher
 #       time
 #       tree
 #       unzip
@@ -121,20 +130,23 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 ##################
 # SYSADMIN
 #       acl
+#       borg
 #       btrfs-progs
 #       cronie
 #       cryptsetup
+#       device-mapper
 #       dkms
 #       dmidecode
-#       device-mapper
 #       e2fsprogs
 #       exim
 #       fakeroot
+#       glances
 #       gptfdisk
 #       haveged
 #       hdparm
 #       htop
 #       initramfs-tools
+#       iotop
 #       irqbalance
 #       keyutils
 #       kmod
@@ -145,19 +157,22 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       lsof
 #       lvm2
 #       mdadm
+#       ncdu
 #       numad
 #       parted
 #       pciutils
 #       procps
 #       psmisc
+#       restic
 #       rng-tools
 #       shadow
 #       smartmontools
 #       strace
-#       sysdig
 #       sudo
+#       sysdig
 #       syslogd
 #       sysstat
+#       systemtap
 #       thin-provisioning-tools
 #       tmux
 #       tzdata
@@ -168,6 +183,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 
 ##################
 # NETWORK OPERATOR
+#       ab
 #       bind-tools
 #       bridge-utils
 #       ca-certificates
@@ -179,8 +195,10 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       ethtool
 #       fping
 #       geoip
+#       goaccess
 #       hostname
 #       httpie
+#       iftop
 #       iperf3
 #       iproute2
 #       ipset
@@ -193,7 +211,10 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       mtr
 #       net-tools
 #       netcat
+#       nethogs
+#       netsniff-ng
 #       nftables
+#       ngrep
 #       nikto
 #       nmap
 #       ntp
@@ -213,6 +234,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       wireless-tools
 #       wireshark
 #       wpa-supplicant
+#       wrk
 ##################
 
 ##################
@@ -259,6 +281,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       pam
 #       qemu
 #       salt
+#       tig
 #       virtinst
 #       wireguard
 ##################
@@ -290,20 +313,27 @@ arch)
     # UTIL
     pacman --sync --needed \
         community/at \
+        community/bat \
         extra/bc \
         core/binutils \
         core/bzip2 \
+        community/colordiff \
         extra/cpio \
         core/diffutils \
         community/dos2unix \
         core/dosfstools \
         community/exa \
+        community/fd \
         core/file \
         core/findutils \
+        community/fzf \
         core/gawk \
         core/gnupg \
         core/grep \
         core/gzip \
+        community/hexyl \
+        community/hyperfine \
+        community/jq \
         core/less \
         extra/lynx \
         core/lz4 \
@@ -317,8 +347,10 @@ arch)
         community/python-pygments \
         extra/qrencode \
         core/readline \
+        community/ripgrep \
         core/sed \
         core/tar \
+        community/the_silver_searcher \
         extra/time \
         extra/tree \
         extra/unzip \
@@ -331,20 +363,23 @@ arch)
     # SYSADMIN
     pacman --sync --needed \
         core/acl \
+        community/borg \
         core/btrfs-progs \
         core/cronie \
         core/cryptsetup \
+        core/device-mapper \
         extra/dkms \
         extra/dmidecode \
-        core/device-mapper \
         core/e2fsprogs \
         community/exim \
         core/fakeroot \
+        community/glances \
         extra/gptfdisk \
         extra/haveged \
         core/hdparm \
         extra/htop \
         core/mkinitcpio{,-busybox} \
+        community/iotop \
         extra/irqbalance \
         core/keyutils \
         core/kmod \
@@ -355,16 +390,18 @@ arch)
         extra/lsof \
         core/lvm2 \
         core/mdadm \
+        community/ncdu \
         extra/parted \
         core/pciutils \
         core/procps-ng \
         core/psmisc \
+        community/restic \
         community/rng-tools \
         core/shadow \
         extra/smartmontools \
         extra/strace \
-        community/sysdig \
         core/sudo \
+        community/sysdig \
         extra/syslog-ng \
         community/sysstat \
         core/thin-provisioning-tools \
@@ -376,6 +413,7 @@ arch)
 
     # NETWORK OPERATOR
     pacman --sync --needed \
+        extra/apache \
         extra/bind \
         extra/bridge-utils \
         core/ca-certificates{,-mozilla,-utils} \
@@ -388,8 +426,10 @@ arch)
         extra/ethtool \
         extra/fping \
         extra/geoip{,-database{,-extra}} \
+        community/goaccess \
         core/inetutils \
         community/httpie \
+        community/iftop \
         community/iperf3 \
         core/iproute2 \
         extra/ipset \
@@ -401,8 +441,11 @@ arch)
         community/mosh \
         extra/mtr \
         core/net-tools \
-        extra/gnu-netcat \
+        community/openbsd-netcat \
+        community/nethogs \
+        community/netsniff-ng \
         extra/nftables \
+        community/ngrep \
         community/nikto \
         extra/nmap \
         extra/ntp \
@@ -420,7 +463,8 @@ arch)
         extra/whois \
         core/wireless_tools \
         community/wireshark-cli \
-        core/wpa_supplicant
+        core/wpa_supplicant \
+        community/wrk
 
     # PLT
     pacman --sync --needed \
@@ -471,6 +515,7 @@ arch)
         community/libpam-google-authenticator \
         extra/qemu-headless \
         community/salt \
+        community/tig \
         community/virt-install \
         extra/wireguard-{dkms,tools}
 
@@ -522,21 +567,28 @@ fedora)
     # UTIL
     dnf install \
         at \
+        bat \
         bc \
         binutils \
         bzip2 \
+        colordiff \
         cpio \
         diffutils \
         dos2unix \
         dosfstools \
         exa \
+        fd-find \
         file \
         findutils \
         finger \
+        fzf \
         gawk{,-doc} \
         gnupg2 \
         grep \
         gzip \
+        hexyl \
+        hyperfine \
+        jq \
         less \
         lynx \
         lz4 \
@@ -550,8 +602,10 @@ fedora)
         python3-pygments \
         qrencode \
         readline \
+        ripgrep \
         sed \
         tar \
+        the_silver_searcher \
         time \
         tree \
         unzip \
@@ -564,21 +618,24 @@ fedora)
     # SYSADMIN
     dnf install \
         acl \
+        borgbackup \
         btrfs-progs \
         cronie \
         crontabs \
         cryptsetup \
+        device-mapper \
         dkms \
         dmidecode \
-        device-mapper \
         e2fsprogs \
         exim \
         fakeroot \
+        glances \
         gdisk \
         haveged \
         hdparm \
         htop \
         dracut \
+        iotop \
         irqbalance \
         keyutils \
         kmod \
@@ -589,11 +646,13 @@ fedora)
         lsof \
         lvm2 \
         mdadm \
+        ncdu \
         numad \
         parted \
         pciutils \
         procps-ng \
         psmisc \
+        restic \
         rng-tools \
         passwd \
         shadow-utils \
@@ -603,6 +662,7 @@ fedora)
         rsyslog{,-doc} \
         syslog-ng \
         sysstat \
+        systemtap \
         device-mapper-persistent-data \
         tmux \
         tzdata \
@@ -617,6 +677,7 @@ fedora)
 
     # NETWORK OPERATOR
     dnf install \
+        httpd-tools \
         bind-utils \
         bridge-utils \
         ca-certificates \
@@ -627,8 +688,10 @@ fedora)
         ethtool \
         fping \
         GeoIP{,-GeoLite-data{,-extra}} \
+        goaccess \
         hostname \
         httpie \
+        iftop \
         iperf3 \
         iproute \
         ipset \
@@ -640,7 +703,10 @@ fedora)
         mtr \
         net-tools \
         nmap-ncat \
+        nethogs \
+        netsniff-ng \
         nftables \
+        ngrep \
         nikto \
         nmap \
         ntp{,-doc} \
@@ -660,7 +726,8 @@ fedora)
         whois \
         wireless-tools \
         wireshark-cli \
-        wpa_supplicant
+        wpa_supplicant \
+        wrk
 
     # PLT
     dnf install \
@@ -711,6 +778,7 @@ fedora)
         pam \
         qemu-{img,system-x86} \
         salt{,-{api,cloud,master,minion,ssh,syndic}} \
+        tig \
         virt-install \
         wireguard-{dkms,tools}
 
@@ -777,20 +845,27 @@ kali)
     # UTIL
     apt install \
         at \
+        bat \
         bc \
         binutils{,-doc} \
         bzip2 \
+        colordiff \
         cpio{,-doc} \
         diffutils{,-doc} \
         dos2unix \
         dosfstools \
+        fd-find \
         file \
         findutils \
         finger \
+        fzf \
         gawk{,-doc} \
         gnupg{,-utils} \
         grep \
         gzip \
+        hexyl \
+        hyperfine \
+        jq \
         less \
         lynx \
         lz4 \
@@ -804,8 +879,10 @@ kali)
         python3-pygments \
         qrencode \
         readline-{common,doc} \
+        ripgrep \
         sed \
         tar \
+        silversearcher-ag \
         time \
         tree \
         unzip \
@@ -819,6 +896,7 @@ kali)
     # SYSADMIN
     apt install \
         acl \
+        borgbackup{,-doc} \
         btrfs-progs \
         cron \
         cryptsetup-{initramfs,run} \
@@ -828,11 +906,13 @@ kali)
         e2fsprogs \
         exim4-daemon-light \
         fakeroot \
+        glances \
         gdisk \
         haveged \
         hdparm \
         htop \
         initramfs-tools \
+        iotop \
         irqbalance \
         keyutils \
         kmod \
@@ -843,13 +923,15 @@ kali)
         lsof \
         lvm2 \
         mdadm \
+        ncdu \
         numad \
         parted{,-doc} \
         pciutils \
         procps \
         sysvinit-utils \
         psmisc \
-        rng-tools \
+        restic \
+        rng-tools5 \
         login \
         passwd \
         smartmontools \
@@ -858,6 +940,7 @@ kali)
         rsyslog{,-doc} \
         syslog-ng \
         sysstat \
+        systemtap \
         thin-provisioning-tools \
         tmux \
         tzdata \
@@ -878,6 +961,7 @@ EOF
 
     # NETWORK OPERATOR
     apt install \
+        apache2-utils \
         bind9-{dnsutils,host} \
         bridge-utils \
         ca-certificates \
@@ -889,8 +973,10 @@ EOF
         ethtool \
         fping \
         geoip-{bin,database} \
+        goaccess \
         hostname \
         httpie \
+        iftop \
         iperf3 \
         iproute2{,-doc} \
         ipset \
@@ -903,7 +989,10 @@ EOF
         mtr-tiny \
         net-tools \
         netcat-openbsd \
+        nethogs \
+        netsniff-ng \
         nftables \
+        ngrep \
         nikto \
         nmap \
         ntp{,-doc} \
@@ -923,7 +1012,8 @@ EOF
         whois \
         wireless-tools \
         wireshark{,-doc} \
-        wpasupplicant
+        wpasupplicant \
+        wrk
 
     # PLT
     apt install \
@@ -974,6 +1064,7 @@ EOF
         oathtool \
         libpam-{doc,google-authenticator,modules{,-bin}} \
         qemu-{system-x86,utils} \
+        tig \
         virtinst \
         wireguard
 
@@ -1064,20 +1155,27 @@ manjaro)
     # UTIL
     pacman --sync --needed \
         community/at \
+        community/bat \
         extra/bc \
         core/binutils \
         core/bzip2 \
+        community/colordiff \
         extra/cpio \
         core/diffutils \
         community/dos2unix \
         core/dosfstools \
         community/exa \
+        community/fd \
         core/file \
         core/findutils \
+        community/fzf \
         core/gawk \
         core/gnupg \
         core/grep \
         core/gzip \
+        community/hexyl \
+        community/hyperfine \
+        community/jq \
         core/less \
         extra/lynx \
         core/lz4 \
@@ -1091,8 +1189,10 @@ manjaro)
         community/python-pygments \
         extra/qrencode \
         core/readline \
+        community/ripgrep \
         core/sed \
         core/tar \
+        community/the_silver_searcher \
         extra/time \
         extra/tree \
         extra/unzip \
@@ -1105,20 +1205,23 @@ manjaro)
     # SYSADMIN
     pacman --sync --needed \
         core/acl \
+        community/borg \
         core/btrfs-progs \
         core/cronie \
         core/cryptsetup \
+        core/device-mapper \
         extra/dkms \
         extra/dmidecode \
-        core/device-mapper \
         core/e2fsprogs \
         community/exim \
         core/fakeroot \
+        community/glances \
         extra/gptfdisk \
         extra/haveged \
         core/hdparm \
         extra/htop \
         core/mkinitcpio{,-busybox} \
+        community/iotop \
         extra/irqbalance \
         core/keyutils \
         core/kmod \
@@ -1129,16 +1232,18 @@ manjaro)
         extra/lsof \
         core/lvm2 \
         core/mdadm \
+        community/ncdu \
         extra/parted \
         core/pciutils \
         core/procps-ng \
         core/psmisc \
+        community/restic \
         community/rng-tools \
         core/shadow \
         extra/smartmontools \
         extra/strace \
-        community/sysdig \
         core/sudo \
+        community/sysdig \
         extra/syslog-ng \
         community/sysstat \
         core/thin-provisioning-tools \
@@ -1150,6 +1255,7 @@ manjaro)
 
     # NETWORK OPERATOR
     pacman --sync --needed \
+        extra/apache \
         extra/bind \
         extra/bridge-utils \
         core/ca-certificates{,-mozilla,-utils} \
@@ -1162,8 +1268,10 @@ manjaro)
         extra/ethtool \
         extra/fping \
         extra/geoip{,-database{,-extra}} \
+        community/goaccess \
         core/inetutils \
         community/httpie \
+        community/iftop \
         community/iperf3 \
         core/iproute2 \
         extra/ipset \
@@ -1175,8 +1283,11 @@ manjaro)
         community/mosh \
         extra/mtr \
         core/net-tools \
-        extra/gnu-netcat \
+        community/openbsd-netcat \
+        community/nethogs \
+        community/netsniff-ng \
         extra/nftables \
+        community/ngrep \
         community/nikto \
         extra/nmap \
         extra/ntp \
@@ -1194,7 +1305,8 @@ manjaro)
         extra/whois \
         core/wireless_tools \
         community/wireshark-cli \
-        core/wpa_supplicant
+        core/wpa_supplicant \
+        community/wrk
 
     # PLT
     pacman --sync --needed \
@@ -1245,6 +1357,7 @@ manjaro)
         community/libpam-google-authenticator \
         extra/qemu-headless \
         community/salt \
+        community/tig \
         community/virt-install \
         extra/wireguard-{dkms,tools}
 
@@ -1293,21 +1406,28 @@ opensuse*)
     # UTIL
     zypper install \
         at \
+        bat \
         bc \
         binutils \
         bzip2 \
+        colordiff \
         cpio \
         diffutils \
         dos2unix \
         dosfstools \
         exa \
+        fd \
         file \
         findutils \
         finger \
+        fzf \
         gawk \
         gpg2 \
         grep \
         gzip \
+        hexyl \
+        hyperfine \
+        jq \
         less \
         lynx \
         lz4 \
@@ -1322,8 +1442,10 @@ opensuse*)
         libreadline8 \
         qrencode \
         readline-doc \
+        ripgrep \
         sed \
         tar \
+        the_silver_searcher \
         time \
         tree \
         unzip \
@@ -1336,21 +1458,24 @@ opensuse*)
     # SYSADMIN
     zypper install \
         acl \
+        borgbackup \
         btrfsprogs \
         cron \
         cronie \
         cryptsetup \
+        device-mapper \
         dkms \
         dmidecode \
-        device-mapper \
         e2fsprogs \
         exim \
         fakeroot \
+        glances \
         gptfdisk \
         haveged \
         hdparm \
         htop \
         dracut \
+        iotop \
         irqbalance \
         keyutils \
         kmod \
@@ -1361,20 +1486,23 @@ opensuse*)
         lsof \
         lvm2 \
         mdadm \
+        ncdu \
         numad \
         parted \
         pciutils \
         procps \
         psmisc \
+        restic \
         rng-tools \
         shadow \
         smartmontools \
         strace \
-        sysdig \
         sudo \
+        sysdig \
         rsyslog{,-doc} \
         syslog-ng \
         sysstat \
+        systemtap \
         thin-provisioning-tools \
         tmux \
         timezone \
@@ -1384,6 +1512,7 @@ opensuse*)
 
     # NETWORK OPERATOR
     zypper install \
+        apache2-utils \
         bind-utils \
         bridge-utils \
         ca-certificates{,-mozilla} \
@@ -1394,8 +1523,10 @@ opensuse*)
         ethtool \
         fping \
         GeoIP{,-data} \
+        goaccess \
         hostname \
         python3-httpie \
+        iftop \
         iperf \
         iproute2 \
         ipset \
@@ -1408,7 +1539,10 @@ opensuse*)
         mtr \
         net-tools \
         netcat-openbsd \
+        nethogs \
+        netsniff-ng \
         nftables \
+        ngrep \
         nikto \
         nmap \
         ntp{,-doc} \
@@ -1426,7 +1560,8 @@ opensuse*)
         whois \
         wireless-tools \
         wireshark \
-        wpa_supplicant
+        wpa_supplicant \
+        wrk
 
     # PLT
     zypper install \
@@ -1477,6 +1612,7 @@ opensuse*)
         pam \
         qemu-{tools,x86} \
         salt{,-{api,cloud,master,minion,ssh,syndic}} \
+        tig \
         virt-install \
         wireguard-{kmp-default,tools}
 
@@ -1527,20 +1663,27 @@ ubuntu)
     # UTIL
     apt install \
         at \
+        bat \
         bc \
         binutils{,-doc} \
         bzip2 \
+        colordiff \
         cpio{,-doc} \
         diffutils{,-doc} \
         dos2unix \
         dosfstools \
+        fd-find \
         file \
         findutils \
         finger \
+        fzf \
         gawk{,-doc} \
         gnupg{,-utils} \
         grep \
         gzip \
+        hexyl \
+        hyperfine \
+        jq \
         less \
         lynx \
         lz4 \
@@ -1554,8 +1697,10 @@ ubuntu)
         python3-pygments \
         qrencode \
         readline-{common,doc} \
+        ripgrep \
         sed \
         tar \
+        silversearcher-ag \
         time \
         tree \
         unzip \
@@ -1569,6 +1714,7 @@ ubuntu)
     # SYSADMIN
     apt install \
         acl \
+        borgbackup{,-doc} \
         btrfs-progs \
         cron \
         cryptsetup{,-bin} \
@@ -1578,11 +1724,13 @@ ubuntu)
         e2fsprogs \
         exim4-daemon-light \
         fakeroot \
+        glances \
         gdisk \
         haveged \
         hdparm \
         htop \
         initramfs-tools \
+        iotop \
         irqbalance \
         keyutils \
         kmod \
@@ -1593,22 +1741,25 @@ ubuntu)
         lsof \
         lvm2 \
         mdadm \
+        ncdu \
         numad \
         parted{,-doc} \
         pciutils \
         procps \
         sysvinit-utils \
         psmisc \
-        rng-tools \
+        restic \
+        rng-tools5 \
         login \
         passwd \
         smartmontools \
         strace \
-        sysdig \
         sudo \
+        sysdig \
         rsyslog{,-doc} \
         syslog-ng \
         sysstat \
+        systemtap \
         thin-provisioning-tools \
         tmux \
         tzdata \
@@ -1618,6 +1769,7 @@ ubuntu)
 
     # NETWORK OPERATOR
     apt install \
+        apache2-utils \
         bind9-{dnsutils,host} \
         bridge-utils \
         ca-certificates \
@@ -1629,8 +1781,10 @@ ubuntu)
         ethtool \
         fping \
         geoip-{bin,database} \
+        goaccess \
         hostname \
         httpie \
+        iftop \
         iperf3 \
         iproute2{,-doc} \
         ipset \
@@ -1643,7 +1797,10 @@ ubuntu)
         mtr-tiny \
         net-tools \
         netcat-openbsd \
+        nethogs \
+        netsniff-ng \
         nftables \
+        ngrep \
         nikto \
         nmap \
         ntp{,-doc} \
@@ -1663,7 +1820,8 @@ ubuntu)
         whois \
         wireless-tools \
         wireshark{,-doc} \
-        wpasupplicant
+        wpasupplicant \
+        wrk
 
     # PLT
     apt install \
@@ -1714,6 +1872,7 @@ ubuntu)
         oathtool \
         libpam-{doc,google-authenticator,modules{,-bin}} \
         qemu-{system-x86,utils} \
+        tig \
         virtinst \
         wireguard
 

@@ -63,7 +63,7 @@ docker run \
     --publish 6666:6666 \
     --restart always \
     --volume /srv/v2ray/config.json:/etc/v2ray/config.json \
-    v2ray/official v2ray -config=/etc/v2ray/config.json
+    v2fly/v2fly-core v2ray -config=/etc/v2ray/config.json
 
 docker image prune --force
 docker container logs "${NAME}"
