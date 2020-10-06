@@ -517,7 +517,7 @@ arch)
         community/salt \
         community/tig \
         community/virt-install \
-        extra/wireguard-{dkms,tools}
+        extra/wireguard-tools
 
     systemctl disable --now \
         dnsmasq.service \
@@ -780,7 +780,7 @@ fedora)
         salt{,-{api,cloud,master,minion,ssh,syndic}} \
         tig \
         virt-install \
-        wireguard-{dkms,tools}
+        wireguard-tools
 
     ## docker [official]
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -854,6 +854,7 @@ kali)
         diffutils{,-doc} \
         dos2unix \
         dosfstools \
+        exa \
         fd-find \
         file \
         findutils \
@@ -1066,7 +1067,7 @@ EOF
         qemu-{system-x86,utils} \
         tig \
         virtinst \
-        wireguard
+        wireguard-tools
 
     GPG_HOME_DIR=$(mktemp --directory)
     curl --fail --location --silent --show-error https://download.docker.com/linux/debian/gpg | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:docker.gpg --import
@@ -1359,7 +1360,7 @@ manjaro)
         community/salt \
         community/tig \
         community/virt-install \
-        extra/wireguard-{dkms,tools}
+        extra/wireguard-tools
 
     systemctl disable --now \
         dnsmasq.service \
@@ -1555,6 +1556,7 @@ opensuse*)
         swaks \
         tcpdump \
         telnet \
+        testssl.sh \
         traceroute \
         wget \
         whois \
@@ -1614,7 +1616,7 @@ opensuse*)
         salt{,-{api,cloud,master,minion,ssh,syndic}} \
         tig \
         virt-install \
-        wireguard-{kmp-default,tools}
+        wireguard-tools
 
     systemctl disable --now \
         dnsmasq.service \
@@ -1672,6 +1674,7 @@ ubuntu)
         diffutils{,-doc} \
         dos2unix \
         dosfstools \
+        exa \
         fd-find \
         file \
         findutils \
@@ -1874,7 +1877,7 @@ ubuntu)
         qemu-{system-x86,utils} \
         tig \
         virtinst \
-        wireguard
+        wireguard-tools
 
     GPG_HOME_DIR=$(mktemp --directory)
     curl --fail --location --silent --show-error https://download.docker.com/linux/ubuntu/gpg | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:docker.gpg --import
