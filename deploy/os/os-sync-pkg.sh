@@ -272,6 +272,7 @@ DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
 #       certbot
 #       dnsmasq
 #       docker
+#       docker-compose
 #       git
 #       libguestfs-tools
 #       libvirt
@@ -505,6 +506,7 @@ arch)
         community/certbot \
         extra/dnsmasq \
         community/docker \
+        community/docker-compose \
         extra/git \
         community/libvirt \
         extra/nginx \
@@ -770,6 +772,7 @@ fedora)
         caddy \
         certbot \
         dnsmasq \
+        docker-compose \
         git \
         libguestfs-tools \
         libvirt \
@@ -1057,6 +1060,8 @@ EOF
         certbot \
         python-certbot-doc \
         dnsmasq \
+        docker.io \
+        docker-compose \
         git{,-doc} \
         libguestfs-tools \
         libvirt-{clients,daemon-system} \
@@ -1068,22 +1073,6 @@ EOF
         tig \
         virtinst \
         wireguard-tools
-
-    GPG_HOME_DIR=$(mktemp --directory)
-    curl --fail --location --silent --show-error https://download.docker.com/linux/debian/gpg | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:docker.gpg --import
-    install --mode 644 "${GPG_HOME_DIR}/docker.gpg" /etc/apt/trusted.gpg.d
-    rm --force --recursive "${GPG_HOME_DIR}"
-    unset GPG_HOME_DIR
-    ## docker [official]
-    tee /etc/apt/sources.list.d/docker.list << 'EOF'
-deb [arch=amd64] https://download.docker.com/linux/debian buster stable
-EOF
-    ## docker [tsinghua]
-    tee /etc/apt/sources.list.d/docker.list << 'EOF'
-deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian buster stable
-EOF
-    apt update --list-cleanup
-    apt install docker-ce
 
     GPG_HOME_DIR=$(mktemp --directory)
     curl --fail --location --silent --show-error https://repo.saltstack.com/py3/debian/10/amd64/latest/SALTSTACK-GPG-KEY.pub | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:saltstack.gpg --import
@@ -1348,6 +1337,7 @@ manjaro)
         community/certbot \
         extra/dnsmasq \
         community/docker \
+        community/docker-compose \
         extra/git \
         community/libvirt \
         extra/nginx \
@@ -1606,6 +1596,7 @@ opensuse*)
         python3-certbot \
         dnsmasq \
         docker \
+        docker-compose \
         git{,-doc} \
         libguestfs0 \
         libvirt \
@@ -1867,6 +1858,8 @@ ubuntu)
         certbot \
         dnsmasq \
         python-certbot-doc \
+        docker.io \
+        docker-compose \
         git{,-doc} \
         libguestfs-tools \
         libvirt-{clients,daemon-system} \
@@ -1878,22 +1871,6 @@ ubuntu)
         tig \
         virtinst \
         wireguard-tools
-
-    GPG_HOME_DIR=$(mktemp --directory)
-    curl --fail --location --silent --show-error https://download.docker.com/linux/ubuntu/gpg | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:docker.gpg --import
-    install --mode 644 "${GPG_HOME_DIR}/docker.gpg" /etc/apt/trusted.gpg.d
-    rm --force --recursive "${GPG_HOME_DIR}"
-    unset GPG_HOME_DIR
-    ## docker [official]
-    tee /etc/apt/sources.list.d/docker.list << 'EOF'
-deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
-EOF
-    ## docker [tsinghua]
-    tee /etc/apt/sources.list.d/docker.list << 'EOF'
-deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu bionic stable
-EOF
-    apt update --list-cleanup
-    apt install docker-ce
 
     GPG_HOME_DIR=$(mktemp --directory)
     curl --fail --location --silent --show-error https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:saltstack.gpg --import
