@@ -239,7 +239,7 @@ openssl req \
     -key "${CERT_NAME}".key \
     -sha512 \
     -subj "/O=Privacy Guard/OU=Public Key Infrastructure/CN=${CERT_NAME}" \
-    -addext 'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1' \
+    -addext "subjectAltName=DNS:${CERT_NAME},DNS:localhost,IP:127.0.0.1,IP:::1" \
     -out "${CERT_NAME}".csr
 
 #openssl req \
@@ -247,7 +247,7 @@ openssl req \
 #    -newkey rsa -pkeyopt rsa_keygen_bits:4096 -nodes -keyout "${CERT_NAME}".key \
 #    -sha512 \
 #    -subj "/O=Privacy Guard/OU=Public Key Infrastructure/CN=${CERT_NAME}" \
-#    -addext 'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1' \
+#    -addext "subjectAltName=DNS:${CERT_NAME},DNS:localhost,IP:127.0.0.1,IP:::1" \
 #    -out "${CERT_NAME}".csr
 
 openssl pkey -pubout -in "${CERT_NAME}".key -out "${CERT_NAME}".pub
@@ -262,13 +262,13 @@ openssl x509 \
     -extfile - \
     -extensions end_entity \
     -out "${CERT_NAME}".crt \
-    << 'EOF'
+    << EOF
 [ end_entity ]
 basicConstraints=critical,CA:FALSE
 
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer
-subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1
+subjectAltName=DNS:${CERT_NAME},DNS:localhost,IP:127.0.0.1,IP:::1
 EOF
 
 if [ "${ENABLE_DIGEST}" = true ]; then
