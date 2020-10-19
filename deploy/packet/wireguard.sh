@@ -68,7 +68,7 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-if [ -d /etc/wireguard ]; then
+if [ -d /etc/wireguard/wg0.conf ]; then
     for i in "${PEER_LIST[@]}"; do
         ping -c 4 "${i}"
     done
