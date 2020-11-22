@@ -58,7 +58,7 @@ sudo install --group "$(id --group)" --mode 600 --owner "$(id --user)" --preserv
 
 # install pod network add-on
 ## cilium
-kubectl apply --filename 'https://raw.githubusercontent.com/cilium/cilium/1.8.4/install/kubernetes/quick-install.yaml'
+kubectl apply --filename 'https://raw.githubusercontent.com/cilium/cilium/1.8.5/install/kubernetes/quick-install.yaml'
 ## kuberouter
 #kubectl apply --filename 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml'
 #kubectl --namespace kube-system delete daemonsets kube-proxy

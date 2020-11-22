@@ -1562,8 +1562,8 @@ opensuse*)
         gdb \
         valgrind \
         gcc-c++ \
-        clang{,10-doc} \
-        llvm{,10-doc} \
+        clang{,11-doc} \
+        llvm{,11-doc} \
         lld \
         lldb \
         elixir{,-doc} \
@@ -1824,8 +1824,8 @@ ubuntu)
         gdb{,-doc} \
         valgrind \
         g++ \
-        clang{,-10-doc,-format} \
-        llvm{,-10-doc} \
+        clang{,-11-doc,-format} \
+        llvm{,-11-doc} \
         lld \
         lldb \
         elixir \
@@ -1873,17 +1873,17 @@ ubuntu)
         wireguard-tools
 
     GPG_HOME_DIR=$(mktemp --directory)
-    curl --fail --location --silent --show-error https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:saltstack.gpg --import
+    curl --fail --location --silent --show-error https://repo.saltstack.com/py3/ubuntu/20.04/amd64/latest/SALTSTACK-GPG-KEY.pub | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:saltstack.gpg --import
     install --mode 644 "${GPG_HOME_DIR}/saltstack.gpg" /etc/apt/trusted.gpg.d
     rm --force --recursive "${GPG_HOME_DIR}"
     unset GPG_HOME_DIR
     ## saltstack [official]
     tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest bionic main
+deb [arch=amd64] https://repo.saltstack.com/py3/ubuntu/20.04/amd64/latest focal main
 EOF
     ## saltstack [tsinghua]
     tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/saltstack/py3/ubuntu/18.04/amd64/latest bionic main
+deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/saltstack/py3/ubuntu/20.04/amd64/latest focal main
 EOF
     apt update --list-cleanup
     apt install salt-{api,cloud,master,minion,ssh,syndic}
