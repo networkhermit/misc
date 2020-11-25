@@ -46,6 +46,8 @@ sudo hostnamectl set-hostname STEM
 echo 'STEM' | sudo tee /etc/hostname
 
 # check internet connection
+ip address add 192.168.1.10/24 dev eth0
+ip route add default via 192.168.1.1
 ping -c 4 1.1.1.1
 
 # modify dns resolver

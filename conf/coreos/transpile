@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run --interactive --rm quay.io/coreos/fcct:release --pretty --strict < config.fcc | tee config.ign

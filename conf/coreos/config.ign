@@ -1,0 +1,75 @@
+{
+  "ignition": {
+    "version": "3.1.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "groups": [
+          "sudo"
+        ],
+        "name": "vac"
+      }
+    ]
+  },
+  "storage": {
+    "files": [
+      {
+        "overwrite": true,
+        "path": "/etc/hostname",
+        "contents": {
+          "source": "data:,STEM%0A"
+        },
+        "mode": 420
+      },
+      {
+        "overwrite": true,
+        "path": "/etc/locale.conf",
+        "contents": {
+          "source": "data:,LANG%3Den_US.UTF-8%0A"
+        },
+        "mode": 420
+      },
+      {
+        "overwrite": true,
+        "path": "/etc/NetworkManager/system-connections/enp0s3.nmconnection",
+        "contents": {
+          "source": "data:,%5Bconnection%5D%0Atype%3Dethernet%0Aid%3Denp0s3%0Ainterface-name%3Denp0s3%0A%0A%5Bipv4%5D%0Amethod%3Dmanual%0Aaddresses%3D172.31.255.10%2F24%0Agateway%3D172.31.255.1%0Adns%3D1.1.1.1%3B119.29.29.29%0A"
+        },
+        "mode": 384
+      },
+      {
+        "overwrite": true,
+        "path": "/etc/NetworkManager/system-connections/enp0s8.nmconnection",
+        "contents": {
+          "source": "data:,%5Bconnection%5D%0Atype%3Dethernet%0Aid%3Denp0s8%0Ainterface-name%3Denp0s8%0A%0A%5Bipv4%5D%0Amethod%3Dmanual%0Aaddresses%3D192.168.56.10%2F24%0A"
+        },
+        "mode": 384
+      },
+      {
+        "overwrite": true,
+        "path": "/etc/zincati/config.d/51-rollout-wariness.toml",
+        "contents": {
+          "source": "data:,%5Bidentity%5D%0Arollout_wariness%20%3D%200.001%0A"
+        },
+        "mode": 420
+      },
+      {
+        "overwrite": true,
+        "path": "/etc/fedora-coreos-pinger/config.d/99-disable-reporting.toml",
+        "contents": {
+          "source": "data:,%5Breporting%5D%0Aenabled%20%3D%20false%0A"
+        },
+        "mode": 420
+      }
+    ],
+    "links": [
+      {
+        "overwrite": true,
+        "path": "/usr/local/bin/vim",
+        "hard": false,
+        "target": "/usr/bin/vi"
+      }
+    ]
+  }
+}

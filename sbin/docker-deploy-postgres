@@ -1,0 +1,70 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+
+if (( EUID != 0 )); then
+    echo '✗ This script must be run as root' 1>&2
+    exit 1
+fi
+
+while (( $# > 0 )); do
+    case ${1} in
+    -h | --help)
+        cat << EOF
+Usage:
+    ${0##*/} [OPTION]...
+
+Optional arguments:
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+EOF
+        shift
+        exit
+        ;;
+    -v | --version)
+        echo v0.1.0
+        shift
+        exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
+    esac
+done
+
+if (( $# > 0 )); then
+    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
+    exit 1
+fi
+
+NAME=postgres
+
+if [ -n "$(docker container ls --all --filter name='^/'${NAME}'$' --format '.')" ]; then
+    docker container stop "${NAME}"
+    docker container rm --volumes "${NAME}"
+fi
+
+docker run \
+    --detach \
+    --env POSTGRES_PASSWORD=bonsoir \
+    --hostname xyz \
+    --label maintainer=sysadmin@local.domain \
+    --name "${NAME}" \
+    --network cluster \
+    --publish 172.24.0.1:5432:5432 \
+    --restart always \
+    --volume /srv/postgres/data:/var/lib/postgresql/data \
+    postgres:12
+
+docker image prune --force
+docker container logs "${NAME}"
