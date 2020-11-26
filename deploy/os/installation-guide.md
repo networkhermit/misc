@@ -410,6 +410,8 @@ sudo arch-chroot /mnt
 sudo ln --force --no-dereference --symbolic /usr/{bin/vim,local/bin/vi}
 
 # add default sysadmin
+sudo touch /etc/subuid /etc/subgid
+sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 vac
 
 # change hostname
 sudo tee /etc/hosts << 'EOF'
