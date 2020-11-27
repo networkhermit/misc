@@ -499,6 +499,7 @@ Fedora
 # modify dns resolver
 
 # configure default address selection
+sudo cp /usr/share/doc/glibc-common/gai.conf /etc
 
 # modify default ntp server
 
@@ -715,6 +716,7 @@ openSUSE
 # modify dns resolver
 
 # configure default address selection
+sudo cp /usr/share/doc/packages/glibc/gai.conf /etc
 
 # modify default ntp server
 
