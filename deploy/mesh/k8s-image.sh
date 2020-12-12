@@ -18,12 +18,12 @@ while (( $# > 0 )); do
     --registry)
         : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
         case ${2} in
-        gcr | azure-proxy | aliyun-registry)
+        gcr | aliyun-registry)
             REGISTRY=${2}
             shift 2
             ;;
         *)
-            echo "✗ argument parsing failed: acceptable values for ‘${1}’ are gcr | azure-proxy | aliyun-registry" 1>&2
+            echo "✗ argument parsing failed: acceptable values for ‘${1}’ are gcr | aliyun-registry" 1>&2
             exit 1
             ;;
         esac
@@ -34,7 +34,7 @@ Usage:
     ${0##*/} [OPTION]...
 
 Optional arguments:
-    --registry REGISTRY (gcr | azure-proxy | aliyun-registry)
+    --registry REGISTRY (gcr | aliyun-registry)
         container registry to pull images from (default: gcr)
     -h, --help
         show this help message and exit
@@ -73,11 +73,11 @@ get_image_list () {
 
     arr_ref=()
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/cilium/cilium/1.8.5/install/kubernetes/quick-install.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.4/aio/deploy/recommended.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/kubernetes/kube-state-metrics/master/examples/standard/deployment.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/kubernetes-sigs/metrics-server/v0.3.7/deploy/1.8%2B/metrics-server-deployment.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $2 }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/cilium/cilium/1.9.1/install/kubernetes/quick-install.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://raw.githubusercontent.com/kubernetes/dashboard/v2.1.0/aio/deploy/recommended.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://github.com/kubernetes/kube-state-metrics/blob/v1.9.7/examples/standard/deployment.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error 'https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml' | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
 }
 
 construct_image () {
@@ -103,11 +103,6 @@ case ${REGISTRY} in
 gcr)
     kubeadm config images pull --kubernetes-version "$(kubeadm version --output short)"
     printf '%s\0' "${arr[@]}" | xargs --max-args 1 --no-run-if-empty --null docker image pull
-    ;;
-azure-proxy)
-    for i in "${arr[@]}"; do
-        construct_image "${i}" gcr.azk8s.cn/google_containers
-    done
     ;;
 *)
     for i in "${arr[@]}"; do

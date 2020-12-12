@@ -43,11 +43,11 @@ if (( $# > 0 )); then
 fi
 
 # review default init configuration
-kubeadm config print init-defaults
+sudo kubeadm config print init-defaults
 
 # initialize master node
 install --directory --mode 700 ~/.kube
-sudo kubeadm init --apiserver-advertise-address 172.24.0.1 --pod-network-cidr 10.0.0.0/16 --service-cidr 10.96.0.0/12 --kubernetes-version "$(kubeadm version --output short)" --ignore-preflight-errors NumCPU,SystemVerification |& tee ~/.kube/log
+sudo kubeadm init --apiserver-advertise-address 172.24.0.1 --control-plane-endpoint k8s-raddest --cri-socket /run/containerd/containerd.sock --pod-network-cidr 10.0.0.0/16 --service-cidr 10.96.0.0/12 --kubernetes-version "$(kubeadm version --output short)" |& tee ~/.kube/log
 sudo systemctl enable kubelet.service
 
 # configure kubectl authentication
@@ -58,7 +58,7 @@ sudo install --group "$(id --group)" --mode 600 --owner "$(id --user)" --preserv
 
 # install pod network add-on
 ## cilium
-kubectl apply --filename 'https://raw.githubusercontent.com/cilium/cilium/1.8.5/install/kubernetes/quick-install.yaml'
+kubectl apply --filename 'https://raw.githubusercontent.com/cilium/cilium/1.9.1/install/kubernetes/quick-install.yaml'
 ## kuberouter
 #kubectl apply --filename 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml'
 #kubectl --namespace kube-system delete daemonsets kube-proxy
@@ -67,12 +67,11 @@ kubectl apply --filename 'https://raw.githubusercontent.com/cilium/cilium/1.8.5/
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
 # deploy kubernetes dashboard
-kubectl apply --filename 'https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.4/aio/deploy/recommended.yaml'
+kubectl apply --filename 'https://raw.githubusercontent.com/kubernetes/dashboard/v2.1.0/aio/deploy/recommended.yaml'
 kubectl create serviceaccount cluster-admin-dashboard --namespace kubernetes-dashboard
 kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kubernetes-dashboard:cluster-admin-dashboard
 
 # verify cluster status
-kubeadm config view
 kubectl cluster-info
 kubectl get configmaps --namespace kube-system kubeadm-config --output yaml
 kubectl get nodes --output wide
@@ -91,19 +90,19 @@ kubeadm config print join-defaults
 
 # join node to cluster
 install --directory --mode 700 ~/.kube
-sudo kubeadm join "${CONTROL_PLANE_ENDPOINT}" --token "${TOKEN}" --discovery-token-ca-cert-hash "${HASH}" --ignore-preflight-errors NumCPU,SystemVerification |& tee ~/.kube/log
+sudo kubeadm join "${CONTROL_PLANE_ENDPOINT}:${CONTROL_PLANE_PORT}" --discovery-token-ca-cert-hash "sha256:${HASH}" --token "${TOKEN}" |& tee ~/.kube/log
 sudo systemctl enable kubelet.service
 
 # create new token after current token expired
 sudo kubeadm token list
-sudo kubeadm token create --print-join-command
+sudo kubeadm token create
 sudo openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt \
     | openssl rsa -pubin -outform der 2> /dev/null \
     | openssl dgst -sha256 -hex | sed 's/^.* //'
 
 # revert deployment changes
 kubectl get nodes --output wide
-kubectl drain "${HOSTNAME,,}" --delete-local-data --force --ignore-daemonsets
+kubectl drain "${HOSTNAME,,}" --delete-emptydir-data --force --ignore-daemonsets
 kubectl delete node "${HOSTNAME,,}"
 sudo kubeadm reset --force
 sudo ipvsadm --clear
