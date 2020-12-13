@@ -47,7 +47,8 @@ sudo kubeadm config print init-defaults
 
 # initialize master node
 install --directory --mode 700 ~/.kube
-sudo kubeadm init --apiserver-advertise-address 172.24.0.1 --control-plane-endpoint k8s-raddest --cri-socket /run/containerd/containerd.sock --pod-network-cidr 10.0.0.0/16 --service-cidr 10.96.0.0/12 --kubernetes-version "$(kubeadm version --output short)" |& tee ~/.kube/log
+#sudo kubeadm init --apiserver-advertise-address 172.24.0.1 --control-plane-endpoint k8s-raddest --cri-socket /run/containerd/containerd.sock --pod-network-cidr 10.0.0.0/16 --service-cidr 10.96.0.0/12 --kubernetes-version "$(kubeadm version --output short)" |& tee ~/.kube/log
+sudo kubeadm init --config kubeadm-config.yaml |& tee ~/.kube/log
 sudo systemctl enable kubelet.service
 
 # configure kubectl authentication
