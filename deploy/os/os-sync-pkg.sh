@@ -1026,8 +1026,8 @@ EOF
         gdb{,-doc} \
         valgrind \
         g++ \
-        clang{,-9-doc,-format} \
-        llvm{,-9-doc} \
+        clang{,-11-doc,-format} \
+        llvm{,-11-doc} \
         lld \
         lldb \
         elixir \
