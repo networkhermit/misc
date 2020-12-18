@@ -36,6 +36,16 @@ if [ ! -r /usr/share/bash-completion/bash_completion ]; then
     complete -cf sudo
 fi
 
+if [ -x "$(command -v kubeadm)" ]; then
+    # shellcheck source=/dev/null
+    source <(kubeadm completion bash)
+fi
+
+if [ -x "$(command -v kubectl)" ]; then
+    # shellcheck source=/dev/null
+    source <(kubectl completion bash)
+fi
+
 shopt -s autocd
 shopt -s histappend
 shopt -s histverify
