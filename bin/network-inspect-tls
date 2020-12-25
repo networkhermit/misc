@@ -1,30 +1,51 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
 
-while (( $# > 0 )); do
-    case ${1} in
-    -h | --help)
-        cat << EOF
-Usage:
+die () {
+    warn "${@}"
+    exit 1
+}
+
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
+
+trap notify ERR
+
+display_help () {
+    cat << EOF
+Synopsis:
     ${0##*/} [OPTION]... FILE|URL...
 
-Optional arguments:
+Options:
     -h, --help
         show this help message and exit
     -v, --version
         output version information and exit
 
-Positional arguments:
+Arguments:
     FILE
         input certificate filename
     URL
         website url which employs tls
 EOF
+}
+
+while (( $# > 0 )); do
+    case ${1} in
+    -h | --help)
+        display_help
         shift
         exit
         ;;
@@ -43,8 +64,14 @@ EOF
     esac
 done
 
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
+
 for i in "$@"; do
-    CERT=''
+    CERT=
 
     if [ -e "${i}" ]; then
         if [ -f "${i}" ]; then
@@ -52,23 +79,23 @@ for i in "$@"; do
                 if [ -s "${i}" ]; then
                     CERT=$(cat "${i}" 2> /dev/null)
                 else
-                    echo "✗ file is empty: ‘${i}’" 1>&2
+                    warn "✗ file is empty: ‘${i}’"
                     continue
                 fi
             else
-                echo "✗ read permission not granted: ‘${i}’" 1>&2
+                warn "✗ read permission not granted: ‘${i}’"
                 continue
             fi
         else
-            echo "✗ not a regular file: ‘${i}’" 1>&2
+            warn "✗ not a regular file: ‘${i}’"
             continue
         fi
     else
         CERT=$(openssl s_client -connect "${i}" < /dev/null 2> /dev/null)
     fi
 
-    if [ "${CERT}" = '' ]; then
-        echo "✗ unable to establish tls connection: ‘${i}’" 1>&2
+    if [ -z "${CERT}" ]; then
+        warn "✗ unable to establish tls connection: ‘${i}’"
         continue
     fi
 

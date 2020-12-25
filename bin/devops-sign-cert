@@ -1,10 +1,52 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
+
+die () {
+    warn "${@}"
+    exit 1
+}
+
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
+
+trap notify ERR
+
+display_help () {
+    cat << EOF
+Synopsis:
+    ${0##*/} [OPTION]... CERT_NAME
+
+Options:
+    --algorithm ALGORITHM (ED25519 | ED448 | RSA)
+        use the specified public key algorithm (default: RSA)
+    --digest
+        enable digest (default: false)
+    --strict
+        enable strict verification (default: false)
+    --verbose
+        enable verbose inspection (default: false)
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+
+Arguments:
+    CERT_NAME
+        common name of the end certificate to be generated
+EOF
+}
 
 PUBLIC_KEY_ALGORITHM=RSA
 ENABLE_DIGEST=false
@@ -14,15 +56,14 @@ VERBOSE=false
 while (( $# > 0 )); do
     case ${1} in
     --algorithm)
-        : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
+        : "${2?✗ option parsing failed: missing value for ‘${1}’}"
         case ${2} in
         ED25519 | ED448 | RSA)
             PUBLIC_KEY_ALGORITHM=${2}
             shift 2
             ;;
         *)
-            echo "✗ argument parsing failed: acceptable values for ‘${1}’ are ED25519 | ED448 | RSA" 1>&2
-            exit 1
+            die "✗ option parsing failed: acceptable values for ‘${1}’ are ED25519 | ED448 | RSA"
             ;;
         esac
         ;;
@@ -39,28 +80,7 @@ while (( $# > 0 )); do
         shift
         ;;
     -h | --help)
-        cat << EOF
-Usage:
-    ${0##*/} [OPTION]... CERT_NAME
-
-Optional arguments:
-    --algorithm ALGORITHM (ED25519 | ED448 | RSA)
-        use the specified public key algorithm (default: RSA)
-    --digest
-        enable digest (default: false)
-    --strict
-        enable strict verification (default: false)
-    --verbose
-        enable verbose inspection (default: false)
-    -h, --help
-        show this help message and exit
-    -v, --version
-        output version information and exit
-
-Positional arguments:
-    CERT_NAME
-        common name of the end certificate to be generated
-EOF
+        display_help
         shift
         exit
         ;;
@@ -79,13 +99,18 @@ EOF
     esac
 done
 
-CERT_NAME=${1?✗ argument parsing failed: missing positional argument ‘CERT_NAME’}
+CERT_NAME=${1?✗ argument parsing failed: missing argument ‘CERT_NAME’}
 shift
 
 if (( $# > 0 )); then
-    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
-    exit 1
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
+
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
 
 digest () {
     echo '+--'

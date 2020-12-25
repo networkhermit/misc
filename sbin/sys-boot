@@ -1,29 +1,49 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
+
+die () {
+    warn "${@}"
+    exit 1
+}
+
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
+
+trap notify ERR
 
 if (( EUID != 0 )); then
-    echo '✗ This script must be run as root' 1>&2
-    exit 1
+    die '✗ This script must be run as root'
 fi
 
-while (( $# > 0 )); do
-    case ${1} in
-    -h | --help)
-        cat << EOF
-Usage:
+display_help () {
+    cat << EOF
+Synopsis:
     ${0##*/} [OPTION]...
 
-Optional arguments:
+Options:
     -h, --help
         show this help message and exit
     -v, --version
         output version information and exit
 EOF
+}
+
+while (( $# > 0 )); do
+    case ${1} in
+    -h | --help)
+        display_help
         shift
         exit
         ;;
@@ -43,13 +63,17 @@ EOF
 done
 
 if (( $# > 0 )); then
-    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
-    exit 1
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
 
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
+
 if [ "${OSTYPE}" != linux-gnu ]; then
-    echo "✗ unknown os type: ‘${OSTYPE}’" 1>&2
-    exit 1
+    die "✗ unknown os type: ‘${OSTYPE}’"
 fi
 
 # shellcheck disable=SC1090
@@ -78,7 +102,6 @@ opensuse*)
     grub2-mkconfig --output /boot/grub2/grub.cfg
     ;;
 *)
-    echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
-    exit 1
+    die "✗ unknown distro: ‘${DISTRO}’"
     ;;
 esac

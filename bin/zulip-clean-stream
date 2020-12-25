@@ -1,29 +1,50 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
 
-# shellcheck disable=SC1090
-source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/.privacy/zulip.cfg"
+die () {
+    warn "${@}"
+    exit 1
+}
 
-: "${MESSAGE_RETENTION:=86400}"
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
 
-while (( $# > 0 )); do
-    case ${1} in
-    -h | --help)
-        cat << EOF
-Usage:
+trap notify ERR
+
+display_help () {
+    cat << EOF
+Synopsis:
     ${0##*/} [OPTION]...
 
-Optional arguments:
+Options:
     -h, --help
         show this help message and exit
     -v, --version
         output version information and exit
 EOF
+}
+
+: "${MESSAGE_RETENTION:=86400}"
+
+# shellcheck disable=SC1090
+source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/.privacy/zulip.cfg"
+
+while (( $# > 0 )); do
+    case ${1} in
+    -h | --help)
+        display_help
         shift
         exit
         ;;
@@ -45,9 +66,14 @@ done
 export MESSAGE_RETENTION
 
 if (( $# > 0 )); then
-    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
-    exit 1
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
+
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
 
 list=$(curl --fail --location --silent --show-error --request GET \
     --get \

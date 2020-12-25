@@ -1,10 +1,42 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
+
+die () {
+    warn "${@}"
+    exit 1
+}
+
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
+
+trap notify ERR
+
+display_help () {
+    cat << EOF
+Synopsis:
+    ${0##*/} [OPTION]...
+
+Options:
+    --force
+        force repository synchronization (default: false)
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+EOF
+}
 
 FORCE_SYNC=false
 
@@ -15,18 +47,7 @@ while (( $# > 0 )); do
         shift
         ;;
     -h | --help)
-        cat << EOF
-Usage:
-    ${0##*/} [OPTION]...
-
-Optional arguments:
-    --force
-        force repository synchronization (default: false)
-    -h, --help
-        show this help message and exit
-    -v, --version
-        output version information and exit
-EOF
+        display_help
         shift
         exit
         ;;
@@ -46,9 +67,14 @@ EOF
 done
 
 if (( $# > 0 )); then
-    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
-    exit 1
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
+
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
 
 if [ "${FORCE_SYNC}" = true ]; then
     url=$(git remote get-url origin)

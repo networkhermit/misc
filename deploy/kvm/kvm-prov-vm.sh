@@ -1,45 +1,38 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
+
+die () {
+    warn "${@}"
+    exit 1
+}
+
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
+
+trap notify ERR
 
 if (( EUID != 0 )); then
-    echo '✗ This script must be run as root' 1>&2
-    exit 1
+    die '✗ This script must be run as root'
 fi
 
-CPU=4
-DIRECTORY=/var/local/images
-MEMORY=8192
-SIZE=40
-
-while (( $# > 0 )); do
-    case ${1} in
-    --cpu)
-        CPU=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
-        shift 2
-        ;;
-    --directory)
-        DIRECTORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
-        shift 2
-        ;;
-    --memory)
-        MEMORY=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
-        shift 2
-        ;;
-    --size)
-        SIZE=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
-        shift 2
-        ;;
-    -h | --help)
-        cat << EOF
-Usage:
+display_help () {
+    cat << EOF
+Synopsis:
     ${0##*/} [OPTION]... DISTRO NAME
 
-Optional arguments:
+Options:
     --cpu N
         number of virtual cpus to configure for the guest (default: 4)
     --directory DIRECTORY
@@ -53,12 +46,39 @@ Optional arguments:
     -v, --version
         output version information and exit
 
-Positional arguments:
+Arguments:
     DISTRO
         linux distro name (arch | fedora | kali | opensuse | ubuntu)
     NAME
         name of the new guest virtual machine instance
 EOF
+}
+
+CPU=4
+DIRECTORY=/var/local/images
+MEMORY=8192
+SIZE=40
+
+while (( $# > 0 )); do
+    case ${1} in
+    --cpu)
+        CPU=${2?✗ option parsing failed: missing value for argument ‘${1}’}
+        shift 2
+        ;;
+    --directory)
+        DIRECTORY=${2?✗ option parsing failed: missing value for argument ‘${1}’}
+        shift 2
+        ;;
+    --memory)
+        MEMORY=${2?✗ option parsing failed: missing value for argument ‘${1}’}
+        shift 2
+        ;;
+    --size)
+        SIZE=${2?✗ option parsing failed: missing value for argument ‘${1}’}
+        shift 2
+        ;;
+    -h | --help)
+        display_help
         shift
         exit
         ;;
@@ -77,14 +97,19 @@ EOF
     esac
 done
 
-DISTRO=${1?✗ argument parsing failed: missing positional argument ‘DISTRO’}
-NAME=${2?✗ argument parsing failed: missing positional argument ‘NAME’}
+DISTRO=${1?✗ argument parsing failed: missing argument ‘DISTRO’}
+NAME=${2?✗ argument parsing failed: missing argument ‘NAME’}
 shift 2
 
 if (( $# > 0 )); then
-    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
-    exit 1
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
+
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
 
 EXTRA_ARGUMENT=()
 
@@ -98,9 +123,9 @@ arch)
     EXTRA_ARGUMENT+=(--os-variant auto)
     ;;
 fedora)
-    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/32/Server/x86_64/os)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/33/Server/x86_64/os)
     EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-    EXTRA_ARGUMENT+=(--os-variant fedora32)
+    EXTRA_ARGUMENT+=(--os-variant fedora33)
     ;;
 kali)
     EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
@@ -118,8 +143,7 @@ ubuntu)
     EXTRA_ARGUMENT+=(--os-variant ubuntu20.04)
     ;;
 *)
-    echo "✗ unknown distro: ‘${DISTRO}’" 1>&2
-    exit
+    die "✗ unknown distro: ‘${DISTRO}’"
     ;;
 esac
 

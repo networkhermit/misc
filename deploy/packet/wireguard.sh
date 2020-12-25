@@ -1,15 +1,46 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
+
+die () {
+    warn "${@}"
+    exit 1
+}
+
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
+
+trap notify ERR
 
 if (( EUID != 0 )); then
-    echo '✗ This script must be run as root' 1>&2
-    exit 1
+    die '✗ This script must be run as root'
 fi
+
+display_help () {
+    cat << EOF
+Synopsis:
+    ${0##*/} [OPTION]...
+
+Options:
+    -s, --server
+        use server mode (default: false)
+    -h, --help
+        show this help message and exit
+    -v, --version
+        output version information and exit
+EOF
+}
 
 IP_ADDRESS=172.20.0.10/16
 SUBNET=172.20.0.0/16
@@ -33,18 +64,7 @@ while (( $# > 0 )); do
         shift
         ;;
     -h | --help)
-        cat << EOF
-Usage:
-    ${0##*/} [OPTION]...
-
-Optional arguments:
-    -s, --server
-        use server mode (default: false)
-    -h, --help
-        show this help message and exit
-    -v, --version
-        output version information and exit
-EOF
+        display_help
         shift
         exit
         ;;
@@ -64,9 +84,14 @@ EOF
 done
 
 if (( $# > 0 )); then
-    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
-    exit 1
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
+
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
 
 if [ -d /etc/wireguard/wg0.conf ]; then
     for i in "${PEER_LIST[@]}"; do

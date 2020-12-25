@@ -1,25 +1,34 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
 
-COUNT=64
+die () {
+    warn "${@}"
+    exit 1
+}
 
-while (( $# > 0 )); do
-    case ${1} in
-    -c | --count)
-        COUNT=${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}
-        shift 2
-        ;;
-    -h | --help)
-        cat << EOF
-Usage:
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
+
+trap notify ERR
+
+display_help () {
+    cat << EOF
+Synopsis:
     ${0##*/} [OPTION]...
 
-Optional arguments:
+Options:
     -c, --count N
         number of request packets to send (default: 64)
     -h, --help
@@ -27,6 +36,20 @@ Optional arguments:
     -v, --version
         output version information and exit
 EOF
+}
+
+COUNT=64
+
+NAMESERVER=$(awk '/nameserver/ { print $2 }' /etc/resolv.conf)
+
+while (( $# > 0 )); do
+    case ${1} in
+    -c | --count)
+        COUNT=${2?✗ option parsing failed: missing value for argument ‘${1}’}
+        shift 2
+        ;;
+    -h | --help)
+        display_help
         shift
         exit
         ;;
@@ -46,11 +69,14 @@ EOF
 done
 
 if (( $# > 0 )); then
-    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
-    exit 1
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
 
-NAMESERVER=$(awk '/nameserver/ { print $2 }' /etc/resolv.conf)
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
 
 for i in ${NAMESERVER}; do
     fping --count "${COUNT}" --quiet "${i}"

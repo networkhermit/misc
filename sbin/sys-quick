@@ -1,33 +1,53 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
+
+die () {
+    warn "${@}"
+    exit 1
+}
+
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
+
+trap notify ERR
 
 if (( EUID != 0 )); then
-    echo '✗ This script must be run as root' 1>&2
-    exit 1
+    die '✗ This script must be run as root'
 fi
 
-while (( $# > 0 )); do
-    case ${1} in
-    -h | --help)
-        cat << EOF
-Usage:
+display_help () {
+    cat << EOF
+Synopsis:
     ${0##*/} [OPTION]... ALIAS
 
-Optional arguments:
+Options:
     -h, --help
         show this help message and exit
     -v, --version
         output version information and exit
 
-Positional arguments:
+Arguments:
     ALIAS (netstat | iptables | ip6tables | ss)
         diagnostic launcher name
 EOF
+}
+
+while (( $# > 0 )); do
+    case ${1} in
+    -h | --help)
+        display_help
         shift
         exit
         ;;
@@ -46,22 +66,26 @@ EOF
     esac
 done
 
-: "${1?✗ argument parsing failed: missing positional argument ‘ALIAS’}"
+: "${1?✗ argument parsing failed: missing argument ‘ALIAS’}"
 case ${1} in
 netstat | iptables | ip6tables | ss)
     ALIAS=${1}
     ;;
 *)
-    echo "✗ argument parsing failed: acceptable values for ‘ALIAS’ are netstat | iptables | ip6tables | ss" 1>&2
-    exit 1
+    die "✗ argument parsing failed: acceptable values for ‘ALIAS’ are netstat | iptables | ip6tables | ss"
     ;;
 esac
 shift
 
 if (( $# > 0 )); then
-    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
-    exit 1
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
+
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
 
 separator=----------------------------------------------------------------
 

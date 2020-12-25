@@ -1,39 +1,38 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
+
+die () {
+    warn "${@}"
+    exit 1
+}
+
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
+
+trap notify ERR
 
 if (( EUID != 0 )); then
-    echo '✗ This script must be run as root' 1>&2
-    exit 1
+    die '✗ This script must be run as root'
 fi
 
-REGISTRY=gcr
-
-while (( $# > 0 )); do
-    case ${1} in
-    --registry)
-        : "${2?✗ argument parsing failed: missing parameter for argument ‘${1}’}"
-        case ${2} in
-        gcr | aliyun-registry)
-            REGISTRY=${2}
-            shift 2
-            ;;
-        *)
-            echo "✗ argument parsing failed: acceptable values for ‘${1}’ are gcr | aliyun-registry" 1>&2
-            exit 1
-            ;;
-        esac
-        ;;
-    -h | --help)
-        cat << EOF
-Usage:
+display_help () {
+    cat << EOF
+Synopsis:
     ${0##*/} [OPTION]...
 
-Optional arguments:
+Options:
     --registry REGISTRY (gcr | aliyun-registry)
         container registry to pull images from (default: gcr)
     -h, --help
@@ -41,6 +40,26 @@ Optional arguments:
     -v, --version
         output version information and exit
 EOF
+}
+
+REGISTRY=gcr
+
+while (( $# > 0 )); do
+    case ${1} in
+    --registry)
+        : "${2?✗ option parsing failed: missing value for argument ‘${1}’}"
+        case ${2} in
+        gcr | aliyun-registry)
+            REGISTRY=${2}
+            shift 2
+            ;;
+        *)
+            die "✗ option parsing failed: acceptable values for ‘${1}’ are gcr | aliyun-registry"
+            ;;
+        esac
+        ;;
+    -h | --help)
+        display_help
         shift
         exit
         ;;
@@ -60,9 +79,14 @@ EOF
 done
 
 if (( $# > 0 )); then
-    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
-    exit 1
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
+
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
 
 get_image_list () {
     if (( $# != 1 )); then

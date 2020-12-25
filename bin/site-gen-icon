@@ -1,28 +1,49 @@
 #!/bin/bash
 
 set -o errexit
+set -o errtrace
 set -o nounset
 set -o pipefail
 
-trap 'echo ✗ fatal error: errexit trapped with status $? 1>&2' ERR
+warn () {
+    if (( $# > 0 )); then
+        echo "${@}" 1>&2
+    fi
+}
 
-while (( $# > 0 )); do
-    case ${1} in
-    -h | --help)
-        cat << EOF
-Usage:
+die () {
+    warn "${@}"
+    exit 1
+}
+
+notify () {
+    local code=$?
+    warn "✗ [FATAL] $(caller): ${BASH_COMMAND} (${code})"
+}
+
+trap notify ERR
+
+display_help () {
+    cat << EOF
+Synopsis:
     ${0##*/} [OPTION]... INPUT_IMAGE
 
-Optional arguments:
+Options:
     -h, --help
         show this help message and exit
     -v, --version
         output version information and exit
 
-Positional arguments:
+Arguments:
     INPUT_IMAGE
         input image to be converted
 EOF
+}
+
+while (( $# > 0 )); do
+    case ${1} in
+    -h | --help)
+        display_help
         shift
         exit
         ;;
@@ -41,17 +62,21 @@ EOF
     esac
 done
 
-INPUT_IMAGE=${1?✗ argument parsing failed: missing positional argument ‘INPUT_IMAGE’}
+INPUT_IMAGE=${1?✗ argument parsing failed: missing argument ‘INPUT_IMAGE’}
 shift
 
 if (( $# > 0 )); then
-    echo "✗ argument parsing failed: unrecognizable argument ‘${1}’" 1>&2
-    exit 1
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
 
+clean_up () {
+    true
+}
+
+trap clean_up EXIT
+
 if [ ! -f "${INPUT_IMAGE}" ]; then
-    echo "✗ not a regular file: ‘${INPUT_IMAGE}’" 1>&2
-    exit 1
+    die "✗ not a regular file: ‘${INPUT_IMAGE}’"
 fi
 
 convert -background transparent "${INPUT_IMAGE}" -define icon:auto-resize=16,32 favicon.ico
