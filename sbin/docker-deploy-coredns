@@ -79,6 +79,7 @@ if [ -n "$(docker container ls --all --filter name='^/'${NAME}'$' --format '.')"
     docker container rm --volumes "${NAME}"
 fi
 
+# shellcheck disable=2102
 docker run \
     --detach \
     --hostname xyz \
@@ -89,7 +90,7 @@ docker run \
     --publish 172.24.0.1:53:53/udp \
     --publish 172.24.0.1:9153:9153 \
     --publish 53:53/tcp \
-    --publish '[::1]:53:53/udp' \
+    --publish [::1]:53:53/udp \
     --restart always \
     --volume /srv/coredns/Corefile:/Corefile \
     --volume /srv/coredns/zones:/zones \
