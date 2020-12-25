@@ -85,16 +85,16 @@ sudo install --group "$(id --group)" --mode 600 --owner "$(id --user)" --preserv
 
 # install pod network add-on
 ## cilium
-kubectl apply --filename 'https://raw.githubusercontent.com/cilium/cilium/1.9.1/install/kubernetes/quick-install.yaml'
+kubectl apply --filename https://raw.githubusercontent.com/cilium/cilium/1.9.1/install/kubernetes/quick-install.yaml
 ## kuberouter
-#kubectl apply --filename 'https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml'
+#kubectl apply --filename https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml
 #kubectl --namespace kube-system delete daemonsets kube-proxy
 
 # remove master node isolation
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
 # deploy kubernetes dashboard
-kubectl apply --filename 'https://raw.githubusercontent.com/kubernetes/dashboard/v2.1.0/aio/deploy/recommended.yaml'
+kubectl apply --filename https://raw.githubusercontent.com/kubernetes/dashboard/v2.1.0/aio/deploy/recommended.yaml
 kubectl create serviceaccount cluster-admin-dashboard --namespace kubernetes-dashboard
 kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kubernetes-dashboard:cluster-admin-dashboard
 
@@ -106,7 +106,7 @@ kubectl get pods --all-namespaces --output wide
 
 # access kubernetes dashboard
 kubectl get secret "$(kubectl get serviceaccount cluster-admin-dashboard --namespace kube-system --output jsonpath='{.secrets[].name}')" --namespace kube-system --output jsonpath="{.data['token']}" | base64 --decode && echo
-echo 'http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy'
+echo http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
 kubectl proxy
 
 # update kubernetes dashboard

@@ -83,11 +83,11 @@ docker run \
     --detach \
     --label maintainer=sysadmin@local.domain \
     --name "${NAME}" \
-    --net 'host' \
-    --pid 'host' \
+    --net host \
+    --pid host \
     --restart always \
-    --volume '/:/host:ro,rslave' \
-    prom/node-exporter --path.rootfs '/host' --web.listen-address '172.24.0.1:9100'
+    --volume /:/host:ro,rslave \
+    prom/node-exporter --path.rootfs /host --web.listen-address 172.24.0.1:9100
 
 docker image prune --force
 docker container logs "${NAME}"

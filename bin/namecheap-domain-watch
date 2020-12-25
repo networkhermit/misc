@@ -100,7 +100,7 @@ for i in ${WATCH_LIST}; do
             --data ActionName=RENEW \
             --data ProductName="${i}" \
             --data ProductType=DOMAIN \
-            'https://api.namecheap.com/xml.response'
+            https://api.namecheap.com/xml.response
         ) \
         | xargs --max-args 1 --no-run-if-empty \
         | awk --assign suffix="${i}" --assign rate="${CURRENCY_RATE}" --field-separator = 'BEGIN { printf suffix }; { printf ",%.2f", $2 * rate }; END { printf "\n" }'

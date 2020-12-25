@@ -79,10 +79,10 @@ list=$(curl --fail --location --silent --show-error --request GET \
     --header "Authorization: Bearer ${TOKEN}" \
     --get \
     --data "channel=${GROUP}" \
-    --data 'inclusive=true' \
-    --data 'limit=100' \
-    --data 'oldest=0' \
-    'https://slack.com/api/conversations.history' \
+    --data inclusive=true \
+    --data limit=100 \
+    --data oldest=0 \
+    https://slack.com/api/conversations.history \
     | python3 -c '
 import json
 import os
@@ -109,7 +109,7 @@ for i in ${list}; do
         --header "Authorization: Bearer ${TOKEN}" \
         --data "channel=${GROUP}" \
         --data "ts=${i}" \
-        'https://slack.com/api/chat.delete' \
+        https://slack.com/api/chat.delete \
         | python3 -c '
 import json
 import sys

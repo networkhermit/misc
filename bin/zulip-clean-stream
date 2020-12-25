@@ -77,9 +77,9 @@ trap clean_up EXIT
 
 list=$(curl --fail --location --silent --show-error --request GET \
     --get \
-    --data 'anchor=0' \
-    --data 'num_after=100' \
-    --data 'num_before=0' \
+    --data anchor=0 \
+    --data num_after=100 \
+    --data num_before=0 \
     --user "${BOT_EMAIL_ADDRESS}:${BOT_API_KEY}" \
     "https://${ORGANIZATION}.zulipchat.com/json/messages" \
     | python3 -c '

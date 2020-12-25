@@ -78,11 +78,11 @@ trap clean_up EXIT
 # Swiss Army Knife SMTP
 
 swaks \
-    --auth 'DIGEST-MD5,CRAM-MD5,PLAIN' \
+    --auth DIGEST-MD5,CRAM-MD5,PLAIN \
     --auth-password "${AUTH_PASSWORD}" \
     --auth-user "${AUTH_USER}" \
     --body - \
-    --ehlo 'Electronic-Frontier-Foundation' \
+    --ehlo Electronic-Frontier-Foundation \
     --from "${FROM}" \
     --header "Date: $(date -u --rfc-email)" \
     --header "Message-Id: <$(sha256sum <(date -u --rfc-3339=ns) | awk '{ print $1 }')@swaks>" \

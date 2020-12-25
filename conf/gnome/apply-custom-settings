@@ -68,4 +68,4 @@ clean_up () {
 
 trap clean_up EXIT
 
-gsettings set org.gnome.desktop.input-sources xkb-options '[]'
+gsettings set org.gnome.desktop.input-sources xkb-options []
