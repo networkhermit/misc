@@ -23,10 +23,6 @@ notify () {
 
 trap notify ERR
 
-if (( EUID != 0 )); then
-    die '✗ This script must be run as root'
-fi
-
 display_help () {
     cat << EOF
 Synopsis:
@@ -103,6 +99,10 @@ shift 2
 
 if (( $# > 0 )); then
     die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
+fi
+
+if (( EUID != 0 )); then
+    die '✗ This script must be run as root'
 fi
 
 clean_up () {
