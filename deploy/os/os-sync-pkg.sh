@@ -1594,7 +1594,7 @@ opensuse*)
         erlang{,-doc} \
         go{,-doc} \
         ghc \
-        java-14-openjdk{-headless,-javadoc} \
+        java-15-openjdk{-headless,-javadoc} \
         sbcl \
         nodejs14{,-docs} \
         ocaml \
