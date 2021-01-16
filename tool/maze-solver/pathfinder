@@ -26,17 +26,13 @@ trap notify ERR
 display_help () {
     cat << EOF
 Synopsis:
-    ${0##*/} [OPTION]... HOST
+    ${0##*/} [OPTION]...
 
 Options:
     -h, --help
         show this help message and exit
     -v, --version
         output version information and exit
-
-Arguments:
-    HOST
-        ssh host name
 EOF
 }
 
@@ -62,9 +58,6 @@ while (( $# > 0 )); do
     esac
 done
 
-HOST=${1?✗ argument parsing failed: missing argument ‘HOST’}
-shift
-
 if (( $# > 0 )); then
     die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
@@ -75,8 +68,8 @@ clean_up () {
 
 trap clean_up EXIT
 
-ssh -T "${HOST}" << 'EOF'
-    for i in {1..8}; do
-        echo "${i}"
-    done
-EOF
+#
+# Most Beautiful Hack
+#
+
+sed --regexp-extended --file solver.sed sample-maze

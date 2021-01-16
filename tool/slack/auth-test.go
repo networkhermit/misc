@@ -18,7 +18,7 @@ type object struct {
 }
 
 func main() {
-    file, err := ioutil.ReadFile("../.privacy/slack.json")
+    file, err := ioutil.ReadFile("../../.privacy/slack.json")
     if err != nil {
         log.Fatal(err)
     }
