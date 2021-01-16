@@ -71,7 +71,12 @@ if (( $# > 0 )); then
 fi
 
 clean_up () {
-    true
+    git gc --aggressive --prune
+    if [ "${ROOT_COMMIT}" = true ]; then
+        git push --force --set-upstream origin master
+    else
+        git push --set-upstream origin master
+    fi
 }
 
 trap clean_up EXIT
@@ -85,4 +90,3 @@ if [ "${ROOT_COMMIT}" = true ]; then
 fi
 
 GIT_AUTHOR_DATE=$(date --utc --iso-8601=s) GIT_COMMITTER_DATE=$(date --utc --iso-8601=s) TZ=UTC git commit --message 'This is where it all begins...'
-git push --force --prune --set-upstream origin master
