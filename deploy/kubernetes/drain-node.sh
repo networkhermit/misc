@@ -26,13 +26,17 @@ trap notify ERR
 display_help () {
     cat << EOF
 Synopsis:
-    ${0##*/} [OPTION]...
+    ${0##*/} [OPTION]... NODE_NAME
 
 Options:
     -h, --help
         show this help message and exit
     -v, --version
         output version information and exit
+
+Arguments:
+    NODE_NAME
+        node name
 EOF
 }
 
@@ -58,6 +62,9 @@ while (( $# > 0 )); do
     esac
 done
 
+NODE_NAME=${1?✗ argument parsing failed: missing argument ‘NODE_NAME’}
+shift
+
 if (( $# > 0 )); then
     die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
@@ -72,27 +79,7 @@ clean_up () {
 
 trap clean_up EXIT
 
-transfer_image () {
-    if (( $# != 2 )); then
-        return 1
-    fi
+export KUBECONFIG=/etc/kubernetes/admin.conf
 
-    local image
-    image=$(awk --field-separator / '{ print $NF }' <<< "${1}")
-
-    docker image tag "${1}" "${2}/${image}"
-    docker image push "${2}/${image}"
-    docker image rm "${2}/${image}"
-}
-
-## push k8s.gcr.io images to [${REGISTRY}]
-
-docker login --username "${USERNAME}" "${REGISTRY}"
-
-arr=()
-get_image_list arr
-for i in "${arr[@]}"; do
-    transfer_image "${i}" "${REGISTRY}/${NAMESPACE}"
-done
-
-docker logout "${REGISTRY}"
+kubectl drain "${NODE_NAME}" --delete-emptydir-data --force --ignore-daemonsets
+kubectl delete node "${NODE_NAME}"

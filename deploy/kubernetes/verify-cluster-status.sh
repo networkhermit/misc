@@ -72,27 +72,10 @@ clean_up () {
 
 trap clean_up EXIT
 
-transfer_image () {
-    if (( $# != 2 )); then
-        return 1
-    fi
+export KUBECONFIG=/etc/kubernetes/admin.conf
 
-    local image
-    image=$(awk --field-separator / '{ print $NF }' <<< "${1}")
-
-    docker image tag "${1}" "${2}/${image}"
-    docker image push "${2}/${image}"
-    docker image rm "${2}/${image}"
-}
-
-## push k8s.gcr.io images to [${REGISTRY}]
-
-docker login --username "${USERNAME}" "${REGISTRY}"
-
-arr=()
-get_image_list arr
-for i in "${arr[@]}"; do
-    transfer_image "${i}" "${REGISTRY}/${NAMESPACE}"
-done
-
-docker logout "${REGISTRY}"
+# verify cluster status
+kubectl cluster-info
+kubectl get configmaps --namespace kube-system kubeadm-config --output yaml
+kubectl get nodes --output wide
+kubectl get pods --all-namespaces --output wide

@@ -97,10 +97,10 @@ get_image_list () {
 
     arr_ref=()
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://raw.githubusercontent.com/cilium/cilium/1.9.1/install/kubernetes/quick-install.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://raw.githubusercontent.com/cilium/cilium/1.9.6/install/kubernetes/quick-install.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://raw.githubusercontent.com/kubernetes/dashboard/v2.1.0/aio/deploy/recommended.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://github.com/kubernetes/kube-state-metrics/blob/v1.9.7/examples/standard/deployment.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://raw.githubusercontent.com/kubernetes/kube-state-metrics/v2.0.0/examples/standard/deployment.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
 }
 

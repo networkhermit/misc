@@ -96,22 +96,20 @@ case ${NAME} in
 alertmanager)
     docker run \
         --detach \
-        --hostname xyz \
-        --label maintainer=sysadmin@local.domain \
+        --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
         --publish 172.24.0.1:9093:9093 \
         --restart always \
-        --volume /srv/alertmanager/data:/alertmanager \
-        --volume /srv/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml \
+        --mount type=bind,source=/srv/alertmanager/data,destination=/alertmanager \
+        --mount type=bind,source=/srv/alertmanager/alertmanager.yml,destination=/etc/alertmanager/alertmanager.yml \
         quay.io/prometheus/alertmanager
     ;;
 coredns)
     # shellcheck disable=2102
     docker run \
         --detach \
-        --hostname xyz \
-        --label maintainer=sysadmin@local.domain \
+        --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
         --publish 127.0.0.1:53:53/udp \
@@ -120,124 +118,121 @@ coredns)
         --publish 53:53/tcp \
         --publish [::1]:53:53/udp \
         --restart always \
-        --volume /srv/coredns/Corefile:/Corefile \
-        --volume /srv/coredns/zones:/zones \
+        --mount type=bind,source=/srv/coredns/Corefile,destination=/Corefile \
+        --mount type=bind,source=/srv/coredns/zones,destination=/zones \
         coredns/coredns
     ;;
 gotify)
     docker run \
         --detach \
-        --hostname xyz \
-        --label maintainer=sysadmin@local.domain \
+        --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
-        --publish 221:221 \
+        --publish 221:443 \
         --restart always \
-        --volume /srv/gotify/certs:/app/certs \
-        --volume /srv/gotify/config.yml:/etc/gotify/config.yml \
-        --volume /srv/gotify/data:/app/data \
+        --mount type=bind,source=/srv/gotify/certs,destination=/app/certs \
+        --mount type=bind,source=/srv/gotify/config.yml,destination=/etc/gotify/config.yml \
+        --mount type=bind,source=/srv/gotify/data,destination=/app/data \
         gotify/server
     ;;
 grafana)
     docker run \
         --detach \
         --env TZ="$(< /etc/timezone)" \
-        --hostname xyz \
-        --label maintainer=sysadmin@local.domain \
+        --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
         --publish 3000:3000 \
         --restart always \
-        --volume /srv/grafana/data:/var/lib/grafana \
-        --volume /srv/grafana/grafana.ini:/etc/grafana/grafana.ini \
+        --mount type=bind,source=/srv/grafana/data,destination=/var/lib/grafana \
+        --mount type=bind,source=/srv/grafana/grafana.ini,destination=/etc/grafana/grafana.ini \
         grafana/grafana
     ;;
 minio)
     docker run \
         --detach \
-        --hostname xyz \
-        --label maintainer=sysadmin@local.domain \
+        --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
-        --publish 256:9000 \
+        --publish 9000:9000 \
         --restart always \
-        --volume /srv/minio:/root/.minio \
-        --volume /srv/s3:/data \
-        minio/minio --json server /data
+        --mount type=bind,source=/srv/minio,destination=/root/.minio \
+        --mount type=bind,source=/srv/s3,destination=/data \
+        minio/minio \
+        --json server /data
     ;;
 mosquitto)
     docker run \
         --detach \
-        --hostname xyz \
-        --label maintainer=sysadmin@local.domain \
+        --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
         --publish 1883:1883 \
         --restart always \
-        --volume /srv/mosquitto:/mosquitto/config \
+        --mount type=bind,source=/srv/mosquitto,destination=/mosquitto/config \
         eclipse-mosquitto
     ;;
 nginx)
     docker run \
-        --hostname xyz \
-        --label maintainer=sysadmin@local.domain \
+        --detach \
+        --label maintainer=kubernetes-operator \
         --name nginx \
+        --network cluster \
         --publish 8000:80 \
-        --rm \
-        --volume "${PWD}":/usr/share/nginx/html \
-        --volume /srv/nginx/default.conf:/etc/nginx/conf.d/default.conf \
+        --restart always \
+        --mount type=bind,source=/srv/nginx/html,destination=/usr/share/nginx/html \
+        --mount type=bind,source=/srv/nginx/default.conf,destination=/etc/nginx/conf.d/default.conf \
         nginx
     exit
     ;;
 node-exporter)
     docker run \
         --detach \
-        --label maintainer=sysadmin@local.domain \
+        --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --net host \
         --pid host \
         --restart always \
-        --volume /:/host:ro,rslave \
-        prom/node-exporter --path.rootfs /host --web.listen-address 172.24.0.1:9100
+        --mount type=bind,source=/,destination=/host,readonly,bind-propagation=rslave \
+        prom/node-exporter \
+        --path.rootfs /host --web.listen-address 172.24.0.1:9100
     ;;
 postgres)
     docker run \
         --detach \
         --env POSTGRES_PASSWORD=bonsoir \
-        --hostname xyz \
-        --label maintainer=sysadmin@local.domain \
+        --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
         --publish 172.24.0.1:5432:5432 \
         --restart always \
-        --volume /srv/postgres/data:/var/lib/postgresql/data \
+        --mount type=bind,source=/srv/postgres/data,destination=/var/lib/postgresql/data \
         postgres:12
     ;;
 prometheus)
     docker run \
         --detach \
-        --hostname xyz \
-        --label maintainer=sysadmin@local.domain \
+        --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
         --publish 172.24.0.1:9090:9090 \
         --restart always \
-        --volume /srv/prometheus/data:/prometheus \
-        --volume /srv/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
-        --volume /srv/prometheus/conf.d:/etc/prometheus/conf.d \
+        --mount type=bind,source=/srv/prometheus/data,destination=/prometheus \
+        --mount type=bind,source=/srv/prometheus/prometheus.yml,destination=/etc/prometheus/prometheus.yml \
+        --mount type=bind,source=/srv/prometheus/conf.d,destination=/etc/prometheus/conf.d \
         prom/prometheus
     ;;
 *)
     docker run \
         --detach \
-        --hostname xyz \
-        --label maintainer=sysadmin@local.domain \
+        --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
         --publish 6666:6666 \
         --restart always \
-        --volume /srv/v2ray/config.json:/etc/v2ray/config.json \
-        v2fly/v2fly-core v2ray -config=/etc/v2ray/config.json
+        --mount type=bind,source=/srv/v2ray/config.json,destination=/etc/v2ray/config.json \
+        v2fly/v2fly-core \
+        v2ray -config=/etc/v2ray/config.json
     ;;
 esac
 

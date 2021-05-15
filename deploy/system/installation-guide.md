@@ -57,7 +57,6 @@ sudo tee /etc/resolv.conf << 'EOF'
 options attempts:1 rotate timeout:1 use-vc
 
 # [[ cloudflare ]]
-#nameserver ::1
 nameserver 1.1.1.1
 #nameserver 1.0.0.1
 

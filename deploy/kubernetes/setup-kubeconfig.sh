@@ -36,6 +36,8 @@ Options:
 EOF
 }
 
+ROLE=cluster-admin
+
 while (( $# > 0 )); do
     case ${1} in
     -h | --help)
@@ -72,27 +74,20 @@ clean_up () {
 
 trap clean_up EXIT
 
-transfer_image () {
-    if (( $# != 2 )); then
-        return 1
-    fi
-
-    local image
-    image=$(awk --field-separator / '{ print $NF }' <<< "${1}")
-
-    docker image tag "${1}" "${2}/${image}"
-    docker image push "${2}/${image}"
-    docker image rm "${2}/${image}"
-}
-
-## push k8s.gcr.io images to [${REGISTRY}]
-
-docker login --username "${USERNAME}" "${REGISTRY}"
-
-arr=()
-get_image_list arr
-for i in "${arr[@]}"; do
-    transfer_image "${i}" "${REGISTRY}/${NAMESPACE}"
-done
-
-docker logout "${REGISTRY}"
+if [ "${ROLE}" = cluster-admin ]; then
+    install \
+        --directory \
+        --group "$(id --group "${SUDO_USER}")" \
+        --mode 700 \
+        --owner "$(id --user "${SUDO_USER}")" \
+        "/home/${SUDO_USER}/.kube"
+    install \
+        --group "$(id --group "${SUDO_USER}")" \
+        --mode 600 \
+        --owner "$(id --user "${SUDO_USER}")" \
+        --preserve-timestamps \
+        /etc/kubernetes/admin.conf "/home/${SUDO_USER}/.kube/config"
+else
+    kubeadm alpha kubeconfig user --client-name "${SUDO_USER}"
+    kubectl create clusterrolebinding
+fi

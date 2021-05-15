@@ -6,14 +6,6 @@ hostname
 ip link
 sudo cat /sys/class/dmi/id/product_uuid
 
-# enable command line completion
-# shellcheck source=/dev/null
-source <(kubeadm completion bash)
-
-# enable command line completion
-# shellcheck source=/dev/null
-source <(kubectl completion bash)
-
 # discovery kubernetes api
 kubectl api-resources --sort-by name
 kubectl api-versions
@@ -23,4 +15,12 @@ kubectl get pods --all-namespaces --output jsonpath='{.items[*].spec.containers[
     | tr --squeeze-repeats '[:space:]' '\n' \
     | sort \
     | uniq
+
+# access kubernetes dashboard
+kubectl get secret "$(kubectl get serviceaccount cluster-admin-dashboard --namespace kube-system --output jsonpath='{.secrets[].name}')" --namespace kube-system --output jsonpath="{.data['token']}" | base64 --decode && echo
+echo http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+kubectl proxy
+
+# update kubernetes dashboard
+kubectl delete "$(kubectl get pod --namespace kube-system --output name | grep --word-regexp 'kubernetes-dashboard')" --namespace kube-system
 ```

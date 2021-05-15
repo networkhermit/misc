@@ -72,27 +72,22 @@ clean_up () {
 
 trap clean_up EXIT
 
-transfer_image () {
-    if (( $# != 2 )); then
-        return 1
-    fi
+kubeadm config print join-defaults
 
-    local image
-    image=$(awk --field-separator / '{ print $NF }' <<< "${1}")
+kubeadm token list
+TOKEN=$(kubeadm token create --ttl 2h)
+HASH=$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt \
+    | openssl rsa -pubin -outform der 2> /dev/null \
+    | openssl dgst -sha256 -hex | sed 's/^.* //')
+#kubeadm token create --print-join-command
 
-    docker image tag "${1}" "${2}/${image}"
-    docker image push "${2}/${image}"
-    docker image rm "${2}/${image}"
-}
-
-## push k8s.gcr.io images to [${REGISTRY}]
-
-docker login --username "${USERNAME}" "${REGISTRY}"
-
-arr=()
-get_image_list arr
-for i in "${arr[@]}"; do
-    transfer_image "${i}" "${REGISTRY}/${NAMESPACE}"
-done
-
-docker logout "${REGISTRY}"
+install --mode 600 /dev/null /etc/kubernetes/kubeadm.log
+#kubeadm join \
+#    --cri-socket /run/containerd/containerd.sock \
+#    --discovery-token "${TOKEN}" \
+#    --discovery-token-ca-cert-hash "sha256:${HASH}" \
+#    --tls-bootstrap-token "${TOKEN}" \
+#    "${CONTROL_PLANE_ENDPOINT}:${CONTROL_PLANE_PORT}" \
+#    |& tee /etc/kubernetes/kubeadm.log
+kubeadm join --config manifest/kubeadm-join-worker.yaml |& tee /etc/kubernetes/kubeadm.log
+systemctl enable kubelet.service

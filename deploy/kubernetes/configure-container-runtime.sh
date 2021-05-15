@@ -72,27 +72,17 @@ clean_up () {
 
 trap clean_up EXIT
 
-transfer_image () {
-    if (( $# != 2 )); then
-        return 1
-    fi
+mkdir --parents /etc/containerd
+if [ -f /etc/containerd/config.toml ]; then
+    cp --preserve /etc/containerd/config.toml{,.original}
+fi
+containerd config default | tee /etc/containerd/config.toml
 
-    local image
-    image=$(awk --field-separator / '{ print $NF }' <<< "${1}")
+cat << 'EOF'
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+  ...
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+    SystemdCgroup = true
+EOF
 
-    docker image tag "${1}" "${2}/${image}"
-    docker image push "${2}/${image}"
-    docker image rm "${2}/${image}"
-}
-
-## push k8s.gcr.io images to [${REGISTRY}]
-
-docker login --username "${USERNAME}" "${REGISTRY}"
-
-arr=()
-get_image_list arr
-for i in "${arr[@]}"; do
-    transfer_image "${i}" "${REGISTRY}/${NAMESPACE}"
-done
-
-docker logout "${REGISTRY}"
+systemctl restart containerd

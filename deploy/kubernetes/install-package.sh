@@ -62,6 +62,10 @@ if (( $# > 0 )); then
     die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
 fi
 
+if (( EUID != 0 )); then
+    die '✗ This script must be run as root'
+fi
+
 clean_up () {
     true
 }
@@ -74,7 +78,7 @@ GPG_HOME_DIR=$(mktemp --directory)
 curl --fail --location --silent --show-error https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:kubernetes.gpg --import
 ## aliyun repository
 curl --fail --location --silent --show-error https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:kubernetes.gpg --import
-sudo install --mode 644 "${GPG_HOME_DIR}/kubernetes.gpg" /etc/apt/trusted.gpg.d
+install --mode 644 "${GPG_HOME_DIR}/kubernetes.gpg" /etc/apt/trusted.gpg.d
 rm --force --recursive "${GPG_HOME_DIR}"
 unset GPG_HOME_DIR
 
@@ -83,32 +87,26 @@ unset GPG_HOME_DIR
 SOURCE_URI=https://packages.cloud.google.com/apt
 ## [tsinghua tuna]
 SOURCE_URI=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt
-sudo tee /etc/apt/sources.list.d/kubernetes.list << EOF
+tee /etc/apt/sources.list.d/kubernetes.list << EOF
 deb ${SOURCE_URI} kubernetes-xenial main
 EOF
 
 KUBERNETES_VERSION=
 
 # install kubernetes packages
-sudo apt update --list-cleanup
+apt update --list-cleanup
 if [ -n "${KUBERNETES_VERSION}" ]; then
     for i in kube{adm,ctl,let}; do
         K8S_PKG_VER["${i}"]=$(apt-cache madison "${i}" | grep "${KUBERNETES_VERSION}" | awk '{ print $3 }')
     done
 fi
-sudo apt install --allow-change-held-packages --assume-yes \
+apt install --allow-change-held-packages --assume-yes \
     kubeadm${K8S_PKG_VER:+=${K8S_PKG_VER[kubeadm]}} \
     kubectl${K8S_PKG_VER:+=${K8S_PKG_VER[kubectl]}} \
     kubelet${K8S_PKG_VER:+=${K8S_PKG_VER[kubelet]}} \
     < /dev/null
-sudo apt-mark hold kube{adm,ctl,let}
+apt-mark hold kube{adm,ctl,let}
 apt list kube{adm,ctl,let} --installed
 apt-mark showhold
-sudo systemctl disable --now kubelet.service
 
-# configure kernel parameter
-sudo tee /etc/sysctl.d/k8s.conf << 'EOF'
-net.bridge.bridge-nf-call-iptables = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-EOF
-sudo sysctl --system
+systemctl disable --now kubelet.service

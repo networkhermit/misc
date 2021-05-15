@@ -76,7 +76,9 @@ if [ "${OSTYPE}" != linux-gnu ]; then
     die "✗ unknown os type: ‘${OSTYPE}’"
 fi
 
-DISTRO=$(awk --field-separator = '/^ID=/ { print $2; exit }' /etc/os-release)
+# shellcheck disable=SC1090
+source <(grep '^ID=' /etc/os-release)
+DISTRO=${ID:-linux}
 
 ##################
 # CORE
@@ -376,7 +378,7 @@ arch)
         core/sed \
         core/tar \
         community/the_silver_searcher \
-        extra/time \
+        community/time \
         extra/tree \
         extra/unzip \
         core/which \
@@ -447,7 +449,6 @@ arch)
         core/dhcpcd \
         extra/dhclient \
         core/dnssec-anchors \
-        community/dnstracer \
         extra/ethtool \
         extra/fping \
         extra/geoip{,-database{,-extra}} \
@@ -488,8 +489,9 @@ arch)
         extra/whois \
         core/wireless_tools \
         community/wireshark-cli \
-        core/wpa_supplicant \
-        community/wrk
+        core/wpa_supplicant
+        #dnstracer
+        #wrk
 
     # PLT
     pacman --sync --needed \
@@ -735,8 +737,6 @@ fedora)
         ngrep \
         nikto \
         nmap \
-        ntp{,-doc} \
-        sntp \
         openssh{,-clients,-server} \
         openssl \
         publicsuffix-list \
@@ -753,7 +753,8 @@ fedora)
         wireless-tools \
         wireshark-cli \
         wpa_supplicant \
-        wrk
+        #ntp
+        #wrk
 
     # PLT
     dnf install \
@@ -892,7 +893,6 @@ kali)
         grep \
         gzip \
         hexyl \
-        hyperfine \
         jq \
         less \
         lynx \
@@ -920,6 +920,7 @@ kali)
         xz-utils \
         zip \
         zstd
+        #hyperfine
 
     # SYSADMIN
     apt install \
@@ -927,7 +928,7 @@ kali)
         borgbackup{,-doc} \
         btrfs-progs \
         cron \
-        cryptsetup-{initramfs,run} \
+        cryptsetup-initramfs \
         dkms \
         dmidecode \
         dmsetup \
@@ -966,7 +967,6 @@ kali)
         strace \
         sudo \
         rsyslog{,-doc} \
-        syslog-ng \
         sysstat \
         systemtap \
         thin-provisioning-tools \
@@ -975,13 +975,14 @@ kali)
         usbutils \
         xfsdump \
         xfsprogs
+        #syslog-ng
 
     GPG_HOME_DIR=$(mktemp --directory)
     curl --fail --location --silent --show-error https://download.sysdig.com/DRAIOS-GPG-KEY.public | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:sysdig.gpg --import
     install --mode 644 "${GPG_HOME_DIR}/sysdig.gpg" /etc/apt/trusted.gpg.d
     rm --force --recursive "${GPG_HOME_DIR}"
     unset GPG_HOME_DIR
-    tee /etc/apt/sources.list.d/osquery.list << EOF
+    tee /etc/apt/sources.list.d/sysdig.list << 'EOF'
 deb https://download.sysdig.com/stable/deb stable-$(ARCH)/
 EOF
     apt update --list-cleanup
@@ -993,7 +994,6 @@ EOF
         bind9-{dnsutils,host} \
         bridge-utils \
         ca-certificates \
-        chrony \
         curl \
         isc-dhcp-client \
         dns-root-data \
@@ -1023,7 +1023,7 @@ EOF
         ngrep \
         nikto \
         nmap \
-        ntp{,-doc} \
+        ntp-doc \
         sntp \
         openssh-{client,server,sftp-server} \
         openssl \
@@ -1042,6 +1042,8 @@ EOF
         wireshark{,-doc} \
         wpasupplicant \
         wrk
+        #chrony
+        #ntp
 
     # PLT
     apt install \
@@ -1207,7 +1209,7 @@ manjaro)
         core/sed \
         core/tar \
         community/the_silver_searcher \
-        extra/time \
+        community/time \
         extra/tree \
         extra/unzip \
         core/which \
@@ -1278,7 +1280,6 @@ manjaro)
         core/dhcpcd \
         extra/dhclient \
         core/dnssec-anchors \
-        community/dnstracer \
         extra/ethtool \
         extra/fping \
         extra/geoip{,-database{,-extra}} \
@@ -1319,8 +1320,9 @@ manjaro)
         extra/whois \
         core/wireless_tools \
         community/wireshark-cli \
-        core/wpa_supplicant \
-        community/wrk
+        core/wpa_supplicant
+        #dnstracer
+        #wrk
 
     # PLT
     pacman --sync --needed \
@@ -1440,7 +1442,6 @@ opensuse*)
         gpg2 \
         grep \
         gzip \
-        hexyl \
         hyperfine \
         jq \
         less \
@@ -1469,6 +1470,7 @@ opensuse*)
         xz \
         zip \
         zstd
+        #hexyl
 
     # SYSADMIN
     zypper install \
@@ -1482,7 +1484,6 @@ opensuse*)
         dkms \
         dmidecode \
         e2fsprogs \
-        exim \
         fakeroot \
         glances \
         gptfdisk \
@@ -1514,8 +1515,7 @@ opensuse*)
         strace \
         sudo \
         sysdig \
-        rsyslog{,-doc} \
-        syslog-ng \
+        rsyslog-doc \
         sysstat \
         systemtap \
         thin-provisioning-tools \
@@ -1524,6 +1524,9 @@ opensuse*)
         usbutils \
         xfsdump \
         xfsprogs
+        #exim
+        #rsyslog
+        #syslog-ng
 
     # NETWORK OPERATOR
     zypper install \
@@ -1537,7 +1540,6 @@ opensuse*)
         dnstracer \
         ethtool \
         fping \
-        GeoIP{,-data} \
         goaccess \
         hostname \
         python3-httpie \
@@ -1578,6 +1580,7 @@ opensuse*)
         wireshark \
         wpa_supplicant \
         wrk
+        #geoip
 
     # PLT
     zypper install \
@@ -1586,8 +1589,8 @@ opensuse*)
         gdb \
         valgrind \
         gcc-c++ \
-        clang{,11-doc} \
-        llvm{,11-doc} \
+        clang{,12-doc} \
+        llvm{,12-doc} \
         lld \
         lldb \
         elixir{,-doc} \
@@ -1596,9 +1599,9 @@ opensuse*)
         ghc \
         java-15-openjdk{-headless,-javadoc} \
         sbcl \
-        nodejs14{,-docs} \
+        nodejs15{,-docs} \
         ocaml \
-        php7 \
+        php8 \
         python3{,-doc,-pip,-virtualenv} \
         ruby{,2.7-doc} \
         rust{,-doc,-src} \
@@ -1700,7 +1703,6 @@ ubuntu)
         grep \
         gzip \
         hexyl \
-        hyperfine \
         jq \
         less \
         lynx \
@@ -1728,6 +1730,7 @@ ubuntu)
         xz-utils \
         zip \
         zstd
+        #hyperfine
 
     # SYSADMIN
     apt install \
@@ -1775,7 +1778,6 @@ ubuntu)
         sudo \
         sysdig \
         rsyslog{,-doc} \
-        syslog-ng \
         sysstat \
         systemtap \
         thin-provisioning-tools \
@@ -1784,6 +1786,7 @@ ubuntu)
         usbutils \
         xfsdump \
         xfsprogs
+        #syslog-ng
 
     # NETWORK OPERATOR
     apt install \
@@ -1791,7 +1794,6 @@ ubuntu)
         bind9-{dnsutils,host} \
         bridge-utils \
         ca-certificates \
-        chrony \
         curl \
         isc-dhcp-client \
         dns-root-data \
@@ -1821,7 +1823,7 @@ ubuntu)
         ngrep \
         nikto \
         nmap \
-        ntp{,-doc} \
+        ntp-doc \
         sntp \
         openssh-{client,server,sftp-server} \
         openssl \
@@ -1840,6 +1842,8 @@ ubuntu)
         wireshark{,-doc} \
         wpasupplicant \
         wrk
+        #chrony
+        #ntp
 
     # PLT
     apt install \
@@ -1848,8 +1852,8 @@ ubuntu)
         gdb{,-doc} \
         valgrind \
         g++ \
-        clang{,-11-doc,-format} \
-        llvm{,-11-doc} \
+        clang{,-12-doc,-format} \
+        llvm{,-12-doc} \
         lld \
         lldb \
         elixir \
@@ -1888,13 +1892,14 @@ ubuntu)
         libguestfs-tools \
         libvirt-{clients,daemon-system} \
         nginx-{doc,full} \
-        libnginx-mod-http-{auth-pam,lua} \
+        libnginx-mod-http-auth-pam \
         oathtool \
         libpam-{doc,google-authenticator,modules{,-bin}} \
         qemu-{system-x86,utils} \
         tig \
         virtinst \
         wireguard-tools
+        #libnginx-mod-http-lua
 
     GPG_HOME_DIR=$(mktemp --directory)
     curl --fail --location --silent --show-error https://repo.saltstack.com/py3/ubuntu/20.04/amd64/latest/SALTSTACK-GPG-KEY.pub | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:saltstack.gpg --import
