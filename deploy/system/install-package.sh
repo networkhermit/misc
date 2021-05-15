@@ -752,7 +752,7 @@ fedora)
         whois \
         wireless-tools \
         wireshark-cli \
-        wpa_supplicant \
+        wpa_supplicant
         #ntp
         #wrk
 
