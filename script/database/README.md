@@ -13,8 +13,8 @@ grant all on database demo to demo;
 
 # dump database
 
-pg_dump --host 127.0.0.1 --port 5432 --username demo --schema-only demo
-pg_dump --host 127.0.0.1 --port 5432 --username demo --data-only --inserts demo
+pg_dump --host 127.0.0.1 --port 5432 --username postgres --schema-only demo
+pg_dump --host 127.0.0.1 --port 5432 --username postgres --data-only --inserts demo
 ```
 
 ```sql
