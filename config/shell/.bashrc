@@ -62,16 +62,6 @@ export VISUAL=vim
 # PATH
 export PATH=${PATH}:~/STEM/bin
 
-# LIBRARY
-export C_INCLUDE_PATH=~/STEM/lib/plt/c/src
-export CPLUS_INCLUDE_PATH=~/STEM/lib/plt/c++/src
-export GOPATH=~/STEM/lib/plt/go
-export LISP_PATH=~/STEM/lib/plt/lisp/src
-export CLASSPATH=.:~/STEM/lib/plt/java/src
-export NODE_PATH=~/STEM/lib/plt/nodejs/src
-export PYTHONPATH=~/STEM/lib/plt/python/src
-export RUBYLIB=~/STEM/lib/plt/ruby/src
-
 # ALIAS
 alias acp='scp -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias ash='ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
