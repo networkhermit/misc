@@ -68,7 +68,7 @@ clean_up () {
 
 trap clean_up EXIT
 
-if [ "${OSTYPE}" != linux-gnu ]; then
+if [ "${OSTYPE}" != linux-gnu ] && [ "${OSTYPE}" != linux ]; then
     die "✗ unknown os type: ‘${OSTYPE}’"
 fi
 
