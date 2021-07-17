@@ -1604,8 +1604,8 @@ opensuse*)
         php8 \
         python3{,-doc,-pip,-virtualenv} \
         ruby{,2.7-doc} \
-        rust{,-doc,-src} \
-        cargo{,-doc}
+        rust \
+        cargo
 
     # GAME
     zypper install \
