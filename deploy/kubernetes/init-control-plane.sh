@@ -92,7 +92,7 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # install pod network add-on
 ## cilium
-kubectl apply --filename https://raw.githubusercontent.com/cilium/cilium/1.9.6/install/kubernetes/quick-install.yaml
+cilium install --version v1.10.4
 ## kuberouter
 #kubectl apply --filename https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml
 

@@ -74,6 +74,6 @@ trap clean_up EXIT
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
-kubectl apply --filename https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
+kubectl apply --filename https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
 kubectl create serviceaccount cluster-admin-dashboard --namespace kubernetes-dashboard
 kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kubernetes-dashboard:cluster-admin-dashboard

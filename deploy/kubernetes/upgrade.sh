@@ -97,7 +97,7 @@ kubeadm upgrade apply "$(kubeadm version --output short)" --yes
 kubeadm upgrade node --dry-run
 kubeadm upgrade node
 
-kubectl drain "${HOSTNAME,,}" --ignore-daemonsets
+kubectl drain "${HOSTNAME,,}" --delete-emptydir-data --ignore-daemonsets
 apt install --allow-change-held-packages --assume-yes kubelet${K8S_PKG_VER:+=${K8S_PKG_VER[kubelet]}} kubectl${K8S_PKG_VER:+=${K8S_PKG_VER[kubectl]}} < /dev/null
 apt-mark hold kubelet kubectl
 systemctl restart kubelet.service
