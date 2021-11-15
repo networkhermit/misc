@@ -1589,8 +1589,8 @@ opensuse*)
         gdb \
         valgrind \
         gcc-c++ \
-        clang{,12-doc} \
-        llvm{,12-doc} \
+        clang{,13-doc} \
+        llvm{,13-doc} \
         lld \
         lldb \
         elixir{,-doc} \
@@ -1599,7 +1599,7 @@ opensuse*)
         ghc \
         java-15-openjdk{-headless,-javadoc} \
         sbcl \
-        nodejs15{,-docs} \
+        nodejs16{,-docs} \
         ocaml \
         php8 \
         python3{,-doc,-pip,-virtualenv} \
@@ -1852,8 +1852,8 @@ ubuntu)
         gdb{,-doc} \
         valgrind \
         g++ \
-        clang{,-12-doc,-format} \
-        llvm{,-12-doc} \
+        clang{,-13-doc,-format} \
+        llvm{,-13-doc} \
         lld \
         lldb \
         elixir \

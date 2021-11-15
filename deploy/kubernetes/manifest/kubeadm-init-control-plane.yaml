@@ -11,7 +11,7 @@ apiVersion: kubeadm.k8s.io/v1beta3
 controlPlaneEndpoint: k8s.cncf.site:6443
 imageRepository: k8s.gcr.io
 kind: ClusterConfiguration
-kubernetesVersion: v1.22.1
+kubernetesVersion: v1.22.3
 networking:
     podSubnet: 10.0.0.0/16
     serviceSubnet: 10.96.0.0/12
