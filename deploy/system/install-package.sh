@@ -294,6 +294,7 @@ DISTRO=${ID:-linux}
 ##################
 # DevOps
 #       ansible
+#       bcc
 #       caddy
 #       certbot
 #       dnsmasq
@@ -529,6 +530,8 @@ arch)
     pacman --sync --needed \
         community/ansible{,-lint} \
         community/python-argcomplete \
+        community/bcc-tools \
+        community/python-bcc \
         community/certbot \
         extra/dnsmasq \
         community/docker \
@@ -794,6 +797,9 @@ fedora)
     dnf install \
         ansible{,-doc} \
         python3-argcomplete \
+        bcc-tools \
+        python3-bcc \
+        bcc-doc \
         caddy \
         certbot \
         dnsmasq \
@@ -1083,6 +1089,8 @@ EOF
     apt install \
         ansible{,-lint} \
         python3-argcomplete \
+        bpfcc-tools \
+        python3-bpfcc \
         certbot \
         python-certbot-doc \
         dnsmasq \
@@ -1360,6 +1368,8 @@ manjaro)
     pacman --sync --needed \
         community/ansible{,-lint} \
         community/python-argcomplete \
+        community/bcc-tools \
+        community/python-bcc \
         community/certbot \
         extra/dnsmasq \
         community/docker \
@@ -1620,6 +1630,9 @@ opensuse*)
     zypper install \
         ansible{,-doc} \
         python3-argcomplete \
+        bcc-tools \
+        python3-bcc \
+        bcc-docs \
         python3-certbot \
         dnsmasq \
         docker \
@@ -1883,6 +1896,8 @@ ubuntu)
     apt install \
         ansible{,-lint} \
         python3-argcomplete \
+        bpfcc-tools \
+        python3-bpfcc \
         certbot \
         dnsmasq \
         python-certbot-doc \
