@@ -515,7 +515,7 @@ arch)
         extra/php \
         extra/python{,-pip,-virtualenv} \
         extra/ruby{,-docs} \
-        extra/rust{,-docs}
+        extra/rust
 
     # GAME
     pacman --sync --needed \
@@ -1353,7 +1353,7 @@ manjaro)
         extra/php \
         extra/python{,-pip,-virtualenv} \
         extra/ruby{,-docs} \
-        extra/rust{,-docs}
+        extra/rust
 
     # GAME
     pacman --sync --needed \
