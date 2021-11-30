@@ -93,8 +93,6 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 # install pod network add-on
 ## cilium
 cilium install --version v1.10.5
-## kuberouter
-#kubectl apply --filename https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml
 
 # remove master node isolation
 kubectl taint nodes --all node-role.kubernetes.io/master-
