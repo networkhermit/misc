@@ -11,6 +11,7 @@
     "terminal.integrated.commandsToSkipShell": [
         "-workbench.action.quickOpen"
     ],
+    "terminal.integrated.enablePersistentSessions": false,
     "update.mode": "manual",
     "vim.history": 1,
     "window.menuBarVisibility": "toggle",
