@@ -64,11 +64,11 @@ done
 
 NAME=${1?✗ argument parsing failed: missing argument ‘NAME’}
 case ${1} in
-alertmanager | coredns | gotify | grafana | minio | mosquitto | nginx | node-exporter | postgres | prometheus | v2ray)
+alertmanager | caddy | coredns | gotify | grafana | minio | mosquitto | nginx | node-exporter | postgres | prometheus | v2ray)
     NAME=${1}
     ;;
 *)
-    die "✗ argument parsing failed: acceptable values for ‘NAME’ are alertmanager | coredns | gotify | grafana | minio | mosquitto | nginx | node-exporter | postgres | prometheus | v2ray"
+    die "✗ argument parsing failed: acceptable values for ‘NAME’ are alertmanager | caddy | coredns | gotify | grafana | minio | mosquitto | nginx | node-exporter | postgres | prometheus | v2ray"
     ;;
 esac
 shift
@@ -104,6 +104,20 @@ alertmanager)
         --mount type=bind,source=/srv/alertmanager/data,destination=/alertmanager \
         --mount type=bind,source=/srv/alertmanager/alertmanager.yml,destination=/etc/alertmanager/alertmanager.yml \
         quay.io/prometheus/alertmanager
+    ;;
+caddy)
+    docker run \
+        --detach \
+        --label maintainer=kubernetes-operator \
+        --name "${NAME}" \
+        --network cluster \
+        --publish 80:80 \
+        --publish 443:443 \
+        --restart always \
+        --mount type=bind,source=/srv/caddy/Caddyfile,destination=/etc/caddy/Caddyfile \
+        --mount type=bind,source=/srv/caddy/config,destination=/config \
+        --mount type=bind,source=/srv/caddy/data,destination=/data \
+        caddy
     ;;
 coredns)
     # shellcheck disable=2102

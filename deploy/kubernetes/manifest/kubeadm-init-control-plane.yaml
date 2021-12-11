@@ -11,7 +11,7 @@ apiVersion: kubeadm.k8s.io/v1beta3
 controlPlaneEndpoint: k8s.cncf.site:6443
 imageRepository: k8s.gcr.io
 kind: ClusterConfiguration
-kubernetesVersion: v1.22.4
+kubernetesVersion: v1.23.0
 networking:
     podSubnet: 10.0.0.0/16
     serviceSubnet: 10.96.0.0/12
@@ -21,6 +21,7 @@ cgroupDriver: systemd
 clusterDNS:
     - 10.96.0.10
 kind: KubeletConfiguration
+serverTLSBootstrap: true
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
