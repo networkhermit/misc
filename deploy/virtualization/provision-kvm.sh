@@ -123,9 +123,9 @@ arch)
     EXTRA_ARGUMENT+=(--os-variant auto)
     ;;
 fedora)
-    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/34/Server/x86_64/os)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/35/Server/x86_64/os)
     EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-    EXTRA_ARGUMENT+=(--os-variant fedora34)
+    EXTRA_ARGUMENT+=(--os-variant fedora35)
     ;;
 kali)
     EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
@@ -138,9 +138,9 @@ opensuse)
     EXTRA_ARGUMENT+=(--os-variant opensusetumbleweed)
     ;;
 ubuntu)
-    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/hirsute/main/installer-amd64)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/impish/main/installer-amd64)
     EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-    EXTRA_ARGUMENT+=(--os-variant ubuntu21.04)
+    EXTRA_ARGUMENT+=(--os-variant ubuntu21.10)
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"

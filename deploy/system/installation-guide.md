@@ -498,7 +498,6 @@ Fedora
 # modify dns resolver
 
 # configure default address selection
-sudo cp /usr/share/doc/glibc-common/gai.conf /etc
 
 # modify default ntp server
 

@@ -740,6 +740,7 @@ fedora)
         ngrep \
         nikto \
         nmap \
+        ntpsec \
         openssh{,-clients,-server} \
         openssl \
         publicsuffix-list \
@@ -756,7 +757,6 @@ fedora)
         wireless-tools \
         wireshark-cli \
         wpa_supplicant
-        #ntp
         #wrk
 
     # PLT
@@ -983,11 +983,7 @@ kali)
         xfsprogs
         #syslog-ng
 
-    GPG_HOME_DIR=$(mktemp --directory)
-    curl --fail --location --silent --show-error https://download.sysdig.com/DRAIOS-GPG-KEY.public | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:sysdig.gpg --import
-    install --mode 644 "${GPG_HOME_DIR}/sysdig.gpg" /etc/apt/trusted.gpg.d
-    rm --force --recursive "${GPG_HOME_DIR}"
-    unset GPG_HOME_DIR
+    curl --fail --location --silent --show-error https://download.sysdig.com/DRAIOS-GPG-KEY.public | gpg --dearmor --output /etc/apt/trusted.gpg.d/sysdig.gpg
     tee /etc/apt/sources.list.d/sysdig.list << 'EOF'
 deb https://download.sysdig.com/stable/deb stable-$(ARCH)/
 EOF
@@ -1000,6 +996,7 @@ EOF
         bind9-{dnsutils,host} \
         bridge-utils \
         ca-certificates \
+        chrony \
         curl \
         isc-dhcp-client \
         dns-root-data \
@@ -1031,6 +1028,7 @@ EOF
         nmap \
         ntp-doc \
         sntp \
+        ntpsec-doc \
         openssh-{client,server,sftp-server} \
         openssl \
         publicsuffix \
@@ -1048,8 +1046,8 @@ EOF
         wireshark{,-doc} \
         wpasupplicant \
         wrk
-        #chrony
         #ntp
+        #ntpsec
 
     # PLT
     apt install \
@@ -1104,31 +1102,12 @@ EOF
         oathtool \
         libpam-{doc,google-authenticator,modules{,-bin}} \
         qemu-{system-x86,utils} \
+        salt-{api,cloud,master,minion,ssh,syndic} \
         tig \
         virtinst \
         wireguard-tools
 
-    GPG_HOME_DIR=$(mktemp --directory)
-    curl --fail --location --silent --show-error https://repo.saltstack.com/py3/debian/10/amd64/latest/SALTSTACK-GPG-KEY.pub | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:saltstack.gpg --import
-    install --mode 644 "${GPG_HOME_DIR}/saltstack.gpg" /etc/apt/trusted.gpg.d
-    rm --force --recursive "${GPG_HOME_DIR}"
-    unset GPG_HOME_DIR
-    ## saltstack [official]
-    tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] https://repo.saltstack.com/py3/debian/10/amd64/latest buster main
-EOF
-    ## saltstack [tsinghua]
-    tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/saltstack/py3/debian/10/amd64/latest buster main
-EOF
-    apt update --list-cleanup
-    apt install salt-{api,cloud,master,minion,ssh,syndic}
-
-    GPG_HOME_DIR=$(mktemp --directory)
-    gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:osquery.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
-    install --mode 644 "${GPG_HOME_DIR}/osquery.gpg" /etc/apt/trusted.gpg.d
-    rm --force --recursive "${GPG_HOME_DIR}"
-    unset GPG_HOME_DIR
+    curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/osquery.gpg https://pkg.osquery.io/deb/keyring.gpg
     tee /etc/apt/sources.list.d/osquery.list << 'EOF'
 deb [arch=amd64] https://pkg.osquery.io/deb deb main
 EOF
@@ -1807,6 +1786,7 @@ ubuntu)
         bind9-{dnsutils,host} \
         bridge-utils \
         ca-certificates \
+        chrony \
         curl \
         isc-dhcp-client \
         dns-root-data \
@@ -1838,6 +1818,7 @@ ubuntu)
         nmap \
         ntp-doc \
         sntp \
+        ntpsec-doc \
         openssh-{client,server,sftp-server} \
         openssl \
         publicsuffix \
@@ -1855,8 +1836,8 @@ ubuntu)
         wireshark{,-doc} \
         wpasupplicant \
         wrk
-        #chrony
         #ntp
+        #ntpsec
 
     # PLT
     apt install \
@@ -1911,32 +1892,13 @@ ubuntu)
         oathtool \
         libpam-{doc,google-authenticator,modules{,-bin}} \
         qemu-{system-x86,utils} \
+        salt-{api,cloud,master,minion,ssh,syndic} \
         tig \
         virtinst \
         wireguard-tools
         #libnginx-mod-http-lua
 
-    GPG_HOME_DIR=$(mktemp --directory)
-    curl --fail --location --silent --show-error https://repo.saltstack.com/py3/ubuntu/20.04/amd64/latest/SALTSTACK-GPG-KEY.pub | gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:saltstack.gpg --import
-    install --mode 644 "${GPG_HOME_DIR}/saltstack.gpg" /etc/apt/trusted.gpg.d
-    rm --force --recursive "${GPG_HOME_DIR}"
-    unset GPG_HOME_DIR
-    ## saltstack [official]
-    tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] https://repo.saltstack.com/py3/ubuntu/20.04/amd64/latest focal main
-EOF
-    ## saltstack [tsinghua]
-    tee /etc/apt/sources.list.d/saltstack.list << 'EOF'
-deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/saltstack/py3/ubuntu/20.04/amd64/latest focal main
-EOF
-    apt update --list-cleanup
-    apt install salt-{api,cloud,master,minion,ssh,syndic}
-
-    GPG_HOME_DIR=$(mktemp --directory)
-    gpg --homedir "${GPG_HOME_DIR}" --no-default-keyring --keyring gnupg-ring:osquery.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
-    install --mode 644 "${GPG_HOME_DIR}/osquery.gpg" /etc/apt/trusted.gpg.d
-    rm --force --recursive "${GPG_HOME_DIR}"
-    unset GPG_HOME_DIR
+    curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/osquery.gpg https://pkg.osquery.io/deb/keyring.gpg
     tee /etc/apt/sources.list.d/osquery.list << 'EOF'
 deb [arch=amd64] https://pkg.osquery.io/deb deb main
 EOF
