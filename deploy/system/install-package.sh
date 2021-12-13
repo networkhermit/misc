@@ -1505,6 +1505,7 @@ opensuse*)
         sudo \
         sysdig \
         rsyslog-doc \
+        syslog-ng \
         sysstat \
         systemtap \
         thin-provisioning-tools \
@@ -1515,7 +1516,6 @@ opensuse*)
         xfsprogs
         #exim
         #rsyslog
-        #syslog-ng
 
     # NETWORK OPERATOR
     zypper install \
@@ -1588,7 +1588,7 @@ opensuse*)
         erlang{,-doc} \
         go{,-doc} \
         ghc \
-        java-15-openjdk{-headless,-javadoc} \
+        java-17-openjdk{-headless,-javadoc} \
         sbcl \
         nodejs16{,-docs} \
         ocaml \

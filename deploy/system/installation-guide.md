@@ -140,6 +140,7 @@ sudo tee /etc/yum.repos.d/fedora.repo << 'EOF'
 name=Fedora $releasever - $basearch
 baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Everything/$basearch/os/
 enabled=1
+countme=1
 metadata_expire=7d
 repo_gpgcheck=0
 type=rpm
@@ -152,6 +153,7 @@ sudo tee /etc/yum.repos.d/fedora-updates.repo << 'EOF'
 name=Fedora $releasever - $basearch - Updates
 baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Everything/$basearch/
 enabled=1
+countme=1
 repo_gpgcheck=0
 type=rpm
 gpgcheck=1
@@ -164,6 +166,7 @@ sudo tee /etc/yum.repos.d/fedora-modular.repo << 'EOF'
 name=Fedora Modular $releasever - $basearch
 baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Modular/$basearch/os/
 enabled=1
+countme=1
 metadata_expire=7d
 repo_gpgcheck=0
 type=rpm
@@ -174,9 +177,9 @@ EOF
 sudo tee /etc/yum.repos.d/fedora-updates-modular.repo << 'EOF'
 [updates-modular]
 name=Fedora Modular $releasever - $basearch - Updates
-failovermethod=priority
 baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Modular/$basearch/
 enabled=1
+countme=1
 repo_gpgcheck=0
 type=rpm
 gpgcheck=1
@@ -202,20 +205,19 @@ sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghu
 sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/update/tumbleweed/ tumbleweed-update
 # https://build.opensuse.org/project
 # https://download.opensuse.org
-sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/network/openSUSE_Tumbleweed/network.repo
 sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/security/openSUSE_Tumbleweed/security.repo
 sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/utilities/openSUSE_Factory/utilities.repo
 ## ubuntu
 sudo tee /etc/apt/sources.list << 'EOF'
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-backports main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-security main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-updates main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-backports main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-security main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-updates main restricted universe multiverse
 
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal main restricted universe multiverse
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-backports main restricted universe multiverse
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-security main restricted universe multiverse
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-updates main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-backports main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-security main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-updates main restricted universe multiverse
 EOF
 
 # make distro sync
@@ -824,13 +826,13 @@ https://archive.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/im
 
 ```
 # linux kernel archive
-deb https://mirrors.kernel.org/ubuntu focal main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu focal-backports main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu focal-security main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu focal-updates main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu impish main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu impish-backports main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu impish-security main restricted universe multiverse
+deb https://mirrors.kernel.org/ubuntu impish-updates main restricted universe multiverse
 
-deb-src https://mirrors.kernel.org/ubuntu focal main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu focal-backports main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu focal-security main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu focal-updates main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu impish main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu impish-backports main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu impish-security main restricted universe multiverse
+deb-src https://mirrors.kernel.org/ubuntu impish-updates main restricted universe multiverse
 ```
