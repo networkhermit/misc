@@ -1529,6 +1529,7 @@ opensuse*)
         dnstracer \
         ethtool \
         fping \
+        geoipupdate \
         goaccess \
         hostname \
         python3-httpie \
@@ -1552,6 +1553,7 @@ opensuse*)
         nikto \
         nmap \
         ntp{,-doc} \
+        ntpsec-doc \
         openssh \
         openssl \
         publicsuffix \
@@ -1569,7 +1571,7 @@ opensuse*)
         wireshark \
         wpa_supplicant \
         wrk
-        #geoip
+        #ntpsec
 
     # PLT
     zypper install \
