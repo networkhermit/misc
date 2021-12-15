@@ -195,10 +195,6 @@ deb-src https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main non-free con
 #deb https://kali.download/kali kali-rolling main non-free contrib
 #deb-src https://kali.download/kali kali-rolling main non-free contrib
 EOF
-## manjaro
-sudo tee /etc/pacman.d/mirrorlist << 'EOF'
-Server = https://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch
-EOF
 ## opensuse
 sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss tumbleweed-oss
 sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/non-oss tumbleweed-non-oss
@@ -332,7 +328,7 @@ sudo systemctl disable --now systemd-resolved.service
 
 # manage system service
 sudo systemctl enable --now fstrim.timer
-## arch | manjaro
+## arch
 sudo systemctl enable --now cronie.service
 ## fedora
 sudo systemctl disable --now \
@@ -347,7 +343,7 @@ sudo systemctl disable --now \
     motd-news.timer
 
 # install command-not-found
-## arch | manjaro
+## arch
 (yes || true) | sudo pacman --sync --needed pkgfile
 sudo tee --append /etc/bash.bashrc << 'EOF'
 
@@ -636,63 +632,6 @@ sudo mv --verbose /etc/profile.d/kali.sh{,.forbid}
 sudo apt install --assume-yes plymouth{,-themes} < /dev/null
 sudo plymouth-set-default-theme kali
 sudo grub-mkconfig --output /boot/grub/grub.cfg
-
-# reboot system
-```
-
-Manjaro
-=======
-
-```bash
-# shellcheck shell=bash
-
-# change root password
-
-# check sudo support
-sudo ln --force --no-dereference --symbolic /usr/{bin/vim,local/bin/vi}
-
-# add default sysadmin
-
-# change hostname
-
-# check internet connection
-
-# modify dns resolver
-
-# configure default address selection
-
-# modify default ntp server
-
-# update system clock
-
-# modify time zone
-
-# configure system network
-
-# change distro source
-
-# make distro sync
-
-# update message of the day
-
-# modify secure shell daemon
-sudo systemctl restart sshd.service
-sudo systemctl enable sshd.service
-
-# update initramfs image
-
-# update boot loader
-
-# network control
-
-# disable dynamic resolver
-
-# manage system service
-
-# install command-not-found
-
-# install arch-install-scripts
-(yes || true) | sudo pacman --sync --needed arch-install-scripts
 
 # reboot system
 ```

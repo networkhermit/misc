@@ -81,7 +81,7 @@ source <(grep '^ID=' /etc/os-release)
 DISTRO=${ID:-linux}
 
 case ${DISTRO} in
-arch | manjaro)
+arch)
     mkinitcpio --allpresets
     grub-mkconfig --output /boot/grub/grub.cfg
     ;;

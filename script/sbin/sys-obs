@@ -81,7 +81,7 @@ source <(grep '^ID=' /etc/os-release)
 DISTRO=${ID:-linux}
 
 case ${DISTRO} in
-arch | manjaro)
+arch)
     echo '------ [ package ] ------'
     (pacman --query --foreign || true) | sed 's/$/ [foreign]/' | column -t
     (pacman --query --deps --unrequired || true) | sed 's/$/ [orphan]/' | column -t

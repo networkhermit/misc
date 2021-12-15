@@ -88,14 +88,11 @@ fedora)
 kali)
     dpkg --get-selections linux-{doc,headers,image}-[0-9]\*
     ;;
-manjaro)
-    pacman --query linux{,-api-headers,-headers}
-    ;;
 opensuse*)
     rpm --query kernel-{default{,-devel},devel,docs}
     ;;
 ubuntu)
-    dpkg --get-selections linux-{doc,headers,image}-[0-9]\*
+    dpkg --get-selections linux-doc linux-{headers,image}-[0-9]\*
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"
