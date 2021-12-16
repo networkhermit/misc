@@ -6,8 +6,7 @@
     "files.eol": "\n",
     "files.insertFinalNewline": true,
     "task.quickOpen.history": 0,
-    "telemetry.enableCrashReporter": false,
-    "telemetry.enableTelemetry": false,
+    "telemetry.telemetryLevel": "off",
     "terminal.integrated.commandsToSkipShell": [
         "-workbench.action.quickOpen"
     ],
