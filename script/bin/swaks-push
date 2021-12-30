@@ -40,7 +40,7 @@ Arguments:
 EOF
 }
 
-# shellcheck disable=SC1090
+# shellcheck source=/dev/null
 source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/.privacy/smtp.cfg"
 
 while (( $# > 0 )); do

@@ -76,7 +76,7 @@ if [ "${OSTYPE}" != linux-gnu ] && [ "${OSTYPE}" != linux ]; then
     die "✗ unknown os type: ‘${OSTYPE}’"
 fi
 
-# shellcheck disable=SC1090
+# shellcheck source=/dev/null
 source <(grep '^ID=' /etc/os-release)
 DISTRO=${ID:-linux}
 

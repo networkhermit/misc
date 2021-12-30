@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-# shellcheck disable=SC1091
+# shellcheck source=/dev/null
 source /etc/skel/.bashrc
 
 ###########################################################################

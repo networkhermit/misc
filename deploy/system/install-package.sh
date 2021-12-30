@@ -76,7 +76,7 @@ if [ "${OSTYPE}" != linux-gnu ] && [ "${OSTYPE}" != linux ]; then
     die "✗ unknown os type: ‘${OSTYPE}’"
 fi
 
-# shellcheck disable=SC1090
+# shellcheck source=/dev/null
 source <(grep '^ID=' /etc/os-release)
 DISTRO=${ID:-linux}
 
@@ -215,7 +215,6 @@ DISTRO=${ID:-linux}
 #       ca-certificates
 #       chrony
 #       curl
-#       dhcp-client
 #       dns-root-data
 #       dnstracer
 #       ethtool
@@ -447,8 +446,6 @@ arch)
         core/ca-certificates{,-mozilla,-utils} \
         community/chrony \
         core/curl \
-        core/dhcpcd \
-        extra/dhclient \
         core/dnssec-anchors \
         extra/ethtool \
         extra/fping \
@@ -515,6 +512,7 @@ arch)
         extra/php \
         core/python \
         extra/python{-pip,-virtualenv} \
+        community/python-black \
         extra/ruby{,-docs} \
         extra/rust
 
@@ -538,6 +536,7 @@ arch)
         community/docker \
         community/docker-compose \
         extra/git \
+        community/libguestfs \
         community/libvirt \
         extra/nginx \
         community/nginx-mod-auth-pam \
@@ -715,7 +714,6 @@ fedora)
         ca-certificates \
         chrony \
         curl \
-        dhcp-client \
         dnstracer \
         ethtool \
         fping \
@@ -781,8 +779,11 @@ fedora)
         ocaml{,-docs} \
         php \
         python3{,-docs,-pip,-virtualenv} \
+        black \
         ruby{,-doc} \
         rust{,-doc,-src} \
+        rustfmt \
+        clippy \
         cargo{,-doc}
 
     # GAME
@@ -999,7 +1000,6 @@ EOF
         ca-certificates \
         chrony \
         curl \
-        isc-dhcp-client \
         dns-root-data \
         dnstracer \
         ethtool \
@@ -1071,8 +1071,11 @@ EOF
         ocaml-{doc,nox} \
         php \
         python3{,-doc,-pip,-virtualenv} \
+        black \
         ruby{,2.7-doc} \
         rust{c,-doc,-src} \
+        rustfmt \
+        rust-clippy \
         cargo{,-doc}
 
     # GAME
@@ -1145,7 +1148,7 @@ opensuse*)
         kernel-firmware-all \
         coreutils \
         util-linux \
-        systemd{,-sysvinit}
+        systemd{,-network,-sysvinit}
 
     # SHELL
     zypper install \
@@ -1273,7 +1276,6 @@ opensuse*)
         ca-certificates{,-mozilla} \
         chrony \
         curl \
-        dhcp-client \
         dnstracer \
         ethtool \
         fping \
@@ -1342,6 +1344,7 @@ opensuse*)
         ocaml \
         php8 \
         python3{,-doc,-pip,-virtualenv} \
+        python3-black \
         ruby{,2.7-doc} \
         rust \
         cargo
@@ -1367,7 +1370,7 @@ opensuse*)
         docker \
         docker-compose \
         git{,-doc} \
-        libguestfs0 \
+        guestfs-tools \
         libvirt \
         nginx \
         oath-toolkit \
@@ -1538,7 +1541,6 @@ ubuntu)
         ca-certificates \
         chrony \
         curl \
-        isc-dhcp-client \
         dns-root-data \
         dnstracer \
         ethtool \
@@ -1610,8 +1612,11 @@ ubuntu)
         ocaml-{doc,nox} \
         php \
         python3{,-doc,-pip,-virtualenv} \
+        black \
         ruby{,2.7-doc} \
         rust{c,-doc,-src} \
+        rustfmt \
+        rust-clippy \
         cargo{,-doc}
 
     # GAME

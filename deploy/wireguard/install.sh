@@ -43,7 +43,7 @@ SUBNET=172.20.0.0/16
 PEER_LIST=( 172.20.0.{10..15} )
 PORT=51820
 
-# shellcheck disable=SC1090
+# shellcheck source=/dev/null
 source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/.privacy/wireguard.cfg"
 
 PAIR=()

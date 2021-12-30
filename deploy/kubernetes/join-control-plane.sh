@@ -78,10 +78,10 @@ KEY=$(kubeadm certs certificate-key)
 kubeadm init phase upload-certs --certificate-key "${KEY}" --upload-certs
 
 kubeadm token list
-TOKEN=$(kubeadm token create --ttl 2h)
-HASH=$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt \
-    | openssl rsa -pubin -outform der 2> /dev/null \
-    | openssl dgst -sha256 -hex | sed 's/^.* //')
+#TOKEN=$(kubeadm token create --ttl 2h)
+#HASH=$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt \
+#    | openssl rsa -pubin -outform der 2> /dev/null \
+#    | openssl dgst -sha256 -hex | sed 's/^.* //')
 #kubeadm token create --certificate-key "${KEY}" --print-join-command
 
 install --mode 600 /dev/null /etc/kubernetes/kubeadm.log

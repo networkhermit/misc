@@ -231,7 +231,7 @@ individual files in /usr/share/doc/*/copyright.
 OS_RELEASE_NAME GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
 permitted by applicable law.
 EOF
-# shellcheck disable=SC1090
+# shellcheck source=/dev/null
 source <(grep '^NAME=' /etc/os-release)
 : "${NAME:=Linux}"
 OS_RELEASE_NAME=${NAME% Linux}
@@ -241,7 +241,7 @@ unset NAME OS_RELEASE_NAME
 
 # modify secure shell daemon
 sudo mkdir --parents --verbose /etc/ssh/sshd_config.d
-sudo tee /etc/ssh/sshd_config.d/local.conf << 'EOF'
+sudo tee /etc/ssh/sshd_config.d/10-local.conf << 'EOF'
 Port 321
 
 HostKey /etc/ssh/ssh_host_rsa_key
@@ -299,36 +299,18 @@ net.ipv4.tcp_fastopen = 3
 EOF
 
 # disable dynamic resolver
-## dhcpcd
-sudo tee --append /etc/dhcpcd.conf << 'EOF'
-
-nohook resolv.conf
-EOF
-## isc-dhcp-client
-sudo tee /etc/dhcp/dhclient-enter-hooks.d/no-dns << 'EOF'
-#!/bin/sh
-
-make_resolv_conf() {
-    :
-}
-EOF
-sudo chmod u+x /etc/dhcp/dhclient-enter-hooks.d/no-dns
+## systemd
+sudo systemctl disable --now systemd-resolved.service
 ## networkmanager
 sudo tee /etc/NetworkManager/conf.d/no-dns.conf << 'EOF'
 [main]
 dns=none
 EOF
-## openresolv
-sudo tee --append /etc/resolvconf.conf << 'EOF'
-
-resolvconf=NO
-EOF
-## systemd
-sudo systemctl disable --now systemd-resolved.service
 
 # manage system service
 sudo systemctl enable --now fstrim.timer
 ## arch
+sudo systemctl disable --now dhcpcd.service
 sudo systemctl enable --now cronie.service
 ## fedora
 sudo systemctl disable --now \
@@ -458,6 +440,9 @@ sudo systemctl enable sshd.service
 echo 'LANG=en_US.UTF-8' | sudo tee /etc/locale.conf
 sudo sed --in-place 's/^#\(en_US\.UTF-8 UTF-8\)/\1/' /etc/locale.gen
 sudo locale-gen
+sudo tee /etc/vconsole.conf << 'EOF'
+KEYMAP=us
+EOF
 
 # color setup for ls
 sudo tee --append /etc/bash.bashrc << 'EOF'

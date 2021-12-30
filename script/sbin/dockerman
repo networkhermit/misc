@@ -120,7 +120,6 @@ caddy)
         caddy
     ;;
 coredns)
-    # shellcheck disable=2102
     docker run \
         --detach \
         --label maintainer=kubernetes-operator \
@@ -130,7 +129,7 @@ coredns)
         --publish 172.24.0.1:53:53/udp \
         --publish 172.24.0.1:9153:9153 \
         --publish 53:53/tcp \
-        --publish [::1]:53:53/udp \
+        --publish "[::1]:53:53/udp" \
         --restart always \
         --mount type=bind,source=/srv/coredns/Corefile,destination=/Corefile \
         --mount type=bind,source=/srv/coredns/zones,destination=/zones \

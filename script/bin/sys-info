@@ -85,7 +85,7 @@ trap clean_up EXIT
 
 case ${MANIFEST} in
 distro)
-    # shellcheck disable=SC1090
+    # shellcheck source=/dev/null
     source <(grep '^ID=' /etc/os-release)
     DISTRO=${ID:-linux}
     echo "${DISTRO}"
