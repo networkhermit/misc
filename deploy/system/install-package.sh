@@ -765,7 +765,7 @@ fedora)
         gdb{-doc,-headless} \
         valgrind \
         gcc-c++ \
-        clang \
+        clang{,-tools-extra} \
         llvm{,-doc} \
         lld \
         lldb \
@@ -1057,8 +1057,8 @@ EOF
         gdb{,-doc} \
         valgrind \
         g++ \
-        clang{,-11-doc,-format} \
-        llvm{,-11-doc} \
+        clang{,-13-doc,d,-format} \
+        llvm{,-13-doc} \
         lld \
         lldb \
         elixir \
@@ -1598,7 +1598,7 @@ ubuntu)
         gdb{,-doc} \
         valgrind \
         g++ \
-        clang{,-13-doc,-format} \
+        clang{,-13-doc,d,-format} \
         llvm{,-13-doc} \
         lld \
         lldb \
