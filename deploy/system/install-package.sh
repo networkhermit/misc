@@ -1345,7 +1345,7 @@ opensuse*)
         php8 \
         python3{,-doc,-pip,-virtualenv} \
         python3-black \
-        ruby{,2.7-doc} \
+        ruby{,3.0-doc} \
         rust \
         cargo
 
