@@ -503,7 +503,9 @@ arch)
         community/elixir \
         community/erlang-{docs,nox} \
         community/go \
+        community/gopls \
         community/ghc \
+        community/haskell-language-server \
         extra/jdk-openjdk \
         extra/openjdk-doc \
         extra/sbcl \
@@ -513,8 +515,10 @@ arch)
         core/python \
         extra/python{-pip,-virtualenv} \
         community/python-black \
+        community/mypy \
         extra/ruby{,-docs} \
-        extra/rust
+        extra/rust \
+        community/rust-analyzer
 
     # GAME
     pacman --sync --needed \
@@ -780,6 +784,7 @@ fedora)
         php \
         python3{,-docs,-pip,-virtualenv} \
         black \
+        python3-mypy \
         ruby{,-doc} \
         rust{,-doc,-src} \
         rustfmt \
@@ -1072,6 +1077,7 @@ EOF
         php \
         python3{,-doc,-pip,-virtualenv} \
         black \
+        mypy \
         ruby{,2.7-doc} \
         rust{c,-doc,-src} \
         rustfmt \
@@ -1345,6 +1351,7 @@ opensuse*)
         php8 \
         python3{,-doc,-pip,-virtualenv} \
         python3-black \
+        python3-mypy \
         ruby{,3.0-doc} \
         rust \
         cargo
@@ -1613,6 +1620,7 @@ ubuntu)
         php \
         python3{,-doc,-pip,-virtualenv} \
         black \
+        mypy \
         ruby{,2.7-doc} \
         rust{c,-doc,-src} \
         rustfmt \
