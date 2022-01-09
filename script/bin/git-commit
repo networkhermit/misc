@@ -73,9 +73,9 @@ fi
 clean_up () {
     git gc --aggressive --prune
     if [ "${ROOT_COMMIT}" = true ]; then
-        git push --force --set-upstream origin master
+        git push --force --set-upstream origin main
     else
-        git push --set-upstream origin master
+        git push --set-upstream origin main
     fi
 }
 
