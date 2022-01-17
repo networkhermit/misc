@@ -535,6 +535,7 @@ arch)
         community/python-argcomplete \
         community/bcc-tools \
         community/python-bcc \
+        community/caddy \
         community/certbot \
         extra/dnsmasq \
         community/docker \
@@ -555,6 +556,7 @@ arch)
         extra/wireguard-tools
 
     systemctl disable --now \
+        caddy.service \
         dnsmasq.service \
         libvirt{d,-guests}.service \
         virtlogd.service \
@@ -1372,6 +1374,7 @@ opensuse*)
         bcc-tools \
         python3-bcc \
         bcc-docs \
+        caddy \
         python3-certbot \
         dnsmasq \
         docker \
@@ -1389,6 +1392,7 @@ opensuse*)
         wireguard-tools
 
     systemctl disable --now \
+        caddy.service \
         dnsmasq.service \
         libvirt{d,-guests}.service \
         virtlogd.service \
@@ -1671,9 +1675,9 @@ EOF
     systemctl disable --now \
         dnsmasq.service \
         libvirt{d,-guests}.service \
+        libvirtd-{tcp,tls}.socket \
         virtlogd.service \
         nginx.service \
-        qemu-kvm.service \
         salt-{api,master,minion,syndic}.service
 
     systemctl enable --now \
@@ -1721,14 +1725,17 @@ systemd-analyze time
 systemd-analyze critical-chain --no-pager
 systemd-analyze blame --no-pager
 
+systemctl list-unit-files --no-pager --state enabled
+
+mkdir --parents --verbose /etc/systemd/system-preset
 systemctl list-unit-files \
     --no-legend \
     --no-pager \
     --state enabled,disabled \
     --type service,socket,timer \
-    | awk '$2 != $3 { print "systemctl", substr($2, 1, length($2) - 1), $1 }' \
-    | sort --key 2,3
-systemctl list-unit-files --no-pager --state enabled
+    | awk '$2 != $3 { print substr($2, 1, length($2) - 1), $1 }' \
+    | sort \
+    | tee /etc/systemd/system-preset/00-local.preset.assess
 
 systemctl list-units --no-pager --type service
 systemctl list-sockets --no-pager --show-types
