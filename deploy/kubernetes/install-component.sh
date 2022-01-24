@@ -78,4 +78,4 @@ kubectl apply --filename https://raw.githubusercontent.com/kubernetes/dashboard/
 kubectl create serviceaccount cluster-admin-dashboard --namespace kubernetes-dashboard
 kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kubernetes-dashboard:cluster-admin-dashboard
 
-kubectl apply --filename https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.5.2/components.yaml
+kubectl apply --filename https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.0/components.yaml

@@ -92,7 +92,7 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # install pod network add-on
 ## cilium
-cilium install --version v1.11.0
+cilium install --version v1.11.1
 
 # remove master node isolation
 kubectl taint nodes --all node-role.kubernetes.io/master-
