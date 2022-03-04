@@ -1,0 +1,10 @@
+disable avahi-daemon.service
+disable cockpit.socket
+disable dnf-makecache.timer
+disable ModemManager.service
+disable NetworkManager.service
+disable systemd-resolved.service
+enable docker.service
+enable osqueryd.service
+enable systemd-networkd.service
+enable wg-quick@.service

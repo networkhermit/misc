@@ -1,5 +1,5 @@
 # Vim swap files
 *.swp
 
-# Privacy
-.privacy/
+# Vault
+vault/

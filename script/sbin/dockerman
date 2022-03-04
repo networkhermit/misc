@@ -164,15 +164,17 @@ grafana)
 minio)
     docker run \
         --detach \
+        --env-file /srv/minio/env \
         --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
         --publish 9000:9000 \
+        --publish 9001:9001 \
         --restart always \
         --mount type=bind,source=/srv/minio,destination=/root/.minio \
         --mount type=bind,source=/srv/s3,destination=/data \
         minio/minio \
-        --json server /data
+        --json server /data --console-address :9001
     ;;
 mosquitto)
     docker run \

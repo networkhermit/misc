@@ -1,0 +1,8 @@
+disable systemd-resolved.service
+enable cronie.service
+enable docker.service
+enable fstrim.timer
+enable osqueryd.service
+enable pkgfile-update.timer
+enable sshd.service
+enable wg-quick@.service

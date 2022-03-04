@@ -1,0 +1,3 @@
+options attempts:1 rotate timeout:1 use-vc
+
+nameserver 119.29.29.29

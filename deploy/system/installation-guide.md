@@ -40,10 +40,14 @@ ls --directory --human-readable -l / /home/* /root
 sudo passwd --delete root
 sudo passwd --lock root
 
+# manage system service
+echo /etc/systemd/system-preset/00-local.preset
+sudo systemctl preset-all
+
 # change hostname
 sudo hostname STEM
 sudo hostnamectl set-hostname STEM
-echo 'STEM' | sudo tee /etc/hostname
+echo /etc/hostname
 
 # check internet connection
 ip address add 192.168.1.10/24 dev eth0
@@ -51,46 +55,15 @@ ip route add default via 192.168.1.1
 ping -c 4 1.1.1.1
 
 # modify dns resolver
-sudo tee /etc/resolv.conf << 'EOF'
-# Electronic Frontier Foundation
-
-options attempts:1 rotate timeout:1 use-vc
-
-# [[ cloudflare ]]
-nameserver 1.1.1.1
-#nameserver 1.0.0.1
-
-# [[ opendns ]]
-nameserver 208.67.222.222
-#nameserver 208.67.220.220
-
-# [[ quad9 ]]
-nameserver 9.9.9.9
-#nameserver 149.112.112.112
-EOF
+echo /etc/resolv.conf
 
 # configure default address selection
-sudo sed --in-place '\%^#precedence ::ffff:0:0/96  100$%r /dev/stdin' /etc/gai.conf << 'EOF'
-
-precedence  ::1/128       50
-precedence  ::/0          40
-precedence  2002::/16     30
-precedence ::/96          20
-precedence ::ffff:0:0/96  100
-EOF
+echo /etc/gai.conf
 
 # modify default ntp server
-## cloudflare | apple
-: "${NTP_LIST:=time.cloudflare.com time1.apple.com time2.apple.com time3.apple.com time4.apple.com}"
-## cloudflare | google
-: "${NTP_LIST:=time.cloudflare.com time1.google.com time2.google.com time3.google.com time4.google.com}"
-sudo sed --in-place '/^#NTP=$/r /dev/stdin' /etc/systemd/timesyncd.conf << EOF
-NTP=${NTP_LIST}
-EOF
-unset NTP_LIST
+echo /etc/systemd/timesyncd.conf.d/10-local.conf
 systemd-analyze cat-config systemd/timesyncd.conf --no-pager
 sudo systemctl restart systemd-timesyncd.service
-sudo systemctl enable systemd-timesyncd.service
 
 # update system clock
 sudo timedatectl set-ntp true
@@ -102,99 +75,19 @@ sudo timedatectl set-timezone Asia/Shanghai
 sudo hwclock --systohc
 
 # configure system network
-: "${DEVICE:=eth0}"
-sudo tee "/etc/systemd/network/10-${DEVICE}.network" << EOF
-[Match]
-Name=${DEVICE}
-
-[Link]
-RequiredForOnline=no
-
-[Network]
-DHCP=yes
-
-[DHCP]
-UseDNS=no
-UseNTP=no
-
-#[Address]
-#Address=192.168.0.10/16
-
-#[Route]
-#Gateway=192.168.0.1
-
-#[Address]
-#Address=fd00::/8
-EOF
-unset DEVICE
-sudo systemctl enable systemd-networkd.service
+echo /etc/systemd/network/10-eth0.network
+sudo systemctl restart systemd-networkd.service
 
 # change distro source
 ## arch
-sudo tee /etc/pacman.d/mirrorlist << 'EOF'
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
-EOF
+echo /etc/pacman.d/mirrorlist
 ## fedora
-sudo tee /etc/yum.repos.d/fedora.repo << 'EOF'
-[fedora]
-name=Fedora $releasever - $basearch
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Everything/$basearch/os/
-enabled=1
-countme=1
-metadata_expire=7d
-repo_gpgcheck=0
-type=rpm
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
-skip_if_unavailable=False
-EOF
-sudo tee /etc/yum.repos.d/fedora-updates.repo << 'EOF'
-[updates]
-name=Fedora $releasever - $basearch - Updates
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Everything/$basearch/
-enabled=1
-countme=1
-repo_gpgcheck=0
-type=rpm
-gpgcheck=1
-metadata_expire=6h
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
-skip_if_unavailable=False
-EOF
-sudo tee /etc/yum.repos.d/fedora-modular.repo << 'EOF'
-[fedora-modular]
-name=Fedora Modular $releasever - $basearch
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Modular/$basearch/os/
-enabled=1
-countme=1
-metadata_expire=7d
-repo_gpgcheck=0
-type=rpm
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
-skip_if_unavailable=False
-EOF
-sudo tee /etc/yum.repos.d/fedora-updates-modular.repo << 'EOF'
-[updates-modular]
-name=Fedora Modular $releasever - $basearch - Updates
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Modular/$basearch/
-enabled=1
-countme=1
-repo_gpgcheck=0
-type=rpm
-gpgcheck=1
-metadata_expire=6h
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
-skip_if_unavailable=False
-EOF
+echo /etc/yum.repos.d/fedora.repo
+echo /etc/yum.repos.d/fedora-updates.repo
+echo /etc/yum.repos.d/fedora-modular.repo
+echo /etc/yum.repos.d/fedora-updates-modular.repo
 ## kali
-sudo tee /etc/apt/sources.list << 'EOF'
-deb https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main non-free contrib
-deb-src https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main non-free contrib
-
-#deb https://kali.download/kali kali-rolling main non-free contrib
-#deb-src https://kali.download/kali kali-rolling main non-free contrib
-EOF
+echo /etc/apt/sources.list
 ## opensuse
 sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss tumbleweed-oss
 sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/non-oss tumbleweed-non-oss
@@ -204,17 +97,7 @@ sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.or
 sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/security/openSUSE_Tumbleweed/security.repo
 sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/utilities/openSUSE_Factory/utilities.repo
 ## ubuntu
-sudo tee /etc/apt/sources.list << 'EOF'
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-backports main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-security main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-updates main restricted universe multiverse
-
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish main restricted universe multiverse
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-backports main restricted universe multiverse
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-security main restricted universe multiverse
-deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu impish-updates main restricted universe multiverse
-EOF
+echo /etc/apt/sources.list
 
 # make distro sync
 # reference script=sys-sync
@@ -222,15 +105,7 @@ EOF
 
 # update message of the day
 sudo mv --no-clobber --verbose /etc/motd{,.original}
-sudo tee /etc/motd << 'EOF'
-
-The programs included with the OS_RELEASE_NAME GNU/Linux system are free software;
-the exact distribution terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
-
-OS_RELEASE_NAME GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law.
-EOF
+echo /etc/motd
 # shellcheck source=/dev/null
 source <(grep '^NAME=' /etc/os-release)
 : "${NAME:=Linux}"
@@ -241,30 +116,7 @@ unset NAME OS_RELEASE_NAME
 
 # modify secure shell daemon
 sudo mkdir --parents --verbose /etc/ssh/sshd_config.d
-sudo tee /etc/ssh/sshd_config.d/10-local.conf << 'EOF'
-Port 321
-
-HostKey /etc/ssh/ssh_host_rsa_key
-HostKey /etc/ssh/ssh_host_ed25519_key
-
-HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-256
-PubkeyAcceptedKeyTypes ssh-ed25519-cert-v01@openssh.com,ssh-ed25519,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-256
-
-Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-KexAlgorithms curve25519-sha256,diffie-hellman-group18-sha512,diffie-hellman-group16-sha512,diffie-hellman-group14-sha256,diffie-hellman-group-exchange-sha256
-MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com
-
-LogLevel VERBOSE
-
-AllowGroups sysadmin
-
-LoginGraceTime 42s
-PermitRootLogin no
-
-PasswordAuthentication no
-
-ClientAliveInterval 20
-EOF
+echo /etc/ssh/sshd_config.d/10-local.conf
 sudo rm --force --verbose /etc/ssh/ssh_host_*_key{,.pub}
 declare -A host_key=(['ed25519']=256 ['rsa']=4096)
 for type in "${!host_key[@]}"; do
@@ -282,47 +134,13 @@ sudo vim /etc/default/grub
 # reference script=sys-boot
 
 # network control
-sudo tee /etc/sysctl.d/network-control.conf << 'EOF'
-# ICMP Black Hole
-net.ipv4.tcp_base_mss = 1024
-net.ipv4.tcp_mtu_probing = 1
-
-# TCP Congestion Control [BBR]
-net.core.default_qdisc = fq
-net.ipv4.tcp_congestion_control = bbr
-# TCP Congestion Control [CUBIC]
-#net.core.default_qdisc = fq_codel
-#net.ipv4.tcp_congestion_control = cubic
-
-# TCP Fast Open
-net.ipv4.tcp_fastopen = 3
-EOF
+echo /etc/sysctl.d/network-control.conf
 
 # disable dynamic resolver
-## systemd
-sudo systemctl disable --now systemd-resolved.service
+## systemd-resolved
+ls --human-readable -l /etc/resolv.conf
 ## networkmanager
-sudo tee /etc/NetworkManager/conf.d/no-dns.conf << 'EOF'
-[main]
-dns=none
-EOF
-
-# manage system service
-sudo systemctl enable --now fstrim.timer
-## arch
-sudo systemctl disable --now dhcpcd.service
-sudo systemctl enable --now cronie.service
-## fedora
-sudo systemctl disable --now \
-    dnf-makecache.timer
-## kali
-sudo systemctl disable --now \
-    apt-daily{,-upgrade}.timer
-## ubuntu
-sudo systemctl disable --now \
-    snapd{,.seeded}.service \
-    apt-daily{,-upgrade}.timer \
-    motd-news.timer
+echo /etc/NetworkManager/conf.d/no-dns.conf
 
 # install command-not-found
 ## arch
@@ -331,7 +149,6 @@ sudo tee --append /etc/bash.bashrc << 'EOF'
 
 [ -r /usr/share/doc/pkgfile/command-not-found.bash ] && . /usr/share/doc/pkgfile/command-not-found.bash
 EOF
-sudo systemctl enable --now pkgfile-update.timer
 ## kali | ubuntu
 sudo apt install --assume-yes command-not-found < /dev/null
 sudo apt update
@@ -346,6 +163,8 @@ sudo reboot
 
 Arch
 ====
+
+> Add `console=ttyS0,115200n8` to boot parameters for KVM.
 
 ```bash
 # shellcheck shell=bash
@@ -392,13 +211,10 @@ sudo ln --force --no-dereference --symbolic /usr/{bin/vim,local/bin/vi}
 sudo touch /etc/subuid /etc/subgid
 sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 vac
 
-# change hostname
-sudo tee /etc/hosts << 'EOF'
-127.0.0.1       localhost
-127.0.1.1       STEM
+# manage system service
 
-::1             localhost
-EOF
+# change hostname
+echo /etc/hosts
 
 # check internet connection
 
@@ -422,7 +238,6 @@ EOF
 
 # modify secure shell daemon
 sudo systemctl restart sshd.service
-sudo systemctl enable sshd.service
 
 # update initramfs image
 
@@ -432,17 +247,13 @@ sudo systemctl enable sshd.service
 
 # disable dynamic resolver
 
-# manage system service
-
 # install command-not-found
 
 # update system locale
-echo 'LANG=en_US.UTF-8' | sudo tee /etc/locale.conf
+echo /etc/locale.conf
 sudo sed --in-place 's/^#\(en_US\.UTF-8 UTF-8\)/\1/' /etc/locale.gen
 sudo locale-gen
-sudo tee /etc/vconsole.conf << 'EOF'
-KEYMAP=us
-EOF
+echo /etc/vconsole.conf
 
 # color setup for ls
 sudo tee --append /etc/bash.bashrc << 'EOF'
@@ -474,6 +285,8 @@ Fedora
 
 # add default sysadmin
 
+# manage system service
+
 # change hostname
 
 # check internet connection
@@ -504,7 +317,6 @@ sudo firewall-cmd --permanent --service ssh --remove-port 22/tcp
 sudo firewall-cmd --permanent --service ssh --get-ports
 sudo firewall-cmd --reload
 sudo systemctl restart sshd.service
-sudo systemctl enable sshd.service
 
 # update initramfs image
 
@@ -513,8 +325,6 @@ sudo systemctl enable sshd.service
 # network control
 
 # disable dynamic resolver
-
-# manage system service
 
 # install command-not-found
 
@@ -527,6 +337,9 @@ sudo sed --in-place 's/^\(installonly_limit\)=.*/\1=2/' /etc/dnf/dnf.conf
 Kali
 ====
 
+> netboot iso
+> https://archive.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/mini.iso
+
 ```bash
 # shellcheck shell=bash
 
@@ -535,6 +348,8 @@ Kali
 # check sudo support
 
 # add default sysadmin
+
+# manage system service
 
 # change hostname
 
@@ -553,37 +368,22 @@ Kali
 # configure system network
 
 ## change distro source [debian]
-sudo tee /etc/apt/sources.list << 'EOF'
-deb http://mirrors.tuna.tsinghua.edu.cn/debian stable main contrib non-free
-deb http://mirrors.tuna.tsinghua.edu.cn/debian stable-updates main contrib non-free
-
-deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stable main contrib non-free
-deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stable-updates main contrib non-free
-EOF
+echo /etc/apt/sources.list
 
 ## remove foreign architecture
 dpkg --print-architecture
 dpkg --print-foreign-architectures
 dpkg --print-foreign-architectures | xargs --no-run-if-empty sudo dpkg --remove-architecture
 
-## make package manager support https
-sudo apt update --list-cleanup
-sudo apt install --assume-yes apt-transport-https < /dev/null
-sudo apt clean
-sudo apt autoremove --purge --assume-yes
-
-## secure debian source
-sudo sed --in-place 's/http:/https:/' /etc/apt/sources.list
-
 ## make initial system upgrade
 sudo apt update --list-cleanup
 sudo apt full-upgrade --purge --assume-yes
-sudo apt purge --assume-yes apt-transport-https installation-report
+sudo apt purge --assume-yes installation-report
 sudo apt clean
 sudo apt autoremove --purge --assume-yes
 
 ## install kali archive keyring
-sudo curl --fail --location --silent --show-error --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2020.2_all.deb'
+sudo curl --fail --location --silent --show-error --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2022.1_all.deb'
 sudo dpkg --install kali-archive-keyring_*_all.deb
 sudo rm --force --verbose kali-archive-keyring_*_all.deb
 
@@ -596,7 +396,6 @@ sudo apt install --assume-yes kali-{defaults,linux-{default,large}} < /dev/null
 
 # modify secure shell daemon
 sudo systemctl restart ssh.service
-sudo systemctl enable ssh.service
 
 # update initramfs image
 
@@ -605,8 +404,6 @@ sudo systemctl enable ssh.service
 # network control
 
 # disable dynamic resolver
-
-# manage system service
 
 # install command-not-found
 
@@ -633,6 +430,8 @@ openSUSE
 
 # add default sysadmin
 
+# manage system service
+
 # change hostname
 
 # check internet connection
@@ -640,7 +439,6 @@ openSUSE
 # modify dns resolver
 
 # configure default address selection
-sudo cp /usr/share/doc/packages/glibc/gai.conf /etc
 
 # modify default ntp server
 
@@ -662,7 +460,6 @@ sudo firewall-cmd --permanent --service ssh --remove-port 22/tcp
 sudo firewall-cmd --permanent --service ssh --get-ports
 sudo firewall-cmd --reload
 sudo systemctl restart sshd.service
-sudo systemctl enable sshd.service
 
 # update initramfs image
 
@@ -671,8 +468,6 @@ sudo systemctl enable sshd.service
 # network control
 
 # disable dynamic resolver
-
-# manage system service
 
 # install command-not-found
 
@@ -690,6 +485,8 @@ Ubuntu
 # check sudo support
 
 # add default sysadmin
+
+# manage system service
 
 # change hostname
 
@@ -715,7 +512,6 @@ Ubuntu
 
 # modify secure shell daemon
 sudo systemctl restart ssh.service
-sudo systemctl enable ssh.service
 
 # update initramfs image
 
@@ -725,38 +521,7 @@ sudo systemctl enable ssh.service
 
 # disable dynamic resolver
 
-# manage system service
-
 # install command-not-found
 
 # reboot system
-```
-
-```
-> Add `console=ttyS0,115200n8` to boot parameters for KVM.
-
-# linux kernel archive
-Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
-```
-
-```
-# archive
-deb https://archive.kali.org/kali kali-rolling main non-free contrib
-deb-src https://archive.kali.org/kali kali-rolling main non-free contrib
-
-# netboot iso
-https://archive.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/mini.iso
-```
-
-```
-# linux kernel archive
-deb https://mirrors.kernel.org/ubuntu impish main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu impish-backports main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu impish-security main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu impish-updates main restricted universe multiverse
-
-deb-src https://mirrors.kernel.org/ubuntu impish main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu impish-backports main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu impish-security main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu impish-updates main restricted universe multiverse
 ```

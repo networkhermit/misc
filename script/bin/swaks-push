@@ -41,7 +41,7 @@ EOF
 }
 
 # shellcheck source=/dev/null
-source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/.privacy/smtp.cfg"
+source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/config/vault/smtp.cfg"
 
 while (( $# > 0 )); do
     case ${1} in

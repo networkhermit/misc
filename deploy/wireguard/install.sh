@@ -44,7 +44,7 @@ PEER_LIST=( 172.20.0.{10..15} )
 PORT=51820
 
 # shellcheck source=/dev/null
-source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/.privacy/wireguard.cfg"
+source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/config/vault/wireguard.cfg"
 
 PAIR=()
 for i in "${PEER_LIST[@]}"; do

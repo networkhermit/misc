@@ -97,9 +97,9 @@ get_image_list () {
 
     arr_ref=()
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)")
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
     mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://raw.githubusercontent.com/kubernetes/kube-state-metrics/v2.3.0/examples/standard/deployment.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
-    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.0/components.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
+    mapfile -O ${#arr_ref[@]} -t arr_ref < <(curl --fail --location --silent --show-error https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.1/components.yaml | awk '/\<image:\s*k8s.gcr.io\// { print $NF }')
 }
 
 construct_image () {

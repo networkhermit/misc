@@ -79,13 +79,7 @@ curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/kub
 curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/kubernetes.gpg https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg
 
 # add kubernetes repository
-## [official]
-SOURCE_URI=https://packages.cloud.google.com/apt
-## [tsinghua tuna]
-SOURCE_URI=https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt
-tee /etc/apt/sources.list.d/kubernetes.list << EOF
-deb ${SOURCE_URI} kubernetes-xenial main
-EOF
+echo /etc/apt/sources.list.d/kubernetes.list
 
 KUBERNETES_VERSION=
 

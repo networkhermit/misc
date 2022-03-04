@@ -37,7 +37,7 @@ EOF
 }
 
 # shellcheck source=/dev/null
-source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/.privacy/gotify.cfg"
+source "$(git -C "$(dirname "$(realpath "${0}")")" rev-parse --show-toplevel)/config/vault/gotify.cfg"
 
 while (( $# > 0 )); do
     case ${1} in

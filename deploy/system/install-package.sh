@@ -555,18 +555,6 @@ arch)
         community/virt-install \
         extra/wireguard-tools
 
-    systemctl disable --now \
-        caddy.service \
-        dnsmasq.service \
-        libvirt{d,-guests}.service \
-        virtlogd.service \
-        nginx.service \
-        salt-{api,master,minion,syndic}.service
-
-    systemctl enable --now \
-        docker.service \
-        osqueryd.service
-
     pacman --files --list \
         openssh \
         | awk --field-separator '[/ ]' '/usr\/lib\/systemd\/.+\/.+\..+[^/]$/ { printf "%-24s%s\n", $1, $NF }'
@@ -833,23 +821,11 @@ fedora)
     dnf install docker-ce
     dnf clean packages
 
-    curl --fail --location --silent --show-error https://pkg.osquery.io/rpm/GPG | tee /etc/pki/rpm-gpg/RPM-GPG-KEY-osquery
+    curl --fail --location --silent --show-error --output /etc/pki/rpm-gpg/RPM-GPG-KEY-osquery https://pkg.osquery.io/rpm/GPG
     dnf config-manager --add-repo https://pkg.osquery.io/rpm/osquery-s3-rpm.repo
     dnf makecache
     dnf install osquery
     dnf clean packages
-
-    systemctl disable --now \
-        caddy.service \
-        dnsmasq.service \
-        libvirt{d,-guests}.service \
-        virtlogd.service \
-        nginx.service \
-        salt-{api,master,minion,syndic}.service
-
-    systemctl enable --now \
-        docker.service \
-        osqueryd.service
 
     rpm --query \
         openssh-server \
@@ -993,9 +969,7 @@ kali)
         #syslog-ng
 
     curl --fail --location --silent --show-error https://download.sysdig.com/DRAIOS-GPG-KEY.public | gpg --dearmor --output /etc/apt/trusted.gpg.d/sysdig.gpg
-    tee /etc/apt/sources.list.d/sysdig.list << 'EOF'
-deb https://download.sysdig.com/stable/deb stable-$(ARCH)/
-EOF
+    echo /etc/apt/sources.list.d/sysdig.list
     apt update --list-cleanup
     apt install sysdig
 
@@ -1075,7 +1049,7 @@ EOF
         default-jdk-{doc,headless} \
         sbcl{,-doc} \
         nodejs{,-doc} \
-        ocaml-{doc,nox} \
+        ocaml{,-doc} \
         php \
         python3{,-doc,-pip,-virtualenv} \
         black \
@@ -1120,22 +1094,9 @@ EOF
         wireguard-tools
 
     curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/osquery.gpg https://pkg.osquery.io/deb/keyring.gpg
-    tee /etc/apt/sources.list.d/osquery.list << 'EOF'
-deb [arch=amd64] https://pkg.osquery.io/deb deb main
-EOF
+    echo /etc/apt/sources.list.d/osquery.list
     apt update --list-cleanup
     apt install osquery
-
-    systemctl disable --now \
-        dnsmasq.service \
-        libvirt{d,-guests}.service \
-        virtlogd.service \
-        nginx.service \
-        salt-{api,master,minion,syndic}.service
-
-    systemctl enable --now \
-        docker.service \
-        osqueryd.service
 
     dpkg --listfiles \
         openssh-server \
@@ -1390,18 +1351,6 @@ opensuse*)
         tig \
         virt-install \
         wireguard-tools
-
-    systemctl disable --now \
-        caddy.service \
-        dnsmasq.service \
-        libvirt{d,-guests}.service \
-        virtlogd.service \
-        nginx.service \
-        salt-{api,master,minion,syndic}.service
-
-    systemctl enable --now \
-        docker.service \
-        osqueryd.service
 
     rpm --query \
         openssh \
@@ -1666,23 +1615,9 @@ ubuntu)
         #libnginx-mod-http-lua
 
     curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/osquery.gpg https://pkg.osquery.io/deb/keyring.gpg
-    tee /etc/apt/sources.list.d/osquery.list << 'EOF'
-deb [arch=amd64] https://pkg.osquery.io/deb deb main
-EOF
+    echo /etc/apt/sources.list.d/osquery.list
     apt update --list-cleanup
     apt install osquery
-
-    systemctl disable --now \
-        dnsmasq.service \
-        libvirt{d,-guests}.service \
-        libvirtd-{tcp,tls}.socket \
-        virtlogd.service \
-        nginx.service \
-        salt-{api,master,minion,syndic}.service
-
-    systemctl enable --now \
-        docker.service \
-        osqueryd.service
 
     dpkg --listfiles \
         openssh-server \
@@ -1698,19 +1633,7 @@ esac
 
 ## Docker
 
-tee /etc/docker/daemon.json << 'EOF'
-{
-    "exec-opts": [
-        "native.cgroupdriver=systemd"
-    ],
-    "log-driver": "json-file",
-    "log-opts": {
-        "max-file": "10",
-        "max-size": "10m"
-    },
-    "storage-driver": "overlay2"
-}
-EOF
+echo /etc/docker/daemon.json
 
 systemctl restart docker.service
 
@@ -1735,7 +1658,7 @@ systemctl list-unit-files \
     --type service,socket,timer \
     | awk '$2 != $3 { print substr($2, 1, length($2) - 1), $1 }' \
     | sort \
-    | tee /etc/systemd/system-preset/00-local.preset.assess
+    | tee /etc/systemd/system-preset/00-local.preset.raw
 
 systemctl list-units --no-pager --type service
 systemctl list-sockets --no-pager --show-types

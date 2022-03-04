@@ -1,0 +1,7 @@
+disable libvirt-guests.service
+disable ModemManager.service
+disable systemd-resolved.service
+enable chrony.service
+enable osqueryd.service
+enable ssh.service
+enable wg-quick@.service
