@@ -1,0 +1,3 @@
+disable cockpit.socket
+disable NetworkManager.service
+enable systemd-networkd.service

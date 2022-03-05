@@ -3,3 +3,6 @@
 
 # Vault
 vault/
+
+# Ansible inventory
+inventory/

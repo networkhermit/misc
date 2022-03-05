@@ -1,0 +1,3 @@
+disable cups.path
+disable cups.socket
+enable sshd.service
