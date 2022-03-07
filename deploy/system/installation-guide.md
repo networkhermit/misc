@@ -8,6 +8,7 @@ Meta
 sudo passwd root
 
 # check sudo support
+echo /etc/sudoers.d/10-local
 sudo SUDO_EDITOR=vim visudo
 
 # add default sysadmin
