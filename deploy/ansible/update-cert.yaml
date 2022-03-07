@@ -9,10 +9,10 @@
   tasks:
     - name: pull cert
       get_url:
-        url: "{{ api_endpoint }}/{{ domain }}/{{ item.src }}?raw=true"
+        url: "{{ api_endpoint }}/{{ nginx_tls_domain }}/{{ item.src }}?raw=true"
         headers:
           Authorization: "{{ auth_token }}"
-        dest: "/etc/nginx/pack/certs/{{ domain }}/{{ item.dst }}"
+        dest: "/etc/nginx/pack/certs/{{ nginx_tls_domain }}/{{ item.dst }}"
         owner: root
         group: root
         mode: "{{ item.mode }}"
@@ -34,7 +34,7 @@
   tasks:
     - name: pull cert
       get_url:
-        url: "{{ api_endpoint }}/{{ domain }}/{{ item.src }}?raw=true"
+        url: "{{ api_endpoint }}/{{ minio_tls_domain }}/{{ item.src }}?raw=true"
         headers:
           Authorization: "{{ auth_token }}"
         dest: "/srv/minio/certs/{{ item.dst }}"
@@ -59,7 +59,7 @@
   tasks:
     - name: pull cert
       get_url:
-        url: "{{ api_endpoint }}/{{ domain }}/{{ item.src }}?raw=true"
+        url: "{{ api_endpoint }}/{{ gotify_tls_domain }}/{{ item.src }}?raw=true"
         headers:
           Authorization: "{{ auth_token }}"
         dest: "/srv/gotify/certs/{{ item.dst }}"
@@ -81,7 +81,7 @@
   tasks:
     - name: pull cert
       get_url:
-        url: "{{ api_endpoint }}/{{ domain }}/{{ item.src }}?raw=true"
+        url: "{{ api_endpoint }}/{{ harbor_tls_domain }}/{{ item.src }}?raw=true"
         headers:
           Authorization: "{{ auth_token }}"
         dest: "/srv/harbor/certs/{{ item.dst }}"

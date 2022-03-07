@@ -485,7 +485,7 @@ arch)
         core/traceroute \
         extra/wget \
         extra/whois \
-        core/wireless_tools \
+        extra/wireless_tools \
         community/wireshark-cli \
         core/wpa_supplicant
         #dnstracer

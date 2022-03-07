@@ -1,2 +1,2 @@
 [Time]
-NTP=time.cloudflare.com time1.apple.com time2.apple.com time3.apple.com time4.apple.com
+NTP=time.cloudflare.com time.apple.com

@@ -1,0 +1,3 @@
+enable bluetooth.service
+enable gdm.service
+enable NetworkManager.service

@@ -1,0 +1,7 @@
+Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/vac/STEM/sbin"
+Defaults mail_badpass
+Defaults env_reset
+Defaults timestamp_timeout=5
+Defaults use_pty
+
+%sudo ALL=(ALL:ALL) ALL

@@ -195,7 +195,7 @@ sudo mkfs.xfs -f -L Arch /dev/vdaX
 sudo mount /dev/vdaX /mnt
 
 # bootstrap base system
-sudo pacstrap /mnt base linux{,-firmware} sudo vim openssh {amd,intel}-ucode grub efibootmgr
+sudo pacstrap /mnt base linux{,-firmware} sudo vim openssh intel-ucode grub efibootmgr
 genfstab -t PARTUUID /mnt | sudo tee /mnt/etc/fstab
 sudo cp --verbose {,/mnt}/etc/resolv.conf
 

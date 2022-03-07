@@ -1,4 +1,6 @@
 disable systemd-resolved.service
+disable systemd-timesyncd.service
+enable chronyd.service
 enable cronie.service
 enable docker.service
 enable fstrim.timer

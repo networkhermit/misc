@@ -20,7 +20,7 @@ Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\DateTime\S
 Set-ItemProperty -Name MaxPollInterval -Path HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\Config -Value 10
 Set-ItemProperty -Name MinPollInterval -Path HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\Config -Value 6
 Set-ItemProperty -Name UpdateInterval -Path HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\Config -Value 100
-Set-ItemProperty -Name NtpServer -Path HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\Parameters -Value 'time1.apple.com,0x9'
+Set-ItemProperty -Name NtpServer -Path HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\Parameters -Value 'time.apple.com,0x9'
 Set-ItemProperty -Name SpecialPollInterval -Path HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\TimeProviders\NtpClient -Value 900
 
 Get-ItemProperty -Name MaxPollInterval -Path HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\Config
@@ -30,7 +30,6 @@ Get-ItemProperty -Name NtpServer -Path HKLM:\SYSTEM\CurrentControlSet\Services\W
 Get-ItemProperty -Name SpecialPollInterval -Path HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\TimeProviders\NtpClient
 
 Get-Service -Name W32Time
-net stop W32Time && net start W32Time
 Restart-Service -Name W32Time -PassThru
 
 w32tm /query /configuration /verbose
