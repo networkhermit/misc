@@ -977,7 +977,6 @@ kali)
     apt install \
         apache2-utils \
         bind9-{dnsutils,host} \
-        bridge-utils \
         ca-certificates \
         chrony \
         curl \
@@ -1028,6 +1027,7 @@ kali)
         wireshark{,-doc} \
         wpasupplicant \
         wrk
+        #bridge-utils
         #ntp
         #ntpsec
 
@@ -1054,7 +1054,7 @@ kali)
         python3{,-doc,-pip,-virtualenv} \
         black \
         mypy \
-        ruby{,2.7-doc} \
+        ruby{,3.0-doc} \
         rust{c,-doc,-src} \
         rustfmt \
         rust-clippy \
@@ -1086,12 +1086,13 @@ kali)
         nginx-{doc,full} \
         libnginx-mod-http-{auth-pam,lua} \
         oathtool \
-        libpam-{doc,google-authenticator,modules{,-bin}} \
+        libpam-{doc,modules{,-bin}} \
         qemu-{system-x86,utils} \
         salt-{api,cloud,master,minion,ssh,syndic} \
         tig \
         virtinst \
         wireguard-tools
+        #libpam-google-authenticator
 
     curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/osquery.gpg https://pkg.osquery.io/deb/keyring.gpg
     echo /etc/apt/sources.list.d/osquery.list

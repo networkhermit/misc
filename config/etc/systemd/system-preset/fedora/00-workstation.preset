@@ -1,3 +1,4 @@
 disable cups.path
 disable cups.socket
+disable systemd-networkd.service
 enable sshd.service

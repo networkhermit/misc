@@ -377,11 +377,6 @@ dpkg --print-foreign-architectures
 dpkg --print-foreign-architectures | xargs --no-run-if-empty sudo dpkg --remove-architecture
 
 ## make initial system upgrade
-sudo apt update --list-cleanup
-sudo apt full-upgrade --purge --assume-yes
-sudo apt purge --assume-yes installation-report
-sudo apt clean
-sudo apt autoremove --purge --assume-yes
 
 ## install kali archive keyring
 sudo curl --fail --location --silent --show-error --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2022.1_all.deb'
@@ -391,7 +386,7 @@ sudo rm --force --verbose kali-archive-keyring_*_all.deb
 # change distro source
 
 # make distro sync
-sudo apt install --assume-yes kali-{defaults,linux-{default,large}} < /dev/null
+sudo apt install --assume-yes kali-linux-{default,large} < /dev/null
 
 # update message of the day
 
@@ -410,11 +405,6 @@ sudo systemctl restart ssh.service
 
 # modify shell environment
 sudo mv --verbose /etc/profile.d/kali.sh{,.forbid}
-
-# install default plymouth
-sudo apt install --assume-yes plymouth{,-themes} < /dev/null
-sudo plymouth-set-default-theme kali
-sudo grub-mkconfig --output /boot/grub/grub.cfg
 
 # reboot system
 ```
