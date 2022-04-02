@@ -21,5 +21,6 @@
     "workbench.activityBar.visible": true,
     "workbench.colorTheme": "GitHub Light Default",
     "workbench.commandPalette.history": 0,
+    "workbench.localHistory.enabled": false,
     "workbench.startupEditor": "newUntitledFile"
 }
