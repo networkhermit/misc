@@ -1,7 +1,7 @@
 {
     "diffEditor.ignoreTrimWhitespace": false,
     "editor.fontFamily": "Go Mono",
-    "editor.fontSize": 24,
+    "editor.fontSize": 16,
     "editor.lineNumbers": "on",
     "editor.scrollBeyondLastLine": false,
     "extensions.autoCheckUpdates": false,
