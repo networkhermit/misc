@@ -104,6 +104,7 @@ DISTRO=${ID:-linux}
 ##################
 # UTIL
 #       at
+#       b3sum
 #       bat
 #       bc
 #       binutils
@@ -247,6 +248,7 @@ DISTRO=${ID:-linux}
 #       openssl
 #       publicsuffix
 #       rsync
+#       sniffglue
 #       socat
 #       sslscan
 #       swaks
@@ -340,6 +342,7 @@ arch)
     # UTIL
     pacman --sync --needed \
         community/at \
+        community/b3sum \
         community/bat \
         extra/bc \
         core/binutils \
@@ -477,6 +480,7 @@ arch)
         core/openssl \
         extra/publicsuffix-list \
         extra/rsync \
+        community/sniffglue \
         extra/socat \
         community/sslscan \
         community/swaks \
@@ -500,6 +504,7 @@ arch)
         extra/llvm \
         extra/lld \
         extra/lldb \
+        community/mold \
         community/elixir \
         community/erlang-{docs,nox} \
         community/go \
@@ -639,6 +644,7 @@ fedora)
         xz \
         zip \
         zstd
+        #b3sum
 
     # SYSADMIN
     dnf install \
@@ -733,7 +739,6 @@ fedora)
         ngrep \
         nikto \
         nmap \
-        ntpsec \
         openssh{,-clients,-server} \
         openssl \
         publicsuffix-list \
@@ -750,6 +755,7 @@ fedora)
         wireless-tools \
         wireshark-cli \
         wpa_supplicant
+        #sniffglue
         #wrk
 
     # PLT
@@ -763,6 +769,7 @@ fedora)
         llvm{,-doc} \
         lld \
         lldb \
+        mold \
         elixir{,-doc} \
         erlang{,-doc} \
         golang{,-docs,-src} \
@@ -864,6 +871,7 @@ kali)
     # UTIL
     apt install \
         at \
+        b3sum \
         bat \
         bc \
         binutils{,-doc} \
@@ -977,6 +985,7 @@ kali)
     apt install \
         apache2-utils \
         bind9-{dnsutils,host} \
+        bridge-utils \
         ca-certificates \
         chrony \
         curl \
@@ -1009,11 +1018,11 @@ kali)
         nmap \
         ntp-doc \
         sntp \
-        ntpsec-doc \
         openssh-{client,server,sftp-server} \
         openssl \
         publicsuffix \
         rsync \
+        sniffglue \
         socat \
         sslscan \
         swaks \
@@ -1027,9 +1036,7 @@ kali)
         wireshark{,-doc} \
         wpasupplicant \
         wrk
-        #bridge-utils
         #ntp
-        #ntpsec
 
     # PLT
     apt install \
@@ -1042,6 +1049,7 @@ kali)
         llvm{,-13-doc} \
         lld \
         lldb \
+        mold \
         elixir \
         erlang-{doc,nox} \
         golang{,-doc,-src} \
@@ -1180,6 +1188,7 @@ opensuse*)
         xz \
         zip \
         zstd
+        #b3sum
         #hexyl
 
     # SYSADMIN
@@ -1273,7 +1282,6 @@ opensuse*)
         nikto \
         nmap \
         ntp{,-doc} \
-        ntpsec-doc \
         openssh \
         openssl \
         publicsuffix \
@@ -1291,7 +1299,7 @@ opensuse*)
         wireshark \
         wpa_supplicant \
         wrk
-        #ntpsec
+        #sniffglue
 
     # PLT
     zypper install \
@@ -1304,6 +1312,7 @@ opensuse*)
         llvm{,13-doc} \
         lld \
         lldb \
+        mold \
         elixir{,-doc} \
         erlang{,-doc} \
         go{,-doc} \
@@ -1436,6 +1445,7 @@ ubuntu)
         xz-utils \
         zip \
         zstd
+        #b3sum \
         #hyperfine
 
     # SYSADMIN
@@ -1531,11 +1541,11 @@ ubuntu)
         nmap \
         ntp-doc \
         sntp \
-        ntpsec-doc \
         openssh-{client,server,sftp-server} \
         openssl \
         publicsuffix \
         rsync \
+        sniffglue \
         socat \
         sslscan \
         swaks \
@@ -1550,7 +1560,6 @@ ubuntu)
         wpasupplicant \
         wrk
         #ntp
-        #ntpsec
 
     # PLT
     apt install \
@@ -1580,6 +1589,7 @@ ubuntu)
         rustfmt \
         rust-clippy \
         cargo{,-doc}
+        #mold
 
     # GAME
     apt install \

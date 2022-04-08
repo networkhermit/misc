@@ -2,12 +2,6 @@
 
 set -o pipefail
 
-# shellcheck source=/dev/null
-source /etc/skel/.bashrc
-
-###########################################################################
-###########################################################################
-
 # If not running interactively, don't do anything
 case $- in
 *i*)
@@ -17,9 +11,29 @@ case $- in
     ;;
 esac
 
-export GIT_PS1_SHOWDIRTYSTATE=1
-export GIT_PS1_SHOWSTASHSTATE=1
+if [ -z "${TMUX}" ]; then
+    if [ "${TERM}" = xterm-256color ] || [ "${TERM}" = tmux-256color ]; then
+        if [ "${TERM_PROGRAM}" != vscode ]; then
+            exec tmux new-session -A -D -s main
+        fi
+    fi
+fi
+
+# shellcheck source=/dev/null
+source /etc/skel/.bashrc
+
+if [ -x "$(command -v cowsay)" ] && [ -x "$(command -v fortune)" ]; then
+    fortune | cowsay -f www
+fi
+
+###########################################################################
+
 PROMPT_COMMAND='echo'
+
+# shellcheck disable=SC2034
+GIT_PS1_SHOWDIRTYSTATE=1
+# shellcheck disable=SC2034
+GIT_PS1_SHOWSTASHSTATE=1
 
 __exit_status () {
     x=$?
@@ -28,18 +42,20 @@ __exit_status () {
     fi
 }
 
-PS1='\[\033[;32m\]┌──${VIRTUAL_ENV:+(\[\033[0;1m\]$(basename $VIRTUAL_ENV)\[\033[;32m\])}(\[\033[1;34m\]\u＠\h\[\033[;32m\])-[\[\033[0;1m\]\w\[\033[;32m\]]$(__git_ps1 " (\[\033[1;36m\]%s\[\033[;32m\])")\[\033[01;31m\]$(__exit_status)\n\[\033[;32m\]└─\[\033[1;34m\]\$\[\033[0m\] '
+PS1='\[\033[;32m\]┌──${VIRTUAL_ENV:+(\[\033[0;1m\]$(basename $VIRTUAL_ENV)\[\033[;32m\])}(\[\033[1;34m\]\u＠\h\[\033[;32m\])-[\[\033[0;1m\]\w\[\033[;32m\]]$(__git_ps1 " (\[\033[1;36m\]ᚠ %s\[\033[;32m\])")\[\033[01;31m\]$(__exit_status)\n\[\033[;32m\]└─\[\033[1;34m\]\$\[\033[0m\] '
 
 ###########################################################################
 
-# WWWSAY
-if [ -x "$(command -v cowsay)" ] && [ -x "$(command -v fortune)" ]; then
-    fortune | cowsay -f www
-fi
-
-###########################################################################
+HISTCONTROL=erasedups:ignorespace
+HISTSIZE=256
+HISTTIMEFORMAT='%F %T '
+unset HISTFILE
 
 bind Space:magic-space
+
+shopt -s autocd
+shopt -s histappend
+shopt -s histverify
 
 if [ ! -r /usr/share/bash-completion/bash_completion ]; then
     complete -cf man
@@ -56,23 +72,17 @@ if [ -x "$(command -v kubectl)" ]; then
     source <(kubectl completion bash)
 fi
 
-shopt -s autocd
-shopt -s histappend
-shopt -s histverify
+###########################################################################
 
-# BASIC
+PATH=${PATH}:~/STEM/bin
+
 export EDITOR=vim
-export HISTCONTROL=erasedups:ignorespace
-export HISTSIZE=256
-export HISTTIMEFORMAT='%F %T '
 export LESSHISTFILE=-
 export MANPAGER=most
 export VISUAL=vim
 
-# PATH
-export PATH=${PATH}:~/STEM/bin
+###########################################################################
 
-# ALIAS
 alias acp='scp -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias ash='ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias bs="find . -type l -exec test ! -e '{}' \; -print"
@@ -84,7 +94,7 @@ alias e='exa --classify --oneline'
 alias el='exa --links --group --long --time-style long-iso'
 alias grep='grep --color=auto'
 alias ip='ip -color=auto'
-alias json='python3 -B -W:all -m json.tool --sort-keys'
+alias json='jq --indent 4 --sort-keys .'
 alias la='ls --almost-all'
 alias less='less -F'
 alias ll='ls --human-readable -l --time-style long-iso'
@@ -103,9 +113,3 @@ alias sudo='sudo '
 
 alias unalias='true'
 alias alias='true'
-
-# PRIVACY
-unset HISTFILE
-
-###########################################################################
-###########################################################################
