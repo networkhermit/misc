@@ -243,7 +243,6 @@ DISTRO=${ID:-linux}
 #       ngrep
 #       nikto
 #       nmap
-#       ntp
 #       openssh
 #       openssl
 #       publicsuffix
@@ -475,7 +474,6 @@ arch)
         community/ngrep \
         community/nikto \
         extra/nmap \
-        extra/ntp \
         core/openssh \
         core/openssl \
         extra/publicsuffix-list \
@@ -509,18 +507,27 @@ arch)
         community/erlang-{docs,nox} \
         community/go \
         community/gopls \
+        community/go-tools \
+        community/staticcheck \
         community/ghc \
+        community/stylish-haskell \
+        community/haskell-ormolu \
         community/haskell-language-server \
         extra/jdk-openjdk \
         extra/openjdk-doc \
         extra/sbcl \
         community/nodejs \
+        community/deno \
         extra/ocaml \
         extra/php \
         core/python \
         extra/python{-pip,-virtualenv} \
-        community/python-black \
         community/mypy \
+        community/python-black \
+        community/python-isort \
+        community/bandit \
+        community/flake8 \
+        community/python-pylint \
         extra/ruby{,-docs} \
         extra/rust \
         community/rust-analyzer
@@ -773,15 +780,22 @@ fedora)
         elixir{,-doc} \
         erlang{,-doc} \
         golang{,-docs,-src} \
+        golang-x-tools-{gopls,goimports} \
+        golang-honnef-tools \
         ghc \
         java-latest-openjdk{-headless,-javadoc} \
         sbcl \
         nodejs{,-docs} \
         ocaml{,-docs} \
         php \
+        php-pear-PHP-CodeSniffer \
         python3{,-docs,-pip,-virtualenv} \
-        black \
         python3-mypy \
+        black \
+        python3-isort \
+        bandit \
+        python3-flake8 \
+        pylint \
         ruby{,-doc} \
         rust{,-doc,-src} \
         rustfmt \
@@ -1016,8 +1030,6 @@ kali)
         ngrep \
         nikto \
         nmap \
-        ntp-doc \
-        sntp \
         openssh-{client,server,sftp-server} \
         openssl \
         publicsuffix \
@@ -1036,7 +1048,6 @@ kali)
         wireshark{,-doc} \
         wpasupplicant \
         wrk
-        #ntp
 
     # PLT
     apt install \
@@ -1053,15 +1064,24 @@ kali)
         elixir \
         erlang-{doc,nox} \
         golang{,-doc,-src} \
+        gopls \
+        golang-golang-x-tools \
         ghc{,-doc} \
+        stylish-haskell \
+        ormolu \
         default-jdk-{doc,headless} \
         sbcl{,-doc} \
         nodejs{,-doc} \
         ocaml{,-doc} \
         php \
+        php-codesniffer \
         python3{,-doc,-pip,-virtualenv} \
-        black \
         mypy \
+        black \
+        isort \
+        bandit \
+        flake8 \
+        pylint \
         ruby{,3.0-doc} \
         rust{c,-doc,-src} \
         rustfmt \
@@ -1281,7 +1301,6 @@ opensuse*)
         ngrep \
         nikto \
         nmap \
-        ntp{,-doc} \
         openssh \
         openssl \
         publicsuffix \
@@ -1323,8 +1342,13 @@ opensuse*)
         ocaml \
         php8 \
         python3{,-doc,-pip,-virtualenv} \
-        python3-black \
         python3-mypy \
+        python3-black \
+        python38-isort \
+        python3-bandit \
+        python38-flake8 \
+        python38-pylint \
+        python38-pyupgrade \
         ruby{,3.0-doc} \
         rust \
         cargo
@@ -1340,7 +1364,7 @@ opensuse*)
 
     # DevOps
     zypper install \
-        ansible{,-doc} \
+        ansible{,-doc,-lint} \
         python3-argcomplete \
         bcc-tools \
         python3-bcc \
@@ -1539,8 +1563,6 @@ ubuntu)
         ngrep \
         nikto \
         nmap \
-        ntp-doc \
-        sntp \
         openssh-{client,server,sftp-server} \
         openssl \
         publicsuffix \
@@ -1559,7 +1581,6 @@ ubuntu)
         wireshark{,-doc} \
         wpasupplicant \
         wrk
-        #ntp
 
     # PLT
     apt install \
@@ -1575,15 +1596,24 @@ ubuntu)
         elixir \
         erlang-{doc,nox} \
         golang{,-doc,-src} \
+        gopls \
+        golang-golang-x-tools \
         ghc{,-doc} \
+        stylish-haskell \
+        ormolu \
         default-jdk-{doc,headless} \
         sbcl{,-doc} \
         nodejs{,-doc} \
         ocaml-{doc,nox} \
         php \
+        php-codesniffer \
         python3{,-doc,-pip,-virtualenv} \
-        black \
         mypy \
+        black \
+        isort \
+        bandit \
+        flake8 \
+        pylint \
         ruby{,2.7-doc} \
         rust{c,-doc,-src} \
         rustfmt \

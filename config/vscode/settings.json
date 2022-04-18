@@ -9,6 +9,8 @@
     "extensions.ignoreRecommendations": true,
     "files.eol": "\n",
     "files.insertFinalNewline": true,
+    "remote.SSH.localServerDownload": "always",
+    "remote.downloadExtensionsLocally": true,
     "task.quickOpen.history": 0,
     "telemetry.telemetryLevel": "off",
     "terminal.integrated.commandsToSkipShell": [

@@ -40,7 +40,7 @@ font:
 
 key_bindings:
   - { key: N, mods: Control|Shift, action: SpawnNewInstance }
-  - { key: Return, mods: Control, action: ToggleFullscreen }
+  - { key: Back, mods: Control, action: ToggleFullscreen }
 
 mouse:
   hide_when_typing: true
