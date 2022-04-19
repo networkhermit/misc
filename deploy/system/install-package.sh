@@ -599,6 +599,8 @@ fedora)
         info \
         vim-enhanced \
         emacs \
+        emacs-evil \
+        emacs-magit \
         ShellCheck
 
     # UTIL
@@ -785,6 +787,7 @@ fedora)
         ghc \
         java-latest-openjdk{-headless,-javadoc} \
         sbcl \
+        emacs-slime \
         nodejs{,-docs} \
         ocaml{,-docs} \
         php \
@@ -880,6 +883,8 @@ kali)
         info \
         vim{,-doc} \
         emacs \
+        elpa-evil \
+        elpa-magit \
         shellcheck
 
     # UTIL
@@ -1071,6 +1076,7 @@ kali)
         ormolu \
         default-jdk-{doc,headless} \
         sbcl{,-doc} \
+        slime \
         nodejs{,-doc} \
         ocaml{,-doc} \
         php \
@@ -1417,6 +1423,8 @@ ubuntu)
         info \
         vim{,-doc} \
         emacs \
+        elpa-evil \
+        elpa-magit \
         shellcheck
 
     # UTIL
@@ -1603,6 +1611,7 @@ ubuntu)
         ormolu \
         default-jdk-{doc,headless} \
         sbcl{,-doc} \
+        slime \
         nodejs{,-doc} \
         ocaml-{doc,nox} \
         php \

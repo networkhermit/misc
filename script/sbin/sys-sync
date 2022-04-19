@@ -91,11 +91,11 @@ DISTRO=${ID:-linux}
 case ${DISTRO} in
 arch)
     if [ "${FORCE_SYNC}" = true ]; then
-        (yes || true) | pacman --sync --clean --clean
+        { yes || true; } | pacman --sync --clean --clean
         pacman --sync --refresh --refresh
     fi
     pacman --sync --refresh --sysupgrade
-    (yes || true) | pacman --sync --clean --clean
+    { yes || true; } | pacman --sync --clean --clean
     ;;
 fedora)
     if [ "${FORCE_SYNC}" = true ]; then

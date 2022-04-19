@@ -72,21 +72,8 @@ clean_up () {
 
 trap clean_up EXIT
 
-FORMAT=
+ss --tcp --udp --raw --listening --numeric --processes
 
-FORMAT+='{{printf "%s\n\n" .Name}}'
+printf "\n%s\n\n" ---------------------------------------------------------------------------
 
-FORMAT+='{{range .IPAM.Config}}'
-FORMAT+='{{printf "\t%s\n" .Gateway}}'
-FORMAT+='{{printf "\t%s\n" .Subnet}}'
-FORMAT+='{{end}}'
-
-FORMAT+='{{range .Containers}}'
-FORMAT+='{{printf "\t%s\t\t%s\n" .IPv4Address .Name}}'
-FORMAT+='{{end}}'
-
-docker network inspect cluster --format "${FORMAT}"
-
-FORMAT='{{if .Ports}}{{printf "\t%-16s\t%s" .Names .Ports}}{{end}}'
-
-docker container ls --format "${FORMAT}" --no-trunc | awk 'NF' | sort
+netstat --tcp --udp --raw --listening --numeric --programs

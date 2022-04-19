@@ -74,24 +74,3 @@
         - src: key.pem
           dst: private.key
           mode: "0600"
-
-- name: harbor
-  hosts: harbor
-  become: yes
-  tasks:
-    - name: pull cert
-      get_url:
-        url: "{{ api_endpoint }}/{{ harbor_tls_domain }}/{{ item.src }}?raw=true"
-        headers:
-          Authorization: "{{ auth_token }}"
-        dest: "/srv/harbor/certs/{{ item.dst }}"
-        owner: root
-        group: root
-        mode: "{{ item.mode }}"
-      with_items:
-        - src: cert.pem
-          dst: cert.pem
-          mode: "0644"
-        - src: key.pem
-          dst: key.pem
-          mode: "0600"

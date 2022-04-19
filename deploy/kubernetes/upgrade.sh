@@ -109,4 +109,4 @@ apt-mark showhold
 # control plane
 rm --force --recursive --verbose /etc/kubernetes/tmp
 
-docker image ls --format '{{.Repository}}:{{.Tag}}' | grep --word-regexp 'k8s.gcr.io' | sort
+crictl --runtime-endpoint unix:///run/containerd/containerd.sock rmi --prune

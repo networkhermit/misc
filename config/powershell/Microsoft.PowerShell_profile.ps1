@@ -1,4 +1,4 @@
-Set-Alias -Name v -Value vim
+Set-Alias -Name v -Value gvim
 
 function s {
     Set-Location ..
