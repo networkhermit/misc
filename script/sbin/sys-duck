@@ -82,35 +82,35 @@ DISTRO=${ID:-linux}
 
 case ${DISTRO} in
 arch)
-    echo '------ [ package ] ------'
+    echo ------ [ package ] ------
     { pacman --query --foreign || true; } | sed 's/$/ [foreign]/' | column --table
     { pacman --query --deps --unrequired || true; } | sed 's/$/ [orphan]/' | column --table
-    echo '------ [ configuration ] ------'
+    echo ------ [ configuration ] ------
     find /etc -type f -iregex '.+\.\(old\|pac\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
     ;;
 fedora)
-    echo '------ [ package ] ------'
+    echo ------ [ package ] ------
     dnf --disableexcludes all --quiet list --extras
     dnf --disableexcludes all --quiet list --obsoletes
     dnf --disableexcludes all --quiet repoquery --duplicates
-    echo '------ [ configuration ] ------'
+    echo ------ [ configuration ] ------
     find /etc -type f -iregex '.+\.\(old\|rpm\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
     ;;
 kali | ubuntu)
-    echo '------ [ package ] ------'
+    echo ------ [ package ] ------
     apt list 2> /dev/null | (grep '\<\(local\|residual-config\)\]' || true) | column --table
     apt search '\<(dummy|transitional)\>' 2> /dev/null | (grep '\[installed\>' || true) | column --table
-    echo '------ [ configuration ] ------'
+    echo ------ [ configuration ] ------
     find /etc -type f \( -iregex '.+\.dpkg-\(dist\|new\|old\)' -o -iregex '.+\.old' -o -iregex '.+\.ucf-\(dist\|new\|old\)' \) -print0 | sort --zero-terminated | tr '\0' '\n'
     dpkg-query --show --showformat '${Package}\n${Conffiles}\n' | awk '/^[^ ]/{pkg=$1}/ obsolete$/{print pkg,$0}' | column --table
-    echo '------ [ recommend ] ------'
+    echo ------ [ recommend ] ------
     aptitude search --display-format '%c %p' '~RBrecommends:~i'
     ;;
 opensuse*)
-    echo '------ [ package ] ------'
+    echo ------ [ package ] ------
     zypper packages --orphaned
     zypper packages --unneeded
-    echo '------ [ configuration ] ------'
+    echo ------ [ configuration ] ------
     find /etc -type f -iregex '.+\.\(old\|rpm\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
     ;;
 *)

@@ -74,6 +74,6 @@ trap clean_up EXIT
 
 ss --tcp --udp --raw --listening --numeric --processes
 
-printf "\n%s\n\n" ---------------------------------------------------------------------------
+printf '\n%s\n\n' ---------------------------------------------------------------------------
 
 netstat --tcp --udp --raw --listening --numeric --programs

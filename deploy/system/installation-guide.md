@@ -145,7 +145,7 @@ echo /etc/NetworkManager/conf.d/no-dns.conf
 
 # install command-not-found
 ## arch
-(yes || true) | sudo pacman --sync --needed pkgfile
+{ yes || true; } | sudo pacman --sync --needed pkgfile
 sudo tee --append /etc/bash.bashrc << 'EOF'
 
 [ -r /usr/share/doc/pkgfile/command-not-found.bash ] && . /usr/share/doc/pkgfile/command-not-found.bash
@@ -265,7 +265,7 @@ fi
 EOF
 
 # install arch-install-scripts
-(yes || true) | sudo pacman --sync --needed arch-install-scripts
+{ yes || true; } | sudo pacman --sync --needed arch-install-scripts
 
 # exit chroot
 exit
