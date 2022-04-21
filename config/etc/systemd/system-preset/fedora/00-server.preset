@@ -1,4 +1,4 @@
-disable cockpit.socket
-disable NetworkManager.service
 disable NetworkManager-wait-online.service
+disable NetworkManager.service
+disable cockpit.socket
 enable systemd-networkd.service

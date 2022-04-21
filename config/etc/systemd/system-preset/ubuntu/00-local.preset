@@ -1,13 +1,13 @@
 disable apache2.service
-disable apt-daily.timer
 disable apt-daily-upgrade.timer
+disable apt-daily.timer
 disable dnsmasq.service
 disable epmd.service
 disable glances.service
-disable libvirtd.service
+disable libvirt-guests.service
 disable libvirtd-tcp.socket
 disable libvirtd-tls.socket
-disable libvirt-guests.service
+disable libvirtd.service
 disable motd-news.timer
 disable nginx.service
 disable salt-api.service

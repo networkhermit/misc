@@ -1707,7 +1707,7 @@ systemctl list-unit-files \
     --state enabled,disabled \
     --type service,socket,timer \
     | awk '$2 != $3 { print substr($2, 1, length($2) - 1), $1 }' \
-    | sort \
+    | LC_ALL=C sort \
     | tee /etc/systemd/system-preset/00-local.preset.raw
 
 systemctl list-units --no-pager --type service

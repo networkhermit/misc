@@ -164,7 +164,7 @@
             ],
             "commands": [
                 "extension.vim_escape",
-                ":'<,'>sort l"
+                ":'<,'>sort"
             ],
             "silent": true
         }
