@@ -1,6 +1,7 @@
 ;; emacs
 
 (column-number-mode 1)
+(electric-pair-mode 1)
 (global-auto-revert-mode 1)
 (global-display-line-numbers-mode 1)
 (global-hl-line-mode 1)
@@ -21,13 +22,23 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-(add-to-list 'default-frame-alist
-             '(font . "Fira Code-12"))
-(add-to-list 'default-frame-alist
-             '(fullscreen . maximized))
+(setq default-frame-alist
+      '((font . "Fira Code-12")
+        (fullscreen . maximized)))
 (set-display-table-slot standard-display-table
                         'vertical-border
                         (make-glyph-code ?│))
+
+(add-hook 'term-mode-hook
+          (lambda ()
+            (display-line-numbers-mode -1)
+            (setq show-trailing-whitespace nil)))
+
+(advice-add 'term-handle-exit :after
+            (lambda (&optional process-name msg)
+              (let ((win (get-buffer-window)))
+                (kill-buffer)
+                (ignore-errors (delete-window win)))))
 
 ;; library
 
@@ -39,15 +50,25 @@
             (delete ".." (delete "." (directory-files default-directory)))))
          load-path)))
 
+;; package
+
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(setq package-user-dir "~/.config/emacs/elpa")
+(setq package-gnupghome-dir "~/.config/emacs/elpa/gnupg")
+(package-initialize)
+
+(setq package-selected-packages '(## slime magit evil))
+
+;; doom-modeline
+
+(require 'doom-modeline)
+
+(doom-modeline-mode 1)
+
 ;; evil
 
-(setq evil-overriding-maps nil)
-(setq evil-split-window-below t)
-(setq evil-start-of-line t)
-(setq evil-vsplit-window-right t)
-(setq evil-want-C-u-delete t)
-(setq evil-want-C-u-scroll t)
-(setq evil-want-Y-yank-to-eol t)
 (setq evil-want-keybinding nil)
 
 (require 'evil)
@@ -67,6 +88,14 @@
 (evil-define-operator visualhashtag (begin end type)
   :repeat nil
   (visual-search begin end type nil))
+
+(setq evil-overriding-maps nil)
+(setq evil-split-window-below t)
+(setq evil-start-of-line t)
+(setq evil-vsplit-window-right t)
+(setq evil-want-C-u-delete t)
+(setq evil-want-C-u-scroll t)
+(setq evil-want-Y-yank-to-eol t)
 
 (define-key evil-ex-completion-map "\C-A" [home])
 (define-key evil-insert-state-map "\C-A" [home])
@@ -88,6 +117,16 @@
 (evil-mode 1)
 (evil-collection-init)
 (global-evil-surround-mode 1)
+
+;; git-gutter
+
+(require 'git-gutter)
+
+(global-git-gutter-mode 1)
+
+;; magit
+
+(setq transient-save-history nil)
 
 ;; slime
 

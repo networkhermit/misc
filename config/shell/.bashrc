@@ -28,8 +28,6 @@ fi
 
 ###########################################################################
 
-PROMPT_COMMAND='echo'
-
 # shellcheck disable=SC2034
 GIT_PS1_SHOWDIRTYSTATE=1
 # shellcheck disable=SC2034
@@ -43,6 +41,15 @@ __exit_status () {
 }
 
 PS1='\[\033[;32m\]┌──${VIRTUAL_ENV:+(\[\033[0;1m\]$(basename $VIRTUAL_ENV)\[\033[;32m\])}(\[\033[1;34m\]\u＠\h\[\033[;32m\])-[\[\033[0;1m\]\w\[\033[;32m\]]$(__git_ps1 " (\[\033[1;36m\]ᚠ %s\[\033[;32m\])")\[\033[01;31m\]$(__exit_status)\n\[\033[;32m\]└─\[\033[1;34m\]\$\[\033[0m\] '
+
+__prompt_command () {
+    echo
+    if [ -n "${TMUX}" ]; then
+        tmux set-option -p @PWD "${PWD}"
+    fi
+}
+
+PROMPT_COMMAND='__prompt_command'
 
 ###########################################################################
 
