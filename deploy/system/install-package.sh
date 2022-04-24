@@ -1333,8 +1333,8 @@ opensuse*)
         gdb \
         valgrind \
         gcc-c++ \
-        clang{,13-doc} \
-        llvm{,13-doc} \
+        clang{,-doc} \
+        llvm{,-doc} \
         lld \
         lldb \
         mold \
@@ -1355,7 +1355,7 @@ opensuse*)
         python38-flake8 \
         python38-pylint \
         python38-pyupgrade \
-        ruby{,3.0-doc} \
+        ruby{,3.1-doc} \
         rust \
         cargo
 
@@ -1430,6 +1430,7 @@ ubuntu)
     # UTIL
     apt install \
         at \
+        b3sum \
         bat \
         bc \
         binutils{,-doc} \
@@ -1450,6 +1451,7 @@ ubuntu)
         grep \
         gzip \
         hexyl \
+        hyperfine \
         jq \
         less \
         lynx \
@@ -1477,8 +1479,6 @@ ubuntu)
         xz-utils \
         zip \
         zstd
-        #b3sum \
-        #hyperfine
 
     # SYSADMIN
     apt install \
@@ -1597,10 +1597,11 @@ ubuntu)
         gdb{,-doc} \
         valgrind \
         g++ \
-        clang{,-13-doc,d,-format} \
-        llvm{,-13-doc} \
+        clang{,-14-doc,d,-format} \
+        llvm{,-14-doc} \
         lld \
         lldb \
+        mold \
         elixir \
         erlang-{doc,nox} \
         golang{,-doc,-src} \
@@ -1613,7 +1614,7 @@ ubuntu)
         sbcl{,-doc} \
         slime \
         nodejs{,-doc} \
-        ocaml-{doc,nox} \
+        ocaml{,-doc} \
         php \
         php-codesniffer \
         python3{,-doc,-pip,-virtualenv} \
@@ -1623,12 +1624,11 @@ ubuntu)
         bandit \
         flake8 \
         pylint \
-        ruby{,2.7-doc} \
+        ruby{,3.0-doc} \
         rust{c,-doc,-src} \
         rustfmt \
         rust-clippy \
         cargo{,-doc}
-        #mold
 
     # GAME
     apt install \

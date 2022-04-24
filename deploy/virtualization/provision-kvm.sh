@@ -138,9 +138,9 @@ opensuse)
     EXTRA_ARGUMENT+=(--os-variant opensusetumbleweed)
     ;;
 ubuntu)
-    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/impish/main/installer-amd64)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/jammy/main/installer-amd64)
     EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-    EXTRA_ARGUMENT+=(--os-variant ubuntu21.10)
+    EXTRA_ARGUMENT+=(--os-variant ubuntu22.04)
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"

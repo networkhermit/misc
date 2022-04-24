@@ -112,6 +112,8 @@ opensuse*)
     zypper packages --unneeded
     echo ------ [ configuration ] ------
     find /etc -type f -iregex '.+\.\(old\|rpm\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
+    echo ------ [ recommend ] ------
+    zypper packages --recommended --not-installed-only
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"
