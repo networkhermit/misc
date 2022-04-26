@@ -28,20 +28,6 @@ fi
 
 ###########################################################################
 
-# shellcheck disable=SC2034
-GIT_PS1_SHOWDIRTYSTATE=1
-# shellcheck disable=SC2034
-GIT_PS1_SHOWSTASHSTATE=1
-
-__exit_status () {
-    x=$?
-    if (( x != 0 )); then
-        echo " ${x} ✘"
-    fi
-}
-
-PS1='\[\033[;32m\]┌──${VIRTUAL_ENV:+(\[\033[0;1m\]$(basename $VIRTUAL_ENV)\[\033[;32m\])}(\[\033[1;34m\]\u＠\h\[\033[;32m\])-[\[\033[0;1m\]\w\[\033[;32m\]]$(__git_ps1 " (\[\033[1;36m\]ᚠ %s\[\033[;32m\])")\[\033[01;31m\]$(__exit_status)\n\[\033[;32m\]└─\[\033[1;34m\]\$\[\033[0m\] '
-
 __prompt_command () {
     echo
     if [ -n "${TMUX}" ]; then
@@ -50,6 +36,20 @@ __prompt_command () {
 }
 
 PROMPT_COMMAND='__prompt_command'
+
+# shellcheck disable=SC2034
+GIT_PS1_SHOWDIRTYSTATE=1
+# shellcheck disable=SC2034
+GIT_PS1_SHOWSTASHSTATE=1
+
+__exit_status () {
+    local x=$?
+    if (( x != 0 )); then
+        echo " ${x} ✘"
+    fi
+}
+
+PS1='\[\033[;32m\]┌──${VIRTUAL_ENV:+(\[\033[0;1m\]$(basename $VIRTUAL_ENV)\[\033[;32m\])}(\[\033[1;34m\]\u＠\h\[\033[;32m\])-[\[\033[0;1m\]\w\[\033[;32m\]]$(__git_ps1 " (\[\033[1;36m\]ᚠ %s\[\033[;32m\])")\[\033[01;31m\]$(__exit_status)\n\[\033[;32m\]└─\[\033[1;34m\]\$\[\033[0m\] '
 
 ###########################################################################
 
@@ -96,16 +96,17 @@ alias bs="find . -type l -exec test ! -e '{}' \; -print"
 alias clip='xclip -selection clip <'
 alias d='cd - &> /dev/null'
 alias diff='diff --color=auto'
-alias ea='exa --all'
 alias e='exa --classify --oneline'
+alias ea='exa --all'
 alias el='exa --links --group --long --time-style long-iso'
+alias emacs='emacs --no-window-system'
 alias grep='grep --color=auto'
 alias ip='ip -color=auto'
 alias json='jq --indent 4 --sort-keys .'
+alias l='ls --classify -1'
 alias la='ls --almost-all'
 alias less='less -F'
 alias ll='ls --human-readable -l --time-style long-iso'
-alias l='ls --classify -1'
 alias ls='ls --color=auto'
 alias n='cd .; clear; fortune | cowsay -f www; date --utc "+%F %T %z" --date "now $((( (RANDOM & 1) == 0 )) && echo + || echo -) ${RANDOM} days"; history -cw; rm --force ~/.bash_history'
 alias pass='echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr --delete +/= | dd bs=32 count=1 2>/dev/null)"'

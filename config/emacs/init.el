@@ -3,7 +3,6 @@
 (column-number-mode 1)
 (electric-pair-mode 1)
 (global-auto-revert-mode 1)
-(global-display-line-numbers-mode 1)
 (global-hl-line-mode 1)
 (line-number-mode 1)
 (set-default-coding-systems 'utf-8-unix)
@@ -12,7 +11,10 @@
 (setq auto-save-list-file-prefix nil)
 (setq inhibit-startup-screen t)
 (setq make-backup-files nil)
+(setq scroll-conservatively most-positive-fixnum)
 (setq sentence-end-double-space nil)
+(setq-default display-line-numbers t)
+(setq-default display-line-numbers-width 3)
 (setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
 (show-paren-mode 1)
@@ -28,6 +30,10 @@
 (set-display-table-slot standard-display-table
                         'vertical-border
                         (make-glyph-code ?│))
+
+(add-hook 'term-load-hook
+          (lambda ()
+            (term-set-escape-char ?\C-\\)))
 
 (add-hook 'term-mode-hook
           (lambda ()
@@ -69,6 +75,12 @@
 
 ;; evil
 
+(setq evil-overriding-maps nil)
+(setq evil-toggle-key "\C-\\")
+(setq evil-want-C-h-delete t)
+(setq evil-want-C-u-delete t)
+(setq evil-want-C-u-scroll t)
+(setq evil-want-Y-yank-to-eol t)
 (setq evil-want-keybinding nil)
 
 (require 'evil)
@@ -78,8 +90,20 @@
 (defun visual-search (begin end type forward)
   (unless (eq type 'block)
     (let ((selection (regexp-quote (buffer-substring begin end))))
-      (setq isearch-forward forward)
-      (evil-search selection forward t))))
+      (if (eq evil-search-module 'evil-search)
+          (progn
+            (setq evil-ex-search-direction (if forward 'forward 'backward))
+            (setq evil-ex-search-pattern
+                  (let (evil-ex-search-vim-style-regexp)
+                    (evil-ex-make-search-pattern selection)))
+            (unless (equal (car-safe evil-ex-search-history) selection)
+              (push selection evil-ex-search-history))
+            (evil-push-search-history selection forward)
+            (evil-ex-search))
+        (progn
+          (setq isearch-forward forward)
+          (evil-push-search-history selection forward)
+          (evil-search selection forward t))))))
 
 (evil-define-operator visualstar (begin end type)
   :repeat nil
@@ -89,18 +113,23 @@
   :repeat nil
   (visual-search begin end type nil))
 
-(setq evil-overriding-maps nil)
 (setq evil-split-window-below t)
 (setq evil-start-of-line t)
 (setq evil-vsplit-window-right t)
-(setq evil-want-C-u-delete t)
-(setq evil-want-C-u-scroll t)
-(setq evil-want-Y-yank-to-eol t)
+
+(evil-select-search-module 'evil-search-module 'evil-search)
+
+(defun ToggleRelativeNumber ()
+  (interactive)
+  (if (eq display-line-numbers 'relative)
+      (setq-default display-line-numbers t)
+    (setq-default display-line-numbers 'relative)))
 
 (define-key evil-ex-completion-map "\C-A" [home])
 (define-key evil-insert-state-map "\C-A" [home])
 (define-key evil-insert-state-map "\C-E" [end])
 (define-key evil-insert-state-map "\C-L" 'evil-ex-nohighlight)
+(define-key evil-normal-state-map "_" 'ToggleRelativeNumber)
 (define-key evil-motion-state-map "'" 'evil-goto-mark)
 (define-key evil-motion-state-map "`" 'evil-goto-mark-line)
 (define-key evil-normal-state-map "K" "\C-Wn\M-Xterm")
@@ -113,6 +142,14 @@
 (define-key evil-visual-state-map "*" 'visualstar)
 (define-key evil-visual-state-map "#" 'visualhashtag)
 (define-key evil-visual-state-map "M" ":sort")
+
+(add-hook 'evil-collection-setup-hook
+          (lambda (mode keymaps &rest _rest)
+            (when (string= mode "term")
+              (evil-collection-define-key 'insert 'term-raw-map
+                "\C-J" 'windmove-down
+                "\C-K" 'windmove-up
+                "\C-C" 'term-send-raw))))
 
 (evil-mode 1)
 (evil-collection-init)
@@ -131,6 +168,7 @@
 ;; slime
 
 (setq inferior-lisp-program "sbcl")
+(setq slime-repl-history-file nil)
 
 ;; theme
 
