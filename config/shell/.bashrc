@@ -92,7 +92,7 @@ export VISUAL=vim
 
 alias acp='scp -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias ash='ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-alias bs="find . -type l -exec test ! -e '{}' \; -print"
+alias broken-symlink="find . -xtype l -exec ls --human-readable -l --time-style long-iso '{}' +"
 alias clip='xclip -selection clip <'
 alias d='cd - &> /dev/null'
 alias diff='diff --color=auto'
