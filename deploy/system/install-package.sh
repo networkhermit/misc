@@ -121,6 +121,7 @@ DISTRO=${ID:-linux}
 #       finger
 #       fzf
 #       gawk
+#       glow
 #       gnupg
 #       grep
 #       gzip
@@ -357,6 +358,7 @@ arch)
         core/findutils \
         community/fzf \
         core/gawk \
+        community/glow \
         core/gnupg \
         core/grep \
         core/gzip \
