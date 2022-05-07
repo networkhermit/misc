@@ -109,4 +109,4 @@ apt-mark showhold
 # control plane
 rm --force --recursive --verbose /etc/kubernetes/tmp
 
-crictl --runtime-endpoint unix:///run/containerd/containerd.sock rmi --prune
+crictl --runtime-endpoint unix:///var/run/containerd/containerd.sock rmi --prune

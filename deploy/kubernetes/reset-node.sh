@@ -72,7 +72,7 @@ clean_up () {
 
 trap clean_up EXIT
 
-kubeadm reset --cri-socket /run/containerd/containerd.sock --force
+kubeadm reset --cri-socket /var/run/containerd/containerd.sock --force
 rm -frv /etc/cni/net.d/*.conf
 ipvsadm --clear
 systemctl disable --now kubelet.service

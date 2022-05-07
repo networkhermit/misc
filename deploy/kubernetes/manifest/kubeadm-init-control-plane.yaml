@@ -3,7 +3,7 @@ kind: InitConfiguration
 localAPIEndpoint:
     advertiseAddress: 172.20.16.10
 nodeRegistration:
-    criSocket: /run/containerd/containerd.sock
+    criSocket: unix:///var/run/containerd/containerd.sock
     kubeletExtraArgs:
         node-ip: 172.20.16.10
 ---
@@ -11,7 +11,7 @@ apiVersion: kubeadm.k8s.io/v1beta3
 controlPlaneEndpoint: k8s.cncf.site:6443
 imageRepository: k8s.gcr.io
 kind: ClusterConfiguration
-kubernetesVersion: v1.23.5
+kubernetesVersion: v1.24.0
 networking:
     podSubnet: 10.0.0.0/16
     serviceSubnet: 10.96.0.0/12

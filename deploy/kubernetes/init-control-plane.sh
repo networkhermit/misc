@@ -78,7 +78,7 @@ install --mode 600 /dev/null /etc/kubernetes/kubeadm.log
 #kubeadm init \
 #    --apiserver-advertise-address 172.20.16.10 \
 #    --control-plane-endpoint k8s.cncf.site \
-#    --cri-socket /run/containerd/containerd.sock \
+#    --cri-socket /var/run/containerd/containerd.sock \
 #    --image-repository k8s.gcr.io \
 #    --kubernetes-version "$(kubeadm version --output short)" \
 #    --pod-network-cidr 10.0.0.0/16 \

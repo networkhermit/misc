@@ -81,3 +81,6 @@ kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-
 # kubectl apply --filename https://raw.githubusercontent.com/kubernetes/kube-state-metrics/v2.4.2/examples/standard/deployment.yaml
 
 kubectl apply --filename https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.1/components.yaml
+
+# kubectl get csr
+# kubectl certificate approve <CSR-name>

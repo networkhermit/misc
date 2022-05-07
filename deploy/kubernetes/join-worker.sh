@@ -83,7 +83,7 @@ kubeadm token list
 
 install --mode 600 /dev/null /etc/kubernetes/kubeadm.log
 #kubeadm join \
-#    --cri-socket /run/containerd/containerd.sock \
+#    --cri-socket /var/run/containerd/containerd.sock \
 #    --discovery-token "${TOKEN}" \
 #    --discovery-token-ca-cert-hash "sha256:${HASH}" \
 #    --tls-bootstrap-token "${TOKEN}" \
