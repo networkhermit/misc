@@ -505,6 +505,7 @@ arch)
         extra/lld \
         extra/lldb \
         community/mold \
+        community/sccache \
         community/elixir \
         community/erlang-{docs,nox} \
         community/go \
@@ -563,7 +564,7 @@ arch)
         community/osquery \
         core/pam \
         community/libpam-google-authenticator \
-        extra/qemu-headless \
+        extra/qemu-base \
         community/salt \
         community/tig \
         community/virt-install \
@@ -725,7 +726,6 @@ fedora)
         ca-certificates \
         chrony \
         curl \
-        dnstracer \
         ethtool \
         fping \
         GeoIP{,-GeoLite-data{,-extra}} \
@@ -763,10 +763,11 @@ fedora)
         traceroute \
         wget \
         whois \
-        wireless-tools \
         wireshark-cli \
         wpa_supplicant
+        #dnstracer
         #sniffglue
+        #wireless-tools
         #wrk
 
     # PLT
@@ -818,7 +819,7 @@ fedora)
 
     # DevOps
     dnf install \
-        ansible{,-doc} \
+        ansible{,-core-doc} \
         python3-argcomplete \
         bcc-tools \
         python3-bcc \
