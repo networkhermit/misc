@@ -533,6 +533,7 @@ arch)
         community/python-pylint \
         extra/ruby{,-docs} \
         extra/rust \
+        community/cargo-audit \
         community/rust-analyzer
 
     # GAME
@@ -1341,6 +1342,7 @@ opensuse*)
         lld \
         lldb \
         mold \
+        sccache \
         elixir{,-doc} \
         erlang{,-doc} \
         go{,-doc} \
@@ -1360,7 +1362,7 @@ opensuse*)
         python38-pyupgrade \
         ruby{,3.1-doc} \
         rust \
-        cargo
+        cargo{,-audit}
 
     # GAME
     zypper install \

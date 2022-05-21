@@ -125,7 +125,7 @@ arch)
 fedora)
     EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/35/Server/x86_64/os)
     EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-    EXTRA_ARGUMENT+=(--os-variant fedora35)
+    EXTRA_ARGUMENT+=(--os-variant fedora36)
     ;;
 kali)
     EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
