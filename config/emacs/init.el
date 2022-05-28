@@ -161,9 +161,22 @@
 
 (global-git-gutter-mode 1)
 
+;; go-mode
+
+(require 'go-mode)
+
+(setq gofmt-args '("-s"))
+(add-hook 'before-save-hook #'gofmt-before-save)
+
 ;; magit
 
 (setq transient-save-history nil)
+
+;; rust-mode
+
+(require 'rust-mode)
+
+(setq rust-format-on-save t)
 
 ;; slime
 
