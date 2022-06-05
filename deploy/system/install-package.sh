@@ -533,7 +533,7 @@ arch)
         community/python-pylint \
         extra/ruby{,-docs} \
         extra/rust \
-        community/cargo-audit \
+        community/cargo-{audit,outdated} \
         community/rust-analyzer
 
     # GAME
