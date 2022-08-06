@@ -1071,8 +1071,8 @@ kali)
         gdb{,-doc} \
         valgrind \
         g++ \
-        clang{,-13-doc,d,-format} \
-        llvm{,-13-doc} \
+        clang{,-14-doc,d,-format} \
+        llvm{,-14-doc} \
         lld \
         lldb \
         mold \
