@@ -1660,7 +1660,7 @@ ubuntu)
         python3-argcomplete \
         bpfcc-tools \
         python3-bpfcc \
-        linux-tools-common \
+        linux-tools-generic \
         bpftrace \
         certbot \
         dnsmasq \
