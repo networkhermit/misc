@@ -296,6 +296,8 @@ DISTRO=${ID:-linux}
 # DevOps
 #       ansible
 #       bcc
+#       bpftool
+#       bpftrace
 #       caddy
 #       certbot
 #       dnsmasq
@@ -551,6 +553,8 @@ arch)
         community/python-argcomplete \
         community/bcc-tools \
         community/python-bcc \
+        community/bpf \
+        community/bpftrace \
         community/caddy \
         community/certbot \
         extra/dnsmasq \
@@ -825,6 +829,8 @@ fedora)
         bcc-tools \
         python3-bcc \
         bcc-doc \
+        bpftool \
+        bpftrace \
         caddy \
         certbot \
         dnsmasq \
@@ -1113,6 +1119,8 @@ kali)
         python3-argcomplete \
         bpfcc-tools \
         python3-bpfcc \
+        bpftool \
+        bpftrace \
         certbot \
         python-certbot-doc \
         dnsmasq \
@@ -1380,6 +1388,8 @@ opensuse*)
         bcc-tools \
         python3-bcc \
         bcc-docs \
+        bpftool \
+        bpftrace{,-tools} \
         caddy \
         python3-certbot \
         dnsmasq \
@@ -1650,6 +1660,8 @@ ubuntu)
         python3-argcomplete \
         bpfcc-tools \
         python3-bpfcc \
+        linux-tools-common \
+        bpftrace \
         certbot \
         dnsmasq \
         python-certbot-doc \
