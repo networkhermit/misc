@@ -1271,7 +1271,6 @@ opensuse*)
         smartmontools \
         strace \
         sudo \
-        sysdig \
         rsyslog-doc \
         syslog-ng \
         sysstat \
@@ -1284,6 +1283,7 @@ opensuse*)
         xfsprogs
         #exim
         #rsyslog
+        #sysdig
 
     # NETWORK OPERATOR
     zypper install \
@@ -1363,11 +1363,11 @@ opensuse*)
         python3{,-doc,-pip,-virtualenv} \
         python3-mypy \
         python3-black \
-        python38-isort \
+        python310-isort \
         python3-bandit \
-        python38-flake8 \
-        python38-pylint \
-        python38-pyupgrade \
+        python310-flake8 \
+        python310-pylint \
+        python310-pyupgrade \
         ruby{,3.1-doc} \
         rust \
         cargo{,-audit}

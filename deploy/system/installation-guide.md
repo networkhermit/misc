@@ -92,6 +92,8 @@ echo /etc/apt/sources.list
 ## opensuse
 sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss tumbleweed-oss
 sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/non-oss tumbleweed-non-oss
+sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/tumbleweed/repo/oss tumbleweed-oss
+sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/tumbleweed/repo/non-oss tumbleweed-non-oss
 sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/update/tumbleweed/ tumbleweed-update
 # https://build.opensuse.org/project
 # https://download.opensuse.org
