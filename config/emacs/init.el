@@ -21,8 +21,10 @@
 (xterm-mouse-mode 1)
 
 (menu-bar-mode -1)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
+(if (display-graphic-p)
+    (progn
+      (scroll-bar-mode -1)
+      (tool-bar-mode -1)))
 
 (setq default-frame-alist
       '((font . "Fira Code-12")

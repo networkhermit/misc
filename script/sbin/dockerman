@@ -87,7 +87,7 @@ clean_up () {
 
 trap clean_up EXIT
 
-if [ -n "$(docker container ls --all --filter name='^/'"${NAME}"'$' --format '.')" ]; then
+if [[ -n "$(docker container ls --all --filter name='^/'"${NAME}"'$' --format '.')" ]]; then
     docker container stop "${NAME}"
     docker container rm --volumes "${NAME}"
 fi

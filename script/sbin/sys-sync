@@ -80,7 +80,7 @@ clean_up () {
 
 trap clean_up EXIT
 
-if [ "${OSTYPE}" != linux-gnu ] && [ "${OSTYPE}" != linux ]; then
+if [[ "${OSTYPE}" != linux-gnu ]] && [[ "${OSTYPE}" != linux ]]; then
     die "✗ unknown os type: ‘${OSTYPE}’"
 fi
 
@@ -90,7 +90,7 @@ DISTRO=${ID:-linux}
 
 case ${DISTRO} in
 arch)
-    if [ "${FORCE_SYNC}" = true ]; then
+    if [[ "${FORCE_SYNC}" = true ]]; then
         { yes || true; } | pacman --sync --clean --clean
         pacman --sync --refresh --refresh
     fi
@@ -98,7 +98,7 @@ arch)
     { yes || true; } | pacman --sync --clean --clean
     ;;
 fedora)
-    if [ "${FORCE_SYNC}" = true ]; then
+    if [[ "${FORCE_SYNC}" = true ]]; then
         dnf clean all
     fi
     dnf makecache
@@ -108,7 +108,7 @@ fedora)
     dnf clean packages
     ;;
 kali | ubuntu)
-    if [ "${FORCE_SYNC}" = true ]; then
+    if [[ "${FORCE_SYNC}" = true ]]; then
         apt clean
     fi
     apt update
@@ -118,7 +118,7 @@ kali | ubuntu)
     apt autoremove --purge
     ;;
 opensuse*)
-    if [ "${FORCE_SYNC}" = true ]; then
+    if [[ "${FORCE_SYNC}" = true ]]; then
         zypper clean --all
     fi
     zypper refresh

@@ -93,7 +93,7 @@ clean_up () {
 
 trap clean_up EXIT
 
-if [ -d /etc/wireguard/wg0.conf ]; then
+if [[ -d /etc/wireguard/wg0.conf ]]; then
     for i in "${PEER_LIST[@]}"; do
         ping -c 4 "${i}"
     done
@@ -113,7 +113,7 @@ $(wg genpsk)
 EOF
 done
 
-if [ "${SERVER_MODE}" = true ]; then
+if [[ "${SERVER_MODE}" = true ]]; then
     install --mode 600 /dev/stdin /etc/wireguard/wg0.conf << EOF
 [Interface]
 PostUp = wg set %i private-key /etc/wireguard/private.key

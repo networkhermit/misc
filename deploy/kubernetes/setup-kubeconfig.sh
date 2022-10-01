@@ -74,7 +74,7 @@ clean_up () {
 
 trap clean_up EXIT
 
-if [ "${ROLE}" = cluster-admin ]; then
+if [[ "${ROLE}" = cluster-admin ]]; then
     install \
         --directory \
         --group "$(id --group "${SUDO_USER}")" \

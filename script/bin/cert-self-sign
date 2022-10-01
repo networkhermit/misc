@@ -190,11 +190,11 @@ openssl x509 \
     -sha512 \
     -out ca.csr
 
-if [ "${ENABLE_DIGEST}" = true ]; then
+if [[ "${ENABLE_DIGEST}" = true ]]; then
     digest ca
 fi
 
-if [ "${VERBOSE}" = true ]; then
+if [[ "${VERBOSE}" = true ]]; then
     inspect ca
 fi
 
@@ -247,11 +247,11 @@ subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid:always,issuer
 EOF
 
-if [ "${ENABLE_DIGEST}" = true ]; then
+if [[ "${ENABLE_DIGEST}" = true ]]; then
     digest interm
 fi
 
-if [ "${VERBOSE}" = true ]; then
+if [[ "${VERBOSE}" = true ]]; then
     inspect interm
 fi
 
@@ -296,11 +296,11 @@ authorityKeyIdentifier=keyid,issuer
 subjectAltName=DNS:${CERT_NAME},DNS:localhost,IP:127.0.0.1,IP:::1
 EOF
 
-if [ "${ENABLE_DIGEST}" = true ]; then
+if [[ "${ENABLE_DIGEST}" = true ]]; then
     digest "${CERT_NAME}"
 fi
 
-if [ "${VERBOSE}" = true ]; then
+if [[ "${VERBOSE}" = true ]]; then
     inspect "${CERT_NAME}"
 fi
 
@@ -308,7 +308,7 @@ fi
 
 cat "${CERT_NAME}".crt interm.crt | tee chain.crt &> /dev/null
 
-if [ "${STRICT_VERIFICATION}" = true ]; then
+if [[ "${STRICT_VERIFICATION}" = true ]]; then
     echo +--
     openssl verify -CAfile ca.crt -no-CApath -show_chain ca.crt
     openssl verify -CAfile ca.crt -no-CApath -show_chain interm.crt

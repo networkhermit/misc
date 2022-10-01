@@ -19,7 +19,7 @@ sudo useradd --create-home --gid 1000 --shell /bin/bash --uid 1000 vac
 sudo gpasswd --add vac sudo
 sudo gpasswd --add vac sysadmin
 sudo passwd vac
-if [ -n "${ANSIBLE_USER}" ]; then
+if [[ -n "${ANSIBLE_USER}" ]]; then
     sudo groupadd --gid 8128 --system "${ANSIBLE_USER}"
     sudo useradd --create-home --gid 8128 --shell /bin/bash --system --uid 8128 "${ANSIBLE_USER}"
     sudo gpasswd --add "${ANSIBLE_USER}" sudo
@@ -31,7 +31,7 @@ EOF
     sudo passwd --lock "${ANSIBLE_USER}"
     sudo install --directory --group "${ANSIBLE_USER}" --mode 700 --owner "${ANSIBLE_USER}" "/home/${ANSIBLE_USER}/.ssh"
     sudo install --group "${ANSIBLE_USER}" --mode 600 --owner "${ANSIBLE_USER}" /dev/null "/home/${ANSIBLE_USER}/.ssh/authorized_keys"
-    if [ -n "${ANSIBLE_USER_DEFAULT_KEY}" ]; then
+    if [[ -n "${ANSIBLE_USER_DEFAULT_KEY}" ]]; then
         sudo install --group "${ANSIBLE_USER}" --mode 600 --owner "${ANSIBLE_USER}" /dev/stdin "/home/${ANSIBLE_USER}/.ssh/authorized_keys" << EOF
 ${ANSIBLE_USER_DEFAULT_KEY}
 EOF
@@ -261,7 +261,7 @@ echo /etc/vconsole.conf
 # color setup for ls
 sudo tee --append /etc/bash.bashrc << 'EOF'
 
-if [ -x /usr/bin/dircolors ]; then
+if [[ -x /usr/bin/dircolors ]]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
 fi
 EOF

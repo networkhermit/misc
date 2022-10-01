@@ -11,18 +11,21 @@ case $- in
     ;;
 esac
 
-if [ -z "${TMUX}" ]; then
-    if [ "${TERM}" = xterm-256color ] || [ "${TERM}" = tmux-256color ]; then
-        if [ "${TERM_PROGRAM}" != vscode ]; then
+if [[ -z "${TMUX}" ]]; then
+    if [[ "${TERM}" = xterm-256color ]] || [[ "${TERM}" = tmux-256color ]]; then
+        if [[ "${TERM_PROGRAM}" != vscode ]]; then
             exec tmux new-session -A -D -s main
         fi
     fi
 fi
 
-# shellcheck source=/dev/null
-source /etc/skel/.bashrc
+if [[ -r /etc/skel/.bashrc ]]; then
+    # shellcheck source=/dev/null
+    source /etc/skel/.bashrc
+fi
 
-if [ -x "$(command -v cowsay)" ] && [ -x "$(command -v fortune)" ]; then
+
+if [[ -x "$(command -v cowsay)" ]] && [[ -x "$(command -v fortune)" ]]; then
     fortune | cowsay -f www
 fi
 
@@ -30,7 +33,7 @@ fi
 
 __prompt_command () {
     echo
-    if [ -n "${TMUX}" ]; then
+    if [[ -n "${TMUX}" ]]; then
         tmux set-option -p @PWD "${PWD}"
     fi
 }
@@ -64,17 +67,17 @@ shopt -s autocd
 shopt -s histappend
 shopt -s histverify
 
-if [ ! -r /usr/share/bash-completion/bash_completion ]; then
+if [[ ! -r /usr/share/bash-completion/bash_completion ]]; then
     complete -cf man
     complete -cf sudo
 fi
 
-if [ -x "$(command -v kubeadm)" ]; then
+if [[ -x "$(command -v kubeadm)" ]]; then
     # shellcheck source=/dev/null
     source <(kubeadm completion bash)
 fi
 
-if [ -x "$(command -v kubectl)" ]; then
+if [[ -x "$(command -v kubectl)" ]]; then
     # shellcheck source=/dev/null
     source <(kubectl completion bash)
 fi

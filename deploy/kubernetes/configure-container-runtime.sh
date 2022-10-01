@@ -73,7 +73,7 @@ clean_up () {
 trap clean_up EXIT
 
 mkdir --parents /etc/containerd
-if [ -f /etc/containerd/config.toml ]; then
+if [[ -f /etc/containerd/config.toml ]]; then
     cp --preserve /etc/containerd/config.toml{,.original}
 fi
 containerd config default | tee /etc/containerd/config.toml

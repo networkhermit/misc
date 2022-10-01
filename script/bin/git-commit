@@ -72,7 +72,7 @@ fi
 
 clean_up () {
     git gc --aggressive --prune
-    if [ "${ROOT_COMMIT}" = true ]; then
+    if [[ "${ROOT_COMMIT}" = true ]]; then
         git push --force --set-upstream origin main
     else
         git push --set-upstream origin main
@@ -81,7 +81,7 @@ clean_up () {
 
 trap clean_up EXIT
 
-if [ "${ROOT_COMMIT}" = true ]; then
+if [[ "${ROOT_COMMIT}" = true ]]; then
     url=$(git remote get-url origin)
     rm --force --recursive .git
     git init

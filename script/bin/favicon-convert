@@ -75,7 +75,7 @@ clean_up () {
 
 trap clean_up EXIT
 
-if [ ! -f "${INPUT_IMAGE}" ]; then
+if [[ ! -f "${INPUT_IMAGE}" ]]; then
     die "✗ not a regular file: ‘${INPUT_IMAGE}’"
 fi
 

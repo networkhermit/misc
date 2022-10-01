@@ -85,7 +85,7 @@ KUBERNETES_VERSION=
 
 # install kubernetes packages
 apt update --list-cleanup
-if [ -n "${KUBERNETES_VERSION}" ]; then
+if [[ -n "${KUBERNETES_VERSION}" ]]; then
     for i in kube{adm,ctl,let}; do
         K8S_PKG_VER["${i}"]=$(apt-cache madison "${i}" | grep "${KUBERNETES_VERSION}" | awk '{ print $3 }')
     done
