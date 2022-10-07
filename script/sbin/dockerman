@@ -247,7 +247,7 @@ prometheus)
         --restart always \
         --mount type=bind,source=/srv/v2ray/config.json,destination=/etc/v2ray/config.json \
         v2fly/v2fly-core \
-        v2ray -config=/etc/v2ray/config.json
+        v2ray run -c /etc/v2ray/config.json
     ;;
 esac
 
