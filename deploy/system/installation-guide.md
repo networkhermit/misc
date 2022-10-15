@@ -150,7 +150,7 @@ echo /etc/NetworkManager/conf.d/no-dns.conf
 { yes || true; } | sudo pacman --sync --needed pkgfile
 sudo tee --append /etc/bash.bashrc << 'EOF'
 
-[ -r /usr/share/doc/pkgfile/command-not-found.bash ] && . /usr/share/doc/pkgfile/command-not-found.bash
+[[ -r /usr/share/doc/pkgfile/command-not-found.bash ]] && . /usr/share/doc/pkgfile/command-not-found.bash
 EOF
 ## kali | ubuntu
 sudo apt install --assume-yes command-not-found < /dev/null

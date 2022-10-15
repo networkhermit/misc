@@ -17,6 +17,7 @@
         "-workbench.action.quickOpen"
     ],
     "terminal.integrated.enablePersistentSessions": false,
+    "terminal.integrated.scrollback": 8192,
     "update.mode": "manual",
     "vim.commandLineModeKeyBindingsNonRecursive": [
         {

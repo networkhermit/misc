@@ -44,6 +44,8 @@ PROMPT_COMMAND='__prompt_command'
 GIT_PS1_SHOWDIRTYSTATE=1
 # shellcheck disable=SC2034
 GIT_PS1_SHOWSTASHSTATE=1
+# shellcheck disable=SC2034
+VIRTUAL_ENV_DISABLE_PROMPT=1
 
 __exit_status () {
     local x=$?
@@ -52,7 +54,7 @@ __exit_status () {
     fi
 }
 
-PS1='\[\033[;32m\]┌──${VIRTUAL_ENV:+(\[\033[0;1m\]$(basename $VIRTUAL_ENV)\[\033[;32m\])}(\[\033[1;34m\]\u＠\h\[\033[;32m\])-[\[\033[0;1m\]\w\[\033[;32m\]]$(__git_ps1 " (\[\033[1;36m\]ᚠ %s\[\033[;32m\])")\[\033[01;31m\]$(__exit_status)\n\[\033[;32m\]└─\[\033[1;34m\]\$\[\033[0m\] '
+PS1='\[\033[;32m\]┌──${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}(\[\033[1;34m\]\u＠\h\[\033[;32m\])-[\[\033[0;1m\]\w\[\033[;32m\]]$(__git_ps1 " (\[\033[1;36m\]ᚠ %s\[\033[;32m\])")\[\033[01;31m\]$(__exit_status)\n\[\033[;32m\]└─\[\033[1;34m\]\$\[\033[0m\] '
 
 ###########################################################################
 

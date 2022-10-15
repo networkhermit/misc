@@ -793,7 +793,7 @@ fedora)
         golang-x-tools-{gopls,goimports} \
         golang-honnef-tools \
         ghc \
-        java-latest-openjdk{-headless,-javadoc} \
+        java-latest-openjdk{-devel,-javadoc} \
         sbcl \
         emacs-slime \
         nodejs{,-docs} \
@@ -1355,7 +1355,7 @@ opensuse*)
         erlang{,-doc} \
         go{,-doc} \
         ghc \
-        java-17-openjdk{-headless,-javadoc} \
+        java-17-openjdk{-devel,-javadoc} \
         sbcl \
         nodejs16{,-docs} \
         ocaml \
