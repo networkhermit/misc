@@ -27,7 +27,7 @@
       (tool-bar-mode -1)))
 
 (setq default-frame-alist
-      '((font . "Fira Code-12")
+      `((font . ,(concat "Fira Code-" (or (getenv "FONT_SIZE") "12")))
         (fullscreen . maximized)))
 (set-display-table-slot standard-display-table
                         'vertical-border
