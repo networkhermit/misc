@@ -1054,7 +1054,7 @@ kali)
         sslscan \
         swaks \
         tcpdump \
-        telnet \
+        inetutils-telnet \
         testssl.sh \
         traceroute \
         wget \
@@ -1595,7 +1595,7 @@ ubuntu)
         sslscan \
         swaks \
         tcpdump \
-        telnet \
+        inetutils-telnet \
         testssl.sh \
         traceroute \
         wget \
@@ -1612,8 +1612,8 @@ ubuntu)
         gdb{,-doc} \
         valgrind \
         g++ \
-        clang{,-14-doc,d,-format} \
-        llvm{,-14-doc} \
+        clang{,-15-doc,d,-format} \
+        llvm{,-15-doc} \
         lld \
         lldb \
         mold \
