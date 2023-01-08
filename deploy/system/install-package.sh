@@ -1357,7 +1357,7 @@ opensuse*)
         ghc \
         java-17-openjdk{-devel,-javadoc} \
         sbcl \
-        nodejs16{,-docs} \
+        nodejs18{,-docs} \
         ocaml \
         php8 \
         python3{,-doc,-pip,-virtualenv} \
