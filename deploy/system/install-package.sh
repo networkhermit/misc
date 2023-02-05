@@ -1098,7 +1098,7 @@ kali)
         bandit \
         flake8 \
         pylint \
-        ruby{,3.0-doc} \
+        ruby{,3.1-doc} \
         rust{c,-doc,-src} \
         rustfmt \
         rust-clippy \

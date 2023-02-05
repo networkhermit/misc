@@ -13,9 +13,13 @@ esac
 
 if [[ -z "${TMUX}" ]]; then
     if [[ "${TERM}" = xterm-256color ]] || [[ "${TERM}" = tmux-256color ]]; then
-        if [[ "${TERM_PROGRAM}" != vscode ]]; then
+        case ${TERM_PROGRAM} in
+        vscode|Lens)
+            ;;
+        *)
             exec tmux new-session -A -D -s main
-        fi
+            ;;
+        esac
     fi
 fi
 
@@ -74,14 +78,14 @@ if [[ ! -r /usr/share/bash-completion/bash_completion ]]; then
     complete -cf sudo
 fi
 
-if [[ -x "$(command -v kubeadm)" ]]; then
-    # shellcheck source=/dev/null
-    source <(kubeadm completion bash)
-fi
-
 if [[ -x "$(command -v kubectl)" ]]; then
     # shellcheck source=/dev/null
     source <(kubectl completion bash)
+fi
+
+if [[ -x "$(command -v helm)" ]]; then
+    # shellcheck source=/dev/null
+    source <(helm completion bash)
 fi
 
 ###########################################################################

@@ -111,6 +111,8 @@ caddy)
         --label maintainer=kubernetes-operator \
         --name "${NAME}" \
         --network cluster \
+        --publish 80:80 \
+        --publish 443:443 \
         --publish 28443-28445:28443-28445 \
         --restart always \
         --mount type=bind,source=/srv/caddy/Caddyfile,destination=/etc/caddy/Caddyfile \
