@@ -82,10 +82,10 @@ arch)
         | awk '/^Name/ { name=$3 } /^Version/ { version=$3 } /^Architecture/ { architecture=$3 } /^Installed Size/ { printf "%-14s %s-%s-%s\n", $4$5, name, version, architecture }' \
         | sort --human-numeric-sort --reverse
     ;;
-fedora | opensuse*)
+fedora)
     rpm --query --all --queryformat '%-14{SIZE:humaniec} %{NAME}-%{VERSION}.%{ARCH}\n'
     ;;
-kali | ubuntu)
+kali)
     dpkg-query --show --showformat '${Installed-Size} ${Package}_${Version}_${Architecture}\n' \
         | numfmt --field 1 --format '%-14.2f' --from none --from-unit 1024 --to iec-i \
         | sort --human-numeric-sort --reverse

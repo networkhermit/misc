@@ -1,5 +1,0 @@
-deb https://mirrors.kernel.org/debian stable main contrib non-free
-deb https://mirrors.kernel.org/debian stable-updates main contrib non-free
-
-deb-src https://mirrors.kernel.org/debian stable main contrib non-free
-deb-src https://mirrors.kernel.org/debian stable-updates main contrib non-free

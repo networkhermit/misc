@@ -1,9 +1,0 @@
-deb https://mirrors.kernel.org/ubuntu jammy main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu jammy-backports main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu jammy-security main restricted universe multiverse
-deb https://mirrors.kernel.org/ubuntu jammy-updates main restricted universe multiverse
-
-deb-src https://mirrors.kernel.org/ubuntu jammy main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu jammy-backports main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu jammy-security main restricted universe multiverse
-deb-src https://mirrors.kernel.org/ubuntu jammy-updates main restricted universe multiverse

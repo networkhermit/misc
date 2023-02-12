@@ -81,16 +81,6 @@ source <(grep '^ID=' /etc/os-release)
 DISTRO=${ID:-linux}
 
 ##################
-# CORE
-#       base-files
-#       glibc
-#       linux
-#       coreutils
-#       util-linux
-#       systemd
-##################
-
-##################
 # SHELL
 #       bash
 #       zsh
@@ -103,182 +93,38 @@ DISTRO=${ID:-linux}
 
 ##################
 # UTIL
-#       at
-#       b3sum
-#       bat
-#       bc
-#       binutils
-#       bzip2
-#       colordiff
-#       cpio
-#       diffutils
-#       dos2unix
-#       dosfstools
 #       exa
-#       fd
-#       file
-#       findutils
-#       finger
 #       fzf
-#       gawk
-#       glow
-#       gnupg
-#       grep
-#       gzip
 #       hexyl
-#       hyperfine
 #       jq
-#       less
-#       lynx
-#       lz4
-#       lzop
 #       moreutils
 #       most
-#       ncurses
-#       pandoc
-#       parallel
-#       pigz
-#       pygmentize
-#       qrencode
-#       readline
 #       ripgrep
-#       sed
-#       tar
-#       the_silver_searcher
-#       time
 #       tree
-#       unzip
-#       which
-#       words
-#       xz
-#       zip
-#       zstd
 ##################
 
 ##################
 # SYSADMIN
-#       acl
-#       borg
-#       btrfs-progs
 #       cronie
-#       cryptsetup
-#       device-mapper
-#       dkms
-#       dmidecode
-#       e2fsprogs
-#       exim
-#       fakeroot
-#       glances
-#       gptfdisk
-#       haveged
-#       hdparm
 #       htop
-#       initramfs-tools
 #       iotop
-#       irqbalance
-#       keyutils
-#       kmod
-#       libosinfo
-#       lm-sensors
-#       logrotate
-#       lsb-release
 #       lsof
-#       lvm2
-#       mdadm
-#       ncdu
-#       numad
-#       parted
-#       pciutils
-#       procps
-#       psmisc
-#       restic
-#       rng-tools
-#       shadow
-#       smartmontools
-#       strace
-#       sudo
-#       sysdig
-#       syslogd
-#       sysstat
-#       systemtap
-#       thin-provisioning-tools
 #       tmux
-#       tzdata
-#       usbutils
-#       xfsdump
-#       xfsprogs
 ##################
 
 ##################
 # NETWORK OPERATOR
-#       ab
-#       bind-tools
-#       bridge-utils
-#       ca-certificates
 #       chrony
 #       curl
-#       dns-root-data
-#       dnstracer
-#       ethtool
-#       fping
-#       geoip
-#       goaccess
-#       hostname
-#       httpie
-#       iftop
-#       iperf3
-#       iproute2
-#       ipset
-#       iptables-nft
-#       iputils
-#       ipvsadm
 #       ldnsutils
-#       mitmproxy
-#       mosh
-#       mtr
-#       net-tools
-#       netcat
-#       nethogs
-#       netsniff-ng
-#       nftables
-#       ngrep
-#       nikto
-#       nmap
 #       openssh
-#       openssl
-#       publicsuffix
 #       rsync
-#       sniffglue
-#       socat
-#       sslscan
-#       swaks
-#       tcpdump
-#       telnet
-#       testssl.sh
-#       traceroute
-#       wget
-#       whois
-#       wireless-tools
-#       wireshark
-#       wpa-supplicant
-#       wrk
 ##################
 
 ##################
 # PLT
-#       c
-#       c++
-#       elixir
-#       erlang
 #       go
-#       haskell
-#       java
-#       lisp
-#       nodejs
-#       ocaml
-#       php
 #       python
-#       ruby
 #       rust
 ##################
 
@@ -298,43 +144,21 @@ DISTRO=${ID:-linux}
 #       bcc
 #       bpftool
 #       bpftrace
-#       caddy
-#       certbot
-#       dnsmasq
 #       docker
 #       docker-compose
 #       git
-#       libguestfs-tools
-#       libvirt
-#       nginx
-#       oathtool
 #       osquery
-#       pam
-#       qemu
-#       salt
-#       tig
-#       virtinst
-#       wireguard
+#       wireguard-tools
 ##################
 
 case ${DISTRO} in
 arch)
 
-    # CORE
-    pacman --sync --needed \
-        core/filesystem \
-        core/iana-etc \
-        core/glibc \
-        core/linux{,-api-headers,-docs,-firmware,-headers} \
-        core/coreutils \
-        core/util-linux \
-        core/systemd{,-sysvcompat}
-
     # SHELL
     pacman --sync --needed \
         core/bash \
         extra/bash-completion \
-        extra/zsh{,-doc} \
+        extra/zsh \
         core/man-{db,pages} \
         core/texinfo \
         extra/vim \
@@ -343,188 +167,37 @@ arch)
 
     # UTIL
     pacman --sync --needed \
-        community/at \
-        community/b3sum \
-        community/bat \
-        extra/bc \
-        core/binutils \
-        core/bzip2 \
-        community/colordiff \
-        extra/cpio \
-        core/diffutils \
-        community/dos2unix \
-        core/dosfstools \
         community/exa \
-        community/fd \
-        core/file \
-        core/findutils \
         community/fzf \
-        core/gawk \
-        community/glow \
-        core/gnupg \
-        core/grep \
-        core/gzip \
         community/hexyl \
-        community/hyperfine \
         community/jq \
-        core/less \
-        extra/lynx \
-        core/lz4 \
-        extra/lzop \
         community/moreutils \
         extra/most \
-        core/ncurses \
-        community/pandoc \
-        community/parallel \
-        community/pigz \
-        community/python-pygments \
-        extra/qrencode \
-        core/readline \
         community/ripgrep \
-        core/sed \
-        core/tar \
-        community/the_silver_searcher \
-        community/time \
-        extra/tree \
-        extra/unzip \
-        core/which \
-        community/words \
-        core/xz \
-        extra/zip \
-        core/zstd
+        extra/tree
 
     # SYSADMIN
     pacman --sync --needed \
-        core/acl \
-        community/borg \
-        core/btrfs-progs \
         core/cronie \
-        core/cryptsetup \
-        core/device-mapper \
-        extra/dkms \
-        extra/dmidecode \
-        core/e2fsprogs \
-        community/exim \
-        core/fakeroot \
-        community/glances \
-        extra/gptfdisk \
-        extra/haveged \
-        core/hdparm \
         extra/htop \
-        core/mkinitcpio{,-busybox} \
         community/iotop \
-        extra/irqbalance \
-        core/keyutils \
-        core/kmod \
-        community/libosinfo \
-        extra/lm_sensors \
-        core/logrotate \
-        community/lsb-release \
         extra/lsof \
-        core/lvm2 \
-        core/mdadm \
-        community/ncdu \
-        extra/parted \
-        core/pciutils \
-        core/procps-ng \
-        core/psmisc \
-        community/restic \
-        community/rng-tools \
-        core/shadow \
-        extra/smartmontools \
-        extra/strace \
-        core/sudo \
-        community/sysdig \
-        extra/syslog-ng \
-        community/sysstat \
-        core/thin-provisioning-tools \
-        community/tmux \
-        core/tzdata \
-        core/usbutils \
-        community/xfsdump \
-        core/xfsprogs
+        community/tmux
 
     # NETWORK OPERATOR
     pacman --sync --needed \
-        extra/apache \
-        extra/bind \
-        extra/bridge-utils \
-        core/ca-certificates{,-mozilla,-utils} \
         community/chrony \
         core/curl \
-        core/dnssec-anchors \
-        extra/ethtool \
-        extra/fping \
-        extra/geoip{,-database{,-extra}} \
-        community/goaccess \
-        core/inetutils \
-        community/httpie \
-        community/iftop \
-        community/iperf3 \
-        core/iproute2 \
-        extra/ipset \
-        core/iptables-nft \
-        core/iputils \
-        community/ipvsadm \
         core/ldns \
-        community/mitmproxy \
-        community/mosh \
-        extra/mtr \
-        core/net-tools \
-        community/openbsd-netcat \
-        community/nethogs \
-        community/netsniff-ng \
-        extra/nftables \
-        community/ngrep \
-        community/nikto \
-        extra/nmap \
         core/openssh \
-        core/openssl \
-        extra/publicsuffix-list \
-        extra/rsync \
-        community/sniffglue \
-        extra/socat \
-        community/sslscan \
-        community/swaks \
-        extra/tcpdump \
-        community/testssl.sh \
-        core/traceroute \
-        extra/wget \
-        extra/whois \
-        extra/wireless_tools \
-        community/wireshark-cli \
-        core/wpa_supplicant
-        #dnstracer
-        #wrk
+        extra/rsync
 
     # PLT
     pacman --sync --needed \
-        core/gcc \
-        extra/gdb \
-        extra/valgrind \
-        extra/clang \
-        extra/llvm \
-        extra/lld \
-        extra/lldb \
-        community/mold \
-        community/sccache \
-        community/elixir \
-        community/erlang-{docs,nox} \
         community/go \
         community/gopls \
         community/go-tools \
         community/staticcheck \
-        community/ghc \
-        community/stylish-haskell \
-        community/haskell-ormolu \
-        community/haskell-language-server \
-        extra/jdk-openjdk \
-        extra/openjdk-doc \
-        extra/sbcl \
-        community/nodejs \
-        community/deno \
-        extra/ocaml \
-        extra/php \
         core/python \
         extra/python{-pip,-virtualenv} \
         community/mypy \
@@ -533,10 +206,11 @@ arch)
         community/bandit \
         community/flake8 \
         community/python-pylint \
-        extra/ruby{,-docs} \
         extra/rust \
+        community/rust-analyzer \
         community/cargo-{audit,outdated} \
-        community/rust-analyzer
+        community/mold \
+        community/sccache
 
     # GAME
     pacman --sync --needed \
@@ -555,24 +229,10 @@ arch)
         community/python-bcc \
         community/bpf \
         community/bpftrace \
-        community/caddy \
-        community/certbot \
-        extra/dnsmasq \
         community/docker \
         community/docker-compose \
         extra/git \
-        community/libguestfs \
-        community/libvirt \
-        extra/nginx \
-        community/nginx-mod-auth-pam \
-        community/oath-toolkit \
         community/osquery \
-        core/pam \
-        community/libpam-google-authenticator \
-        extra/qemu-base \
-        community/salt \
-        community/tig \
-        community/virt-install \
         extra/wireguard-tools
 
     pacman --files --list \
@@ -584,234 +244,60 @@ arch)
     ;;
 fedora)
 
-    # CORE
-    dnf install \
-        basesystem \
-        filesystem \
-        rootfiles \
-        setup \
-        glibc{,-devel} \
-        kernel{,-core,-devel,-headers} \
-        linux-firmware \
-        coreutils \
-        util-linux \
-        systemd \
-        chkconfig \
-        initscripts
-
     # SHELL
     dnf install \
-        bash{,-completion,-doc} \
+        bash{,-completion} \
         zsh \
         man-{db,pages} \
         info \
         vim-enhanced \
         emacs \
-        emacs-evil \
-        emacs-magit \
         ShellCheck
 
     # UTIL
     dnf install \
-        at \
-        bat \
-        bc \
-        binutils \
-        bzip2 \
-        colordiff \
-        cpio \
-        diffutils \
-        dos2unix \
-        dosfstools \
         exa \
-        fd-find \
-        file \
-        findutils \
-        finger \
         fzf \
-        gawk{,-doc} \
-        gnupg2 \
-        grep \
-        gzip \
         hexyl \
-        hyperfine \
         jq \
-        less \
-        lynx \
-        lz4 \
-        lzop \
         moreutils \
         most \
-        ncurses{,-base} \
-        pandoc \
-        parallel \
-        pigz \
-        python3-pygments \
-        qrencode \
-        readline \
         ripgrep \
-        sed \
-        tar \
-        the_silver_searcher \
-        time \
-        tree \
-        unzip \
-        which \
-        words \
-        xz \
-        zip \
-        zstd
-        #b3sum
+        tree
 
     # SYSADMIN
     dnf install \
-        acl \
-        borgbackup \
-        btrfs-progs \
         cronie \
-        crontabs \
-        cryptsetup \
-        device-mapper \
-        dkms \
-        dmidecode \
-        e2fsprogs \
-        exim \
-        fakeroot \
-        glances \
-        gdisk \
-        haveged \
-        hdparm \
         htop \
-        dracut \
         iotop \
-        irqbalance \
-        keyutils \
-        kmod \
-        libosinfo \
-        lm_sensors \
-        logrotate \
-        redhat-lsb \
         lsof \
-        lvm2 \
-        mdadm \
-        ncdu \
-        numad \
-        parted \
-        pciutils \
-        procps-ng \
-        psmisc \
-        restic \
-        rng-tools \
-        passwd \
-        shadow-utils \
-        smartmontools \
-        strace \
-        sudo \
-        rsyslog{,-doc} \
-        syslog-ng \
-        sysstat \
-        systemtap \
-        device-mapper-persistent-data \
-        tmux \
-        tzdata \
-        usbutils \
-        xfsdump \
-        xfsprogs
-
-    dnf config-manager --add-repo http://download.sysdig.com/stable/rpm/draios.repo
-    dnf makecache
-    dnf install sysdig
-    dnf clean packages
+        tmux
 
     # NETWORK OPERATOR
     dnf install \
-        httpd-tools \
-        bind-utils \
-        bridge-utils \
-        ca-certificates \
         chrony \
         curl \
-        ethtool \
-        fping \
-        GeoIP{,-GeoLite-data{,-extra}} \
-        goaccess \
-        hostname \
-        httpie \
-        iftop \
-        iperf3 \
-        iproute \
-        ipset \
-        iptables-nft \
-        iputils \
-        ipvsadm \
         ldns-utils \
-        mosh \
-        mtr \
-        net-tools \
-        nmap-ncat \
-        nethogs \
-        netsniff-ng \
-        nftables \
-        ngrep \
-        nikto \
-        nmap \
-        openssh{,-clients,-server} \
-        openssl \
-        publicsuffix-list \
-        rsync \
-        socat \
-        sslscan \
-        swaks \
-        tcpdump \
-        telnet \
-        testssl \
-        traceroute \
-        wget \
-        whois \
-        wireshark-cli \
-        wpa_supplicant
-        #dnstracer
-        #sniffglue
-        #wireless-tools
-        #wrk
+        openssh-server \
+        rsync
 
     # PLT
     dnf install \
-        gcc \
-        cpp \
-        gdb{-doc,-headless} \
-        valgrind \
-        gcc-c++ \
-        clang{,-tools-extra} \
-        llvm{,-doc} \
-        lld \
-        lldb \
-        mold \
-        elixir{,-doc} \
-        erlang{,-doc} \
-        golang{,-docs,-src} \
+        golang \
         golang-x-tools-{gopls,goimports} \
         golang-honnef-tools \
-        ghc \
-        java-latest-openjdk{-devel,-javadoc} \
-        sbcl \
-        emacs-slime \
-        nodejs{,-docs} \
-        ocaml{,-docs} \
-        php \
-        php-pear-PHP-CodeSniffer \
-        python3{,-docs,-pip,-virtualenv} \
+        python3{,-pip,-virtualenv} \
         python3-mypy \
         black \
         python3-isort \
         bandit \
         python3-flake8 \
         pylint \
-        ruby{,-doc} \
-        rust{,-doc,-src} \
+        rust \
         rustfmt \
         clippy \
-        cargo{,-doc}
+        cargo \
+        mold
 
     # GAME
     dnf install \
@@ -824,27 +310,14 @@ fedora)
 
     # DevOps
     dnf install \
-        ansible{,-core-doc} \
+        ansible \
         python3-argcomplete \
         bcc-tools \
         python3-bcc \
-        bcc-doc \
         bpftool \
         bpftrace \
-        caddy \
-        certbot \
-        dnsmasq \
         docker-compose \
         git \
-        libguestfs-tools \
-        libvirt \
-        nginx \
-        oathtool \
-        pam \
-        qemu-{img,system-x86} \
-        salt{,-{api,cloud,master,minion,ssh,syndic}} \
-        tig \
-        virt-install \
         wireguard-tools
 
     ## docker [official]
@@ -871,779 +344,60 @@ fedora)
     ;;
 kali)
 
-    # CORE
-    apt install \
-        base-{files,passwd} \
-        netbase \
-        libc{6,6-dev,-bin,-dev-bin} \
-        glibc-doc \
-        linux-{doc,headers-amd64,image-amd64} \
-        firmware-linux \
-        coreutils \
-        util-linux \
-        bsdutils \
-        systemd{,-sysv} \
-        init-system-helpers
-
     # SHELL
     apt install \
-        bash{,-completion,-doc} \
-        zsh{,-doc} \
-        manpages{,-dev} \
-        info \
-        vim{,-doc} \
-        emacs \
-        elpa-evil \
-        elpa-magit \
-        shellcheck
-
-    # UTIL
-    apt install \
-        at \
-        b3sum \
-        bat \
-        bc \
-        binutils{,-doc} \
-        bzip2 \
-        colordiff \
-        cpio{,-doc} \
-        diffutils{,-doc} \
-        dos2unix \
-        dosfstools \
-        exa \
-        fd-find \
-        file \
-        findutils \
-        finger \
-        fzf \
-        gawk{,-doc} \
-        gnupg{,-utils} \
-        grep \
-        gzip \
-        hexyl \
-        jq \
-        less \
-        lynx \
-        lz4 \
-        lzop \
-        moreutils \
-        most \
-        ncurses-{base,bin,doc} \
-        pandoc \
-        parallel \
-        pigz \
-        python3-pygments \
-        qrencode \
-        readline-{common,doc} \
-        ripgrep \
-        sed \
-        tar \
-        silversearcher-ag \
-        time \
-        tree \
-        unzip \
-        debianutils \
-        dictionaries-common \
-        wamerican \
-        xz-utils \
-        zip \
-        zstd
-        #hyperfine
-
-    # SYSADMIN
-    apt install \
-        acl \
-        borgbackup{,-doc} \
-        btrfs-progs \
-        cron \
-        cryptsetup-initramfs \
-        dkms \
-        dmidecode \
-        dmsetup \
-        e2fsprogs \
-        exim4-daemon-light \
-        fakeroot \
-        glances \
-        gdisk \
-        haveged \
-        hdparm \
-        htop \
-        initramfs-tools \
-        iotop \
-        irqbalance \
-        keyutils \
-        kmod \
-        libosinfo-bin \
-        lm-sensors \
-        logrotate \
-        lsb-release \
-        lsof \
-        lvm2 \
-        mdadm \
-        ncdu \
-        numad \
-        parted{,-doc} \
-        pciutils \
-        procps \
-        sysvinit-utils \
-        psmisc \
-        restic \
-        rng-tools5 \
-        login \
-        passwd \
-        smartmontools \
-        strace \
-        sudo \
-        rsyslog{,-doc} \
-        sysstat \
-        systemtap \
-        thin-provisioning-tools \
-        tmux \
-        tzdata \
-        usbutils \
-        xfsdump \
-        xfsprogs
-        #syslog-ng
-
-    curl --fail --location --silent --show-error https://download.sysdig.com/DRAIOS-GPG-KEY.public | gpg --dearmor --output /etc/apt/trusted.gpg.d/sysdig.gpg
-    echo /etc/apt/sources.list.d/sysdig.list
-    apt update --list-cleanup
-    apt install sysdig
-
-    # NETWORK OPERATOR
-    apt install \
-        apache2-utils \
-        bind9-{dnsutils,host} \
-        bridge-utils \
-        ca-certificates \
-        chrony \
-        curl \
-        dns-root-data \
-        dnstracer \
-        ethtool \
-        fping \
-        geoip-{bin,database} \
-        goaccess \
-        hostname \
-        httpie \
-        iftop \
-        iperf3 \
-        iproute2{,-doc} \
-        ipset \
-        iptables \
-        iputils-{arping,ping,tracepath} \
-        ipvsadm \
-        ldnsutils \
-        mitmproxy \
-        mosh \
-        mtr-tiny \
-        net-tools \
-        netcat-openbsd \
-        nethogs \
-        netsniff-ng \
-        nftables \
-        ngrep \
-        nikto \
-        nmap \
-        openssh-{client,server,sftp-server} \
-        openssl \
-        publicsuffix \
-        rsync \
-        sniffglue \
-        socat \
-        sslscan \
-        swaks \
-        tcpdump \
-        inetutils-telnet \
-        testssl.sh \
-        traceroute \
-        wget \
-        whois \
-        wireless-tools \
-        wireshark{,-doc} \
-        wpasupplicant \
-        wrk
-
-    # PLT
-    apt install \
-        gcc{,-doc} \
-        cpp{,-doc} \
-        gdb{,-doc} \
-        valgrind \
-        g++ \
-        clang{,-14-doc,d,-format} \
-        llvm{,-14-doc} \
-        lld \
-        lldb \
-        mold \
-        elixir \
-        erlang-{doc,nox} \
-        golang{,-doc,-src} \
-        gopls \
-        golang-golang-x-tools \
-        ghc{,-doc} \
-        stylish-haskell \
-        ormolu \
-        default-jdk-{doc,headless} \
-        sbcl{,-doc} \
-        slime \
-        nodejs{,-doc} \
-        ocaml{,-doc} \
-        php \
-        php-codesniffer \
-        python3{,-doc,-pip,-virtualenv} \
-        mypy \
-        black \
-        isort \
-        bandit \
-        flake8 \
-        pylint \
-        ruby{,3.1-doc} \
-        rust{c,-doc,-src} \
-        rustfmt \
-        rust-clippy \
-        cargo{,-doc}
-
-    # GAME
-    apt install \
-        cmatrix \
-        cowsay \
-        fortunes \
-        neofetch \
-        screenfetch \
-        sl
-
-    # DevOps
-    apt install \
-        ansible{,-lint} \
-        python3-argcomplete \
-        bpfcc-tools \
-        python3-bpfcc \
-        bpftool \
-        bpftrace \
-        certbot \
-        python-certbot-doc \
-        dnsmasq \
-        docker.io \
-        docker-compose \
-        git{,-doc} \
-        libguestfs-tools \
-        libvirt-{clients,daemon-system} \
-        nginx-{doc,full} \
-        libnginx-mod-http-{auth-pam,lua} \
-        oathtool \
-        libpam-{doc,modules{,-bin}} \
-        qemu-{system-x86,utils} \
-        salt-{api,cloud,master,minion,ssh,syndic} \
-        tig \
-        virtinst \
-        wireguard-tools
-        #libpam-google-authenticator
-
-    curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/osquery.gpg https://pkg.osquery.io/deb/keyring.gpg
-    echo /etc/apt/sources.list.d/osquery.list
-    apt update --list-cleanup
-    apt install osquery
-
-    dpkg --listfiles \
-        openssh-server \
-        | awk --field-separator '[/ ]' '/\/lib\/systemd\/.+\/.+\..+/ { printf "%s\n", $NF }'
-
-    dpkg --search /etc/bash.bashrc
-
-    ;;
-opensuse*)
-
-    # CORE
-    zypper install \
-        aaa_base{,-extras} \
-        filesystem \
-        openSUSE-release \
-        glibc{,-devel} \
-        kernel-{default{,-devel},devel,docs} \
-        kernel-firmware-all \
-        coreutils \
-        util-linux \
-        systemd{,-network,-sysvinit}
-
-    # SHELL
-    zypper install \
-        bash{,-completion,-doc} \
+        bash{,-completion} \
         zsh \
-        man{,-pages} \
+        manpages{,-dev} \
         info \
         vim \
         emacs \
-        ShellCheck
-
-    # UTIL
-    zypper install \
-        at \
-        bat \
-        bc \
-        binutils \
-        bzip2 \
-        colordiff \
-        cpio \
-        diffutils \
-        dos2unix \
-        dosfstools \
-        exa \
-        fd \
-        file \
-        findutils \
-        finger \
-        fzf \
-        gawk \
-        gpg2 \
-        grep \
-        gzip \
-        hyperfine \
-        jq \
-        less \
-        lynx \
-        lz4 \
-        lzop \
-        moreutils \
-        most \
-        ncurses-{devel,utils} \
-        pandoc \
-        gnu_parallel \
-        pigz \
-        python3-Pygments \
-        libreadline8 \
-        qrencode \
-        readline-doc \
-        ripgrep \
-        sed \
-        tar \
-        the_silver_searcher \
-        time \
-        tree \
-        unzip \
-        which \
-        words \
-        xz \
-        zip \
-        zstd
-        #b3sum
-        #hexyl
-
-    # SYSADMIN
-    zypper install \
-        acl \
-        borgbackup \
-        btrfsprogs \
-        cron \
-        cronie \
-        cryptsetup \
-        device-mapper \
-        dkms \
-        dmidecode \
-        e2fsprogs \
-        fakeroot \
-        glances \
-        gptfdisk \
-        haveged \
-        hdparm \
-        htop \
-        dracut \
-        iotop \
-        irqbalance \
-        keyutils \
-        kmod \
-        libosinfo \
-        sensors \
-        logrotate \
-        lsb-release \
-        lsof \
-        lvm2 \
-        mdadm \
-        ncdu \
-        numad \
-        parted \
-        pciutils \
-        procps \
-        psmisc \
-        restic \
-        rng-tools \
-        shadow \
-        smartmontools \
-        strace \
-        sudo \
-        rsyslog-doc \
-        syslog-ng \
-        sysstat \
-        systemtap \
-        thin-provisioning-tools \
-        tmux \
-        timezone \
-        usbutils \
-        xfsdump \
-        xfsprogs
-        #exim
-        #rsyslog
-        #sysdig
-
-    # NETWORK OPERATOR
-    zypper install \
-        apache2-utils \
-        bind-utils \
-        bridge-utils \
-        ca-certificates{,-mozilla} \
-        chrony \
-        curl \
-        dnstracer \
-        ethtool \
-        fping \
-        geoipupdate \
-        goaccess \
-        hostname \
-        python3-httpie \
-        iftop \
-        iperf \
-        iproute2 \
-        ipset \
-        iptables-backend-nft \
-        iputils \
-        ipvsadm \
-        ldns \
-        python3-mitmproxy \
-        mosh \
-        mtr \
-        net-tools \
-        netcat-openbsd \
-        nethogs \
-        netsniff-ng \
-        nftables \
-        ngrep \
-        nikto \
-        nmap \
-        openssh \
-        openssl \
-        publicsuffix \
-        rsync \
-        socat \
-        sslscan \
-        swaks \
-        tcpdump \
-        telnet \
-        testssl.sh \
-        traceroute \
-        wget \
-        whois \
-        wireless-tools \
-        wireshark \
-        wpa_supplicant \
-        wrk
-        #sniffglue
-
-    # PLT
-    zypper install \
-        gcc{,-info} \
-        cpp \
-        gdb \
-        valgrind \
-        gcc-c++ \
-        clang{,-doc} \
-        llvm{,-doc} \
-        lld \
-        lldb \
-        mold \
-        sccache \
-        elixir{,-doc} \
-        erlang{,-doc} \
-        go{,-doc} \
-        ghc \
-        java-17-openjdk{-devel,-javadoc} \
-        sbcl \
-        nodejs18{,-docs} \
-        ocaml \
-        php8 \
-        python3{,-doc,-pip,-virtualenv} \
-        python3-mypy \
-        python3-black \
-        python310-isort \
-        python3-bandit \
-        python310-flake8 \
-        python310-pylint \
-        python310-pyupgrade \
-        ruby{,3.1-doc} \
-        rust \
-        cargo{,-audit}
-
-    # GAME
-    zypper install \
-        cmatrix \
-        cowsay \
-        fortune \
-        neofetch \
-        screenfetch \
-        sl
-
-    # DevOps
-    zypper install \
-        ansible{,-doc,-lint} \
-        python3-argcomplete \
-        bcc-tools \
-        python3-bcc \
-        bcc-docs \
-        bpftool \
-        bpftrace{,-tools} \
-        caddy \
-        python3-certbot \
-        dnsmasq \
-        docker \
-        docker-compose \
-        git{,-doc} \
-        guestfs-tools \
-        libvirt \
-        nginx \
-        oath-toolkit \
-        pam \
-        qemu-{tools,x86} \
-        salt{,-{api,cloud,master,minion,ssh,syndic}} \
-        tig \
-        virt-install \
-        wireguard-tools
-
-    rpm --query \
-        openssh \
-        --list \
-        | awk --field-separator '[/ ]' '/\/lib\/systemd\/.+\/.+\..+/ { printf "%s\n", $NF }'
-
-    rpm --query --file /etc/bash.bashrc
-
-    ;;
-ubuntu)
-
-    # CORE
-    apt install \
-        base-{files,passwd} \
-        netbase \
-        libc{6,6-dev,-bin,-dev-bin} \
-        glibc-doc \
-        linux-{doc,firmware,headers-generic,image-generic} \
-        coreutils \
-        util-linux \
-        bsdutils \
-        systemd{,-sysv} \
-        init-system-helpers
-
-    # SHELL
-    apt install \
-        bash{,-completion,-doc} \
-        zsh{,-doc} \
-        manpages{,-dev} \
-        info \
-        vim{,-doc} \
-        emacs \
-        elpa-evil \
-        elpa-magit \
         shellcheck
 
     # UTIL
     apt install \
-        at \
-        b3sum \
-        bat \
-        bc \
-        binutils{,-doc} \
-        bzip2 \
-        colordiff \
-        cpio{,-doc} \
-        diffutils{,-doc} \
-        dos2unix \
-        dosfstools \
         exa \
-        fd-find \
-        file \
-        findutils \
-        finger \
         fzf \
-        gawk{,-doc} \
-        gnupg{,-utils} \
-        grep \
-        gzip \
         hexyl \
-        hyperfine \
         jq \
-        less \
-        lynx \
-        lz4 \
-        lzop \
         moreutils \
         most \
-        ncurses-{base,bin,doc} \
-        pandoc \
-        parallel \
-        pigz \
-        python3-pygments \
-        qrencode \
-        readline-{common,doc} \
         ripgrep \
-        sed \
-        tar \
-        silversearcher-ag \
-        time \
-        tree \
-        unzip \
-        debianutils \
-        dictionaries-common \
-        wamerican \
-        xz-utils \
-        zip \
-        zstd
+        tree
 
     # SYSADMIN
     apt install \
-        acl \
-        borgbackup{,-doc} \
-        btrfs-progs \
         cron \
-        cryptsetup{,-bin} \
-        dkms \
-        dmidecode \
-        dmsetup \
-        e2fsprogs \
-        exim4-daemon-light \
-        fakeroot \
-        glances \
-        gdisk \
-        haveged \
-        hdparm \
         htop \
-        initramfs-tools \
         iotop \
-        irqbalance \
-        keyutils \
-        kmod \
-        libosinfo-bin \
-        lm-sensors \
-        logrotate \
-        lsb-release \
         lsof \
-        lvm2 \
-        mdadm \
-        ncdu \
-        numad \
-        parted{,-doc} \
-        pciutils \
-        procps \
-        sysvinit-utils \
-        psmisc \
-        restic \
-        rng-tools5 \
-        login \
-        passwd \
-        smartmontools \
-        strace \
-        sudo \
-        sysdig \
-        rsyslog{,-doc} \
-        sysstat \
-        systemtap \
-        thin-provisioning-tools \
-        tmux \
-        tzdata \
-        usbutils \
-        xfsdump \
-        xfsprogs
-        #syslog-ng
+        tmux
 
     # NETWORK OPERATOR
     apt install \
-        apache2-utils \
-        bind9-{dnsutils,host} \
-        bridge-utils \
-        ca-certificates \
         chrony \
         curl \
-        dns-root-data \
-        dnstracer \
-        ethtool \
-        fping \
-        geoip-{bin,database} \
-        goaccess \
-        hostname \
-        httpie \
-        iftop \
-        iperf3 \
-        iproute2{,-doc} \
-        ipset \
-        iptables \
-        iputils-{arping,ping,tracepath} \
-        ipvsadm \
         ldnsutils \
-        mitmproxy \
-        mosh \
-        mtr-tiny \
-        net-tools \
-        netcat-openbsd \
-        nethogs \
-        netsniff-ng \
-        nftables \
-        ngrep \
-        nikto \
-        nmap \
-        openssh-{client,server,sftp-server} \
-        openssl \
-        publicsuffix \
-        rsync \
-        sniffglue \
-        socat \
-        sslscan \
-        swaks \
-        tcpdump \
-        inetutils-telnet \
-        testssl.sh \
-        traceroute \
-        wget \
-        whois \
-        wireless-tools \
-        wireshark{,-doc} \
-        wpasupplicant \
-        wrk
+        openssh-server \
+        rsync
 
     # PLT
     apt install \
-        gcc{,-doc} \
-        cpp{,-doc} \
-        gdb{,-doc} \
-        valgrind \
-        g++ \
-        clang{,-15-doc,d,-format} \
-        llvm{,-15-doc} \
-        lld \
-        lldb \
-        mold \
-        elixir \
-        erlang-{doc,nox} \
-        golang{,-doc,-src} \
+        golang \
         gopls \
         golang-golang-x-tools \
-        ghc{,-doc} \
-        stylish-haskell \
-        ormolu \
-        default-jdk-{doc,headless} \
-        sbcl{,-doc} \
-        slime \
-        nodejs{,-doc} \
-        ocaml{,-doc} \
-        php \
-        php-codesniffer \
-        python3{,-doc,-pip,-virtualenv} \
+        python3{,-pip,-virtualenv} \
         mypy \
         black \
         isort \
         bandit \
         flake8 \
         pylint \
-        ruby{,3.0-doc} \
-        rust{c,-doc,-src} \
+        rustc, \
         rustfmt \
         rust-clippy \
-        cargo{,-doc}
+        cargo \
+        mold
 
     # GAME
     apt install \
@@ -1660,26 +414,12 @@ ubuntu)
         python3-argcomplete \
         bpfcc-tools \
         python3-bpfcc \
-        linux-tools-generic \
+        bpftool \
         bpftrace \
-        certbot \
-        dnsmasq \
-        python-certbot-doc \
         docker.io \
         docker-compose \
-        git{,-doc} \
-        libguestfs-tools \
-        libvirt-{clients,daemon-system} \
-        nginx-{doc,full} \
-        libnginx-mod-http-auth-pam \
-        oathtool \
-        libpam-{doc,google-authenticator,modules{,-bin}} \
-        qemu-{system-x86,utils} \
-        salt-{api,cloud,master,minion,ssh,syndic} \
-        tig \
-        virtinst \
+        git \
         wireguard-tools
-        #libnginx-mod-http-lua
 
     curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/osquery.gpg https://pkg.osquery.io/deb/keyring.gpg
     echo /etc/apt/sources.list.d/osquery.list
@@ -1692,7 +432,7 @@ ubuntu)
 
     dpkg --search /etc/bash.bashrc
 
-        ;;
+    ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"
     ;;

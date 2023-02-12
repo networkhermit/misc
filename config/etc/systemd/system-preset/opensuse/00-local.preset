@@ -1,7 +1,0 @@
-disable epmd.socket
-disable postfix.service
-enable chronyd.service
-enable docker.service
-enable firewalld.service
-enable sshd.service
-enable wicked.service

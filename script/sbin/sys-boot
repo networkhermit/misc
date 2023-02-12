@@ -92,13 +92,9 @@ fedora)
     fi
     grub2-mkconfig --output /boot/grub2/grub.cfg
     ;;
-kali | ubuntu)
+kali)
     update-initramfs -k all -u
     grub-mkconfig --output /boot/grub/grub.cfg
-    ;;
-opensuse*)
-    dracut --force --regenerate-all
-    grub2-mkconfig --output /boot/grub2/grub.cfg
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"

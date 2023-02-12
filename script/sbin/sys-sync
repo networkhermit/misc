@@ -107,7 +107,7 @@ fedora)
     dnf autoremove
     dnf clean packages
     ;;
-kali | ubuntu)
+kali)
     if [[ "${FORCE_SYNC}" = true ]]; then
         apt clean
     fi
@@ -116,16 +116,6 @@ kali | ubuntu)
     apt full-upgrade --purge
     apt clean
     apt autoremove --purge
-    ;;
-opensuse*)
-    if [[ "${FORCE_SYNC}" = true ]]; then
-        zypper clean --all
-    fi
-    zypper refresh
-    zypper list-updates
-    zypper dist-upgrade
-    zypper purge-kernels
-    zypper clean
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"

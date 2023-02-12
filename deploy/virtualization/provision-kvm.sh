@@ -44,7 +44,7 @@ Options:
 
 Arguments:
     DISTRO
-        linux distro name (arch | fedora | kali | opensuse | ubuntu)
+        linux distro name (arch | fedora | kali)
     NAME
         name of the new guest virtual machine instance
 EOF
@@ -131,16 +131,6 @@ kali)
     EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
     EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
     EXTRA_ARGUMENT+=(--os-variant debiantesting)
-    ;;
-opensuse)
-    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss)
-    EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-    EXTRA_ARGUMENT+=(--os-variant opensusetumbleweed)
-    ;;
-ubuntu)
-    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/ubuntu/dists/jammy/main/installer-amd64)
-    EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-    EXTRA_ARGUMENT+=(--os-variant ubuntu22.04)
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"

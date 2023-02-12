@@ -89,18 +89,6 @@ echo /etc/yum.repos.d/fedora-modular.repo
 echo /etc/yum.repos.d/fedora-updates-modular.repo
 ## kali
 echo /etc/apt/sources.list
-## opensuse
-sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss tumbleweed-oss
-sudo zypper addrepo --check --gpgcheck --no-refresh https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/non-oss tumbleweed-non-oss
-sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/tumbleweed/repo/oss tumbleweed-oss
-sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/tumbleweed/repo/non-oss tumbleweed-non-oss
-sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/update/tumbleweed/ tumbleweed-update
-# https://build.opensuse.org/project
-# https://download.opensuse.org
-sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/security/openSUSE_Tumbleweed/security.repo
-sudo zypper addrepo --check --gpgcheck --no-refresh https://download.opensuse.org/repositories/utilities/openSUSE_Factory/utilities.repo
-## ubuntu
-echo /etc/apt/sources.list
 
 # make distro sync
 # reference script=sys-sync
@@ -152,12 +140,10 @@ sudo tee --append /etc/bash.bashrc << 'EOF'
 
 [[ -r /usr/share/doc/pkgfile/command-not-found.bash ]] && . /usr/share/doc/pkgfile/command-not-found.bash
 EOF
-## kali | ubuntu
+## kali
 sudo apt install --assume-yes command-not-found < /dev/null
 sudo apt update
 sudo update-command-not-found
-## opensuse
-sudo zypper install command-not-found
 
 # reboot system
 sudo sync
@@ -198,7 +184,7 @@ sudo mkfs.xfs -f -L Arch /dev/vdaX
 sudo mount /dev/vdaX /mnt
 
 # bootstrap base system
-sudo pacstrap /mnt base linux{,-firmware} sudo vim openssh intel-ucode grub efibootmgr
+sudo pacstrap /mnt base linux{,-firmware} intel-ucode grub efibootmgr sudo vim openssh gptfdisk xfsprogs
 genfstab -t PARTUUID /mnt | sudo tee /mnt/etc/fstab
 sudo cp --verbose {,/mnt}/etc/resolv.conf
 
@@ -370,25 +356,10 @@ Kali
 
 # configure system network
 
-## change distro source [debian]
-echo /etc/apt/sources.list
-
-## remove foreign architecture
-dpkg --print-architecture
-dpkg --print-foreign-architectures
-dpkg --print-foreign-architectures | xargs --no-run-if-empty sudo dpkg --remove-architecture
-
-## make initial system upgrade
-
-## install kali archive keyring
-sudo curl --fail --location --silent --show-error --remote-name 'https://mirrors.tuna.tsinghua.edu.cn/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2022.1_all.deb'
-sudo dpkg --install kali-archive-keyring_*_all.deb
-sudo rm --force --verbose kali-archive-keyring_*_all.deb
-
 # change distro source
 
 # make distro sync
-sudo apt install --assume-yes kali-linux-{default,large} < /dev/null
+sudo apt install --assume-yes kali-linux-default < /dev/null
 
 # update message of the day
 
@@ -407,114 +378,6 @@ sudo systemctl restart ssh.service
 
 # modify shell environment
 sudo mv --verbose /etc/profile.d/kali.sh{,.forbid}
-
-# reboot system
-```
-
-openSUSE
-========
-
-```bash
-# shellcheck shell=bash
-
-# change root password
-
-# check sudo support
-
-# add default sysadmin
-
-# manage system service
-
-# change hostname
-
-# check internet connection
-
-# modify dns resolver
-
-# configure default address selection
-
-# modify default ntp server
-
-# update system clock
-
-# modify time zone
-
-# configure system network
-
-# change distro source
-
-# make distro sync
-
-# update message of the day
-
-# modify secure shell daemon
-sudo firewall-cmd --permanent --service ssh --add-port 321/tcp
-sudo firewall-cmd --permanent --service ssh --remove-port 22/tcp
-sudo firewall-cmd --permanent --service ssh --get-ports
-sudo firewall-cmd --reload
-sudo systemctl restart sshd.service
-
-# update initramfs image
-
-# update boot loader
-
-# network control
-
-# disable dynamic resolver
-
-# install command-not-found
-
-# reboot system
-```
-
-Ubuntu
-======
-
-```bash
-# shellcheck shell=bash
-
-# change root password
-
-# check sudo support
-
-# add default sysadmin
-
-# manage system service
-
-# change hostname
-
-# check internet connection
-
-# modify dns resolver
-
-# configure default address selection
-
-# modify default ntp server
-
-# update system clock
-
-# modify time zone
-
-# configure system network
-
-# change distro source
-
-# make distro sync
-
-# update message of the day
-
-# modify secure shell daemon
-sudo systemctl restart ssh.service
-
-# update initramfs image
-
-# update boot loader
-
-# network control
-
-# disable dynamic resolver
-
-# install command-not-found
 
 # reboot system
 ```
