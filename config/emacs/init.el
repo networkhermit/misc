@@ -67,7 +67,19 @@
 (setq package-gnupghome-dir "~/.config/emacs/elpa/gnupg")
 (package-initialize)
 
-(setq package-selected-packages '(## slime magit evil))
+(setq package-selected-packages '(##
+                                  doom-modeline
+                                  dracula-theme
+                                  evil
+                                  evil-collection
+                                  evil-surround
+                                  git-gutter
+                                  go-mode
+                                  kaolin-themes
+                                  magit
+                                  nord-theme
+                                  rust-mode
+                                  slime))
 
 ;; doom-modeline
 

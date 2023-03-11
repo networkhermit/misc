@@ -1,4 +1,1 @@
-disable systemd-networkd.service
-enable NetworkManager.service
-enable bluetooth.service
-enable gdm.service
+enable wpa_supplicant@.service

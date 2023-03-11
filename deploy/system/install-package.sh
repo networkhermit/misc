@@ -95,7 +95,6 @@ DISTRO=${ID:-linux}
 # UTIL
 #       exa
 #       fzf
-#       hexyl
 #       jq
 #       moreutils
 #       most
@@ -134,7 +133,6 @@ DISTRO=${ID:-linux}
 #       cowsay
 #       fortunes
 #       neofetch
-#       screenfetch
 #       sl
 ##################
 
@@ -156,84 +154,74 @@ arch)
 
     # SHELL
     pacman --sync --needed \
-        core/bash \
-        extra/bash-completion \
-        extra/zsh \
-        core/man-{db,pages} \
-        core/texinfo \
-        extra/vim \
-        extra/emacs \
-        community/shellcheck
+        bash{,-completion} \
+        zsh \
+        man-{db,pages} \
+        texinfo \
+        vim \
+        emacs \
+        shellcheck
 
     # UTIL
     pacman --sync --needed \
-        community/exa \
-        community/fzf \
-        community/hexyl \
-        community/jq \
-        community/moreutils \
-        extra/most \
-        community/ripgrep \
-        extra/tree
+        exa \
+        fzf \
+        jq \
+        moreutils \
+        most \
+        ripgrep \
+        tree
 
     # SYSADMIN
     pacman --sync --needed \
-        core/cronie \
-        extra/htop \
-        community/iotop \
-        extra/lsof \
-        community/tmux
+        cronie \
+        htop \
+        iotop \
+        lsof \
+        tmux
 
     # NETWORK OPERATOR
     pacman --sync --needed \
-        community/chrony \
-        core/curl \
-        core/ldns \
-        core/openssh \
-        extra/rsync
+        chrony \
+        curl \
+        ldns \
+        openssh \
+        rsync
 
     # PLT
     pacman --sync --needed \
-        community/go \
-        community/gopls \
-        community/go-tools \
-        community/staticcheck \
-        core/python \
-        extra/python{-pip,-virtualenv} \
-        community/mypy \
-        community/python-black \
-        community/python-isort \
-        community/bandit \
-        community/flake8 \
-        community/python-pylint \
-        extra/rust \
-        community/rust-analyzer \
-        community/cargo-{audit,outdated} \
-        community/mold \
-        community/sccache
+        go \
+        gopls \
+        go-tools \
+        staticcheck \
+        python{,-black,-pip} \
+        mypy \
+        ruff \
+        rust{,-analyzer} \
+        cargo-{audit,outdated} \
+        mold \
+        sccache
 
     # GAME
     pacman --sync --needed \
-        community/cmatrix \
-        extra/cowsay \
-        community/fortune-mod \
-        community/neofetch \
-        community/screenfetch \
-        community/sl
+        cmatrix \
+        cowsay \
+        fortune-mod \
+        neofetch \
+        sl
 
     # DevOps
     pacman --sync --needed \
-        community/ansible{,-lint} \
-        community/python-argcomplete \
-        community/bcc-tools \
-        community/python-bcc \
-        community/bpf \
-        community/bpftrace \
-        community/docker \
-        community/docker-compose \
-        extra/git \
-        community/osquery \
-        extra/wireguard-tools
+        ansible{,-lint} \
+        python-argcomplete \
+        bcc-tools \
+        python-bcc \
+        bpf \
+        bpftrace \
+        docker{,-compose} \
+        git \
+        osquery \
+        wireguard-tools
 
     pacman --files --list \
         openssh \
@@ -258,7 +246,6 @@ fedora)
     dnf install \
         exa \
         fzf \
-        hexyl \
         jq \
         moreutils \
         most \
@@ -286,13 +273,9 @@ fedora)
         golang \
         golang-x-tools-{gopls,goimports} \
         golang-honnef-tools \
-        python3{,-pip,-virtualenv} \
+        python3{,-pip} \
         python3-mypy \
         black \
-        python3-isort \
-        bandit \
-        python3-flake8 \
-        pylint \
         rust \
         rustfmt \
         clippy \
@@ -305,7 +288,6 @@ fedora)
         cowsay \
         fortune-mod \
         neofetch \
-        screenfetch \
         sl
 
     # DevOps
@@ -316,7 +298,6 @@ fedora)
         python3-bcc \
         bpftool \
         bpftrace \
-        docker-compose \
         git \
         wireguard-tools
 
@@ -358,7 +339,6 @@ kali)
     apt install \
         exa \
         fzf \
-        hexyl \
         jq \
         moreutils \
         most \
@@ -386,14 +366,10 @@ kali)
         golang \
         gopls \
         golang-golang-x-tools \
-        python3{,-pip,-virtualenv} \
-        mypy \
+        python3{,-pip} \
         black \
-        isort \
-        bandit \
-        flake8 \
-        pylint \
-        rustc, \
+        mypy \
+        rustc \
         rustfmt \
         rust-clippy \
         cargo \
@@ -405,7 +381,6 @@ kali)
         cowsay \
         fortunes \
         neofetch \
-        screenfetch \
         sl
 
     # DevOps
@@ -417,7 +392,6 @@ kali)
         bpftool \
         bpftrace \
         docker.io \
-        docker-compose \
         git \
         wireguard-tools
 

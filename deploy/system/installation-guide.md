@@ -194,7 +194,6 @@ sudo arch-chroot /mnt
 # change root password
 
 # check sudo support
-sudo ln --force --no-dereference --symbolic /usr/{bin/vim,local/bin/vi}
 
 # add default sysadmin
 sudo touch /etc/subuid /etc/subgid

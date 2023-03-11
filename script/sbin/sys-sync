@@ -95,6 +95,7 @@ arch)
         pacman --sync --refresh --refresh
     fi
     pacman --sync --refresh --sysupgrade
+    pacman --query --deps --unrequired --unrequired --quiet | pacman --remove --nosave --recursive --unneeded - || true
     { yes || true; } | pacman --sync --clean --clean
     ;;
 fedora)

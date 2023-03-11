@@ -99,8 +99,8 @@ export VISUAL=vim
 
 ###########################################################################
 
-alias acp='scp -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-alias ash='ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+alias acp='scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+alias ash='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias broken-symlink="find . -xtype l -exec ls --human-readable -l --time-style long-iso '{}' +"
 alias clip='xclip -selection clip <'
 alias d='cd - &> /dev/null'
