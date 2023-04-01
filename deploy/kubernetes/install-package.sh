@@ -74,9 +74,9 @@ trap clean_up EXIT
 
 # trust google cloud package signing key
 ## google repository
-curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/kubernetes.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 ## aliyun repository
-curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/kubernetes.gpg https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg
+curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg
 
 # add kubernetes repository
 echo /etc/apt/sources.list.d/kubernetes.list

@@ -1,17 +1,17 @@
 apiVersion: kubeadm.k8s.io/v1beta3
-discovery:
-    bootstrapToken:
-        apiServerEndpoint: k8s.cncf.site:6443
-        caCertHashes:
-            - sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-        token: abcdef.0123456789abcdef
-    tlsBootstrapToken: abcdef.0123456789abcdef
 controlPlane:
-    certificateKey: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-    localAPIEndpoint:
-        advertiseAddress: 172.20.16.13
+  certificateKey: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+  localAPIEndpoint:
+    advertiseAddress: 172.31.0.20
+    bindPort: 6443
+discovery:
+  bootstrapToken:
+    apiServerEndpoint: k8s.internal.cncf.site:6443
+    caCertHashes:
+      - sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+    token: abcdef.0123456789abcdef
 kind: JoinConfiguration
 nodeRegistration:
-    criSocket: unix:///var/run/containerd/containerd.sock
-    kubeletExtraArgs:
-        node-ip: 172.20.16.13
+  criSocket: unix:///var/run/containerd/containerd.sock
+  kubeletExtraArgs:
+    node-ip: 172.31.0.20,fd00:1:2:3::20

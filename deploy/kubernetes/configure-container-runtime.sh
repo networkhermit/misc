@@ -79,10 +79,10 @@ fi
 containerd config default | tee /etc/containerd/config.toml
 
 cat << 'EOF'
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-  ...
-  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-    SystemdCgroup = true
+[plugins."io.containerd.grpc.v1.cri"]
+  sandbox_image = "registry.k8s.io/pause:3.9"
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+  SystemdCgroup = true
 EOF
 
 systemctl restart containerd

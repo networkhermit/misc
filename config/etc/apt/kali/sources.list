@@ -1,2 +1,2 @@
-deb https://archive.kali.org/kali kali-rolling main non-free contrib
-deb-src https://archive.kali.org/kali kali-rolling main non-free contrib
+deb https://archive.kali.org/kali kali-rolling main contrib non-free non-free-firmware
+deb-src https://archive.kali.org/kali kali-rolling main contrib non-free non-free-firmware

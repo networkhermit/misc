@@ -1,0 +1,6 @@
+[
+  {
+    "command": "workbench.action.toggleZenMode",
+    "key": "ctrl+backspace"
+  }
+]

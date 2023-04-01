@@ -75,7 +75,7 @@ trap clean_up EXIT
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # verify cluster status
+kubectl --namespace kube-system get configmaps kubeadm-config --output yaml
 kubectl cluster-info
-kubectl get configmaps --namespace kube-system kubeadm-config --output yaml
 kubectl get nodes --output wide
-kubectl get pods --all-namespaces --output wide
+kubectl --namespace kube-system get pods --output wide

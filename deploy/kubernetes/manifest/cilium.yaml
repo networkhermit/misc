@@ -1,0 +1,40 @@
+autoDirectNodeRoutes: true
+bandwidthManager:
+  bbr: true
+  enabled: true
+bpf:
+  masquerade: true
+devices: eth+
+enableIPv6BIGTCP: true
+enableIPv6Masquerade: false
+hubble:
+  metrics:
+    enabled:
+      - dns
+      - drop
+      - flow
+      - flows-to-world
+      - httpV2
+      - icmp
+      - port-distribution
+      - tcp
+    enableOpenMetrics: true
+  relay:
+    enabled: true
+  ui:
+    enabled: true
+ipam:
+  mode: kubernetes
+ipv4NativeRoutingCIDR: 10.24.0.0/16
+ipv6:
+  enabled: true
+ipv6NativeRoutingCIDR: fd00:ebee:10:2400::/56
+loadBalancer:
+  acceleration: native
+  mode: hybrid
+operator:
+  prometheus:
+    enabled: true
+prometheus:
+  enabled: true
+tunnel: disabled

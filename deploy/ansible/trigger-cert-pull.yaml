@@ -24,7 +24,6 @@
         - src: key.pem
           dst: privkey.pem
           mode: "0600"
-
 - name: minio
   hosts: minio
   become: yes
@@ -49,7 +48,6 @@
         - src: key.pem
           dst: private.key
           mode: "0600"
-
 - name: gotify
   hosts: gotify
   become: yes

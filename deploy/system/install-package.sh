@@ -100,6 +100,7 @@ DISTRO=${ID:-linux}
 #       most
 #       ripgrep
 #       tree
+#       yq-go
 ##################
 
 ##################
@@ -373,7 +374,8 @@ kali)
         rustfmt \
         rust-clippy \
         cargo \
-        mold
+        mold \
+        sccache
 
     # GAME
     apt install \

@@ -72,9 +72,9 @@ clean_up () {
 
 trap clean_up EXIT
 
-kubeadm config print join-defaults
+#kubeadm config print join-defaults
 
-kubeadm token list
+#kubeadm token list
 #TOKEN=$(kubeadm token create --ttl 2h)
 #HASH=$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt \
 #    | openssl rsa -pubin -outform der 2> /dev/null \
@@ -82,12 +82,5 @@ kubeadm token list
 #kubeadm token create --print-join-command
 
 install --mode 600 /dev/null /etc/kubernetes/kubeadm.log
-#kubeadm join \
-#    --cri-socket /var/run/containerd/containerd.sock \
-#    --discovery-token "${TOKEN}" \
-#    --discovery-token-ca-cert-hash "sha256:${HASH}" \
-#    --tls-bootstrap-token "${TOKEN}" \
-#    "${CONTROL_PLANE_ENDPOINT}:${CONTROL_PLANE_PORT}" \
-#    |& tee /etc/kubernetes/kubeadm.log
 kubeadm join --config manifest/kubeadm-join-worker.yaml |& tee /etc/kubernetes/kubeadm.log
 systemctl enable kubelet.service

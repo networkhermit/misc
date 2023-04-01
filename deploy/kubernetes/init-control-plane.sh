@@ -72,27 +72,13 @@ clean_up () {
 
 trap clean_up EXIT
 
-kubeadm config print init-defaults --component-configs KubeletConfiguration,KubeProxyConfiguration
+#kubeadm config print init-defaults --component-configs KubeletConfiguration,KubeProxyConfiguration
 
 install --mode 600 /dev/null /etc/kubernetes/kubeadm.log
-#kubeadm init \
-#    --apiserver-advertise-address 172.20.16.10 \
-#    --control-plane-endpoint k8s.cncf.site \
-#    --cri-socket /var/run/containerd/containerd.sock \
-#    --image-repository k8s.gcr.io \
-#    --kubernetes-version "$(kubeadm version --output short)" \
-#    --pod-network-cidr 10.0.0.0/16 \
-#    --service-cidr 10.96.0.0/12 \
-#    |& tee /etc/kubernetes/kubeadm.log
 kubeadm init --config manifest/kubeadm-init-control-plane.yaml --upload-certs |& tee /etc/kubernetes/kubeadm.log
-#kubeadm init --config manifest/kubeadm-init-control-plane.yaml --skip-phases addon/kube-proxy |& tee /etc/kubernetes/kubeadm.log
 systemctl enable kubelet.service
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
-
-# install pod network add-on
-## cilium
-cilium install --version v1.12.0
 
 # remove master node isolation
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-

@@ -1,26 +1,41 @@
 ```bash
 # shellcheck shell=bash
 
-# verify uniqueness of node
-hostname
-ip link
-sudo cat /sys/class/dmi/id/product_uuid
-
-# discovery kubernetes api
-kubectl api-resources --sort-by name
-kubectl api-versions
-
 # list all container images running in a cluster
-kubectl get pods --all-namespaces --output jsonpath='{.items[*].spec.containers[*].image}' \
+kubectl get pods --all-namespaces --output jsonpath="{.items[*].spec['containers', 'initContainers'][*].image}" \
     | tr --squeeze-repeats '[:space:]' '\n' \
     | sort \
     | uniq
 
-# access kubernetes dashboard
-kubectl get secret "$(kubectl get serviceaccount cluster-admin-dashboard --namespace kube-system --output jsonpath='{.secrets[].name}')" --namespace kube-system --output jsonpath="{.data['token']}" | base64 --decode && echo
-echo http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
-kubectl proxy
+# mirroring images
+REGISTRY_HOST=
+REGISTRY_USERNAME=
+REGISTRY_PASSWORD=
+IMAGE_REPOSITORY=${REGISTRY_HOST}/k8s
 
-# update kubernetes dashboard
-kubectl delete "$(kubectl get pod --namespace kube-system --output name | grep --word-regexp 'kubernetes-dashboard')" --namespace kube-system
+for i in $(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)") registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.8.2 registry.k8s.io/metrics-server/metrics-server:v0.6.3; do
+    image=$(cut --delimiter / --fields 2- <<< "${i}" | tr / _)
+    #image=$(cut --delimiter / --fields 2- <<< "${i}")
+    skopeo copy --all --preserve-digests "docker://${i}" "docker://${IMAGE_REPOSITORY}/${image}"
+done
+
+sudo docker run --rm -it --entrypoint /bin/bash quay.io/skopeo/stable:latest
+echo "${REGISTRY_PASSWORD}" | skopeo login --username "${REGISTRY_USERNAME}" --password-stdin "${REGISTRY_HOST}"
+skopeo logout "${REGISTRY_HOST}"
+
+# create kubeconfig for new user
+export KUBECONFIG=/etc/kubernetes/admin.conf
+kubeadm kubeconfig user --config <(kubectl --namespace kube-system get configmaps kubeadm-config --output jsonpath='{.data.ClusterConfiguration}') --org devops --client-name vac --validity-period 24h
+
+# checking api access
+kubectl auth can-i delete namespace
+
+# access hubble
+cilium hubble port-forward
+cilium hubble ui
+
+# access kubernetes dashboard
+kubectl --namespace kubernetes-dashboard create token cluster-admin-dashboard
+echo http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+kubectl proxy
 ```

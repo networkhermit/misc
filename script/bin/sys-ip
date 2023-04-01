@@ -75,15 +75,9 @@ ip route get 1.1.1.1 | awk '{ print $7; exit }'
 echo [ opendns ]
 
 {
-    dig myip.opendns.com @208.67.222.222 a +short
-    dig myip.opendns.com @208.67.220.220 a +short
+    drill -Q myip.opendns.com @208.67.222.222 a
+    drill -Q myip.opendns.com @208.67.220.220 a
 } | uniq
-
-#drill myip.opendns.com @208.67.222.222 a
-#drill myip.opendns.com @208.67.220.220 a
-
-#host -t a myip.opendns.com 208.67.222.222
-#host -t a myip.opendns.com 208.67.220.220
 
 echo [ amazonaws ]
 
@@ -92,8 +86,8 @@ curl --fail --location --silent --show-error https://checkip.amazonaws.com
 echo [ google ]
 
 {
-    dig o-o.myaddr.l.google.com @216.239.32.10 txt +short
-    dig o-o.myaddr.l.google.com @216.239.34.10 txt +short
+    drill -Q o-o.myaddr.l.google.com @216.239.32.10 txt
+    drill -Q o-o.myaddr.l.google.com @216.239.34.10 txt
 } | tr --delete \" | uniq
 
 echo [ ipv4 ]

@@ -1,30 +1,43 @@
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: InitConfiguration
 localAPIEndpoint:
-    advertiseAddress: 172.20.16.10
+  advertiseAddress: 172.31.0.10
+  bindPort: 6443
 nodeRegistration:
-    criSocket: unix:///var/run/containerd/containerd.sock
-    kubeletExtraArgs:
-        node-ip: 172.20.16.10
+  criSocket: unix:///var/run/containerd/containerd.sock
+  kubeletExtraArgs:
+    node-ip: 172.31.0.10,fd00:1:2:3::10
+skipPhases:
+  - addon/kube-proxy
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
-controlPlaneEndpoint: k8s.cncf.site:6443
-imageRepository: k8s.gcr.io
+clusterName: fleet
+controlPlaneEndpoint: k8s.internal.cncf.site:6443
+imageRepository: registry.k8s.io
 kind: ClusterConfiguration
-kubernetesVersion: v1.24.3
+kubernetesVersion: v1.26.3
 networking:
-    podSubnet: 10.0.0.0/16
-    serviceSubnet: 10.96.0.0/12
+  dnsDomain: fleet.local
+  podSubnet: 10.24.0.0/16,fd00:ebee:10:2400::/56
+  serviceSubnet: 10.20.0.0/16,fd00:ebee:10:2000::/112
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 cgroupDriver: systemd
-clusterDNS:
-    - 10.96.0.10
+eventBurst: 100
+eventRecordQPS: 50
+evictionHard:
+  imagefs.available: 3.75%
+  nodefs.available: 2.5%
+failSwapOn: false
 kind: KubeletConfiguration
+kubeAPIBurst: 100
+kubeAPIQPS: 50
+maxPods: 256
+registryBurst: 100
+registryPullQPS: 50
+serializeImagePulls: false
 serverTLSBootstrap: true
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: ipvs
-nodePortAddresses:
-    - 172.20.0.0/16

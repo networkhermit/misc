@@ -74,13 +74,38 @@ trap clean_up EXIT
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
-kubectl apply --filename https://raw.githubusercontent.com/kubernetes/dashboard/v2.6.1/aio/deploy/recommended.yaml
-kubectl create serviceaccount cluster-admin-dashboard --namespace kubernetes-dashboard
+kubectl get certificatesigningrequests --sort-by '{.metadata.creationTimestamp}'
+kubectl certificate approve csr-abcde
+
+# install pod network add-on
+## cilium
+cilium install --helm-values manifest/cilium.yaml --version v1.13.1 |& tee /etc/kubernetes/cilium.log
+
+kubectl --namespace kube-system rollout restart deployment coredns
+
+cilium hubble enable --ui
+
+kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/1.13.1/examples/kubernetes/addons/prometheus/monitoring-example.yaml
+
+kubectl apply --filename https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+kubectl --namespace kubernetes-dashboard create serviceaccount cluster-admin-dashboard
 kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kubernetes-dashboard:cluster-admin-dashboard
 
-# kubectl apply --filename https://raw.githubusercontent.com/kubernetes/kube-state-metrics/v2.5.0/examples/standard/deployment.yaml
+for component in cluster-role-binding cluster-role deployment service-account service; do
+    kubectl apply --filename "https://raw.githubusercontent.com/kubernetes/kube-state-metrics/v2.8.2/examples/standard/${component}.yaml"
+done
 
-kubectl apply --filename https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.1/components.yaml
+kubectl apply --filename https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.3/components.yaml
 
-# kubectl get csr
-# kubectl certificate approve <CSR-name>
+kubectl apply --filename https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml
+
+kubectl apply --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/baremetal/deploy.yaml
+
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+helm install rancher rancher-stable/rancher \
+    --create-namespace \
+    --namespace cattle-system \
+    --set hostname=rancher.cncf.site \
+    --set bootstrapPassword=admin \
+    --version 2.7.1
+# helm pull rancher-stable/rancher

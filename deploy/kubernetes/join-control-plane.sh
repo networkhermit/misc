@@ -72,10 +72,10 @@ clean_up () {
 
 trap clean_up EXIT
 
-kubeadm config print join-defaults
+#kubeadm config print join-defaults
 
-KEY=$(kubeadm certs certificate-key)
-kubeadm init phase upload-certs --certificate-key "${KEY}" --upload-certs
+#KEY=$(kubeadm certs certificate-key)
+#kubeadm init phase upload-certs --certificate-key "${KEY}" --upload-certs
 
 kubeadm token list
 #TOKEN=$(kubeadm token create --ttl 2h)
@@ -85,15 +85,5 @@ kubeadm token list
 #kubeadm token create --certificate-key "${KEY}" --print-join-command
 
 install --mode 600 /dev/null /etc/kubernetes/kubeadm.log
-#kubeadm join \
-#    --apiserver-advertise-address 172.20.16.13 \
-#    --certificate-key "${KEY}" \
-#    --control-plane \
-#    --cri-socket /var/run/containerd/containerd.sock \
-#    --discovery-token "${TOKEN}" \
-#    --discovery-token-ca-cert-hash "sha256:${HASH}" \
-#    --tls-bootstrap-token "${TOKEN}" \
-#    "${CONTROL_PLANE_ENDPOINT}:${CONTROL_PLANE_PORT}" \
-#    |& tee /etc/kubernetes/kubeadm.log
 kubeadm join --config manifest/kubeadm-join-control-plane.yaml |& tee /etc/kubernetes/kubeadm.log
 systemctl enable kubelet.service

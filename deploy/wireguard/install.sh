@@ -137,6 +137,7 @@ else
 [Interface]
 PostUp = wg set %i private-key /etc/wireguard/private.key
 Address = ${IP_ADDRESS}
+#Table = off
 #PostUp = iptables --table nat --insert POSTROUTING --source ${SUBNET} --out-interface wlan0 --jump MASQUERADE
 #PostUp = iptables --table filter --insert FORWARD --in-interface wlan0 --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
 #PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface wlan0 --jump ACCEPT
