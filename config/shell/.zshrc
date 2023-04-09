@@ -3,13 +3,9 @@
 set -o pipefail
 
 # If not running interactively, don't do anything
-case $- in
-*i*)
-    ;;
-*)
+if [[ ! -o interactive ]]; then
     return
-    ;;
-esac
+fi
 
 if [[ -z "${TMUX}" ]] && [[ -z "${VIM}" ]]; then
     if [[ "${TERM}" = xterm-256color ]] || [[ "${TERM}" = tmux-256color ]]; then
@@ -23,10 +19,17 @@ if [[ -z "${TMUX}" ]] && [[ -z "${VIM}" ]]; then
     fi
 fi
 
-if [[ -r /etc/skel/.bashrc ]]; then
+if [[ -r /etc/skel/.zshrc ]]; then
     # shellcheck source=/dev/null
-    source /etc/skel/.bashrc
+    source /etc/skel/.zshrc
 fi
+
+if [[ -r ~/.zshrc.kali ]]; then
+    # shellcheck source=/dev/null
+    source ~/.zshrc.kali
+fi
+
+bindkey ^P up-line-or-history
 
 if [[ -x "$(command -v cowsay)" ]] && [[ -x "$(command -v fortune)" ]]; then
     fortune | cowsay -f www
@@ -41,7 +44,9 @@ __prompt_command () {
     fi
 }
 
-PROMPT_COMMAND='__prompt_command'
+precmd () {
+    __prompt_command
+}
 
 # shellcheck disable=SC2034
 GIT_PS1_SHOWDIRTYSTATE=1
@@ -57,36 +62,21 @@ __exit_status () {
     fi
 }
 
-PS1='\[\033[;32m\]┌──${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}(\[\033[1;34m\]\u＠\h\[\033[;32m\])-[\[\033[0;1m\]\w\[\033[;32m\]]$(__git_ps1 " (\[\033[1;36m\]ᚠ %s\[\033[;32m\])")\[\033[01;31m\]$(__exit_status)\n\[\033[;32m\]└─\[\033[1;34m\]\$\[\033[0m\] '
+# shellcheck disable=SC2034
+PROMPT=$'%F{%(#.blue.green)}┌──${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n㉿%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]$(__git_ps1 " (\e[1;36mᚠ %s\e[;32m)")%B%F{red}$(__exit_status)\n%b%F{%(#.blue.green)}└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
 
 ###########################################################################
 
-HISTCONTROL=erasedups:ignorespace
-HISTSIZE=256
-HISTTIMEFORMAT='%F %T '
-unset HISTFILE
-
-bind Space:magic-space
-
 set -o noclobber
-
-shopt -s autocd
-shopt -s histappend
-shopt -s histverify
-
-if [[ ! -r /usr/share/bash-completion/bash_completion ]]; then
-    complete -cf man
-    complete -cf sudo
-fi
 
 if [[ -x "$(command -v kubectl)" ]]; then
     # shellcheck source=/dev/null
-    source <(kubectl completion bash)
+    source <(kubectl completion zsh)
 fi
 
 if [[ -x "$(command -v helm)" ]]; then
     # shellcheck source=/dev/null
-    source <(helm completion bash)
+    source <(helm completion zsh)
 fi
 
 ###########################################################################

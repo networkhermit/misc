@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -o errexit
 set -o errtrace
@@ -97,7 +97,6 @@ DISTRO=${ID:-linux}
 #       fzf
 #       jq
 #       moreutils
-#       most
 #       ripgrep
 #       tree
 #       yq-go
@@ -156,7 +155,7 @@ arch)
     # SHELL
     pacman --sync --needed \
         bash{,-completion} \
-        zsh \
+        zsh{,-autosuggestions,-syntax-highlighting} \
         man-{db,pages} \
         texinfo \
         vim \
@@ -169,9 +168,9 @@ arch)
         fzf \
         jq \
         moreutils \
-        most \
         ripgrep \
-        tree
+        tree \
+        go-yq
 
     # SYSADMIN
     pacman --sync --needed \
@@ -236,7 +235,7 @@ fedora)
     # SHELL
     dnf install \
         bash{,-completion} \
-        zsh \
+        zsh{,-autosuggestions,-syntax-highlighting} \
         man-{db,pages} \
         info \
         vim-enhanced \
@@ -249,7 +248,6 @@ fedora)
         fzf \
         jq \
         moreutils \
-        most \
         ripgrep \
         tree
 
@@ -329,7 +327,7 @@ kali)
     # SHELL
     apt install \
         bash{,-completion} \
-        zsh \
+        zsh{,-autosuggestions,-syntax-highlighting} \
         manpages{,-dev} \
         info \
         vim \
@@ -342,7 +340,6 @@ kali)
         fzf \
         jq \
         moreutils \
-        most \
         ripgrep \
         tree
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -o errexit
 set -o errtrace
@@ -100,6 +100,14 @@ kubectl apply --filename https://github.com/kubernetes-sigs/metrics-server/relea
 kubectl apply --filename https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml
 
 kubectl apply --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/baremetal/deploy.yaml
+
+istioctl install --skip-confirmation
+# https://istio.io/latest/docs/setup/getting-started
+kubectl create namespace istio-demo
+kubectl label namespace istio-demo istio-injection=enabled
+kubectl --namespace istio-demo apply --filename samples/bookinfo/platform/kube/bookinfo.yaml
+kubectl --namespace istio-demo apply --filename samples/bookinfo/networking/bookinfo-gateway.yaml
+kubectl --namespace istio-demo apply --filename samples/addons
 
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm install rancher rancher-stable/rancher \

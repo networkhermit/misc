@@ -1,6 +1,7 @@
 disable ModemManager.service
 disable systemd-resolved.service
 enable chrony.service
+enable nix-daemon.service
 enable osqueryd.service
 enable ssh.service
 enable wg-quick@.service
