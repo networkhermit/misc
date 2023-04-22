@@ -1,0 +1,70 @@
+with import <nixpkgs> {}; let
+  base = [
+    ansible
+    ansible-lint
+    bash-completion
+    bashInteractive
+    bat
+    black
+    cargo
+    clippy
+    cmatrix
+    coreutils
+    cowsay
+    exa
+    file
+    findutils
+    fortune
+    fzf
+    gawk
+    gnugrep
+    gnused
+    gnutar
+    go
+    go-tools
+    golangci-lint
+    gopls
+    gzip
+    htop
+    jq
+    ldns
+    less
+    mold
+    moreutils
+    mypy
+    neofetch
+    neovim
+    python3
+    ripgrep
+    ruff
+    rust-analyzer
+    rustc
+    rustfmt
+    sccache
+    shellcheck
+    sl
+    tmux
+    tree
+    watch
+    xz
+    yq-go
+    zsh
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+  ];
+  devops = [
+    kubectl
+    kubernetes-helm
+    kubie
+    mitmproxy
+    nmap
+    sqlfluff
+    terraform
+    tfk8s
+    tflint
+    tfsec
+  ];
+  nix = [alejandra];
+  list = base ++ devops ++ nix;
+in
+  list

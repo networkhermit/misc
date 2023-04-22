@@ -1,0 +1,43 @@
+cluster:
+  network:
+    cni:
+      name: none
+    dnsDomain: fleet.local
+    podSubnets:
+      - 10.24.0.0/16
+      #- fd00:ebee:10:2400::/56
+    serviceSubnets:
+      - 10.20.0.0/16
+      #- fd00:ebee:10:2000::/112
+  proxy:
+    disabled: true
+machine:
+  kubelet:
+    extraConfig:
+      cgroupDriver: cgroupfs
+      eventBurst: 100
+      eventRecordQPS: 50
+      evictionHard:
+        imagefs.available: 3.75%
+        nodefs.available: 2.5%
+      failSwapOn: false
+      kubeAPIBurst: 100
+      kubeAPIQPS: 50
+      maxPods: 256
+      registryBurst: 100
+      registryPullQPS: 50
+      serializeImagePulls: false
+      serverTLSBootstrap: true
+    nodeIP:
+      validSubnets:
+        - 172.31.0.0/24
+        #- fd00:1:2:3::10/64
+  network:
+    nameservers:
+      - 1.1.1.1
+      - 208.67.222.222
+      - 9.9.9.9
+  time:
+    servers:
+      - time.cloudflare.com
+      - time.google.com

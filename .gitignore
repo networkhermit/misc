@@ -6,3 +6,8 @@ vault/
 
 # Ansible inventory
 inventory/
+
+# Terraform
+.terraform/
+terraform.tfstate*
+terraform.tfvars

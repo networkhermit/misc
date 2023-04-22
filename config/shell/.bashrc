@@ -130,7 +130,7 @@ alias sha='sha256sum'
 alias t='tree'
 alias v='vim'
 alias www='python3 -B -W:all -m http.server'
-alias yaml='yq "sort_keys(.)"'
+alias yaml='yq "sort_keys(..)"'
 
 if [[ $(uname) = Darwin ]]; then
     alias clip='pbcopy <'

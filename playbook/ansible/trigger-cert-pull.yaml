@@ -1,0 +1,74 @@
+- become: true
+  handlers:
+    - ansible.builtin.service:
+        name: nginx
+        state: reloaded
+      name: reload nginx
+  hosts: nginx
+  name: nginx
+  tasks:
+    - ansible.builtin.get_url:
+        dest: "/etc/nginx/pack/certs/{{ nginx_tls_domain }}/{{ item.dst }}"
+        group: root
+        headers:
+          Authorization: "{{ auth_token }}"
+        mode: "{{ item.mode }}"
+        owner: root
+        url: "{{ api_endpoint }}/{{ nginx_tls_domain }}/{{ item.src }}?raw=true"
+      name: pull cert
+      notify: reload nginx
+      with_items:
+        - dst: fullchain.pem
+          mode: "0644"
+          src: cert.pem
+        - dst: privkey.pem
+          mode: "0600"
+          src: key.pem
+- become: true
+  handlers:
+    - ansible.builtin.command: docker restart minio
+      name: reload minio
+  hosts: minio
+  name: minio
+  tasks:
+    - ansible.builtin.get_url:
+        dest: "/srv/minio/certs/{{ item.dst }}"
+        group: root
+        headers:
+          Authorization: "{{ auth_token }}"
+        mode: "{{ item.mode }}"
+        owner: root
+        url: "{{ api_endpoint }}/{{ minio_tls_domain }}/{{ item.src }}?raw=true"
+      name: pull cert
+      notify: reload minio
+      with_items:
+        - dst: public.crt
+          mode: "0644"
+          src: cert.pem
+        - dst: private.key
+          mode: "0600"
+          src: key.pem
+- become: true
+  handlers:
+    - ansible.builtin.command: docker restart gotify
+      name: reload gotify
+  hosts: gotify
+  name: gotify
+  tasks:
+    - ansible.builtin.get_url:
+        dest: "/srv/gotify/certs/{{ item.dst }}"
+        group: root
+        headers:
+          Authorization: "{{ auth_token }}"
+        mode: "{{ item.mode }}"
+        owner: root
+        url: "{{ api_endpoint }}/{{ gotify_tls_domain }}/{{ item.src }}?raw=true"
+      name: pull cert
+      notify: reload gotify
+      with_items:
+        - dst: public.crt
+          mode: "0644"
+          src: cert.pem
+        - dst: private.key
+          mode: "0600"
+          src: key.pem

@@ -1,0 +1,223 @@
+networks:
+  default:
+    external: true
+    name: cluster
+services:
+  alertmanager:
+    container_name: alertmanager
+    image: quay.io/prometheus/alertmanager
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 172.24.0.1:9093:9093
+    profiles: ["alertmanager"]
+    restart: always
+    volumes:
+      - source: /srv/alertmanager/data
+        target: /alertmanager
+        type: bind
+      - source: /srv/alertmanager/alertmanager.yml
+        target: /etc/alertmanager/alertmanager.yml
+        type: bind
+  caddy:
+    container_name: caddy
+    image: caddy
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 80:80
+      - 443:443
+      - 28443-28445:28443-28445
+    profiles: ["caddy"]
+    restart: always
+    volumes:
+      - source: /srv/caddy/Caddyfile
+        target: /etc/caddy/Caddyfile
+        type: bind
+      - source: /srv/caddy/config
+        target: /config
+        type: bind
+      - source: /srv/caddy/data
+        target: /data
+        type: bind
+  coredns:
+    container_name: coredns
+    image: coredns/coredns
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 127.0.0.1:53:53/udp
+      - 172.24.0.1:53:53/udp
+      - 172.24.0.1:9153:9153
+      - 53:53/tcp
+      - "[::1]:53:53/udp"
+    profiles: ["coredns"]
+    restart: always
+    volumes:
+      - source: /srv/coredns/Corefile
+        target: /Corefile
+        type: bind
+      - source: /srv/coredns/zones
+        target: /zones
+        type: bind
+  gotify:
+    container_name: gotify
+    image: gotify/server
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 221:443
+    profiles: ["gotify"]
+    restart: always
+    volumes:
+      - source: /srv/gotify/certs
+        target: /app/certs
+        type: bind
+      - source: /srv/gotify/config.yml
+        target: /etc/gotify/config.yml
+        type: bind
+      - source: /srv/gotify/data
+        target: /app/data
+        type: bind
+  grafana:
+    container_name: grafana
+    environment:
+      TZ: Asia/Shanghai
+    image: grafana/grafana
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 3000:3000
+    profiles: ["grafana"]
+    restart: always
+    volumes:
+      - source: /srv/grafana/data
+        target: /var/lib/grafana
+        type: bind
+      - source: /srv/grafana/grafana.ini
+        target: /etc/grafana/grafana.ini
+        type: bind
+  minio:
+    command:
+      - --json
+      - server
+      - /data
+      - --console-address
+      - :9001
+    container_name: minio
+    env_file:
+      - /srv/minio/env
+    image: minio/minio
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 9000:9000
+      - 9001:9001
+    profiles: ["minio"]
+    restart: always
+    volumes:
+      - source: /srv/minio
+        target: /root/.minio
+        type: bind
+      - source: /srv/s3
+        target: /data
+        type: bind
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 1883:1883
+    profiles: ["mosquitto"]
+    restart: always
+    volumes:
+      - source: /srv/mosquitto
+        target: /mosquitto/config
+        type: bind
+  nginx:
+    container_name: nginx
+    image: nginx
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 8000:80
+    profiles: ["nginx"]
+    restart: always
+    volumes:
+      - source: /srv/nginx/html
+        target: /usr/share/nginx/html
+        type: bind
+      - source: /srv/nginx/default.conf
+        target: /etc/nginx/conf.d/default.conf
+        type: bind
+  node-exporter:
+    command:
+      - --path.rootfs
+      - /host
+      - --web.listen-address
+      - 172.24.0.1:9100
+    container_name: node-exporter
+    image: prom/node-exporter
+    labels:
+      maintainer: kubernetes-operator
+    network_mode: host
+    pid: host
+    profiles: ["node-exporter"]
+    restart: always
+    volumes:
+      - bind:
+          propagation: rslave
+        read_only: true
+        source: /
+        target: /host
+        type: bind
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 172.24.0.1:5432:5432
+    profiles: ["postgres"]
+    restart: always
+    volumes:
+      - source: /srv/postgres/data
+        target: /var/lib/postgresql/data
+        type: bind
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 172.24.0.1:9090:9090
+    profiles: ["prometheus"]
+    restart: always
+    volumes:
+      - source: /srv/prometheus/data
+        target: /prometheus
+        type: bind
+      - source: /srv/prometheus/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+        type: bind
+      - source: /srv/prometheus/conf.d
+        target: /etc/prometheus/conf.d
+        type: bind
+  v2fly:
+    command:
+      - run
+      - -c
+      - /etc/v2ray/config.json
+    container_name: v2fly
+    image: v2fly/v2fly-core
+    labels:
+      maintainer: kubernetes-operator
+    ports:
+      - 6666:6666
+    profiles: ["v2fly"]
+    restart: always
+    volumes:
+      - source: /srv/v2ray/config.json
+        target: /etc/v2ray/config.json
+        type: bind

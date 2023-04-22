@@ -4,4 +4,5 @@ disable systemd-resolved.service
 enable docker.service
 enable nix-daemon.service
 enable osqueryd.service
+enable tailscaled.service
 enable wg-quick@.service

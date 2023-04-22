@@ -1,27 +1,27 @@
 colors:
-  primary:
-    background: '#23252e'
-    forground: '#ffffff'
-    bright_background: '#23252e'
-    bright_forground: '#ffffff'
-  normal:
-    black: '#1f2229'
-    red: '#d41919'
-    green: '#5ebdab'
-    yellow: '#fea44c'
-    blue: '#367bf0'
-    magenta: '#9755b3'
-    cyan: '#49aee6'
-    white: '#e6e6e6'
   bright:
     black: '#198388'
-    red: '#ec0101'
-    green: '#47d4b9'
-    yellow: '#ff8a18'
     blue: '#277fff'
-    magenta: '#962ac3'
     cyan: '#05a1f7'
+    green: '#47d4b9'
+    magenta: '#962ac3'
+    red: '#ec0101'
     white: '#ffffff'
+    yellow: '#ff8a18'
+  normal:
+    black: '#1f2229'
+    blue: '#367bf0'
+    cyan: '#49aee6'
+    green: '#5ebdab'
+    magenta: '#9755b3'
+    red: '#d41919'
+    white: '#e6e6e6'
+    yellow: '#fea44c'
+  primary:
+    background: '#23252e'
+    bright_background: '#23252e'
+    bright_forground: '#ffffff'
+    forground: '#ffffff'
   transparent_background_colors: true
 cursor:
   style:
@@ -34,10 +34,10 @@ font:
     family: SF Mono
   size: 12.0
 key_bindings:
-  - {key: N, mods: Control|Shift, action: SpawnNewInstance}
-  - {key: Back, mods: Control, action: ToggleFullscreen}
-  - {key: C, mods: Control|Shift, action: Copy}
-  - {key: V, mods: Control|Shift, mode: ~Vi, action: Paste}
+  - {action: SpawnNewInstance, key: N, mods: Control|Shift}
+  - {action: ToggleFullscreen, key: Back, mods: Control}
+  - {action: Copy, key: C, mods: Control|Shift}
+  - {action: Paste, key: V, mode: ~Vi, mods: Control|Shift}
 mouse:
   hide_when_typing: true
 window:
