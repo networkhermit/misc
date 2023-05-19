@@ -119,10 +119,11 @@ if [[ "${SERVER_MODE}" = true ]]; then
 PostUp = wg set %i private-key /etc/wireguard/private.key
 Address = ${IP_ADDRESS}
 ListenPort = ${PORT}
-PostUp = iptables --table nat --insert POSTROUTING --source ${SUBNET} --out-interface %i --jump MASQUERADE
-PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface %i --jump ACCEPT
-PreDown = iptables --table nat --delete POSTROUTING --source ${SUBNET} --out-interface %i --jump MASQUERADE || true
-PreDown = iptables --table filter --delete FORWARD --in-interface %i --out-interface %i --jump ACCEPT || true
+Table = off
+#PostUp = iptables --table nat --insert POSTROUTING --source ${SUBNET} --out-interface %i --jump MASQUERADE
+#PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface %i --jump ACCEPT
+#PreDown = iptables --table nat --delete POSTROUTING --source ${SUBNET} --out-interface %i --jump MASQUERADE || true
+#PreDown = iptables --table filter --delete FORWARD --in-interface %i --out-interface %i --jump ACCEPT || true
 PostUp = wg set %i peer PEER_PUBLIC_KEY preshared-key /etc/wireguard/preshared-key/${IP_ADDRESS%/*}-${PEER_LIST[0]}.key
 
 [Peer]
@@ -137,7 +138,6 @@ else
 [Interface]
 PostUp = wg set %i private-key /etc/wireguard/private.key
 Address = ${IP_ADDRESS}
-#Table = off
 #PostUp = iptables --table nat --insert POSTROUTING --source ${SUBNET} --out-interface wlan0 --jump MASQUERADE
 #PostUp = iptables --table filter --insert FORWARD --in-interface wlan0 --out-interface %i --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
 #PostUp = iptables --table filter --insert FORWARD --in-interface %i --out-interface wlan0 --jump ACCEPT

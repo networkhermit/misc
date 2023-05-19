@@ -51,12 +51,13 @@
 ;; library
 
 (let ((default-directory "~/.emacs.d/lisp/community"))
-  (setq load-path
-        (append
-         (let ((load-path (copy-sequence load-path)))
-           (normal-top-level-add-to-load-path
-            (delete ".." (delete "." (directory-files default-directory)))))
-         load-path)))
+  (when (file-directory-p default-directory)
+    (setq load-path
+          (append
+           (let ((load-path (copy-sequence load-path)))
+             (normal-top-level-add-to-load-path
+              (delete ".." (delete "." (directory-files default-directory)))))
+           load-path))))
 
 ;; package
 

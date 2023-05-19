@@ -89,7 +89,7 @@ source <(grep '^ID=' /etc/os-release)
 DISTRO=${ID:-linux}
 
 case ${DISTRO} in
-arch)
+arch|archarm)
     if [[ "${FORCE_SYNC}" = true ]]; then
         { yes || true; } | pacman --sync --clean --clean
         pacman --sync --refresh --refresh

@@ -29,7 +29,7 @@ variable "kubernetes_version" {
 }
 
 variable "talos_version" {
-  default  = "v1.4.0"
+  default  = "v1.4.4"
   nullable = false
   type     = string
 }

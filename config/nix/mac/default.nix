@@ -35,9 +35,11 @@ with import <nixpkgs> {}; let
     neofetch
     neovim
     python3
+    python310Packages.pytest
     ripgrep
     ruff
     rust-analyzer
+    rust.packages.stable.rustPlatform.rustLibSrc
     rustc
     rustfmt
     sccache

@@ -82,13 +82,13 @@ kubectl get certificatesigningrequests \
 
 # install pod network add-on
 ## cilium
-cilium install --helm-values ../../infra/manifest/cilium.yaml --version 1.13.1 |& tee /etc/kubernetes/cilium.log
+cilium install --helm-values ../../infra/manifest/cilium.yaml --version 1.13.2 |& tee /etc/kubernetes/cilium.log
 
 kubectl --namespace kube-system rollout restart deployment coredns
 
 cilium hubble enable --ui
 
-kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/1.13.1/examples/kubernetes/addons/prometheus/monitoring-example.yaml
+kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/1.13.2/examples/kubernetes/addons/prometheus/monitoring-example.yaml
 
 kubectl apply --filename https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 kubectl --namespace kubernetes-dashboard create serviceaccount cluster-admin-dashboard
@@ -118,5 +118,5 @@ helm install rancher rancher-stable/rancher \
     --namespace cattle-system \
     --set hostname=rancher.cncf.site \
     --set bootstrapPassword=admin \
-    --version 2.7.1
+    --version 2.7.2
 # helm pull rancher-stable/rancher

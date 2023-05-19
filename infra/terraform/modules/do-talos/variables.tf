@@ -59,7 +59,7 @@ variable "talos_api_allowed_cidr" {
 }
 
 variable "talos_version" {
-  default  = "v1.4.0"
+  default  = "v1.4.4"
   nullable = false
   type     = string
 }

@@ -3,7 +3,15 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "~> 2.27.1"
+      version = "~> 2.28.1"
+    }
+    flux = {
+      source  = "fluxcd/flux"
+      version = "1.0.0-rc.3"
+    }
+    github = {
+      source  = "integrations/github"
+      version = "~> 5.25.1"
     }
     helm = {
       source  = "hashicorp/helm"
@@ -15,7 +23,7 @@ terraform {
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "0.2.0-beta.0"
+      version = "~> 0.2.0"
     }
     tls = {
       source  = "hashicorp/tls"
