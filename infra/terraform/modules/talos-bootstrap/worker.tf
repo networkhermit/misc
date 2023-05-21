@@ -1,7 +1,20 @@
 data "talos_machine_configuration" "worker" {
-  cluster_endpoint   = var.cluster_endpoint
-  cluster_name       = var.cluster_name
-  config_patches     = var.config_patches
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  config_patches = concat(
+    [
+      file("${path.module}/../../../manifest/talos-machine-patch.yaml"),
+      yamlencode({
+        cluster = {
+          network = {
+            dnsDomain = var.cluster_domain
+          }
+        }
+      })
+    ],
+    var.machine_override,
+    var.worker_override
+  )
   kubernetes_version = var.kubernetes_version
   machine_secrets    = talos_machine_secrets.default.machine_secrets
   machine_type       = "worker"

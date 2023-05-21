@@ -5,7 +5,7 @@ bandwidthManager:
 bpf:
   masquerade: true
 cluster:
-  name: fleet
+  name: default
 enableIPv6BIGTCP: true
 enableIPv6Masquerade: false
 hubble:

@@ -1,0 +1,9 @@
+advertise-address: 172.31.0.10
+default-local-storage-path: /mnt/k3s-local-storage
+disable:
+  - traefik
+disable-helm-controller: true
+disable-kube-proxy: true
+disable-network-policy: true
+flannel-backend: none
+node-ip: 172.31.0.10

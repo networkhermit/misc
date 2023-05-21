@@ -11,10 +11,10 @@ module "do_talos" {
 module "talos_bootstrap" {
   source = "../modules/talos-bootstrap"
 
+  cluster_domain   = local.cluster_domain
   cluster_endpoint = module.do_talos.cluster_endpoint
   cluster_name     = local.cluster_name
-  config_patches = [
-    file("files/patch.yaml"),
+  machine_override = [
     yamlencode({
       cluster = {
         allowSchedulingOnControlPlanes = true

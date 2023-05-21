@@ -74,19 +74,7 @@ trap clean_up EXIT
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
-kubectl get certificatesigningrequests --sort-by '{.metadata.creationTimestamp}'
-# kubectl certificate approve csr-abcde
-kubectl get certificatesigningrequests \
-    --output jsonpath='{.items[?(@.spec.signerName=="kubernetes.io/kubelet-serving")].metadata.name}' \
-    | xargs --max-args 1 --no-run-if-empty kubectl certificate approve
-
-# install pod network add-on
-## cilium
-cilium install --helm-values ../../infra/manifest/cilium.yaml --version 1.13.2 |& tee /etc/kubernetes/cilium.log
-
 kubectl --namespace kube-system rollout restart deployment coredns
-
-cilium hubble enable --ui
 
 kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/1.13.2/examples/kubernetes/addons/prometheus/monitoring-example.yaml
 
@@ -100,9 +88,9 @@ done
 
 kubectl apply --filename https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.3/components.yaml
 
-kubectl apply --filename https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml
+kubectl apply --filename https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
 
-kubectl apply --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/baremetal/deploy.yaml
+kubectl apply --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.1/deploy/static/provider/baremetal/deploy.yaml
 
 istioctl install --skip-confirmation
 # https://istio.io/latest/docs/setup/getting-started
@@ -111,12 +99,3 @@ kubectl label namespace istio-demo istio-injection=enabled
 kubectl --namespace istio-demo apply --filename samples/bookinfo/platform/kube/bookinfo.yaml
 kubectl --namespace istio-demo apply --filename samples/bookinfo/networking/bookinfo-gateway.yaml
 kubectl --namespace istio-demo apply --filename samples/addons
-
-helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
-helm install rancher rancher-stable/rancher \
-    --create-namespace \
-    --namespace cattle-system \
-    --set hostname=rancher.cncf.site \
-    --set bootstrapPassword=admin \
-    --version 2.7.2
-# helm pull rancher-stable/rancher

@@ -38,4 +38,11 @@ cilium hubble ui
 kubectl --namespace kubernetes-dashboard create token cluster-admin-dashboard
 echo http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 kubectl proxy
+
+# approve kubernetes csr
+kubectl get certificatesigningrequests --sort-by '{.metadata.creationTimestamp}'
+# kubectl certificate approve csr-abcde
+kubectl get certificatesigningrequests \
+    --output jsonpath='{.items[?(@.spec.signerName=="kubernetes.io/kubelet-serving")].metadata.name}' \
+    | xargs --max-args 1 --no-run-if-empty kubectl certificate approve
 ```

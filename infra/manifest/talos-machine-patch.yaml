@@ -2,7 +2,7 @@ cluster:
   network:
     cni:
       name: none
-    dnsDomain: fleet.local
+    dnsDomain: cluster.local
     podSubnets:
       - 10.24.0.0/16
       #- fd00:ebee:10:2400::/56
