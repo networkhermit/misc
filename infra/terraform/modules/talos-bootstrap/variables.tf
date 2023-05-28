@@ -17,7 +17,7 @@ variable "cluster_name" {
 }
 
 variable "control_plane_nodes" {
-  default  = { "control_plan" : "172.31.0.10" }
+  default  = { control_plan = "172.31.0.10" }
   nullable = false
   type     = map(string)
 }
@@ -47,7 +47,7 @@ variable "talos_version" {
 }
 
 variable "worker_nodes" {
-  default  = { "worker" : "172.31.0.11" }
+  default  = { worker = "172.31.0.11" }
   nullable = false
   type     = map(string)
 }

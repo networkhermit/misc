@@ -30,7 +30,7 @@ Synopsis:
 
 Options:
     --directory DIRECTORY
-        directory to store the disk image (default: /var/local/images)
+        directory to store the disk image (default: ${DIRECTORY})
     -h, --help
         show this help message and exit
     -v, --version

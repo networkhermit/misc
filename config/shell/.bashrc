@@ -132,6 +132,9 @@ alias v='vim'
 alias www='python3 -B -W:all -m http.server'
 alias yaml='yq "sort_keys(..)"'
 
+jsonfmt () { json "${1}" | sponge "${1}"; }
+yamlfmt () { yaml "${1}" | sponge "${1}"; }
+
 if [[ $(uname) = Darwin ]]; then
     alias clip='pbcopy <'
 else

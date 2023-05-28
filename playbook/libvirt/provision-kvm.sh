@@ -30,13 +30,13 @@ Synopsis:
 
 Options:
     --cpu N
-        number of virtual cpus to configure for the guest (default: 4)
+        number of virtual cpus to configure for the guest (default: ${CPU})
     --directory DIRECTORY
-        directory to store the disk image (default: /var/local/images)
+        directory to store the disk image (default: ${DIRECTORY})
     --memory N (MiB)
-        memory to allocate for the guest (default: 8192)
+        memory to allocate for the guest (default: ${MEMORY})
     --size N (GiB)
-        size of the disk image to be created (default: 40)
+        size of the disk image to be created (default: ${SIZE})
     -h, --help
         show this help message and exit
     -v, --version

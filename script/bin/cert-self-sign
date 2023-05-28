@@ -30,13 +30,13 @@ Synopsis:
 
 Options:
     --algorithm ALGORITHM (ED25519 | ED448 | RSA)
-        use the specified public key algorithm (default: RSA)
+        use the specified public key algorithm (default: ${PUBLIC_KEY_ALGORITHM})
     --digest
-        enable digest (default: false)
+        enable digest (default: ${ENABLE_DIGEST})
     --strict
-        enable strict verification (default: false)
+        enable strict verification (default: ${STRICT_VERIFICATION})
     --verbose
-        enable verbose inspection (default: false)
+        enable verbose inspection (default: ${VERBOSE})
     -h, --help
         show this help message and exit
     -v, --version

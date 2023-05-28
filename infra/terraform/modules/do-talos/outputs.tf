@@ -1,5 +1,5 @@
 output "cluster_endpoint" {
-  value = var.control_plane_count > 1 ? "https://${digitalocean_loadbalancer.kubernetes_api[0].ip}:443" : var.control_plane_count > 0 ? "https://${digitalocean_droplet.control_plane[0].ipv4_address}:6443" : null
+  value = var.control_plane_spec.count > 1 ? "https://${digitalocean_loadbalancer.k8s_api[0].ip}:443" : var.control_plane_spec.count > 0 ? "https://${digitalocean_droplet.control_plane[0].ipv4_address}:6443" : null
 }
 
 output "control_plane_nodes" {

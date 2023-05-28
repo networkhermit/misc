@@ -9,6 +9,12 @@ variable "GITHUB_TOKEN" {
   type      = string
 }
 
+variable "KUBE_CONFIG_PATH" {
+  default  = "vault/kubeconfig"
+  nullable = false
+  type     = string
+}
+
 variable "cluster_endpoint" {
   nullable = false
   type     = string

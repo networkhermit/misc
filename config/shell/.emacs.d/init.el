@@ -76,8 +76,8 @@
                                   evil-surround
                                   git-gutter
                                   go-mode
-                                  kaolin-themes
                                   magit
+                                  modus-themes
                                   nord-theme
                                   rust-mode
                                   slime))
@@ -201,7 +201,7 @@
 ;; theme
 
 (require 'dracula-theme)
-(require 'kaolin-themes)
+(require 'modus-themes)
 (require 'nord-theme)
 
-(load-theme 'kaolin-dark t)
+(load-theme 'modus-vivendi t)

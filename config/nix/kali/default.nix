@@ -9,6 +9,9 @@ with import <nixpkgs> {}; let
   blog = [zola];
   devops = [
     cue
+    fluxcd
+    kubectl
+    kubernetes-helm
     kubie
     nickel
     pulumi

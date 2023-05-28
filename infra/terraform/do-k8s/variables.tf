@@ -15,6 +15,18 @@ variable "GITHUB_TOKEN" {
   type      = string
 }
 
+variable "KUBE_CONFIG_PATH" {
+  default  = "vault/kubeconfig"
+  nullable = false
+  type     = string
+}
+
+variable "TALOSCONFIG" {
+  default  = "vault/talosconfig"
+  nullable = false
+  type     = string
+}
+
 variable "github_branch" {
   default  = "main"
   nullable = false

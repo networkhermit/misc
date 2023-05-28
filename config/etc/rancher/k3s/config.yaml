@@ -6,4 +6,6 @@ disable-helm-controller: true
 disable-kube-proxy: true
 disable-network-policy: true
 flannel-backend: none
+kubelet-arg:
+  - config=/etc/rancher/k3s/kubelet.yaml
 node-ip: 172.31.0.10

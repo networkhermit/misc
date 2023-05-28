@@ -24,6 +24,7 @@ module "k8s_addon" {
 
   source = "../modules/k8s-addon"
 
+  cilium_override    = local.addon.cilium_override
   cluster_domain     = local.cluster_domain
   cluster_endpoint   = var.cluster_endpoint
   cluster_name       = local.cluster_name

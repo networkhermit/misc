@@ -30,7 +30,7 @@ Synopsis:
 
 Options:
     -f, --force
-        force synchronization of package metadata (default: false)
+        force synchronization of package metadata (default: ${FORCE_SYNC})
     -h, --help
         show this help message and exit
     -v, --version

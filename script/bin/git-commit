@@ -29,8 +29,14 @@ Synopsis:
     ${0##*/} [OPTION]...
 
 Options:
+    --amend
+        amend last commit (default: ${AMEND})
+    -m, --message MESSAGE
+        commit message (default: ${MESSAGE})
+    --push
+        push to remote (default: ${PUSH})
     --root-commit
-        force root commit (default: false)
+        force root commit (default: ${ROOT_COMMIT})
     -h, --help
         show this help message and exit
     -v, --version
@@ -38,10 +44,25 @@ Options:
 EOF
 }
 
+AMEND=false
+MESSAGE='This is where it all begins...'
+PUSH=false
 ROOT_COMMIT=false
 
 while (( $# > 0 )); do
     case ${1} in
+    --amend)
+        AMEND=true
+        shift
+        ;;
+    -m | --message)
+        MESSAGE=${2?✗ argument parsing failed: missing value for option ‘-m | --message’}
+        shift 2
+        ;;
+    --push)
+        PUSH=true
+        shift
+        ;;
     --root-commit)
         ROOT_COMMIT=true
         shift
@@ -72,10 +93,12 @@ fi
 
 clean_up () {
     git gc --aggressive --prune
-    if [[ "${ROOT_COMMIT}" = true ]]; then
-        git push --force --set-upstream origin main
-    else
-        git push --set-upstream origin main
+    if [[ "${PUSH}" = true ]]; then
+        if [[ "${ROOT_COMMIT}" = true ]]; then
+            git push --force --set-upstream origin "$(git branch --show-current)"
+        else
+            git push --set-upstream origin "$(git branch --show-current)"
+        fi
     fi
 }
 
@@ -89,4 +112,13 @@ if [[ "${ROOT_COMMIT}" = true ]]; then
     git add --all
 fi
 
-GIT_AUTHOR_DATE=$(date --utc --iso-8601=s) GIT_COMMITTER_DATE=$(date --utc --iso-8601=s) TZ=UTC git commit --message 'This is where it all begins...'
+GIT_AUTHOR_DATE=$(date --utc --iso-8601=s)
+export GIT_AUTHOR_DATE
+export GIT_COMMITTER_DATE=${GIT_AUTHOR_DATE}
+export TZ=UTC
+
+if [[ "${AMEND}" = true ]]; then
+    git commit --amend --message "${MESSAGE}" --reset-author
+else
+    git commit --message "${MESSAGE}"
+fi

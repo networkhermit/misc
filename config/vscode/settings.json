@@ -8,6 +8,12 @@
   "[rust]": {
     "editor.formatOnSave": true
   },
+  "[terraform-vars]": {
+    "editor.formatOnSave": true
+  },
+  "[terraform]": {
+    "editor.formatOnSave": true
+  },
   "diffEditor.ignoreTrimWhitespace": false,
   "editor.fontFamily": "Go Mono",
   "editor.fontSize": 16,

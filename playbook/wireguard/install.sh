@@ -30,7 +30,7 @@ Synopsis:
 
 Options:
     -s, --server
-        use server mode (default: false)
+        use server mode (default: ${SERVER_MODE})
     -h, --help
         show this help message and exit
     -v, --version

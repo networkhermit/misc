@@ -1,0 +1,16 @@
+apiVersion: kubelet.config.k8s.io/v1beta1
+cgroupDriver: systemd
+eventBurst: 100
+eventRecordQPS: 50
+evictionHard:
+  imagefs.available: 3.75%
+  nodefs.available: 2.5%
+failSwapOn: false
+kind: KubeletConfiguration
+kubeAPIBurst: 100
+kubeAPIQPS: 50
+maxPods: 256
+registryBurst: 100
+registryPullQPS: 50
+serializeImagePulls: false
+serverTLSBootstrap: true

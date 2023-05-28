@@ -1,5 +1,7 @@
 locals {
-  cluster_domain   = "fleet.local"
-  cluster_name     = "fleet"
-  kube_config_path = "vault/kubeconfig"
+  addon = {
+    cilium_override = []
+  }
+  cluster_domain = "fleet.local"
+  cluster_name   = "fleet"
 }

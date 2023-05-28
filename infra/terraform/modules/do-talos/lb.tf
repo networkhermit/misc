@@ -1,10 +1,10 @@
-resource "digitalocean_loadbalancer" "kubernetes_api" {
-  count = var.control_plane_count > 1 ? 1 : 0
+resource "digitalocean_loadbalancer" "k8s_api" {
+  count = var.control_plane_spec.count > 1 ? 1 : 0
 
   droplet_tag = "control-plane"
   name        = "${var.cluster_name}-kubernetes-api"
   region      = var.region
-  size_unit   = var.kubernetes_api_lb_size
+  size_unit   = var.k8s_api_lb_size
   vpc_uuid    = digitalocean_vpc.vpc.id
 
   forwarding_rule {
@@ -14,7 +14,8 @@ resource "digitalocean_loadbalancer" "kubernetes_api" {
     target_protocol = "tcp"
   }
   healthcheck {
-    port     = 6443
-    protocol = "tcp"
+    healthy_threshold = 2
+    port              = 6443
+    protocol          = "tcp"
   }
 }

@@ -18,17 +18,17 @@ resource "digitalocean_firewall" "internal" {
   }
   inbound_rule {
     protocol         = "icmp"
-    source_addresses = var.extra_internal_allowed_cidr
+    source_addresses = var.extra_internal_cidr
   }
   inbound_rule {
     port_range       = "1-65535"
     protocol         = "tcp"
-    source_addresses = var.extra_internal_allowed_cidr
+    source_addresses = var.extra_internal_cidr
   }
   inbound_rule {
     port_range       = "1-65535"
     protocol         = "udp"
-    source_addresses = var.extra_internal_allowed_cidr
+    source_addresses = var.extra_internal_cidr
   }
 }
 
@@ -52,29 +52,29 @@ resource "digitalocean_firewall" "internet" {
   }
 }
 
-resource "digitalocean_firewall" "kubernetes_api" {
-  count = var.control_plane_count > 1 ? 0 : 1
+resource "digitalocean_firewall" "k8s_api" {
+  count = var.control_plane_spec.count > 1 ? 0 : 1
 
-  name = "${var.cluster_name}-kubernetes-api"
+  name = "${var.cluster_name}-k8s-api"
   tags = [digitalocean_tag.control_plane.name]
 
   inbound_rule {
     port_range       = "6443"
     protocol         = "tcp"
-    source_addresses = var.kubernetes_api_allowed_cidr
+    source_addresses = var.k8s_api_allowed_cidr
   }
 }
 
-resource "digitalocean_firewall" "kubernetes_api_lb" {
-  count = var.control_plane_count > 1 ? 1 : 0
+resource "digitalocean_firewall" "k8s_api_lb" {
+  count = var.control_plane_spec.count > 1 ? 1 : 0
 
-  name = "${var.cluster_name}-kubernetes-api-lb"
+  name = "${var.cluster_name}-k8s-api-lb"
   tags = [digitalocean_tag.control_plane.name]
 
   inbound_rule {
     port_range                = "6443"
     protocol                  = "tcp"
-    source_load_balancer_uids = digitalocean_loadbalancer.kubernetes_api[*].id
+    source_load_balancer_uids = digitalocean_loadbalancer.k8s_api[*].id
   }
 }
 

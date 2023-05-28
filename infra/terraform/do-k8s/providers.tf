@@ -4,7 +4,7 @@ provider "digitalocean" {
 
 provider "flux" {
   kubernetes = {
-    config_path = local.kube_config_path
+    config_path = var.KUBE_CONFIG_PATH
   }
   git = {
     branch = var.github_branch
@@ -23,6 +23,6 @@ provider "github" {
 
 provider "helm" {
   kubernetes {
-    config_path = local.kube_config_path
+    config_path = var.KUBE_CONFIG_PATH
   }
 }

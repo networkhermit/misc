@@ -1,19 +1,7 @@
-resource "helm_release" "kubelet_csr_approver" {
-  chart      = "kubelet-csr-approver"
-  name       = "kubelet-csr-approver"
-  namespace  = "kube-system"
-  repository = "https://postfinance.github.io/kubelet-csr-approver"
-  version    = "1.0.0"
-
-  values = [
-    yamlencode({
-      bypassDnsResolution : true
-    })
-  ]
-}
-
 locals {
-  k8sServiceCapture = regex("^https?://([0-9]+.[0-9]+.[0-9]+.[0-9]+):([0-9]+)$", var.cluster_endpoint)
+  k8s_service_capture = regex("^https?://([^:@/?#]+)(:([0-9]+))?$", var.cluster_endpoint)
+  k8s_service_host    = local.k8s_service_capture[0]
+  k8s_service_port    = local.k8s_service_capture[2] != null ? local.k8s_service_capture[2] : 443
 }
 
 resource "helm_release" "cilium" {
@@ -30,12 +18,26 @@ resource "helm_release" "cilium" {
         cluster = {
           name = var.cluster_name
         }
-        k8sServiceHost = local.k8sServiceCapture[0]
-        k8sServicePort = local.k8sServiceCapture[1]
+        k8sServiceHost = local.k8s_service_host
+        k8sServicePort = local.k8s_service_port
       })
     ],
     var.cilium_override
   )
+}
+
+resource "helm_release" "kubelet_csr_approver" {
+  chart      = "kubelet-csr-approver"
+  name       = "kubelet-csr-approver"
+  namespace  = "kube-system"
+  repository = "https://postfinance.github.io/kubelet-csr-approver"
+  version    = "1.0.0"
+
+  values = [
+    yamlencode({
+      bypassDnsResolution : true
+    })
+  ]
 }
 
 resource "flux_bootstrap_git" "fleet" {
