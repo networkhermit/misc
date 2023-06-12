@@ -22,6 +22,8 @@ hubble:
       - tcp
   relay:
     enabled: true
+    prometheus:
+      enabled: true
   ui:
     enabled: true
 ipam:
@@ -42,4 +44,6 @@ operator:
   replicas: 1
 prometheus:
   enabled: true
+socketLB:
+  hostNamespaceOnly: true
 tunnel: disabled

@@ -8,6 +8,9 @@ vault/
 inventory/
 
 # Terraform
+*.auto.tfvars
+*.tfbackend
 .terraform/
-terraform.tfstate*
+terraform.tfstate
+terraform.tfstate.*
 terraform.tfvars

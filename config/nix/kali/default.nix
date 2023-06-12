@@ -1,4 +1,4 @@
-with import <nixpkgs> {}; let
+with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
     bat
     golangci-lint
@@ -8,11 +8,18 @@ with import <nixpkgs> {}; let
   ];
   blog = [zola];
   devops = [
+    _1password
+    cilium-cli
     cue
     fluxcd
+    hubble
+    istioctl
     kubectl
     kubernetes-helm
+    kubescape
+    kubeseal
     kubie
+    nerdctl
     nickel
     pulumi
     talosctl

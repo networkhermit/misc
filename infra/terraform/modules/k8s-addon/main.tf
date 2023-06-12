@@ -9,7 +9,7 @@ resource "helm_release" "cilium" {
   name       = "cilium"
   namespace  = "kube-system"
   repository = "https://helm.cilium.io"
-  version    = "1.14.0-snapshot.2"
+  version    = "1.14.0-snapshot.3"
 
   values = concat(
     [
@@ -31,11 +31,12 @@ resource "helm_release" "kubelet_csr_approver" {
   name       = "kubelet-csr-approver"
   namespace  = "kube-system"
   repository = "https://postfinance.github.io/kubelet-csr-approver"
-  version    = "1.0.0"
+  version    = "1.0.1"
 
   values = [
     yamlencode({
-      bypassDnsResolution : true
+      bypassDnsResolution = true
+      replicas            = 1
     })
   ]
 }

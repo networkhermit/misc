@@ -1,4 +1,4 @@
-with import <nixpkgs> {}; let
+with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
     ansible
     ansible-lint
@@ -55,6 +55,7 @@ with import <nixpkgs> {}; let
     zsh-syntax-highlighting
   ];
   devops = [
+    _1password
     kubectl
     kubernetes-helm
     kubie
@@ -62,7 +63,6 @@ with import <nixpkgs> {}; let
     nmap
     sqlfluff
     terraform
-    tfk8s
     tflint
     tfsec
   ];
