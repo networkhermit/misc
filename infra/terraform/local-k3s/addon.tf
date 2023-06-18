@@ -26,7 +26,7 @@ module "k8s_addon" {
 
   cilium_override    = local.addon.cilium_override
   cluster_domain     = local.cluster_domain
-  cluster_endpoint   = var.cluster_endpoint
+  cluster_endpoint   = var.KUBE_HOST
   cluster_name       = local.cluster_name
   flux_git_repo_path = "clusters/${local.cluster_name}"
 }

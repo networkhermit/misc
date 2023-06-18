@@ -3,19 +3,23 @@ variable "GITHUB_OWNER" {
   type     = string
 }
 
-variable "GITHUB_TOKEN" {
+variable "KUBE_CLIENT_CERT_DATA" {
+  nullable = false
+  type     = string
+}
+
+variable "KUBE_CLIENT_KEY_DATA" {
   nullable  = false
   sensitive = true
   type      = string
 }
 
-variable "KUBE_CONFIG_PATH" {
-  default  = "vault/kubeconfig"
+variable "KUBE_CLUSTER_CA_CERT_DATA" {
   nullable = false
   type     = string
 }
 
-variable "cluster_endpoint" {
+variable "KUBE_HOST" {
   nullable = false
   type     = string
 }

@@ -1,5 +1,12 @@
 terraform {
-  backend "s3" {}
+  backend "s3" {
+    bucket                      = "infra"
+    force_path_style            = true
+    key                         = "terraform/harbor/terraform.tfstate"
+    skip_credentials_validation = true
+    skip_metadata_api_check     = true
+    skip_region_validation      = true
+  }
   required_providers {
     flux = {
       source  = "fluxcd/flux"
@@ -7,7 +14,7 @@ terraform {
     }
     github = {
       source  = "integrations/github"
-      version = "~> 5.26.0"
+      version = "~> 5.28.0"
     }
     helm = {
       source  = "hashicorp/helm"

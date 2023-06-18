@@ -1,6 +1,10 @@
 advertise-address: 172.31.0.10
+cluster-cidr: 10.42.0.0/16,fd00:ebee:10:4200::/56
+cluster-dns: 10.43.0.10
+cluster-init: true
 default-local-storage-path: /mnt/k3s-local-storage
 disable:
+  - servicelb
   - traefik
 disable-helm-controller: true
 disable-kube-proxy: true
@@ -8,4 +12,5 @@ disable-network-policy: true
 flannel-backend: none
 kubelet-arg:
   - config=/etc/rancher/k3s/kubelet.yaml
-node-ip: 172.31.0.10
+node-ip: 172.31.0.10,fd00:1:2:3::10
+service-cidr: 10.43.0.0/16,fd00:ebee:10:4300::/112

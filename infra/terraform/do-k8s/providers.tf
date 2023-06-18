@@ -1,6 +1,4 @@
-provider "digitalocean" {
-  token = var.DIGITALOCEAN_TOKEN
-}
+provider "digitalocean" {}
 
 provider "flux" {
   kubernetes = {
@@ -16,10 +14,7 @@ provider "flux" {
   }
 }
 
-provider "github" {
-  owner = var.GITHUB_OWNER
-  token = var.GITHUB_TOKEN
-}
+provider "github" {}
 
 provider "helm" {
   kubernetes {

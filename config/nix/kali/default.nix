@@ -11,6 +11,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     _1password
     cilium-cli
     cue
+    doppler
     fluxcd
     hubble
     istioctl

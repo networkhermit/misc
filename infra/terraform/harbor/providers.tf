@@ -1,6 +1,9 @@
 provider "flux" {
   kubernetes = {
-    config_path = var.KUBE_CONFIG_PATH
+    client_certificate     = var.KUBE_CLIENT_CERT_DATA
+    cluster_ca_certificate = var.KUBE_CLUSTER_CA_CERT_DATA
+    config_path            = var.KUBE_CLIENT_KEY_DATA
+    host                   = var.KUBE_HOST
   }
   git = {
     branch = var.github_branch
@@ -12,13 +15,8 @@ provider "flux" {
   }
 }
 
-provider "github" {
-  owner = var.GITHUB_OWNER
-  token = var.GITHUB_TOKEN
-}
+provider "github" {}
 
 provider "helm" {
-  kubernetes {
-    config_path = var.KUBE_CONFIG_PATH
-  }
+  kubernetes {}
 }
