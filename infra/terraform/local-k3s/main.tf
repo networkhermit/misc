@@ -6,6 +6,6 @@ locals {
       })
     ]
   }
-  cluster_domain = "cluster.local"
-  cluster_name   = "default"
+  cluster_dns_domain = "cluster.local"
+  cluster_name       = "default"
 }

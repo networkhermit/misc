@@ -3,6 +3,10 @@ resource "github_branch" "flux" {
 
   branch     = var.github_branch
   repository = var.github_repository
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "tls_private_key" "flux" {
@@ -27,7 +31,7 @@ module "k8s_addon" {
   source = "../modules/k8s-addon"
 
   cilium_override    = local.addon.cilium_override
-  cluster_domain     = local.cluster_domain
+  cluster_dns_domain = local.cluster_dns_domain
   cluster_endpoint   = module.do_talos.cluster_endpoint
   cluster_name       = local.cluster_name
   flux_git_repo_path = "clusters/${local.cluster_name}"

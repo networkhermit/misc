@@ -1,14 +1,20 @@
 variable "acme_clients" {
-  default  = []
+  default = {
+    environment = []
+    project     = "example-project"
+  }
   nullable = false
-  type = list(
-    object({
-      expires_on = optional(string)
-      name       = string
-      not_before = optional(string)
-      uuid       = string
-    })
-  )
+  type = object({
+    environment = list(
+      object({
+        expires_on = optional(string)
+        name       = string
+        not_before = optional(string)
+        uuid       = string
+      })
+    )
+    project = string
+  })
 }
 
 variable "cloudflare_account_name" {
@@ -16,22 +22,19 @@ variable "cloudflare_account_name" {
   type     = string
 }
 
-variable "domain" {
+variable "zone_records" {
   nullable = false
-  type     = string
-}
-
-variable "records" {
-  default  = []
-  nullable = false
-  type = list(
-    object({
-      name     = string
-      priority = optional(number)
-      ttl      = number
-      type     = string
-      uuid     = string
-      value    = string
-    })
-  )
+  type = object({
+    domain = string
+    records = list(
+      object({
+        name     = string
+        priority = optional(number)
+        ttl      = number
+        type     = string
+        uuid     = string
+        value    = string
+      })
+    )
+  })
 }

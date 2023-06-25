@@ -11,7 +11,7 @@ module "do_talos" {
 module "talos_bootstrap" {
   source = "../modules/talos-bootstrap"
 
-  cluster_domain      = local.cluster_domain
+  cluster_dns_domain  = local.cluster_dns_domain
   cluster_endpoint    = module.do_talos.cluster_endpoint
   cluster_name        = local.cluster_name
   control_plane_nodes = module.do_talos.control_plane_nodes

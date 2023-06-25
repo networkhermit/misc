@@ -7,7 +7,6 @@ bpf:
 cluster:
   name: default
 enableIPv6BIGTCP: true
-enableIPv6Masquerade: false
 hubble:
   metrics:
     enableOpenMetrics: true

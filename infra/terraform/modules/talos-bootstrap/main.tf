@@ -9,7 +9,7 @@ locals {
       yamlencode({
         cluster = {
           network = {
-            dnsDomain = var.cluster_domain
+            dnsDomain = var.cluster_dns_domain
           }
         }
       })

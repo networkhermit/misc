@@ -9,7 +9,7 @@ resource "helm_release" "cilium" {
   name       = "cilium"
   namespace  = "kube-system"
   repository = "https://helm.cilium.io"
-  version    = "1.14.0-snapshot.3"
+  version    = "1.14.0-snapshot.4"
 
   values = concat(
     [
@@ -44,6 +44,6 @@ resource "helm_release" "kubelet_csr_approver" {
 resource "flux_bootstrap_git" "fleet" {
   depends_on = [helm_release.cilium, helm_release.kubelet_csr_approver]
 
-  cluster_domain = var.cluster_domain
+  cluster_domain = var.cluster_dns_domain
   path           = var.flux_git_repo_path
 }

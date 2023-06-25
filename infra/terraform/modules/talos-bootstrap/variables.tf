@@ -1,4 +1,4 @@
-variable "cluster_domain" {
+variable "cluster_dns_domain" {
   default  = "cluster.local"
   nullable = false
   type     = string
@@ -29,7 +29,7 @@ variable "control_plane_override" {
 }
 
 variable "kubernetes_version" {
-  default  = "1.27.2"
+  default  = "1.27.3"
   nullable = false
   type     = string
 }
@@ -41,7 +41,7 @@ variable "machine_override" {
 }
 
 variable "talos_version" {
-  default  = "v1.4.4"
+  default  = "v1.4.5"
   nullable = false
   type     = string
 }

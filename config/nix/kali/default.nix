@@ -18,7 +18,6 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     kubectl
     kubernetes-helm
     kubescape
-    kubeseal
     kubie
     nerdctl
     nickel

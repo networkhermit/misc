@@ -1,4 +1,4 @@
 options attempts:1 rotate timeout:1
 
 nameserver 119.29.29.29
-nameserver 223.6.6.6
+nameserver 8.8.8.8

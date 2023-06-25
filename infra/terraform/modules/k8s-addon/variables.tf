@@ -4,7 +4,7 @@ variable "cilium_override" {
   type     = list(string)
 }
 
-variable "cluster_domain" {
+variable "cluster_dns_domain" {
   default  = "cluster.local"
   nullable = false
   type     = string
