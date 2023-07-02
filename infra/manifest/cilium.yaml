@@ -7,6 +7,8 @@ bpf:
 cluster:
   name: default
 enableIPv6BIGTCP: true
+endpointRoutes:
+  enabled: true
 hubble:
   metrics:
     enableOpenMetrics: true
@@ -25,6 +27,13 @@ hubble:
       enabled: true
   ui:
     enabled: true
+ingressController:
+  enabled: true
+  loadbalancerMode: shared
+  service:
+    insecureNodePort: 30080
+    secureNodePort: 30443
+    type: NodePort
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: 10.24.0.0/16
@@ -33,16 +42,17 @@ ipv6:
 ipv6NativeRoutingCIDR: fd00:ebee:10:2400::/56
 k8sServiceHost: k8s.internal.cncf.site
 k8sServicePort: 6443
-kubeProxyReplacement: strict
+kubeProxyReplacement: true
 loadBalancer:
   #acceleration: native
-  mode: hybrid
+  mode: snat
 operator:
   prometheus:
     enabled: true
   replicas: 1
 prometheus:
   enabled: true
+rollOutCiliumPods: true
 socketLB:
   hostNamespaceOnly: true
 tunnel: disabled

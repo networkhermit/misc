@@ -76,23 +76,9 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 
 kubectl --namespace kube-system rollout restart deployment coredns
 
-kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/1.13.2/examples/kubernetes/addons/prometheus/monitoring-example.yaml
-
-kubectl apply --filename https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 kubectl --namespace kubernetes-dashboard create serviceaccount cluster-admin-dashboard
 kubectl create clusterrolebinding cluster-admin-dashboard --clusterrole cluster-admin --serviceaccount kubernetes-dashboard:cluster-admin-dashboard
 
-for component in cluster-role-binding cluster-role deployment service-account service; do
-    kubectl apply --filename "https://raw.githubusercontent.com/kubernetes/kube-state-metrics/v2.8.2/examples/standard/${component}.yaml"
-done
-
-kubectl apply --filename https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.3/components.yaml
-
-kubectl apply --filename https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
-
-kubectl apply --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.1/deploy/static/provider/baremetal/deploy.yaml
-
-istioctl install --skip-confirmation
 # https://istio.io/latest/docs/setup/getting-started
 kubectl create namespace istio-demo
 kubectl label namespace istio-demo istio-injection=enabled

@@ -9,7 +9,7 @@ resource "helm_release" "cilium" {
   name       = "cilium"
   namespace  = "kube-system"
   repository = "https://helm.cilium.io"
-  version    = "1.14.0-snapshot.4"
+  version    = "1.14.0-rc.0"
 
   values = concat(
     [
@@ -17,6 +17,11 @@ resource "helm_release" "cilium" {
       yamlencode({
         cluster = {
           name = var.cluster_name
+        }
+        hubble = {
+          peerService = {
+            clusterDomain = var.cluster_dns_domain
+          }
         }
         k8sServiceHost = local.k8s_service_host
         k8sServicePort = local.k8s_service_port

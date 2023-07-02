@@ -4,7 +4,9 @@ eventBurst: 100
 eventRecordQPS: 50
 evictionHard:
   imagefs.available: 3.75%
+  memory.available: 100Mi
   nodefs.available: 2.5%
+  nodefs.inodesFree: 5%
 failSwapOn: false
 kind: KubeletConfiguration
 kubeAPIBurst: 100

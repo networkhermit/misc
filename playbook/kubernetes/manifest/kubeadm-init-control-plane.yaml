@@ -4,7 +4,7 @@ localAPIEndpoint:
   advertiseAddress: 172.31.0.10
   bindPort: 6443
 nodeRegistration:
-  criSocket: unix:///var/run/containerd/containerd.sock
+  criSocket: unix:///run/containerd/containerd.sock
   kubeletExtraArgs:
     node-ip: 172.31.0.10,fd00:1:2:3::10
 skipPhases:
@@ -27,7 +27,9 @@ eventBurst: 100
 eventRecordQPS: 50
 evictionHard:
   imagefs.available: 3.75%
+  memory.available: 100Mi
   nodefs.available: 2.5%
+  nodefs.inodesFree: 5%
 failSwapOn: false
 kind: KubeletConfiguration
 kubeAPIBurst: 100
