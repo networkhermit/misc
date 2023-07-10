@@ -1,5 +1,5 @@
 resource "harbor_robot_account" "proxy_cache" {
-  for_each = var.proxy_cache_accounts
+  for_each = nonsensitive(var.proxy_cache_accounts)
 
   level  = "system"
   name   = each.key

@@ -42,7 +42,7 @@ ipv6:
 ipv6NativeRoutingCIDR: fd00:ebee:10:2400::/56
 k8sServiceHost: k8s.internal.cncf.site
 k8sServicePort: 6443
-kubeProxyReplacement: true
+kubeProxyReplacement: "true"
 loadBalancer:
   #acceleration: native
   mode: snat

@@ -9,9 +9,9 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
   blog = [zola];
   devops = [
     _1password
+    age
     cilium-cli
     cue
-    doppler
     fluxcd
     hubble
     istioctl
@@ -22,11 +22,14 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     nerdctl
     nickel
     pulumi
+    rage
+    sops
     talosctl
     terraform
     tflint
     tfsec
     topiary
+    weave-gitops
   ];
   nix = [alejandra];
   list = base ++ blog ++ devops ++ nix;

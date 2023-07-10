@@ -11,7 +11,7 @@ locals {
     }
     extra_internal_cidr = ["10.24.0.0/16"]
     kubernetes_version  = "1.27.3"
-    talos_version       = "v1.4.5"
+    talos_version       = "v1.4.6"
     worker_spec = {
       count = 3
       type  = "s-4vcpu-8gb-amd"
