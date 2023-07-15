@@ -14,11 +14,11 @@ terraform {
     }
     flux = {
       source  = "fluxcd/flux"
-      version = "1.0.0-rc.5"
+      version = "~> 1.0.1"
     }
     github = {
       source  = "integrations/github"
-      version = "~> 5.29.0"
+      version = "~> 5.31.0"
     }
     helm = {
       source  = "hashicorp/helm"

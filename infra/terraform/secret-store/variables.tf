@@ -1,3 +1,17 @@
+variable "dex_secret" {
+  default  = {}
+  nullable = false
+  type = map(
+    object({
+      dex_credential = object({
+        GITHUB_CLIENT_ID     = string
+        GITHUB_CLIENT_SECRET = string
+      })
+      static_clients = optional(map(string), {})
+    })
+  )
+}
+
 variable "harbor_secret" {
   default  = {}
   nullable = false

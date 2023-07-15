@@ -2,10 +2,13 @@
 # shellcheck shell=bash
 
 # list all container images running in a cluster
-kubectl get pods --all-namespaces --output jsonpath="{.items[*].spec['containers', 'initContainers'][*].image}" \
-    | tr --squeeze-repeats '[:space:]' '\n' \
-    | sort \
-    | uniq
+for ns in $(kubectl get namespaces -o jsonpath="{ .items[*].metadata.name }"); do
+    echo "==== ${ns} ===="
+    kubectl get pods --namespace "${ns}" --output jsonpath="{.items[*].spec['containers', 'initContainers'][*].image}" \
+        | tr --squeeze-repeats '[:space:]' '\n' \
+        | sort \
+        | uniq
+done
 
 # mirroring images
 REGISTRY_HOST=

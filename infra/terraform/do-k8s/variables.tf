@@ -15,13 +15,10 @@ variable "TALOSCONFIG" {
   type     = string
 }
 
-variable "github_branch" {
-  default  = "main"
+variable "git_source" {
   nullable = false
-  type     = string
-}
-
-variable "github_repository" {
-  nullable = false
-  type     = string
+  type = object({
+    branch     = optional(string, "main")
+    repository = string
+  })
 }

@@ -1,10 +1,16 @@
-variable "cilium_override" {
-  default  = []
+variable "addon_override" {
+  default  = {}
   nullable = false
-  type     = list(string)
+  type = object({
+    cilium = optional(list(string), [])
+    flux = optional(object({
+      watch_path = optional(string, "clusters/default")
+    }), {})
+    kubelet_csr_approver = optional(list(string), [])
+  })
 }
 
-variable "cluster_dns_domain" {
+variable "cluster_domain" {
   default  = "cluster.local"
   nullable = false
   type     = string
@@ -21,8 +27,11 @@ variable "cluster_name" {
   type     = string
 }
 
-variable "flux_git_repo_path" {
-  default  = "clusters/default"
+variable "pinned_version" {
+  default  = {}
   nullable = false
-  type     = string
+  type = object({
+    cilium               = optional(string, "1.14.0-rc.0")
+    kubelet_csr_approver = optional(string, "1.0.1")
+  })
 }

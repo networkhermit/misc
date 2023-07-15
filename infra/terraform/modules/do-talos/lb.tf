@@ -1,10 +1,10 @@
 resource "digitalocean_loadbalancer" "k8s_api" {
-  count = var.control_plane_spec.count > 1 ? 1 : 0
+  count = var.cluster_spec.control_plane.count > 1 ? 1 : 0
 
   droplet_tag = "control-plane"
   name        = "${var.cluster_name}-kubernetes-api"
   region      = var.region
-  size_unit   = var.k8s_api_lb_size
+  size_unit   = var.cluster_spec.lb.size
   vpc_uuid    = digitalocean_vpc.vpc.id
 
   forwarding_rule {

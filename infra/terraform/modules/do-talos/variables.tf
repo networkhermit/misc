@@ -4,34 +4,40 @@ variable "cluster_name" {
   type     = string
 }
 
-variable "control_plane_spec" {
-  default = {
-    count = 1
-    type  = "s-2vcpu-2gb"
-  }
+variable "cluster_spec" {
+  default  = {}
   nullable = false
   type = object({
-    count = number
-    type  = string
+    control_plane = optional(object({
+      count = optional(number, 1)
+      type  = optional(string, "s-2vcpu-2gb")
+    }), {})
+    lb = optional(object({
+      size = optional(number, 1)
+    }), {})
+    worker = optional(object({
+      count = optional(number, 1)
+      type  = optional(string, "s-2vcpu-4gb")
+    }), {})
   })
 }
 
-variable "extra_internal_cidr" {
-  default  = []
+variable "firewall_allowlist" {
+  default  = {}
   nullable = false
-  type     = list(string)
+  type = object({
+    internal  = optional(list(string), [])
+    k8s_api   = optional(list(string), ["0.0.0.0/0", "::/0"])
+    talos_api = optional(list(string), ["0.0.0.0/0", "::/0"])
+  })
 }
 
-variable "k8s_api_allowed_cidr" {
-  default  = ["0.0.0.0/0", "::/0"]
+variable "pinned_version" {
+  default  = {}
   nullable = false
-  type     = list(string)
-}
-
-variable "k8s_api_lb_size" {
-  default  = 1
-  nullable = false
-  type     = number
+  type = object({
+    talos = optional(string, "v1.4.6")
+  })
 }
 
 variable "region" {
@@ -40,33 +46,9 @@ variable "region" {
   type     = string
 }
 
-variable "talos_api_allowed_cidr" {
-  default  = ["0.0.0.0/0", "::/0"]
-  nullable = false
-  type     = list(string)
-}
-
-variable "talos_version" {
-  default  = "v1.4.6"
-  nullable = false
-  type     = string
-}
-
 variable "vpc_cidr" {
   default  = "172.31.0.0/24"
   nullable = false
   type     = string
-}
-
-variable "worker_spec" {
-  default = {
-    count = 1
-    type  = "s-2vcpu-4gb"
-  }
-  nullable = false
-  type = object({
-    count = number
-    type  = string
-  })
 }
 

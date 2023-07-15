@@ -9,7 +9,7 @@ resource "helm_release" "cilium" {
   name       = "cilium"
   namespace  = "kube-system"
   repository = "https://helm.cilium.io"
-  version    = "1.14.0-rc.0"
+  version    = var.pinned_version.cilium
 
   values = concat(
     [
@@ -20,14 +20,14 @@ resource "helm_release" "cilium" {
         }
         hubble = {
           peerService = {
-            clusterDomain = var.cluster_dns_domain
+            clusterDomain = var.cluster_domain
           }
         }
         k8sServiceHost = local.k8s_service_host
         k8sServicePort = local.k8s_service_port
       })
     ],
-    var.cilium_override
+    var.addon_override.cilium
   )
 }
 
@@ -36,19 +36,22 @@ resource "helm_release" "kubelet_csr_approver" {
   name       = "kubelet-csr-approver"
   namespace  = "kube-system"
   repository = "https://postfinance.github.io/kubelet-csr-approver"
-  version    = "1.0.1"
+  version    = var.pinned_version.kubelet_csr_approver
 
-  values = [
-    yamlencode({
-      bypassDnsResolution = true
-      replicas            = 1
-    })
-  ]
+  values = concat(
+    [
+      yamlencode({
+        bypassDnsResolution = true
+        replicas            = 1
+      })
+    ],
+    var.addon_override.kubelet_csr_approver
+  )
 }
 
 resource "flux_bootstrap_git" "fleet" {
   depends_on = [helm_release.cilium, helm_release.kubelet_csr_approver]
 
-  cluster_domain = var.cluster_dns_domain
-  path           = var.flux_git_repo_path
+  cluster_domain = var.cluster_domain
+  path           = var.addon_override.flux.watch_path
 }

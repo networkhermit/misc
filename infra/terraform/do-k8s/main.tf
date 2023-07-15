@@ -1,24 +1,32 @@
 locals {
-  addon = {
-    cilium_override = [file("${path.module}/../../manifest/cilium-talos.yaml")]
+  addon_override = {
+    cilium = [file("${path.module}/../../manifest/cilium-talos.yaml")]
+    flux = {
+      watch_path = "clusters/${local.cluster_name}"
+    }
   }
-  cluster_dns_domain = "fleet.local"
-  cluster_name       = "fleet"
+  cluster_domain = "${local.cluster_name}.local"
+  cluster_name   = "fleet"
   infra = {
-    control_plane_spec = {
-      count = 3
-      type  = "s-2vcpu-2gb"
+    cluster_spec = {
+      control_plane = {
+        count = 3
+      }
+      worker = {
+        count = 3
+        type  = "s-4vcpu-8gb-amd"
+      }
     }
-    extra_internal_cidr = ["10.24.0.0/16"]
-    kubernetes_version  = "1.27.3"
-    talos_version       = "v1.4.6"
-    worker_spec = {
-      count = 3
-      type  = "s-4vcpu-8gb-amd"
+    firewall_allowlist = {
+      internal = ["10.24.0.0/16"]
+    }
+    pinned_version = {
+      kubernetes = "1.27.3"
+      talos      = "v1.4.6"
     }
   }
-  talos = {
-    machine_override = [
+  talos_override = {
+    machine = [
       yamlencode({
         cluster = {
           allowSchedulingOnControlPlanes = false

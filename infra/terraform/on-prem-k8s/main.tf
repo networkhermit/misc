@@ -1,7 +1,9 @@
 locals {
-  addon = {
-    cilium_override = []
+  addon_override = {
+    flux = {
+      watch_path = "clusters/${local.cluster_name}"
+    }
   }
-  cluster_dns_domain = "fleet.local"
-  cluster_name       = "fleet"
+  cluster_domain = "${local.cluster_name}.local"
+  cluster_name   = "fleet"
 }

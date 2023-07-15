@@ -1,4 +1,4 @@
-variable "cluster_dns_domain" {
+variable "cluster_domain" {
   default  = "cluster.local"
   nullable = false
   type     = string
@@ -16,44 +16,30 @@ variable "cluster_name" {
   type     = string
 }
 
-variable "control_plane_nodes" {
-  default  = { control_plan = "172.31.0.10" }
+variable "node_list" {
+  default  = {}
   nullable = false
-  type     = map(string)
+  type = object({
+    control_plane = optional(map(string), { control_plane = "172.31.0.10" })
+    worker        = optional(map(string), { worker = "172.31.0.11" })
+  })
 }
 
-variable "control_plane_override" {
-  default  = []
+variable "pinned_version" {
+  default  = {}
   nullable = false
-  type     = list(string)
+  type = object({
+    kubernetes = optional(string, "1.27.3")
+    talos      = optional(string, "v1.4.6")
+  })
 }
 
-variable "kubernetes_version" {
-  default  = "1.27.3"
+variable "talos_override" {
+  default  = {}
   nullable = false
-  type     = string
-}
-
-variable "machine_override" {
-  default  = []
-  nullable = false
-  type     = list(string)
-}
-
-variable "talos_version" {
-  default  = "v1.4.6"
-  nullable = false
-  type     = string
-}
-
-variable "worker_nodes" {
-  default  = { worker = "172.31.0.11" }
-  nullable = false
-  type     = map(string)
-}
-
-variable "worker_override" {
-  default  = []
-  nullable = false
-  type     = list(string)
+  type = object({
+    control_plane = optional(list(string), [])
+    machine       = optional(list(string), [])
+    worker        = optional(list(string), [])
+  })
 }

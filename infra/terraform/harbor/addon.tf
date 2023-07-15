@@ -1,8 +1,8 @@
 resource "github_branch" "flux" {
-  count = var.github_branch != "main" ? 1 : 0
+  count = var.git_source.branch != "main" ? 1 : 0
 
-  branch     = var.github_branch
-  repository = var.github_repository
+  branch     = var.git_source.branch
+  repository = var.git_source.repository
 
   lifecycle {
     prevent_destroy = true
@@ -16,7 +16,7 @@ resource "tls_private_key" "flux" {
 resource "github_repository_deploy_key" "flux" {
   key        = tls_private_key.flux.public_key_openssh
   read_only  = false
-  repository = var.github_repository
+  repository = var.git_source.repository
   title      = "flux"
 }
 
@@ -28,9 +28,6 @@ module "k8s_addon" {
 
   source = "../modules/k8s-addon"
 
-  cilium_override    = local.addon.cilium_override
-  cluster_dns_domain = local.cluster_dns_domain
-  cluster_endpoint   = var.KUBE_HOST
-  cluster_name       = local.cluster_name
-  flux_git_repo_path = "clusters/${local.cluster_name}"
+  addon_override   = local.addon_override
+  cluster_endpoint = var.KUBE_HOST
 }
