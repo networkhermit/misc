@@ -5,6 +5,8 @@ locals {
 }
 
 resource "helm_release" "cilium" {
+  depends_on = [helm_release.prometheus_operator_crds]
+
   chart      = "cilium"
   name       = "cilium"
   namespace  = "kube-system"
@@ -32,6 +34,8 @@ resource "helm_release" "cilium" {
 }
 
 resource "helm_release" "kubelet_csr_approver" {
+  depends_on = [helm_release.prometheus_operator_crds]
+
   chart      = "kubelet-csr-approver"
   name       = "kubelet-csr-approver"
   namespace  = "kube-system"
@@ -42,11 +46,24 @@ resource "helm_release" "kubelet_csr_approver" {
     [
       yamlencode({
         bypassDnsResolution = true
-        replicas            = 1
+        metrics = {
+          serviceMonitor = {
+            enabled = false
+          }
+        }
+        replicas = 1
       })
     ],
     var.addon_override.kubelet_csr_approver
   )
+}
+
+resource "helm_release" "prometheus_operator_crds" {
+  chart      = "prometheus-operator-crds"
+  name       = "prometheus-operator-crds"
+  namespace  = "kube-system"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  version    = var.pinned_version.prometheus_operator_crds
 }
 
 resource "flux_bootstrap_git" "fleet" {

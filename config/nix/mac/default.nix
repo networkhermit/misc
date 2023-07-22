@@ -39,7 +39,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     ripgrep
     ruff
     rust-analyzer
-    rust.packages.stable.rustPlatform.rustLibSrc
+    rust.packages.stable.rustPlatform.rustcSrc
     rustc
     rustfmt
     sccache

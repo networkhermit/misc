@@ -11,6 +11,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     _1password
     age
     cilium-cli
+    conftest
     cue
     fluxcd
     hubble
@@ -21,6 +22,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     kubie
     nerdctl
     nickel
+    open-policy-agent
     pulumi
     rage
     sops

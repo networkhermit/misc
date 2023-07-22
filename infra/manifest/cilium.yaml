@@ -9,6 +9,11 @@ cluster:
 enableIPv6BIGTCP: true
 endpointRoutes:
   enabled: true
+envoy:
+  enabled: true
+  prometheus:
+    serviceMonitor:
+      enabled: true
 hubble:
   metrics:
     enableOpenMetrics: true
@@ -21,10 +26,14 @@ hubble:
       - icmp
       - port-distribution
       - tcp
+    serviceMonitor:
+      enabled: true
   relay:
     enabled: true
     prometheus:
       enabled: true
+      serviceMonitor:
+        enabled: true
   ui:
     enabled: true
 ingressController:
@@ -49,9 +58,13 @@ loadBalancer:
 operator:
   prometheus:
     enabled: true
+    serviceMonitor:
+      enabled: true
   replicas: 1
 prometheus:
   enabled: true
+  serviceMonitor:
+    enabled: true
 rollOutCiliumPods: true
 socketLB:
   hostNamespaceOnly: true
