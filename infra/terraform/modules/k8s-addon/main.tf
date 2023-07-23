@@ -48,7 +48,7 @@ resource "helm_release" "kubelet_csr_approver" {
         bypassDnsResolution = true
         metrics = {
           serviceMonitor = {
-            enabled = false
+            enabled = true
           }
         }
         replicas = 1

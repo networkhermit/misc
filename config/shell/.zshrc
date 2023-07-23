@@ -67,6 +67,10 @@ PROMPT=$'%F{%(#.blue.green)}┌──${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))�
 
 ###########################################################################
 
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '\C-x\C-e' edit-command-line
+
 set -o noclobber
 
 if [[ -x "$(command -v kubectl)" ]]; then
