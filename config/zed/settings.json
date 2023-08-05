@@ -1,0 +1,59 @@
+{
+  "auto_update": false,
+  "buffer_font_features": {
+    "calt": false
+  },
+  "features": {
+    "copilot": false
+  },
+  "language_overrides": {
+    "Go": {
+      "format_on_save": {
+        "external": {
+          "arguments": [
+            "-s"
+          ],
+          "command": "gofmt"
+        }
+      }
+    },
+    "Python": {
+      "format_on_save": {
+        "external": {
+          "arguments": [
+            "--quiet",
+            "-"
+          ],
+          "command": "black"
+        }
+      }
+    }
+  },
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "check": {
+          "command": "clippy"
+        },
+        "imports": {
+          "granularity": {
+            "enforce": true
+          }
+        }
+      }
+    }
+  },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "terminal": {
+    "env": {
+      "TERM_PROGRAM": "zed"
+    },
+    "line_height": "standard",
+    "option_as_meta": true
+  },
+  "theme": "Ayu Light",
+  "vim_mode": true
+}

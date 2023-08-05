@@ -1,0 +1,37 @@
+[
+  {
+    "bindings": {
+      "ctrl-backspace": "zed::ToggleFullScreen",
+      "ctrl-h": "workspace::ToggleLeftDock"
+    }
+  },
+  {
+    "bindings": {
+      "ctrl-l": "buffer_search::Dismiss"
+    },
+    "context": "Editor"
+  },
+  {
+    "bindings": {
+      "shift-backspace": "zed::OpenSettings",
+      "shift-k": "workspace::NewTerminal",
+      "shift-q": "pane::CloseActiveItem"
+    },
+    "context": "Editor && vim_mode == normal"
+  },
+  {
+    "bindings": {
+      "shift-m": "editor::SortLinesCaseSensitive"
+    },
+    "context": "Editor && vim_mode == visual"
+  },
+  {
+    "bindings": {
+      "ctrl-h": [
+        "terminal::SendKeystroke",
+        "ctrl-h"
+      ]
+    },
+    "context": "Terminal"
+  }
+]

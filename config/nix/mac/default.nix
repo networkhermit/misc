@@ -29,6 +29,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     jq
     ldns
     less
+    lua-language-server
     mold
     moreutils
     mypy
@@ -37,7 +38,9 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     python3
     python310Packages.pytest
     ripgrep
+    rome
     ruff
+    ruff-lsp
     rust-analyzer
     rust.packages.stable.rustPlatform.rustcSrc
     rustc
@@ -45,6 +48,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     sccache
     shellcheck
     sl
+    stylua
     tmux
     tree
     watch
@@ -63,6 +67,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     nmap
     sqlfluff
     terraform
+    terraform-ls
     tflint
     tfsec
   ];

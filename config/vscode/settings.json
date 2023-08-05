@@ -1,6 +1,7 @@
 {
   "[python]": {
     "editor.codeActionsOnSave": {
+      "source.fixAll": true,
       "source.organizeImports": true
     },
     "editor.formatOnSave": true
@@ -129,14 +130,6 @@
       ],
       "commands": [
         "workbench.action.openSettingsJson"
-      ]
-    },
-    {
-      "before": [
-        "<C-H>"
-      ],
-      "commands": [
-        "workbench.view.explorer"
       ]
     },
     {

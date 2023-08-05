@@ -48,6 +48,8 @@
                 (kill-buffer)
                 (ignore-errors (delete-window win)))))
 
+(setq treesit-extra-load-path '("~/.config/emacs/tree-sitter"))
+
 ;; library
 
 (let ((default-directory "~/.emacs.d/lisp/community"))
@@ -80,7 +82,8 @@
                                   modus-themes
                                   nord-theme
                                   rust-mode
-                                  slime))
+                                  slime
+                                  treesit-auto))
 
 ;; doom-modeline
 
@@ -197,6 +200,13 @@
 
 (setq inferior-lisp-program "sbcl")
 (setq slime-repl-history-file nil)
+
+;; treesit-auto
+
+(if (>= emacs-major-version 29)
+    (progn
+      (require 'treesit-auto)
+      (global-treesit-auto-mode -1)))
 
 ;; theme
 

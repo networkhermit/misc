@@ -10,7 +10,7 @@ fi
 if [[ -z "${TMUX}" ]] && [[ -z "${VIM}" ]]; then
     if [[ "${TERM}" = xterm-256color ]] || [[ "${TERM}" = tmux-256color ]]; then
         case ${TERM_PROGRAM} in
-        vscode|Lens)
+        Lens|vscode|zed)
             ;;
         *)
             exec tmux new-session -A -D -s main
@@ -101,6 +101,7 @@ fi
 
 alias acp='scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias ash='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+alias batdiff='git diff --diff-filter d --name-only --relative | xargs bat --diff'
 alias broken-symlink="find . -xtype l -exec ls --human-readable -l --time-style long-iso '{}' +"
 alias d='cd - &> /dev/null'
 alias diff='diff --color=auto'
@@ -116,7 +117,7 @@ alias la='ls --almost-all'
 alias less='less -F'
 alias ll='ls --human-readable -l --time-style long-iso'
 alias ls='ls --color=auto'
-alias n='cd .; clear; fortune | cowsay -f www; date --utc "+%F %T %z" --date "now $((( (RANDOM & 1) == 0 )) && echo + || echo -) ${RANDOM} days"; history -cw; rm --force ~/.bash_history'
+alias n='nvim'
 alias pass='echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr --delete +/= | dd bs=32 count=1 2>/dev/null)"'
 alias s='cd ..'
 alias sc='shellcheck'

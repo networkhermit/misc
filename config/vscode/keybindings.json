@@ -2,5 +2,15 @@
   {
     "command": "workbench.action.toggleZenMode",
     "key": "ctrl+backspace"
+  },
+  {
+    "command": "workbench.action.toggleSidebarVisibility",
+    "key": "ctrl+h",
+    "when": "view.workbench.explorer.fileView.visible"
+  },
+  {
+    "command": "workbench.view.explorer",
+    "key": "ctrl+h",
+    "when": "!view.workbench.explorer.fileView.visible"
   }
 ]

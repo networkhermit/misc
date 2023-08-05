@@ -2,8 +2,13 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
     bat
     golangci-lint
+    lua-language-server
+    neovim
+    rome
     ruff
+    ruff-lsp
     rust-analyzer
+    stylua
     yq-go
   ];
   blog = [zola];
@@ -28,6 +33,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     sops
     talosctl
     terraform
+    terraform-ls
     tflint
     tfsec
     topiary
