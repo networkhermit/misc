@@ -53,6 +53,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     tree
     watch
     xz
+    yamllint
     yq-go
     zsh
     zsh-autosuggestions
