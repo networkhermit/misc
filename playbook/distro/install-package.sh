@@ -93,7 +93,9 @@ DISTRO=${ID:-linux}
 
 ##################
 # UTIL
+#       bat
 #       exa
+#       fd
 #       fzf
 #       jq
 #       moreutils
@@ -164,7 +166,9 @@ arch)
 
     # UTIL
     pacman --sync --needed \
+        bat \
         exa \
+        fd \
         fzf \
         jq \
         moreutils \
@@ -244,7 +248,9 @@ fedora)
 
     # UTIL
     dnf install \
+        bat \
         exa \
+        fd-find \
         fzf \
         jq \
         moreutils \
@@ -336,7 +342,9 @@ kali)
 
     # UTIL
     apt install \
+        bat \
         exa \
+        fd-find \
         fzf \
         jq \
         moreutils \

@@ -1,6 +1,7 @@
 with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
     bat
+    go-tools
     golangci-lint
     lua-language-server
     neovim

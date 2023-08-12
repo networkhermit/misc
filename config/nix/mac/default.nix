@@ -12,6 +12,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     coreutils
     cowsay
     exa
+    fd
     file
     findutils
     fortune
