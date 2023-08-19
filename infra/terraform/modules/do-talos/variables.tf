@@ -36,7 +36,7 @@ variable "pinned_version" {
   default  = {}
   nullable = false
   type = object({
-    talos = optional(string, "v1.4.7")
+    talos = optional(string, "v1.5.0")
   })
 }
 

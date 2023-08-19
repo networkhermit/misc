@@ -30,7 +30,7 @@ terraform {
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~> 0.2.1"
+      version = "~> 0.3.0"
     }
     tls = {
       source  = "hashicorp/tls"
