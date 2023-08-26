@@ -14,15 +14,15 @@ terraform {
     }
     flux = {
       source  = "fluxcd/flux"
-      version = "~> 1.0.1"
+      version = "~> 1.1.0"
     }
     github = {
       source  = "integrations/github"
-      version = "~> 5.33.0"
+      version = "~> 5.34.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.10.1"
+      version = "~> 2.11.0"
     }
     local = {
       source  = "hashicorp/local"
@@ -30,7 +30,7 @@ terraform {
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~> 0.3.0"
+      version = "~> 0.3.1"
     }
     tls = {
       source  = "hashicorp/tls"
