@@ -5,7 +5,6 @@ enable cronie.service
 enable docker.service
 enable fstrim.timer
 enable nix-daemon.service
-enable osqueryd.service
 enable pkgfile-update.timer
 enable sshd.service
 enable tailscaled.service

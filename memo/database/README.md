@@ -18,6 +18,11 @@ pg_dump --host 127.0.0.1 --port 5432 --username postgres --data-only --inserts d
 ```
 
 ```sql
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+```
+
+```sql
 SELECT SCHEMA_NAME,
        relname,
        pg_size_pretty(table_size) AS SIZE,

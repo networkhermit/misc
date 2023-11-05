@@ -94,7 +94,7 @@ DISTRO=${ID:-linux}
 ##################
 # UTIL
 #       bat
-#       exa
+#       eza
 #       fd
 #       fzf
 #       jq
@@ -147,7 +147,6 @@ DISTRO=${ID:-linux}
 #       docker
 #       docker-compose
 #       git
-#       osquery
 #       wireguard-tools
 ##################
 
@@ -167,7 +166,7 @@ arch)
     # UTIL
     pacman --sync --needed \
         bat \
-        exa \
+        eza \
         fd \
         fzf \
         jq \
@@ -200,7 +199,7 @@ arch)
         staticcheck \
         python{,-black,-pip} \
         mypy \
-        ruff \
+        ruff{,-lsp} \
         rust{,-analyzer} \
         cargo-{audit,outdated} \
         mold \
@@ -224,7 +223,6 @@ arch)
         bpftrace \
         docker{,-compose} \
         git \
-        osquery \
         wireguard-tools
 
     pacman --files --list \
@@ -249,7 +247,7 @@ fedora)
     # UTIL
     dnf install \
         bat \
-        exa \
+        eza \
         fd-find \
         fzf \
         jq \
@@ -276,12 +274,10 @@ fedora)
     # PLT
     dnf install \
         golang \
-        golang-x-tools-{gopls,goimports} \
-        golang-honnef-tools \
         python3{,-pip} \
-        python3-mypy \
         black \
-        rust \
+        python3-mypy \
+        rust{,-analyzer} \
         rustfmt \
         clippy \
         cargo \
@@ -298,6 +294,7 @@ fedora)
     # DevOps
     dnf install \
         ansible \
+        python3-ansible-lint \
         python3-argcomplete \
         bcc-tools \
         python3-bcc \
@@ -311,13 +308,7 @@ fedora)
     ## docker [tsinghua]
     dnf config-manager --add-repo https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/fedora/docker-ce.repo
     dnf makecache
-    dnf install docker-ce
-    dnf clean packages
-
-    curl --fail --location --silent --show-error --output /etc/pki/rpm-gpg/RPM-GPG-KEY-osquery https://pkg.osquery.io/rpm/GPG
-    dnf config-manager --add-repo https://pkg.osquery.io/rpm/osquery-s3-rpm.repo
-    dnf makecache
-    dnf install osquery
+    dnf install docker-ce docker-compose-plugin
     dnf clean packages
 
     rpm --query \
@@ -401,11 +392,6 @@ kali)
         docker.io \
         git \
         wireguard-tools
-
-    curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/osquery.gpg https://pkg.osquery.io/deb/keyring.gpg
-    echo /etc/apt/sources.list.d/osquery.list
-    apt update --list-cleanup
-    apt install osquery
 
     dpkg --listfiles \
         openssh-server \

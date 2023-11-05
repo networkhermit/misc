@@ -6,3 +6,7 @@ defaults write com.apple.dock ResetLaunchPad -bool true && killall Dock
 defaults write com.apple.dock autohide -bool true && killall Dock
 defaults write com.apple.dock show-recents -bool false && killall Dock
 ```
+
+```bash
+sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder
+```

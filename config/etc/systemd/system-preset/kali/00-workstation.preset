@@ -1,3 +1,3 @@
 disable systemd-networkd.service
-enable bluetooth.service
+enable avahi-daemon.service
 enable sddm.service

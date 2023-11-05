@@ -1,39 +1,33 @@
 with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
-    bat
-    go-tools
+    #lua-language-server
+    #stylua
     golangci-lint
-    lua-language-server
-    neovim
     rome
-    ruff
-    ruff-lsp
-    rust-analyzer
-    stylua
-    yq-go
   ];
-  blog = [zola];
+  blog = [
+    #zola
+  ];
   devops = [
     #age
     #cilium-cli
-    #hubble
-    #kubernetes-helm
-    #tetragon
+    #cue
+    #kubectl
+    #kubernetes-helm (helm)
+    #kubie
+    #nerdctl
+    #nickel
+    #pulumi
+    #rage (rust-rage)
+    #sops
     _1password
     conftest
-    cue
     fluxcd
+    hubble
     istioctl
-    kubectl
     kubescape
-    kubie
-    nerdctl
-    nickel
     open-policy-agent
     opentofu
-    pulumi
-    rage
-    sops
     talosctl
     terraform-ls
     tflint

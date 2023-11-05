@@ -11,7 +11,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     cmatrix
     coreutils
     cowsay
-    exa
+    eza
     fd
     file
     findutils
@@ -21,8 +21,8 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     gnugrep
     gnused
     gnutar
-    go
     go-tools
+    go
     golangci-lint
     gopls
     gzip
@@ -37,7 +37,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     neofetch
     neovim
     python3
-    python310Packages.pytest
+    python311Packages.pytest
     ripgrep
     rome
     ruff
@@ -67,8 +67,8 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     kubie
     mitmproxy
     nmap
+    opentofu
     sqlfluff
-    terraform
     terraform-ls
     tflint
     tfsec
