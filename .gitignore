@@ -7,7 +7,7 @@ vault/
 # Ansible inventory
 inventory/
 
-# Terraform
+# OpenTofu
 *.auto.tfvars
 *.tfbackend
 .terraform/

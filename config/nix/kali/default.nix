@@ -1,11 +1,11 @@
 with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
     bat
+    biome
     go-tools
     golangci-lint
     lua-language-server
     neovim
-    rome
     ruff
     ruff-lsp
     rust-analyzer
@@ -24,6 +24,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     cue
     fluxcd
     istioctl
+    kubebuilder
     kubectl
     kubescape
     kubie

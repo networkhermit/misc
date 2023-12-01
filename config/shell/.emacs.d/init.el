@@ -48,6 +48,9 @@
                 (kill-buffer)
                 (ignore-errors (delete-window win)))))
 
+(when (boundp 'native-comp-eln-load-path)
+  (startup-redirect-eln-cache "~/.config/emacs/eln-cache"))
+
 (setq treesit-extra-load-path '("~/.config/emacs/tree-sitter"))
 
 ;; library
@@ -203,10 +206,8 @@
 
 ;; treesit-auto
 
-(if (>= emacs-major-version 29)
-    (progn
-      (require 'treesit-auto)
-      (global-treesit-auto-mode -1)))
+(require 'treesit-auto)
+(global-treesit-auto-mode -1)
 
 ;; theme
 

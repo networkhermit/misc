@@ -32,8 +32,6 @@
     "--fast"
   ],
   "go.lintTool": "golangci-lint",
-  "python.formatting.provider": "black",
-  "python.linting.mypyEnabled": true,
   "redhat.telemetry.enabled": false,
   "remote.SSH.localServerDownload": "always",
   "remote.downloadExtensionsLocally": true,

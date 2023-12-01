@@ -5,6 +5,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     bash-completion
     bashInteractive
     bat
+    biome
     black
     cargo
     clippy
@@ -21,8 +22,8 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     gnugrep
     gnused
     gnutar
-    go-tools
     go
+    go-tools
     golangci-lint
     gopls
     gzip
@@ -39,7 +40,6 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     python3
     python311Packages.pytest
     ripgrep
-    rome
     ruff
     ruff-lsp
     rust-analyzer
@@ -62,6 +62,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
   ];
   devops = [
     _1password
+    kubebuilder
     kubectl
     kubernetes-helm
     kubie

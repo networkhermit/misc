@@ -2,8 +2,8 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
     #lua-language-server
     #stylua
+    biome
     golangci-lint
-    rome
   ];
   blog = [
     #zola
@@ -25,6 +25,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     fluxcd
     hubble
     istioctl
+    kubebuilder
     kubescape
     open-policy-agent
     opentofu
