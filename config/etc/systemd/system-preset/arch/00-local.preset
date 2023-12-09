@@ -8,4 +8,4 @@ enable nix-daemon.service
 enable pkgfile-update.timer
 enable sshd.service
 enable tailscaled.service
-enable wg-quick@.service
+enable wg-quick@.service wg0

@@ -1,8 +1,8 @@
 {
   "[python]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
+      "source.fixAll": "always",
+      "source.organizeImports": "always"
     },
     "editor.formatOnSave": true
   },
@@ -191,7 +191,6 @@
   "vim.visualstar": true,
   "window.menuBarVisibility": "toggle",
   "window.restoreWindows": "none",
-  "workbench.activityBar.visible": true,
   "workbench.colorTheme": "GitHub Light Default",
   "workbench.commandPalette.history": 0,
   "workbench.localHistory.enabled": false,

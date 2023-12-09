@@ -2,10 +2,6 @@ cgroup:
   autoMount:
     enabled: false
   hostRoot: /sys/fs/cgroup
-ipv6:
-  enabled: false
-loadBalancer:
-  acceleration: native
 securityContext:
   capabilities:
     ciliumAgent:

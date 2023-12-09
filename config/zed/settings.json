@@ -1,14 +1,18 @@
 {
   "auto_update": false,
+  "buffer_font_family": "Go Mono",
   "buffer_font_features": {
     "calt": false
   },
+  "buffer_font_size": 16,
+  "enable_language_server": false,
   "features": {
     "copilot": false
   },
   "language_overrides": {
     "Go": {
-      "format_on_save": {
+      "enable_language_server": true,
+      "formatter": {
         "external": {
           "arguments": [
             "-s"
@@ -17,8 +21,12 @@
         }
       }
     },
+    "JSON": {
+      "enable_language_server": true
+    },
     "Python": {
-      "format_on_save": {
+      "enable_language_server": true,
+      "formatter": {
         "external": {
           "arguments": [
             "--quiet",
@@ -27,6 +35,12 @@
           "command": "black"
         }
       }
+    },
+    "Rust": {
+      "enable_language_server": true
+    },
+    "YAML": {
+      "enable_language_server": true
     }
   },
   "lsp": {
@@ -51,6 +65,8 @@
     "env": {
       "TERM_PROGRAM": "zed"
     },
+    "font_family": "SF Mono",
+    "font_size": 12,
     "line_height": "standard",
     "option_as_meta": true
   },

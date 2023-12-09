@@ -1,6 +1,16 @@
 locals {
   addon_override = {
-    cilium = [file("${path.module}/../../manifest/cilium-talos.yaml")]
+    cilium = [
+      file("${path.module}/../../manifest/cilium-talos.yaml"),
+      yamlencode({
+        ipv6 = {
+          enabled = false
+        }
+        loadBalancer = {
+          acceleration = "native"
+        }
+      })
+    ]
     flux = {
       watch_path = "clusters/${local.cluster_name}"
     }

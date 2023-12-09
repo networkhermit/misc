@@ -12,29 +12,29 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     #age
     #cilium-cli
     #cue
+    #fluxcd
+    #hyperfine
     #kubectl
     #kubernetes-helm (helm)
     #kubie
     #nerdctl
     #nickel
-    #pulumi
     #rage (rust-rage)
     #sops
+    #sqlfluff
+    #tailspin
+    #talosctl
+    #trivy
     _1password
     conftest
-    fluxcd
     hubble
     istioctl
     kubebuilder
     kubescape
     open-policy-agent
     opentofu
-    talosctl
     terraform-ls
     tflint
-    tfsec
-    topiary
-    weave-gitops
   ];
   nix = [alejandra];
   list = base ++ blog ++ devops ++ nix;

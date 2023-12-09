@@ -17,8 +17,11 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     #age
     #cilium-cli
     #hubble
+    #hyperfine
     #kubernetes-helm
+    #tailspin
     #tetragon
+    #trivy
     _1password
     conftest
     cue
@@ -32,15 +35,12 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     nickel
     open-policy-agent
     opentofu
-    pulumi
     rage
     sops
+    sqlfluff
     talosctl
     terraform-ls
     tflint
-    tfsec
-    topiary
-    weave-gitops
   ];
   nix = [alejandra];
   list = base ++ blog ++ devops ++ nix;

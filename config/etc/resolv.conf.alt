@@ -1,4 +1,10 @@
-options attempts:1 rotate timeout:1
+options attempts:3 rotate timeout:1 use-vc
 
-nameserver 119.29.29.29
-nameserver 8.8.8.8
+#nameserver 223.5.5.5
+nameserver 223.6.6.6
+
+#nameserver 1.1.1.1
+nameserver 1.0.0.1
+
+#nameserver 8.8.8.8
+nameserver 8.8.4.4

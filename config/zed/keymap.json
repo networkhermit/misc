@@ -17,13 +17,13 @@
       "shift-k": "workspace::NewTerminal",
       "shift-q": "pane::CloseActiveItem"
     },
-    "context": "Editor && vim_mode == normal"
+    "context": "Editor && vim_mode == normal && !VimWaiting && !menu"
   },
   {
     "bindings": {
       "shift-m": "editor::SortLinesCaseSensitive"
     },
-    "context": "Editor && vim_mode == visual"
+    "context": "Editor && vim_mode == visual && !VimWaiting && !menu"
   },
   {
     "bindings": {

@@ -72,11 +72,9 @@ clean_up () {
 
 trap clean_up EXIT
 
-# trust google cloud package signing key
-## google repository
-curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-## aliyun repository
-curl --fail --location --silent --show-error --output /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg
+# trust kubernetes package signing key
+curl --fail --location --silent --show-error https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key \
+    | gpg --dearmor --output /etc/apt/keyrings/kubernetes-archive-keyring.gpg 
 
 # add kubernetes repository
 echo /etc/apt/sources.list.d/kubernetes.list

@@ -1,1 +1,1 @@
-deb https://packages.cloud.google.com/apt kubernetes-xenial main
+deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb /

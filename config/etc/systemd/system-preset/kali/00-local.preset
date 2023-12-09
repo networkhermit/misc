@@ -4,4 +4,4 @@ enable chrony.service
 enable nix-daemon.service
 enable ssh.service
 enable tailscaled.service
-enable wg-quick@.service
+enable wg-quick@.service wg0

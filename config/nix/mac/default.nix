@@ -2,6 +2,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
     ansible
     ansible-lint
+    b3sum
     bash-completion
     bashInteractive
     bat
@@ -62,6 +63,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
   ];
   devops = [
     _1password
+    hyperfine
     kubebuilder
     kubectl
     kubernetes-helm
@@ -70,9 +72,10 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     nmap
     opentofu
     sqlfluff
+    tailspin
     terraform-ls
     tflint
-    tfsec
+    trivy
   ];
   nix = [alejandra];
   list = base ++ devops ++ nix;

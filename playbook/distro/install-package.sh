@@ -93,6 +93,7 @@ DISTRO=${ID:-linux}
 
 ##################
 # UTIL
+#       b3sum
 #       bat
 #       eza
 #       fd
@@ -165,6 +166,7 @@ arch)
 
     # UTIL
     pacman --sync --needed \
+        b3sum \
         bat \
         eza \
         fd \
@@ -197,6 +199,7 @@ arch)
         gopls \
         go-tools \
         staticcheck \
+        delve \
         python{,-black,-pip} \
         mypy \
         ruff{,-lsp} \
@@ -274,6 +277,7 @@ fedora)
     # PLT
     dnf install \
         golang \
+        delve \
         python3{,-pip} \
         black \
         python3-mypy \
@@ -333,6 +337,7 @@ kali)
 
     # UTIL
     apt install \
+        b3sum \
         bat \
         exa \
         fd-find \
@@ -363,6 +368,7 @@ kali)
         golang \
         gopls \
         golang-golang-x-tools \
+        delve \
         python3{,-pip} \
         black \
         mypy \
