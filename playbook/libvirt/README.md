@@ -29,6 +29,7 @@ sudo virsh setmem "${DOMAIN}" 8G --config
 sudo virsh start "${DOMAIN}"
 
 # attach/detach disk to/from kvm
+sudo virsh attach-disk "${DOMAIN}" /var/lib/libvirt/images/archlinux-*-x86_64.iso sda --type cdrom
 sudo virsh attach-disk "${DOMAIN}" "${SOURCE}" "${TARGET}" --persistent
 sudo virsh detach-disk "${DOMAIN}" "${TARGET}" --persistent
 

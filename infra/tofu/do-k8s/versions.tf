@@ -11,11 +11,11 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "~> 2.32.0"
+      version = "~> 2.34.0"
     }
     flux = {
       source  = "fluxcd/flux"
-      version = "~> 1.1.2"
+      version = "~> 1.2.1"
     }
     github = {
       source  = "integrations/github"
@@ -27,11 +27,11 @@ terraform {
     }
     local = {
       source  = "hashicorp/local"
-      version = "~> 2.4.0"
+      version = "~> 2.4.1"
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~> 0.3.4"
+      version = "~> 0.4.0"
     }
     tls = {
       source  = "hashicorp/tls"

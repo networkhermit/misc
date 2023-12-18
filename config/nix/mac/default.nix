@@ -28,6 +28,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     golangci-lint
     gopls
     gzip
+    hexyl
     htop
     jq
     ldns

@@ -3,6 +3,7 @@ locals {
     cilium = [
       file("${path.module}/../../manifest/cilium-talos.yaml"),
       yamlencode({
+        enableIPv4BIGTCP = false
         ipv6 = {
           enabled = false
         }
@@ -31,8 +32,8 @@ locals {
       internal = ["10.24.0.0/16"]
     }
     pinned_version = {
-      kubernetes = "1.28.4"
-      talos      = "v1.5.5"
+      kubernetes = "1.29.0"
+      talos      = "v1.6.0"
     }
   }
   talos_override = {

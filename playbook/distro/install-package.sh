@@ -98,6 +98,7 @@ DISTRO=${ID:-linux}
 #       eza
 #       fd
 #       fzf
+#       hexyl
 #       jq
 #       moreutils
 #       ripgrep
@@ -152,7 +153,7 @@ DISTRO=${ID:-linux}
 ##################
 
 case ${DISTRO} in
-arch)
+arch|archarm)
 
     # SHELL
     pacman --sync --needed \
@@ -171,6 +172,7 @@ arch)
         eza \
         fd \
         fzf \
+        hexyl \
         jq \
         moreutils \
         ripgrep \
@@ -253,6 +255,7 @@ fedora)
         eza \
         fd-find \
         fzf \
+        hexyl \
         jq \
         moreutils \
         ripgrep \
@@ -342,6 +345,7 @@ kali)
         exa \
         fd-find \
         fzf \
+        hexyl \
         jq \
         moreutils \
         ripgrep \

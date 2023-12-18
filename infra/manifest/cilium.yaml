@@ -6,6 +6,7 @@ bpf:
   masquerade: true
 cluster:
   name: default
+enableIPv4BIGTCP: true
 enableIPv6BIGTCP: true
 endpointRoutes:
   enabled: true

@@ -1,8 +1,5 @@
 [Match]
-Name=eth0
-
-#[Link]
-#RequiredForOnline=no
+Name=br0
 
 [Network]
 DHCP=yes

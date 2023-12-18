@@ -19,7 +19,6 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     #hubble
     #hyperfine
     #kubernetes-helm
-    #tailspin
     #tetragon
     #trivy
     _1password
@@ -38,6 +37,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     rage
     sops
     sqlfluff
+    tailspin
     talosctl
     terraform-ls
     tflint

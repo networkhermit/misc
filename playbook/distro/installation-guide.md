@@ -184,7 +184,7 @@ sudo mkfs.xfs -f -L Arch /dev/vdaX
 sudo mount /dev/vdaX /mnt
 
 # bootstrap base system
-sudo pacstrap /mnt base linux{,-firmware} intel-ucode grub efibootmgr sudo vim openssh gptfdisk xfsprogs
+sudo pacstrap /mnt base linux{,-firmware} {amd,intel}-ucode grub efibootmgr sudo vim openssh gptfdisk xfsprogs zram-generator
 genfstab -t PARTUUID /mnt | sudo tee /mnt/etc/fstab
 sudo cp --verbose {,/mnt}/etc/resolv.conf
 

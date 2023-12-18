@@ -1,0 +1,4 @@
+[NetDev]
+Kind=bridge
+MACAddress=none
+Name=br0

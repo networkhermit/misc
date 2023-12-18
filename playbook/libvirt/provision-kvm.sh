@@ -31,6 +31,8 @@ Synopsis:
 Options:
     --cpu N
         number of virtual cpus to configure for the guest (default: ${CPU})
+    --bridge INTERFACE
+        bridge interface to use if you don't want to use NAT
     --directory DIRECTORY
         directory to store the disk image (default: ${DIRECTORY})
     --memory N (MiB)
@@ -51,7 +53,7 @@ EOF
 }
 
 CPU=4
-DIRECTORY=/var/local/images
+DIRECTORY=/var/lib/libvirt/images
 MEMORY=8192
 SIZE=40
 
@@ -59,6 +61,10 @@ while (( $# > 0 )); do
     case ${1} in
     --cpu)
         CPU=${2?✗ option parsing failed: missing value for argument ‘${1}’}
+        shift 2
+        ;;
+    --bridge)
+        BRIDGE=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
         ;;
     --directory)
@@ -113,23 +119,23 @@ trap clean_up EXIT
 
 EXTRA_ARGUMENT=()
 
-INSTALLER_PARAMETER=(--extra-args 'console=ttyS0,115200n8 nameserver=1.0.0.1')
+KERNEL_ARGUMENT=(--extra-args 'console=ttyS0,115200n8 nameserver=1.0.0.1')
 
 case ${DISTRO} in
 arch)
-    IMAGE=$(find images/ -type f -name 'archlinux-*-x86_64.iso' | sort --version-sort | tail --lines 1)
+    IMAGE=$(find "${DIRECTORY}" -type f -name 'archlinux-*-x86_64.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
-    EXTRA_ARGUMENT+=(--os-variant auto)
+    EXTRA_ARGUMENT+=(--os-variant archlinux)
     ;;
 fedora)
-    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/38/Server/x86_64/os)
-    EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
-    EXTRA_ARGUMENT+=(--os-variant fedora38)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/39/Server/x86_64/os)
+    EXTRA_ARGUMENT+=("${KERNEL_ARGUMENT[@]}")
+    EXTRA_ARGUMENT+=(--os-variant fedora-rawhide)
     ;;
 kali)
     EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
-    EXTRA_ARGUMENT+=("${INSTALLER_PARAMETER[@]}")
+    EXTRA_ARGUMENT+=("${KERNEL_ARGUMENT[@]}")
     EXTRA_ARGUMENT+=(--os-variant debiantesting)
     ;;
 *)
@@ -137,20 +143,30 @@ kali)
     ;;
 esac
 
+if [[ -z "${BRIDGE}" ]]; then
+    NETWORK_OPTION=model=virtio,network=default
+else
+    NETWORK_OPTION=bridge=${BRIDGE}
+fi
+
+if [[ -x "$(command -v numad)" ]]; then
+    VCPUS_OPTION=cpuset=auto,vcpus=${CPU}
+else
+    VCPUS_OPTION=vcpus=${CPU}
+fi
+
 virt-install \
     --autostart \
+    --boot uefi \
     --connect qemu:///system \
-    --console char_type=pty,target_type=serial \
+    --console type=pty,target.type=serial \
     --cpu host \
     --disk "device=disk,format=qcow2,path=${DIRECTORY}/${NAME}.qcow2,size=${SIZE}" \
-    --features kvm_hidden=off \
     --graphics none \
     --hvm \
     --memory "${MEMORY}" \
     --name "${NAME}" \
-    --network model=virtio,network=default \
-    --os-type linux \
-    --serial char_type=pty,target_type=isa-serial \
-    --vcpus cpuset=auto,vcpus="${CPU}" \
+    --network "${NETWORK_OPTION}" \
+    --vcpus "${VCPUS_OPTION}" \
     --virt-type kvm \
     "${EXTRA_ARGUMENT[@]}"
