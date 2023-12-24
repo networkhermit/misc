@@ -96,7 +96,7 @@ case ${NAME} in
 alertmanager)
     docker run \
         --detach \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --network cluster \
         --publish 172.24.0.1:9093:9093 \
@@ -108,7 +108,7 @@ alertmanager)
 caddy)
     docker run \
         --detach \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --network cluster \
         --publish 80:80 \
@@ -123,7 +123,7 @@ caddy)
 coredns)
     docker run \
         --detach \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --network cluster \
         --publish 127.0.0.1:53:53/udp \
@@ -139,7 +139,7 @@ coredns)
 gotify)
     docker run \
         --detach \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --network cluster \
         --publish 221:443 \
@@ -153,7 +153,7 @@ grafana)
     docker run \
         --detach \
         --env TZ="$(< /etc/timezone)" \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --network cluster \
         --publish 3000:3000 \
@@ -166,7 +166,7 @@ minio)
     docker run \
         --detach \
         --env-file /srv/minio/env \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --network cluster \
         --publish 9000:9000 \
@@ -180,7 +180,7 @@ minio)
 mosquitto)
     docker run \
         --detach \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --network cluster \
         --publish 1883:1883 \
@@ -191,7 +191,7 @@ mosquitto)
 nginx)
     docker run \
         --detach \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name nginx \
         --network cluster \
         --publish 8000:80 \
@@ -204,7 +204,7 @@ nginx)
 node-exporter)
     docker run \
         --detach \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --net host \
         --pid host \
@@ -217,7 +217,7 @@ postgres)
     docker run \
         --detach \
         --env POSTGRES_PASSWORD=bonsoir \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --network cluster \
         --publish 172.24.0.1:5432:5432 \
@@ -228,7 +228,7 @@ postgres)
 prometheus)
     docker run \
         --detach \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --network cluster \
         --publish 172.24.0.1:9090:9090 \
@@ -241,7 +241,7 @@ prometheus)
 *)
     docker run \
         --detach \
-        --label maintainer=kubernetes-operator \
+        --label managed-by=docker \
         --name "${NAME}" \
         --network cluster \
         --publish 6666:6666 \

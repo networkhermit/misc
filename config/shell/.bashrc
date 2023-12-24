@@ -111,9 +111,9 @@ alias batdiff='git diff --diff-filter d --name-only --relative | xargs bat --dif
 alias broken-symlink="find . -xtype l -exec ls --human-readable -l --time-style long-iso '{}' +"
 alias d='cd - &> /dev/null'
 alias diff='diff --color=auto'
-alias e='exa --classify --oneline'
-alias ea='exa --all'
-alias el='exa --links --group --long --time-style long-iso'
+alias e='eza --classify --oneline'
+alias ea='eza --all'
+alias el='eza --links --group --long --time-style long-iso'
 alias emacs='emacs --no-window-system'
 alias grep='grep --color=auto'
 alias ip='ip -color=auto'
@@ -136,7 +136,7 @@ alias yaml='yq "sort_keys(..)"'
 jsonfmt () { json "${1}" | sponge "${1}"; }
 yamlfmt () { yaml "${1}" | sponge "${1}"; }
 
-if [[ $(uname) = Darwin ]]; then
+if [[ $(uname -s) = Darwin ]]; then
     alias clip='pbcopy <'
 else
     alias clip='xclip -selection clip <'

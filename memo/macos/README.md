@@ -8,5 +8,9 @@ defaults write com.apple.dock show-recents -bool false && killall Dock
 ```
 
 ```bash
+defaults write com.apple.dock persistent-apps -array && killall Dock
+```
+
+```bash
 sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder
 ```

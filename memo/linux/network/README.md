@@ -4,13 +4,6 @@ iptables/ip6tables
 ```bash
 # shellcheck shell=bash
 
-# Manually Set Static IP
-
-ip addr add 192.168.1.10/24 dev enp0s3
-# ip link set enp0s3 down
-# ip link set enp0s3 up
-ip route add default via 192.168.1.1 dev enp0s3
-
 # Inspect Firewall Status
 
 sysctl net.ipv4.conf.{all,default}.forwarding

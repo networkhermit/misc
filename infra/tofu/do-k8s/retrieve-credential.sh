@@ -69,5 +69,5 @@ clean_up () {
 trap clean_up EXIT
 
 for o in kubeconfig talosconfig; do
-    install -D --mode 600 <(tofu output -raw "${o}") "vault/${o}"
+    install -D --mode 600 --no-target-directory <(tofu output -raw "${o}") "vault/${o}"
 done

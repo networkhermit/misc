@@ -72,11 +72,10 @@ clean_up () {
 
 trap clean_up EXIT
 
-mkdir --parents /etc/containerd
 if [[ -f /etc/containerd/config.toml ]]; then
-    cp --preserve /etc/containerd/config.toml{,.original}
+    cp --no-clobber --preserve /etc/containerd/config.toml{,.original}
 fi
-containerd config default | tee /etc/containerd/config.toml
+install -D --mode 644 --no-target-directory <(containerd config default) /etc/containerd/config.toml
 
 cat << 'EOF'
 [plugins."io.containerd.grpc.v1.cri"]

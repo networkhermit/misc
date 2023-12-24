@@ -7,7 +7,7 @@ services:
     container_name: alertmanager
     image: quay.io/prometheus/alertmanager
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 172.24.0.1:9093:9093
     profiles: ["alertmanager"]
@@ -23,7 +23,7 @@ services:
     container_name: caddy
     image: caddy
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 80:80
       - 443:443
@@ -44,7 +44,7 @@ services:
     container_name: coredns
     image: coredns/coredns
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 127.0.0.1:53:53/udp
       - 172.24.0.1:53:53/udp
@@ -64,7 +64,7 @@ services:
     container_name: gotify
     image: gotify/server
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 221:443
     profiles: ["gotify"]
@@ -85,7 +85,7 @@ services:
       TZ: Asia/Shanghai
     image: grafana/grafana
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 3000:3000
     profiles: ["grafana"]
@@ -109,7 +109,7 @@ services:
       - /srv/minio/env
     image: minio/minio
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 9000:9000
       - 9001:9001
@@ -126,7 +126,7 @@ services:
     container_name: mosquitto
     image: eclipse-mosquitto
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 1883:1883
     profiles: ["mosquitto"]
@@ -139,7 +139,7 @@ services:
     container_name: nginx
     image: nginx
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 8000:80
     profiles: ["nginx"]
@@ -160,7 +160,7 @@ services:
     container_name: node-exporter
     image: prom/node-exporter
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     network_mode: host
     pid: host
     profiles: ["node-exporter"]
@@ -176,7 +176,7 @@ services:
     container_name: postgres
     image: postgres:12
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 172.24.0.1:5432:5432
     profiles: ["postgres"]
@@ -189,7 +189,7 @@ services:
     container_name: prometheus
     image: prom/prometheus
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 172.24.0.1:9090:9090
     profiles: ["prometheus"]
@@ -212,7 +212,7 @@ services:
     container_name: v2fly
     image: v2fly/v2fly-core
     labels:
-      maintainer: kubernetes-operator
+      managed-by: docker-compose
     ports:
       - 6666:6666
     profiles: ["v2fly"]

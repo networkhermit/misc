@@ -72,6 +72,10 @@ echo [ route ]
 
 ip route get 1.1.1.1 | awk '{ print $7; exit }'
 
+echo [ ipinfo ]
+
+curl --fail --location --silent --show-error https://ipinfo.io | jq
+
 echo [ opendns ]
 
 {

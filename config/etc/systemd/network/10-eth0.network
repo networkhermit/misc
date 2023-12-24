@@ -21,7 +21,7 @@ UseNTP=no
 #Address=fd00::/8
 
 [DHCPv4]
-RouteMetric=10
+RouteMetric=100
 
 [IPv6AcceptRA]
-RouteMetric=10
+RouteMetric=100

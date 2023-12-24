@@ -72,13 +72,17 @@ clean_up () {
 
 trap clean_up EXIT
 
-if [[ "${OSTYPE}" != linux-gnu ]] && [[ "${OSTYPE}" != linux ]]; then
-    die "✗ unknown os type: ‘${OSTYPE}’"
-fi
+OS=$(uname -s)
 
-# shellcheck source=/dev/null
-source <(grep '^ID=' /etc/os-release)
-DISTRO=${ID:-linux}
+case ${OS} in
+Linux|FreeBSD)
+    # shellcheck source=/dev/null
+    source <(grep '^ID=' /etc/os-release)
+    DISTRO=${ID:-linux}
+    ;;
+*)
+    die "✗ unknown os: ‘${OS}’"
+esac
 
 case ${DISTRO} in
 arch|archarm)

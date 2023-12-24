@@ -306,7 +306,7 @@ fi
 
 # [ Chain of Trust ]
 
-cat "${CERT_NAME}".crt interm.crt | tee chain.crt &> /dev/null
+cat "${CERT_NAME}".crt interm.crt > chain.crt
 
 if [[ "${STRICT_VERIFICATION}" = true ]]; then
     echo +--

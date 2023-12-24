@@ -73,11 +73,14 @@ clean_up () {
 trap clean_up EXIT
 
 # trust kubernetes package signing key
-curl --fail --location --silent --show-error https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key \
+curl --fail --location --silent --show-error https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key \
     | gpg --dearmor --output /etc/apt/keyrings/kubernetes-archive-keyring.gpg 
 
 # add kubernetes repository
-echo /etc/apt/sources.list.d/kubernetes.list
+(
+pushd "$(dirname "$(realpath "${0}")")" &> /dev/null
+install -D --mode 644 --target-directory /etc/apt/sources.list.d "$(git rev-parse --show-toplevel)/config/etc/apt/sources.list.d/kubernetes.list"
+)
 
 KUBERNETES_VERSION=
 

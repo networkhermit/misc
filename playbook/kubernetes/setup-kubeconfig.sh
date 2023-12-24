@@ -84,6 +84,7 @@ if [[ "${ROLE}" = cluster-admin ]]; then
     install \
         --group "$(id --group "${SUDO_USER}")" \
         --mode 600 \
+        --no-target-directory \
         --owner "$(id --user "${SUDO_USER}")" \
         --preserve-timestamps \
         /etc/kubernetes/admin.conf "/home/${SUDO_USER}/.kube/config"

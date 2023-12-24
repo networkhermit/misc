@@ -46,7 +46,7 @@ Options:
 
 Arguments:
     DISTRO
-        linux distro name (arch | fedora | kali)
+        linux/bsd distro name (arch | fedora | kali | freebsd)
     NAME
         name of the new guest virtual machine instance
 EOF
@@ -123,7 +123,7 @@ KERNEL_ARGUMENT=(--extra-args 'console=ttyS0,115200n8 nameserver=1.0.0.1')
 
 case ${DISTRO} in
 arch)
-    IMAGE=$(find "${DIRECTORY}" -type f -name 'archlinux-*-x86_64.iso' | sort --version-sort | tail --lines 1)
+    IMAGE=$(find "${DIRECTORY}" -type f -name 'archlinux-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
     EXTRA_ARGUMENT+=(--os-variant archlinux)
@@ -137,6 +137,12 @@ kali)
     EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
     EXTRA_ARGUMENT+=("${KERNEL_ARGUMENT[@]}")
     EXTRA_ARGUMENT+=(--os-variant debiantesting)
+    ;;
+freebsd)
+    IMAGE=$(find "${DIRECTORY}" -type f -name 'FreeBSD-*.*-RELEASE-amd64-disc1.iso' | sort --version-sort | tail --lines 1)
+
+    EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+    EXTRA_ARGUMENT+=(--os-variant freebsd14.0)
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"

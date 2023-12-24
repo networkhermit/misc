@@ -5,11 +5,11 @@ Meta
 # shellcheck shell=bash
 
 # change root password
-sudo passwd root
+passwd root
 
 # check sudo support
-echo /etc/sudoers.d/10-local
-sudo SUDO_EDITOR=vim visudo
+sudo install -D --mode 644 --target-directory /etc/sudoers.d config/etc/sudoers.d/10-local
+SUDO_EDITOR=vim visudo
 
 # add default sysadmin
 sudo groupadd --gid 27 --system sudo
@@ -42,29 +42,34 @@ sudo passwd --delete root
 sudo passwd --lock root
 
 # manage system service
-echo /etc/systemd/system-preset/00-local.preset
+sudo install -D --mode 644 --target-directory /etc/systemd/system-preset config/etc/systemd/system-preset/00-local.preset
 sudo systemctl preset-all
 
 # change hostname
-sudo hostname STEM
-sudo hostnamectl set-hostname STEM
-echo /etc/hostname
+sudo hostnamectl set-hostname stem || sudo hostname stem
+sudo install -D --mode 644 --target-directory /etc config/etc/hostname
 
 # check internet connection
-ip address add 192.168.1.10/24 dev eth0
-ip route add default via 192.168.1.1
+sudo ip address add 192.168.1.10/24 dev eth0
+# sudo ip link set eth0 down
+# sudo ip link set eth0 up
+# ip link show dev eth0
+# sudo ip link set dev eth0 mtu 1420
+sudo ip route add default via 192.168.1.1 dev eth0
 ping -c 4 1.1.1.1
 
 # modify dns resolver
-echo /etc/resolv.conf
+sudo install -D --mode 644 --target-directory /etc config/etc/resolv.conf
 
 # configure default address selection
-echo /etc/gai.conf
+sudo install -D --mode 644 --target-directory /etc config/etc/gai.conf
 
 # modify default ntp server
-echo /etc/systemd/timesyncd.conf.d/10-local.conf
+sudo install -D --mode 644 --target-directory /etc/systemd/timesyncd.conf.d config/etc/systemd/timesyncd.conf.d/10-local.conf
 systemd-analyze cat-config systemd/timesyncd.conf --no-pager
-sudo systemctl restart systemd-timesyncd.service
+sudo install -D --mode 644 --target-directory /etc/chrony.d config/etc/chrony.d/10-local.conf
+sudo vim /etc/chrony.conf # kali: /etc/chrony/chrony.conf
+sudo systemctl restart chronyd.service
 
 # update system clock
 sudo timedatectl set-ntp true
@@ -76,27 +81,26 @@ sudo timedatectl set-timezone Asia/Shanghai
 sudo hwclock --systohc
 
 # configure system network
-echo /etc/systemd/network/10-eth0.network
+sudo install -D --mode 644 --target-directory /etc/systemd/network config/etc/systemd/network/10-eth0.network
 sudo systemctl restart systemd-networkd.service
 
 # change distro source
 ## arch
-echo /etc/pacman.d/mirrorlist
+sudo install -D --mode 644 --target-directory /etc/pacman.d config/etc/pacman.d/mirrorlist
 ## fedora
-echo /etc/yum.repos.d/fedora.repo
-echo /etc/yum.repos.d/fedora-updates.repo
-echo /etc/yum.repos.d/fedora-modular.repo
-echo /etc/yum.repos.d/fedora-updates-modular.repo
+sudo install -D --mode 644 --target-directory /etc/yum.repos.d config/etc/yum.repos.d/fedora{,-updates}.repo
 ## kali
-echo /etc/apt/sources.list
+sudo install -D --mode 644 --target-directory /etc/apt config/etc/apt/sources.list
+## freebsd
+sudo install -D --mode 644 --target-directory /usr/local/etc/pkg/repos config/bsd/usr/local/etc/pkg/repos/FreeBSD.conf
 
 # make distro sync
 # reference script=sys-sync
-# reference script=sys-obs
+# reference script=sys-duck
 
 # update message of the day
 sudo mv --no-clobber --verbose /etc/motd{,.original}
-echo /etc/motd
+sudo install -D --mode 644 --target-directory /etc config/etc/motd
 # shellcheck source=/dev/null
 source <(grep '^NAME=' /etc/os-release)
 : "${NAME:=Linux}"
@@ -106,12 +110,11 @@ sudo sed --in-place "s%OS_RELEASE_NAME%${OS_RELEASE_NAME}%g" /etc/motd
 unset NAME OS_RELEASE_NAME
 
 # modify secure shell daemon
-sudo mkdir --parents --verbose /etc/ssh/sshd_config.d
-echo /etc/ssh/sshd_config.d/10-local.conf
+sudo install -D --mode 644 --target-directory /etc/ssh/sshd_config.d config/etc/ssh/sshd_config.d/10-local.conf
 sudo rm --force --verbose /etc/ssh/ssh_host_*_key{,.pub}
 declare -A host_key=(['ed25519']=256 ['rsa']=4096)
 for type in "${!host_key[@]}"; do
-    sudo ssh-keygen -a 100 -b "${host_key[${type}]}" -f "/etc/ssh/ssh_host_${type}_key" -t "${type}" -C 'sysadmin@local.domain' -N ''
+    sudo ssh-keygen -a 100 -b "${host_key[${type}]}" -f "/etc/ssh/ssh_host_${type}_key" -t "${type}" -C "sysadmin@$(uname -n)" -N ''
 done
 unset host_key
 sudo sshd -T | sort | less
@@ -125,13 +128,13 @@ sudo vim /etc/default/grub
 # reference script=sys-boot
 
 # network control
-echo /etc/sysctl.d/network-control.conf
+sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/network-control.conf
 
 # disable dynamic resolver
 ## systemd-resolved
 ls --human-readable -l /etc/resolv.conf
 ## networkmanager
-echo /etc/NetworkManager/conf.d/no-dns.conf
+sudo install -D --mode 644 --target-directory /etc/NetworkManager/conf.d config/etc/NetworkManager/conf.d/no-dns.conf
 
 # install command-not-found
 ## arch
@@ -202,7 +205,7 @@ sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 vac
 # manage system service
 
 # change hostname
-echo /etc/hosts
+sudo install -D --mode 644 --target-directory /etc config/etc/hosts
 
 # check internet connection
 
@@ -238,10 +241,10 @@ sudo systemctl restart sshd.service
 # install command-not-found
 
 # update system locale
-echo /etc/locale.conf
+sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
 sudo sed --in-place 's/^#\(en_US\.UTF-8 UTF-8\)/\1/' /etc/locale.gen
 sudo locale-gen
-echo /etc/vconsole.conf
+sudo install -D --mode 644 --target-directory /etc config/etc/vconsole.conf
 
 # color setup for ls
 sudo tee --append /etc/bash.bashrc << 'EOF'
@@ -254,8 +257,11 @@ EOF
 # install arch-install-scripts
 { yes || true; } | sudo pacman --sync --needed arch-install-scripts
 
+# setup mdns (optional)
+{ yes || true; } | sudo pacman --sync --needed avahi nss-mdns
+
 # exit chroot
-exit
+#exit
 sudo umount --recursive /mnt
 
 # reboot system
@@ -298,7 +304,6 @@ Fedora
 # update message of the day
 
 # modify secure shell daemon
-sudo dnf install policycoreutils-python-utils
 sudo semanage port --add --type ssh_port_t --proto tcp 321
 sudo firewall-cmd --permanent --service ssh --add-port 321/tcp
 sudo firewall-cmd --permanent --service ssh --remove-port 22/tcp
@@ -318,6 +323,10 @@ sudo systemctl restart sshd.service
 
 # modify dnf configuration
 sudo sed --in-place 's/^\(installonly_limit\)=.*/\1=2/' /etc/dnf/dnf.conf
+
+# setup mdns (optional)
+sudo dnf install avahi nss-mdns
+sudo firewall-cmd --permanent --add-service mdns
 
 # reboot system
 ```
@@ -378,5 +387,81 @@ sudo systemctl restart ssh.service
 # modify shell environment
 sudo mv --verbose /etc/profile.d/kali.sh{,.forbid}
 
+# setup mdns (optional)
+sudo apt install --assume-yes avahi-daemon libnss-mdns < /dev/null
+
 # reboot system
+```
+
+FreeBSD
+=======
+
+```bash
+# shellcheck shell=bash
+
+# change root password
+
+# check sudo support
+sudo install -D --mode 644 --target-directory /usr/local/etc/sudoers.d config/etc/sudoers.d/10-local
+
+# add default sysadmin
+sudo pw groupadd sudo -g 27
+sudo pw groupadd sysadmin -g 256
+sudo pw groupadd vac -g 1000
+sudo adduser -M 700 -g 1000 -s /bin/sh -u 1000 -w no
+sudo pw groupmod sudo -m vac
+sudo pw groupmod sysadmin -m vac
+sudo passwd vac
+ls -dhl / /home/* /root
+sudo pw usermod root -w no
+sudo pw lock root
+
+# manage system service
+service -e
+
+# change hostname
+sudo sysrc hostname="stem"
+
+# check internet connection
+sudo ifconfig em0 inet 192.168.1.10/24
+# sudo ifconfig em0 down
+# sudo ifconfig em0 up
+# ifconfig vtnet0
+# sudo ifconfig vtnet0 mtu 1420
+sudo route add default 192.168.1.1
+ping -c 4 1.1.1.1
+
+# modify dns resolver
+
+# modify default ntp server
+sudo vim /etc/ntp.conf
+sudo service ntpd restart
+
+# modify time zone
+sudo ln -fns /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+# configure system network
+sudo vim /etc/rc.conf
+sudo service netif restart
+
+# change distro source
+
+# make distro sync
+# reference script=sys-sync
+
+# modify secure shell daemon
+sudo install -D --mode 644 --target-directory /etc/ssh/sshd_config.d config/etc/ssh/sshd_config.d/00-freebsd.conf
+
+# update boot loader
+sudo install -D --mode 644 --target-directory /boot config/bsd/boot/loader.conf
+
+# network control
+sudo install -D --mode 644 --target-directory /etc config/etc/sysctl.conf.local
+
+# update system locale
+sudo vim /etc/login.conf
+sudo cap_mkdb /etc/login.conf
+
+# setup mdns (optional)
+sudo pkg install mDNSResponder mDNSResponder_nss
 ```

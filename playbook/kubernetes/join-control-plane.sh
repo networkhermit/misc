@@ -84,6 +84,6 @@ kubeadm token list
 #    | openssl dgst -sha256 -hex | sed 's/^.* //')
 #kubeadm token create --certificate-key "${KEY}" --print-join-command
 
-install --mode 600 /dev/null /etc/kubernetes/kubeadm.log
+install --mode 600 --no-target-directory /dev/null /etc/kubernetes/kubeadm.log
 kubeadm join --config manifest/kubeadm-join-control-plane.yaml |& tee /etc/kubernetes/kubeadm.log
 systemctl enable kubelet.service

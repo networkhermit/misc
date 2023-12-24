@@ -37,7 +37,6 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     mold
     moreutils
     mypy
-    neofetch
     neovim
     python3
     python311Packages.pytest

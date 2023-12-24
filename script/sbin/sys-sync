@@ -80,13 +80,17 @@ clean_up () {
 
 trap clean_up EXIT
 
-if [[ "${OSTYPE}" != linux-gnu ]] && [[ "${OSTYPE}" != linux ]]; then
-    die "✗ unknown os type: ‘${OSTYPE}’"
-fi
+OS=$(uname -s)
 
-# shellcheck source=/dev/null
-source <(grep '^ID=' /etc/os-release)
-DISTRO=${ID:-linux}
+case ${OS} in
+Linux|FreeBSD)
+    # shellcheck source=/dev/null
+    source <(grep '^ID=' /etc/os-release)
+    DISTRO=${ID:-linux}
+    ;;
+*)
+    die "✗ unknown os: ‘${OS}’"
+esac
 
 case ${DISTRO} in
 arch|archarm)
@@ -117,6 +121,19 @@ kali)
     apt full-upgrade --purge
     apt clean
     apt autoremove --purge
+    ;;
+freebsd)
+    if [[ "${FORCE_SYNC}" = true ]]; then
+        pkg update --force
+    fi
+    freebsd-update fetch
+    if freebsd-update updatesready; then
+        freebsd-update install
+    fi
+    pkg update
+    pkg upgrade
+    pkg autoremove
+    pkg clean --all
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"

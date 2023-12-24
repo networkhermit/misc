@@ -74,7 +74,7 @@ trap clean_up EXIT
 
 #kubeadm config print init-defaults --component-configs KubeletConfiguration,KubeProxyConfiguration
 
-install --mode 600 /dev/null /etc/kubernetes/kubeadm.log
+install --mode 600 --no-target-directory /dev/null /etc/kubernetes/kubeadm.log
 kubeadm init --config manifest/kubeadm-init-control-plane.yaml --upload-certs |& tee /etc/kubernetes/kubeadm.log
 systemctl enable kubelet.service
 
