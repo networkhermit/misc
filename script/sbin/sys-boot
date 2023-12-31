@@ -75,7 +75,7 @@ trap clean_up EXIT
 OS=$(uname -s)
 
 case ${OS} in
-Linux|FreeBSD)
+Linux | FreeBSD)
     # shellcheck source=/dev/null
     source <(grep '^ID=' /etc/os-release)
     DISTRO=${ID:-linux}
@@ -85,7 +85,7 @@ Linux|FreeBSD)
 esac
 
 case ${DISTRO} in
-arch|archarm)
+arch | archarm)
     mkinitcpio --allpresets
     grub-mkconfig --output /boot/grub/grub.cfg
     ;;

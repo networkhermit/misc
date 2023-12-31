@@ -71,7 +71,7 @@ trap clean_up EXIT
 OS=$(uname -s)
 
 case ${OS} in
-Linux|FreeBSD)
+Linux | FreeBSD)
     # shellcheck source=/dev/null
     source <(grep '^ID=' /etc/os-release)
     DISTRO=${ID:-linux}
@@ -81,7 +81,7 @@ Linux|FreeBSD)
 esac
 
 case ${DISTRO} in
-arch|archarm)
+arch | archarm)
     pacman --query --info \
         | awk '/^Name/ { name=$3 } /^Version/ { version=$3 } /^Architecture/ { architecture=$3 } /^Installed Size/ { printf "%-14s %s-%s-%s\n", $4$5, name, version, architecture }' \
         | sort --human-numeric-sort --reverse

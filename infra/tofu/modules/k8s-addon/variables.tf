@@ -32,7 +32,7 @@ variable "pinned_version" {
   nullable = false
   type = object({
     cilium                   = optional(string, "1.14.5")
-    kubelet_csr_approver     = optional(string, "1.0.5")
+    kubelet_csr_approver     = optional(string, "1.0.6")
     prometheus_operator_crds = optional(string, "8.0.1")
   })
 }

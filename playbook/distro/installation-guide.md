@@ -8,21 +8,20 @@ Meta
 passwd root
 
 # check sudo support
-sudo install -D --mode 644 --target-directory /etc/sudoers.d config/etc/sudoers.d/10-local
+sudo install -D --mode 640 --target-directory /etc/sudoers.d config/etc/sudoers.d/10-local
 SUDO_EDITOR=vim visudo
 
 # add default sysadmin
-sudo groupadd --gid 27 --system sudo
 sudo groupadd --gid 256 --system sysadmin
 sudo groupadd --gid 1000 vac
 sudo useradd --create-home --gid 1000 --shell /bin/bash --uid 1000 vac
-sudo gpasswd --add vac sudo
+sudo gpasswd --add vac wheel
 sudo gpasswd --add vac sysadmin
 sudo passwd vac
 if [[ -n "${ANSIBLE_USER}" ]]; then
     sudo groupadd --gid 8128 --system "${ANSIBLE_USER}"
     sudo useradd --create-home --gid 8128 --shell /bin/bash --system --uid 8128 "${ANSIBLE_USER}"
-    sudo gpasswd --add "${ANSIBLE_USER}" sudo
+    sudo gpasswd --add "${ANSIBLE_USER}" wheel
     sudo gpasswd --add "${ANSIBLE_USER}" sysadmin
     sudo SUDO_EDITOR=tee visudo --file "/etc/sudoers.d/${ANSIBLE_USER}" << EOF
 ${ANSIBLE_USER} ALL=(ALL:ALL) NOPASSWD:ALL
@@ -72,8 +71,8 @@ sudo vim /etc/chrony.conf # kali: /etc/chrony/chrony.conf
 sudo systemctl restart chronyd.service
 
 # update system clock
-sudo timedatectl set-ntp true
 timedatectl status
+systemctl status chronyd.service
 
 # modify time zone
 sudo ln --force --no-dereference --symbolic /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -93,6 +92,8 @@ sudo install -D --mode 644 --target-directory /etc/yum.repos.d config/etc/yum.re
 sudo install -D --mode 644 --target-directory /etc/apt config/etc/apt/sources.list
 ## freebsd
 sudo install -D --mode 644 --target-directory /usr/local/etc/pkg/repos config/bsd/usr/local/etc/pkg/repos/FreeBSD.conf
+## openbsd
+sudo install -D --mode 644 --target-directory /etc config/etc/installurl
 
 # make distro sync
 # reference script=sys-sync
@@ -118,6 +119,7 @@ for type in "${!host_key[@]}"; do
 done
 unset host_key
 sudo sshd -T | sort | less
+sudo systemctl restart sshd.service
 
 # update initramfs image
 # reference script=sys-boot
@@ -135,6 +137,8 @@ sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/
 ls --human-readable -l /etc/resolv.conf
 ## networkmanager
 sudo install -D --mode 644 --target-directory /etc/NetworkManager/conf.d config/etc/NetworkManager/conf.d/no-dns.conf
+## resolvd
+rcctl check resolvd
 
 # install command-not-found
 ## arch
@@ -143,10 +147,14 @@ sudo tee --append /etc/bash.bashrc << 'EOF'
 
 [[ -r /usr/share/doc/pkgfile/command-not-found.bash ]] && . /usr/share/doc/pkgfile/command-not-found.bash
 EOF
+## fedora
+sudo dnf install --assumeyes PackageKit-command-not-found
 ## kali
 sudo apt install --assume-yes command-not-found < /dev/null
 sudo apt update
 sudo update-command-not-found
+## openbsd
+sudo pkg_add pkglocatedb--
 
 # reboot system
 sudo sync
@@ -187,7 +195,8 @@ sudo mkfs.xfs -f -L Arch /dev/vdaX
 sudo mount /dev/vdaX /mnt
 
 # bootstrap base system
-sudo pacstrap /mnt base linux{,-firmware} {amd,intel}-ucode grub efibootmgr sudo vim openssh gptfdisk xfsprogs zram-generator
+sudo pacstrap /mnt base linux{,-firmware} iptables-nft {amd,intel}-ucode grub efibootmgr sudo vim openssh gptfdisk xfsprogs zram-generator
+sudo ln --force --no-dereference --relative --symbolic --verbose "$(command -v vim)" /usr/bin/vi
 genfstab -t PARTUUID /mnt | sudo tee /mnt/etc/fstab
 sudo cp --verbose {,/mnt}/etc/resolv.conf
 
@@ -228,7 +237,6 @@ sudo install -D --mode 644 --target-directory /etc config/etc/hosts
 # update message of the day
 
 # modify secure shell daemon
-sudo systemctl restart sshd.service
 
 # update initramfs image
 
@@ -309,7 +317,6 @@ sudo firewall-cmd --permanent --service ssh --add-port 321/tcp
 sudo firewall-cmd --permanent --service ssh --remove-port 22/tcp
 sudo firewall-cmd --permanent --service ssh --get-ports
 sudo firewall-cmd --reload
-sudo systemctl restart sshd.service
 
 # update initramfs image
 
@@ -324,8 +331,12 @@ sudo systemctl restart sshd.service
 # modify dnf configuration
 sudo sed --in-place 's/^\(installonly_limit\)=.*/\1=2/' /etc/dnf/dnf.conf
 
+# change selinux to permissive mode
+sudo vim /etc/selinux/config
+sudo fixfiles -F onboot
+
 # setup mdns (optional)
-sudo dnf install avahi nss-mdns
+sudo dnf install --assumeyes avahi nss-mdns
 sudo firewall-cmd --permanent --add-service mdns
 
 # reboot system
@@ -343,8 +354,13 @@ Kali
 # change root password
 
 # check sudo support
+SUDO_EDITOR=vim visudo --file /etc/sudoers.d/10-local
 
 # add default sysadmin
+sudo gpasswd --add vac sudo
+if [[ -n "${ANSIBLE_USER}" ]]; then
+    sudo gpasswd --add "${ANSIBLE_USER}" sudo
+fi
 
 # manage system service
 
@@ -384,8 +400,14 @@ sudo systemctl restart ssh.service
 
 # install command-not-found
 
-# modify shell environment
-sudo mv --verbose /etc/profile.d/kali.sh{,.forbid}
+# enable tmpfs for /tmp
+sudo cp /usr/share/systemd/tmp.mount /etc/systemd/system/
+sudo systemctl enable tmp.mount
+sudo mkdir /mnt/root
+sudo mount --bind / /mnt/root
+sudo find /mnt/root/tmp -mindepth 1 # -delete
+sudo umount /mnt/root
+sudo rmdir /mnt/root
 
 # setup mdns (optional)
 sudo apt install --assume-yes avahi-daemon libnss-mdns < /dev/null
@@ -402,14 +424,15 @@ FreeBSD
 # change root password
 
 # check sudo support
-sudo install -D --mode 644 --target-directory /usr/local/etc/sudoers.d config/etc/sudoers.d/10-local
+pkg install --yes doas sudo
+sudo install -D --mode 600 --target-directory /etc config/etc/doas.conf
+sudo install -D --mode 640 --target-directory /usr/local/etc/sudoers.d config/etc/sudoers.d/10-local
 
 # add default sysadmin
-sudo pw groupadd sudo -g 27
 sudo pw groupadd sysadmin -g 256
 sudo pw groupadd vac -g 1000
 sudo adduser -M 700 -g 1000 -s /bin/sh -u 1000 -w no
-sudo pw groupmod sudo -m vac
+sudo pw groupmod wheel -m vac
 sudo pw groupmod sysadmin -m vac
 sudo passwd vac
 ls -dhl / /home/* /root
@@ -420,25 +443,33 @@ sudo pw lock root
 service -e
 
 # change hostname
-sudo sysrc hostname="stem"
+sudo sysrc hostname=stem
 
 # check internet connection
 sudo ifconfig em0 inet 192.168.1.10/24
 # sudo ifconfig em0 down
 # sudo ifconfig em0 up
-# ifconfig vtnet0
-# sudo ifconfig vtnet0 mtu 1420
+# ifconfig em0
+# sudo ifconfig em0 mtu 1420
 sudo route add default 192.168.1.1
 ping -c 4 1.1.1.1
 
 # modify dns resolver
 
+# configure default address selection
+sudo sysrc ip6addrctl_policy=ipv4_prefer
+
 # modify default ntp server
 sudo vim /etc/ntp.conf
 sudo service ntpd restart
 
+# update system clock
+ntpq --numeric --peers
+service ntpd status
+
 # modify time zone
 sudo ln -fns /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+sysctl machdep.disable_rtc_set
 
 # configure system network
 sudo vim /etc/rc.conf
@@ -447,10 +478,12 @@ sudo service netif restart
 # change distro source
 
 # make distro sync
-# reference script=sys-sync
+
+# update message of the day
 
 # modify secure shell daemon
 sudo install -D --mode 644 --target-directory /etc/ssh/sshd_config.d config/etc/ssh/sshd_config.d/00-freebsd.conf
+sudo service sshd restart
 
 # update boot loader
 sudo install -D --mode 644 --target-directory /boot config/bsd/boot/loader.conf
@@ -458,10 +491,111 @@ sudo install -D --mode 644 --target-directory /boot config/bsd/boot/loader.conf
 # network control
 sudo install -D --mode 644 --target-directory /etc config/etc/sysctl.conf.local
 
+# disable dynamic resolver
+
+# install command-not-found
+
 # update system locale
 sudo vim /etc/login.conf
 sudo cap_mkdb /etc/login.conf
 
+# enable tmpfs for /tmp
+sudo sysrc tmpmfs=YES
+sudo sysrc tmpsize=4054866k
+sudo mkdir /mnt/root
+sudo mount -t nullfs / /mnt/root
+sudo find /mnt/root/tmp -mindepth 1 # -delete
+sudo umount /mnt/root
+sudo rmdir /mnt/root
+
 # setup mdns (optional)
-sudo pkg install mDNSResponder mDNSResponder_nss
+sudo pkg install --yes mDNSResponder mDNSResponder_nss
+
+# reboot system
+```
+
+OpenBSD
+=======
+
+> Type `set tty com0` and `boot` in the boot loader to use serial console.
+
+```bash
+# shellcheck shell=bash
+
+# change root password
+
+# check sudo support
+pkg_add sudo--
+sudo install -D --mode 600 --target-directory /etc config/etc/doas.conf
+
+# add default sysadmin
+sudo groupadd -g 256 sysadmin
+sudo groupadd -g 1000 vac
+sudo useradd -g 1000 -m -s /bin/ksh -u 1000 vac
+sudo usermod -G wheel vac
+sudo usermod -G sysadmin vac
+sudo passwd vac
+ls -dhl / /home/* /root
+sudo vipw
+
+# manage system service
+rcctl ls on
+
+# change hostname
+sudo install -D --mode 644 --target-directory /etc config/etc/myname
+
+# check internet connection
+sudo ifconfig em0 inet 192.168.1.10/24
+# sudo ifconfig em0 down
+# sudo ifconfig em0 up
+# ifconfig em0
+# sudo ifconfig em0 mtu 1420
+sudo route add default 192.168.1.1
+ping -c 4 1.1.1.1
+
+# modify dns resolver
+
+# configure default address selection
+
+# modify default ntp server
+sudo vim /etc/ntp.conf
+sudo rcctl restart ntpd
+
+# update system clock
+ntpctl -s peers
+rcctl check ntpd
+
+# modify time zone
+sudo ln -fns /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+# configure system network
+sudo vim /etc/hostname.em0
+sudo sh /etc/netstart -n em0
+sudo sh /etc/netstart em0
+
+# change distro source
+
+# make distro sync
+
+# update message of the day
+
+# modify secure shell daemon
+sudo rcctl restart sshd
+
+# update boot loader
+sudo install -D --mode 644 --target-directory /etc config/etc/boot.conf
+
+# network control
+
+# disable dynamic resolver
+
+# install command-not-found
+
+# update system locale
+sudo vim /etc/profile
+
+# setup mdns (optional)
+sudo pkg_add openmdns--
+
+# reboot system
 ```

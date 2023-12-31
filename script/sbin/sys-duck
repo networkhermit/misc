@@ -75,7 +75,7 @@ trap clean_up EXIT
 OS=$(uname -s)
 
 case ${OS} in
-Linux|FreeBSD)
+Linux | FreeBSD)
     # shellcheck source=/dev/null
     source <(grep '^ID=' /etc/os-release)
     DISTRO=${ID:-linux}
@@ -85,7 +85,7 @@ Linux|FreeBSD)
 esac
 
 case ${DISTRO} in
-arch|archarm)
+arch | archarm)
     echo ------ [ package ] ------
     { pacman --query --foreign || true; } | sed 's/$/ [foreign]/' | column --table
     { pacman --query --deps --unrequired || true; } | sed 's/$/ [orphan]/' | column --table
@@ -109,6 +109,10 @@ kali)
     dpkg-query --show --showformat '${Package}\n${Conffiles}\n' | awk '/^[^ ]/{pkg=$1}/ obsolete$/{print pkg,$0}' | column --table
     echo ------ [ recommend ] ------
     aptitude search --display-format '%c %p' '~RBrecommends:~i'
+    ;;
+freebsd)
+    echo ------ [ package ] ------
+    pkg orphans --no-repo-update
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"

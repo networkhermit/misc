@@ -31,10 +31,12 @@ Synopsis:
 Options:
     --cpu N
         number of virtual cpus to configure for the guest (default: ${CPU})
+    --boot-path BOOT_PATH
+        directory to store the boot image (default: ${BOOT_PATH})
     --bridge INTERFACE
         bridge interface to use if you don't want to use NAT
-    --directory DIRECTORY
-        directory to store the disk image (default: ${DIRECTORY})
+    --images-path IMAGES_PATH
+        directory to store the disk image (default: ${IMAGES_PATH})
     --memory N (MiB)
         memory to allocate for the guest (default: ${MEMORY})
     --size N (GiB)
@@ -46,14 +48,15 @@ Options:
 
 Arguments:
     DISTRO
-        linux/bsd distro name (arch | fedora | kali | freebsd)
+        linux/bsd distro name (arch | fedora | kali | freebsd | openbsd)
     NAME
         name of the new guest virtual machine instance
 EOF
 }
 
+BOOT_PATH=/var/lib/libvirt/boot
 CPU=4
-DIRECTORY=/var/lib/libvirt/images
+IMAGES_PATH=/var/lib/libvirt/images
 MEMORY=8192
 SIZE=40
 
@@ -63,12 +66,16 @@ while (( $# > 0 )); do
         CPU=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
         ;;
+    --boot-path)
+        BOOT_PATH=${2?✗ option parsing failed: missing value for argument ‘${1}’}
+        shift 2
+        ;;
     --bridge)
         BRIDGE=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
         ;;
-    --directory)
-        DIRECTORY=${2?✗ option parsing failed: missing value for argument ‘${1}’}
+    --images-path)
+        IMAGES_PATH=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
         ;;
     --memory)
@@ -123,7 +130,7 @@ KERNEL_ARGUMENT=(--extra-args 'console=ttyS0,115200n8 nameserver=1.0.0.1')
 
 case ${DISTRO} in
 arch)
-    IMAGE=$(find "${DIRECTORY}" -type f -name 'archlinux-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
+    IMAGE=$(find "${BOOT_PATH}" -type f -name 'archlinux-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
     EXTRA_ARGUMENT+=(--os-variant archlinux)
@@ -139,10 +146,17 @@ kali)
     EXTRA_ARGUMENT+=(--os-variant debiantesting)
     ;;
 freebsd)
-    IMAGE=$(find "${DIRECTORY}" -type f -name 'FreeBSD-*.*-RELEASE-amd64-disc1.iso' | sort --version-sort | tail --lines 1)
+    IMAGE=$(find "${BOOT_PATH}" -type f -name 'FreeBSD-*.*-RELEASE-amd64-disc1.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
     EXTRA_ARGUMENT+=(--os-variant freebsd14.0)
+    ;;
+openbsd)
+    IMAGE=$(find "${BOOT_PATH}" -type f -name 'install*.img' | sort --version-sort | tail --lines 1)
+
+    EXTRA_ARGUMENT+=(--import)
+    EXTRA_ARGUMENT+=(--disk "device=disk,format=raw,path=${IMAGE},transient=on")
+    EXTRA_ARGUMENT+=(--os-variant openbsd7.4)
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"
@@ -167,7 +181,7 @@ virt-install \
     --connect qemu:///system \
     --console type=pty,target.type=serial \
     --cpu host \
-    --disk "device=disk,format=qcow2,path=${DIRECTORY}/${NAME}.qcow2,size=${SIZE}" \
+    --disk "device=disk,format=qcow2,path=${IMAGES_PATH}/${NAME}.qcow2,size=${SIZE}" \
     --graphics none \
     --hvm \
     --memory "${MEMORY}" \

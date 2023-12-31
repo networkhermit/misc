@@ -75,10 +75,13 @@ trap clean_up EXIT
 OS=$(uname -s)
 
 case ${OS} in
-Linux|FreeBSD)
+Linux | FreeBSD)
     # shellcheck source=/dev/null
     source <(grep '^ID=' /etc/os-release)
     DISTRO=${ID:-linux}
+    ;;
+OpenBSD)
+    DISTRO=openbsd
     ;;
 *)
     die "✗ unknown os: ‘${OS}’"
@@ -156,7 +159,7 @@ esac
 ##################
 
 case ${DISTRO} in
-arch|archarm)
+arch | archarm)
 
     # SHELL
     pacman --sync --needed \
@@ -238,7 +241,7 @@ arch|archarm)
 
     pacman --query --owns /etc/bash.bashrc
 
-    ;;
+    ;;&
 fedora)
 
     # SHELL
@@ -326,7 +329,7 @@ fedora)
 
     rpm --query --file /etc/bashrc
 
-    ;;
+    ;;&
 kali)
 
     # SHELL
@@ -409,14 +412,149 @@ kali)
 
     dpkg --search /etc/bash.bashrc
 
+    ;;&
+freebsd)
+
+    # SHELL
+    pkg install --no-repo-update \
+        bash{,-completion} \
+        zsh{,-autosuggestions,-syntax-highlighting} \
+        texinfo \
+        vim \
+        emacs-nox \
+        hs-ShellCheck
+
+    # UTIL
+    pkg install --no-repo-update \
+        b3sum \
+        bat \
+        eza \
+        fd-find \
+        fzf \
+        hexyl \
+        jq \
+        moreutils \
+        ripgrep \
+        tree \
+        go-yq
+
+    # SYSADMIN
+    pkg install --no-repo-update \
+        htop \
+        lsof \
+        tmux
+
+    # NETWORK OPERATOR
+    pkg install --no-repo-update \
+        chrony \
+        curl \
+        ldns \
+        rsync
+
+    # PLT
+    pkg install --no-repo-update \
+        go121 \
+        gopls \
+        go-tools \
+        golangci-lint \
+        delve \
+        python311 \
+        py39-{black,pip,mypy} \
+        ruff \
+        rust{,-analyzer} \
+        cargo-audit \
+        sccache
+
+    # GAME
+    pkg install --no-repo-update \
+        cmatrix \
+        cowsay \
+        fortune-mod-freebsd-classic \
+        sl
+
+    # DevOps
+    pkg install --no-repo-update \
+        py39-ansible{,-lint} \
+        py39-argparse \
+        git \
+        wireguard-tools
+
+    pkg query '%n %Fp' \
+        chrony \
+        | awk -F '[/ ]' '/usr\/local\/etc\/rc.d\/.+$/ { printf "%-24s%s\n", $1, $NF }'
+
+    pkg which /usr/local/bin/bash
+
+    ;;
+openbsd)
+
+    # SHELL
+    pkg_add \
+        bash{,-completion}-- \
+        zsh{,-syntax-highlighting}-- \
+        vim--no_x11 \
+        emacs--no_x11%emacs \
+        shellcheck--
+
+    # UTIL
+    pkg_add \
+        bat-- \
+        exa-- \
+        fd-- \
+        fzf-- \
+        hexyl-- \
+        jq-- \
+        moreutils-- \
+        ripgrep-- \
+        colortree--
+
+    # SYSADMIN
+    pkg_add \
+        htop--
+
+    # NETWORK OPERATOR
+    pkg_add \
+        curl-- \
+        drill-- \
+        rsync--
+
+    # PLT
+    pkg_add \
+        go-- \
+        gopls-- \
+        go-tools-- \
+        python3-- \
+        py3-{black,pip,mypy}-- \
+        rust{,-clippy,-rustfmt,-src}-- \
+        cargo-audit--
+
+    # GAME
+    pkg_add \
+        cmatrix-- \
+        cowsay-- \
+        sl--
+
+    # DevOps
+    pkg_add \
+        ansible{,-lint}-- \
+        git-- \
+        wireguard-tools--
+
+    pkg_info -L \
+        tailscale \
+        | awk -F '[/ ]' '/etc\/rc.d\/.+$/ { printf "%-24s%s\n", "tailscale", $NF }'
+
+    pkg_info -E /usr/local/bin/bash
+
+    ;;
+arch | archarm | fedora | kali)
+    ## Docker
+
+    pushd "$(dirname "$(realpath "${0}")")" &> /dev/null
+
+    install -D --mode 644 --target-directory /etc/docker "$(git rev-parse --show-toplevel)/config/etc/docker/daemon.json"
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"
     ;;
 esac
-
-## Docker
-
-pushd "$(dirname "$(realpath "${0}")")" &> /dev/null
-
-install -D --mode 644 --target-directory /etc/docker "$(git rev-parse --show-toplevel)/config/etc/docker/daemon.json"

@@ -1,5 +1,13 @@
 with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
+    #curl
+    #git
+    #lsof
+    #man
+    #openssh
+    #rsync
+    #vim
+    #zsh
     ansible
     ansible-lint
     b3sum
@@ -11,28 +19,19 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     cargo
     clippy
     cmatrix
-    coreutils
     cowsay
     eza
     fd
-    file
-    findutils
     fortune
     fzf
-    gawk
-    gnugrep
-    gnused
-    gnutar
     go
     go-tools
     golangci-lint
     gopls
-    gzip
     hexyl
     htop
     jq
     ldns
-    less
     lua-language-server
     mold
     moreutils
@@ -54,10 +53,8 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     tmux
     tree
     watch
-    xz
     yamllint
     yq-go
-    zsh
     zsh-autosuggestions
     zsh-syntax-highlighting
   ];

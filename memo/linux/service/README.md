@@ -2,6 +2,8 @@ systemd
 =======
 
 ```bash
+# shellcheck shell=bash
+
 systemd-detect-virt || true
 systemctl get-default
 systemctl list-machines --no-pager
@@ -26,4 +28,21 @@ systemctl list-sockets --no-pager --show-types
 systemctl list-units --no-pager --type socket
 systemctl list-timers --no-pager
 systemctl list-units --no-pager --type timer
+```
+
+magic SysRq key
+===============
+
+```bash
+# shellcheck shell=bash
+
+# influences only the invocation via key combination
+#echo 1 > /proc/sys/kernel/sysrq # enable all magic SysRq key
+echo 176 > /proc/sys/kernel/sysrq # enable certain magic SysRq key
+
+# invoke via the procfs
+echo s > /proc/sysrq-trigger # sync (16)
+echo u > /proc/sysrq-trigger # remount read-only (32)
+echo b > /proc/sysrq-trigger # reboot (128)
+#echo o > /proc/sysrq-trigger # poweroff (128)
 ```

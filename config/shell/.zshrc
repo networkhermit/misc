@@ -10,7 +10,7 @@ fi
 if [[ -z "${TMUX}" ]] && [[ -z "${VIM}" ]]; then
     if [[ "${TERM}" = xterm-256color ]] || [[ "${TERM}" = tmux-256color ]]; then
         case ${TERM_PROGRAM} in
-        Lens|vscode|zed)
+        Lens | vscode | zed)
             ;;
         *)
             exec tmux new-session -A -D -s main
@@ -102,7 +102,6 @@ fi
 alias acp='scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias ash='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias batdiff='git diff --diff-filter d --name-only --relative | xargs bat --diff'
-alias broken-symlink="find . -xtype l -exec ls --human-readable -l --time-style long-iso '{}' +"
 alias d='cd - &> /dev/null'
 alias diff='diff --color=auto'
 alias e='eza --classify --oneline'
@@ -110,15 +109,9 @@ alias ea='eza --all'
 alias el='eza --links --group --long --time-style long-iso'
 alias emacs='emacs --no-window-system'
 alias grep='grep --color=auto'
-alias ip='ip -color=auto'
 alias json='jq --sort-keys .'
-alias l='ls --classify -1'
-alias la='ls --almost-all'
-alias less='less -F'
-alias ll='ls --human-readable -l --time-style long-iso'
-alias ls='ls --color=auto'
+alias less='less --quit-if-one-screen'
 alias n='printf "\e[?1004h"; nvim'
-alias pass='echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr --delete +/= | dd bs=32 count=1 2>/dev/null)"'
 alias s='cd ..'
 alias sc='shellcheck'
 alias sha='sha256sum'
@@ -130,11 +123,70 @@ alias yaml='yq "sort_keys(..)"'
 jsonfmt () { json "${1}" | sponge "${1}"; }
 yamlfmt () { yaml "${1}" | sponge "${1}"; }
 
-if [[ $(uname -s) = Darwin ]]; then
-    alias clip='pbcopy <'
-else
+OS=$(uname -s)
+
+case ${OS} in
+Linux)
+    alias broken-symlink="find . -xtype l -exec ls --human-readable -l --time-style long-iso '{}' +"
+    alias ip='ip -color=auto'
+    alias l='ls --classify -1'
+    alias la='ls --almost-all'
+    alias ll='ls --human-readable -l --time-style long-iso'
+    alias ls='ls --color=auto'
+    alias pass='echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr --delete +/= | dd bs=32 count=1 2>/dev/null)"'
+    ;;
+FreeBSD | Darwin)
+    alias l='ls -F -1'
+    alias la='ls -A'
+    alias ll="ls -h -l -D '%F %R'"
+    alias ls='ls -G'
+    ;;
+OpenBSD)
+    if [[ -x "$(command -v colordiff)" ]]; then
+        alias diff='colordiff'
+    else
+        unalias diff
+    fi
+    unalias grep
+    alias l='ls -F -1'
+    alias la='ls -A'
+    alias less='less --no-init --quit-if-one-screen'
+    alias ll='ls -h -l -T'
+    if [[ -x "$(command -v colorls)" ]]; then
+        alias ls='colorls -G'
+    fi
+    alias sha='sha256'
+    if [[ -x "$(command -v colortree)" ]]; then
+        alias tree='colortree'
+    fi
+    ;;
+esac
+
+case ${OS} in
+Darwin)
+    alias sha='shasum --algorithm 256'
+    ;;
+esac
+
+case ${OS} in
+FreeBSD)
+    alias pass='echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr -d +/= | dd bs=32 count=1 2>/dev/null)"'
+    ;;
+OpenBSD | Darwin)
+    alias pass='echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d +/= | dd bs=32 count=1 2>/dev/null)"'
+    ;;
+esac
+
+case ${OS} in
+Linux | FreeBSD | OpenBSD)
     alias clip='xclip -selection clip <'
-fi
+    ;;
+Darwin)
+    alias clip='pbcopy <'
+    ;;
+esac
+
+unset OS
 
 alias sudo='sudo '
 

@@ -1,0 +1,21 @@
+# base
+
+neovim
+stylua
+
+# blog
+
+zola
+
+# devops
+
+1password-client2
+age
+helm
+hyperfine
+kubectl
+opentofu
+sops
+tailscale
+tailspin
+tflint

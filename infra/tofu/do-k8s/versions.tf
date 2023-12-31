@@ -11,11 +11,11 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "~> 2.34.0"
+      version = "~> 2.34.1"
     }
     flux = {
       source  = "fluxcd/flux"
-      version = "~> 1.2.1"
+      version = "~> 1.2.2"
     }
     github = {
       source  = "integrations/github"

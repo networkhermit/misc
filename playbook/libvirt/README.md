@@ -1,21 +1,6 @@
 ```bash
 # shellcheck shell=bash
 
-## [ linux kernel archive ]
-BASE_URL=https://mirrors.kernel.org/archlinux
-## [ tsinghua ]
-BASE_URL=https://mirrors.tuna.tsinghua.edu.cn/archlinux
-
-SNAPSHOT=$(date '+%Y.%m.01')
-
-curl --fail --location --silent --show-error --remote-name "${BASE_URL}/iso/${SNAPSHOT}/archlinux-${SNAPSHOT}-x86_64.iso"
-curl --fail --location --silent --show-error --remote-name "${BASE_URL}/iso/${SNAPSHOT}/archlinux-bootstrap-${SNAPSHOT}-x86_64.tar.gz"
-curl --fail --location --silent --show-error --remote-name "${BASE_URL}/iso/${SNAPSHOT}/sha1sums.txt"
-```
-
-```bash
-# shellcheck shell=bash
-
 # reallocate kvm cpu/memory
 sudo virsh nodeinfo
 sudo virsh dominfo "${DOMAIN}"
@@ -29,6 +14,7 @@ sudo virsh setmem "${DOMAIN}" 8G --config
 sudo virsh start "${DOMAIN}"
 
 # attach/detach disk to/from kvm
+sudo virsh domblklist --details "${DOMAIN}"
 sudo virsh attach-disk "${DOMAIN}" /var/lib/libvirt/images/archlinux-*.*.*-x86_64.iso sda --type cdrom
 sudo virsh attach-disk "${DOMAIN}" "${SOURCE}" "${TARGET}" --persistent
 sudo virsh detach-disk "${DOMAIN}" "${TARGET}" --persistent
@@ -53,4 +39,8 @@ sudo modprobe nbd
 sudo qemu-nbd --connect /dev/nbdX --read-only "${DISK_IMAGE}"
 sudo qemu-nbd --disconnect /dev/nbdX
 sudo modprobe --remove nbd
+
+# mount iso image
+mount --options loop,ro "${ISO_IMAGE}" "${MOUNT_POINT}"
+umount "${MOUNT_POINT}"
 ```

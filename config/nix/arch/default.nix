@@ -1,6 +1,7 @@
 with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
     #lua-language-server
+    #neovim
     #stylua
     biome
     golangci-lint

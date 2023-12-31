@@ -1,0 +1,2 @@
+# required for delve
+security.bsd.unprivileged_proc_debug=1

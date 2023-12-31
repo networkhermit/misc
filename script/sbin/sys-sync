@@ -83,17 +83,20 @@ trap clean_up EXIT
 OS=$(uname -s)
 
 case ${OS} in
-Linux|FreeBSD)
+Linux | FreeBSD)
     # shellcheck source=/dev/null
     source <(grep '^ID=' /etc/os-release)
     DISTRO=${ID:-linux}
+    ;;
+OpenBSD)
+    DISTRO=openbsd
     ;;
 *)
     die "✗ unknown os: ‘${OS}’"
 esac
 
 case ${DISTRO} in
-arch|archarm)
+arch | archarm)
     if [[ "${FORCE_SYNC}" = true ]]; then
         { yes || true; } | pacman --sync --clean --clean
         pacman --sync --refresh --refresh
@@ -131,9 +134,18 @@ freebsd)
         freebsd-update install
     fi
     pkg update
-    pkg upgrade
+    pkg upgrade --no-repo-update
     pkg autoremove
     pkg clean --all
+    ;;
+openbsd)
+    if [[ "${FORCE_SYNC}" = true ]]; then
+        pkg_delete -a
+    fi
+    syspatch -c
+    syspatch || true
+    pkg_add -Uu
+    pkg_delete -a
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"
