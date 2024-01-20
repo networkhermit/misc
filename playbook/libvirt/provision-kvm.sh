@@ -29,12 +29,12 @@ Synopsis:
     ${0##*/} [OPTION]... DISTRO NAME
 
 Options:
-    --cpu N
-        number of virtual cpus to configure for the guest (default: ${CPU})
     --boot-path BOOT_PATH
         directory to store the boot image (default: ${BOOT_PATH})
     --bridge INTERFACE
         bridge interface to use if you don't want to use NAT
+    --cpu N
+        number of virtual cpus to configure for the guest (default: ${CPU})
     --images-path IMAGES_PATH
         directory to store the disk image (default: ${IMAGES_PATH})
     --memory N (MiB)
@@ -48,7 +48,7 @@ Options:
 
 Arguments:
     DISTRO
-        linux/bsd distro name (arch | fedora | kali | freebsd | openbsd)
+        linux/bsd distro name (arch | fedora | gentoo | kali | void | freebsd | openbsd)
     NAME
         name of the new guest virtual machine instance
 EOF
@@ -62,16 +62,16 @@ SIZE=40
 
 while (( $# > 0 )); do
     case ${1} in
-    --cpu)
-        CPU=${2?✗ option parsing failed: missing value for argument ‘${1}’}
-        shift 2
-        ;;
     --boot-path)
         BOOT_PATH=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
         ;;
     --bridge)
         BRIDGE=${2?✗ option parsing failed: missing value for argument ‘${1}’}
+        shift 2
+        ;;
+    --cpu)
+        CPU=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
         ;;
     --images-path)
@@ -140,10 +140,22 @@ fedora)
     EXTRA_ARGUMENT+=("${KERNEL_ARGUMENT[@]}")
     EXTRA_ARGUMENT+=(--os-variant fedora-rawhide)
     ;;
+gentoo)
+    IMAGE=$(find "${BOOT_PATH}" -type f -name 'install-amd64-minimal-*.iso' | sort --version-sort | tail --lines 1)
+
+    EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+    EXTRA_ARGUMENT+=(--os-variant gentoo)
+    ;;
 kali)
     EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
     EXTRA_ARGUMENT+=("${KERNEL_ARGUMENT[@]}")
     EXTRA_ARGUMENT+=(--os-variant debiantesting)
+    ;;
+void)
+    IMAGE=$(find "${BOOT_PATH}" -type f -name 'void-live-x86_64-*-base.iso' | sort --version-sort | tail --lines 1)
+
+    EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+    EXTRA_ARGUMENT+=(--os-variant voidlinux)
     ;;
 freebsd)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'FreeBSD-*.*-RELEASE-amd64-disc1.iso' | sort --version-sort | tail --lines 1)

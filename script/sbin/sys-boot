@@ -96,8 +96,17 @@ fedora)
     fi
     grub2-mkconfig --output /boot/grub2/grub.cfg
     ;;
+gentoo)
+    emerge --ask @module-rebuild
+    emerge --config sys-kernel/gentoo-kernel-bin
+    #grub-mkconfig --output /boot/grub/grub.cfg
+    ;;
 kali)
     update-initramfs -k all -u
+    grub-mkconfig --output /boot/grub/grub.cfg
+    ;;
+void)
+    dracut --force --regenerate-all --verbose
     grub-mkconfig --output /boot/grub/grub.cfg
     ;;
 *)

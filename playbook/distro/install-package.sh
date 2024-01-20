@@ -90,6 +90,7 @@ esac
 ##################
 # SHELL
 #       bash
+#       fish
 #       zsh
 #       man-pages
 #       info
@@ -164,6 +165,7 @@ arch | archarm)
     # SHELL
     pacman --sync --needed \
         bash{,-completion} \
+        fish \
         zsh{,-autosuggestions,-syntax-highlighting} \
         man-{db,pages} \
         texinfo \
@@ -247,6 +249,7 @@ fedora)
     # SHELL
     dnf install \
         bash{,-completion} \
+        fish \
         zsh{,-autosuggestions,-syntax-highlighting} \
         man-{db,pages} \
         info \
@@ -285,6 +288,8 @@ fedora)
     # PLT
     dnf install \
         golang \
+        golang-x-tools-{gopls,goimports} \
+        golang-honnef-tools \
         delve \
         python3{,-pip} \
         black \
@@ -330,11 +335,89 @@ fedora)
     rpm --query --file /etc/bashrc
 
     ;;&
+gentoo)
+
+    # SHELL
+    emerge --ask --getbinpkg --noreplace \
+        app-shells/bash{,-completion} \
+        app-shells/fish \
+        app-shells/zsh{,-syntax-highlighting} \
+        sys-apps/man-{db,pages} \
+        sys-apps/texinfo \
+        app-editors/vim \
+        app-editors/emacs \
+        dev-util/shellcheck-bin
+
+    # UTIL
+    emerge --ask --getbinpkg --noreplace \
+        sys-apps/bat \
+        sys-apps/eza \
+        sys-apps/fd \
+        app-shells/fzf \
+        app-misc/jq \
+        sys-apps/moreutils \
+        sys-apps/ripgrep \
+        app-text/tree
+
+    # SYSADMIN
+    emerge --ask --getbinpkg --noreplace \
+        sys-process/cronie \
+        sys-process/htop \
+        sys-process/iotop \
+        sys-process/lsof \
+        app-misc/tmux
+
+    # NETWORK OPERATOR
+    emerge --ask --getbinpkg --noreplace \
+        net-misc/chrony \
+        net-misc/curl \
+        net-libs/ldns \
+        net-misc/openssh \
+        net-misc/rsync
+
+    # PLT
+    emerge --ask --getbinpkg --noreplace \
+        dev-lang/go \
+        dev-go/gopls \
+        dev-lang/python \
+        dev-python/pip \
+        dev-python/mypy \
+        dev-python/black \
+        dev-lang/rust \
+        sys-devel/mold
+
+    # GAME
+    emerge --ask --getbinpkg --noreplace \
+        app-misc/cmatrix \
+        games-misc/cowsay \
+        games-misc/fortune-mod \
+        app-misc/sl
+
+    # DevOps
+    emerge --ask --getbinpkg --noreplace \
+        app-admin/ansible \
+        app-admin/ansible-lint \
+        dev-python/argcomplete \
+        dev-util/bcc \
+        dev-util/bpftool \
+        dev-debug/bpftrace \
+        app-containers/docker{,compose} \
+        dev-vcs/git \
+        net-vpn/wireguard-tools
+
+    qlist \
+        net-misc/openssh\
+        | awk --field-separator '[/ ]' '/etc\/init.d\/.+[^/]$/ { printf "%-24s%s\n", "openssh", $4 }'
+
+    qfile /etc/bash/bashrc
+
+    ;;&
 kali)
 
     # SHELL
     apt install \
         bash{,-completion} \
+        fish \
         zsh{,-autosuggestions,-syntax-highlighting} \
         manpages{,-dev} \
         info \
@@ -380,7 +463,7 @@ kali)
         python3{,-pip} \
         black \
         mypy \
-        rustc \
+        rust{c,-src} \
         rustfmt \
         rust-clippy \
         cargo \
@@ -413,11 +496,97 @@ kali)
     dpkg --search /etc/bash.bashrc
 
     ;;&
+void)
+
+    # SHELL
+    xbps-install \
+        bash{,-completion} \
+        fish-shell \
+        zsh{,-autosuggestions,-syntax-highlighting} \
+        man{doc,-pages} \
+        texinfo \
+        vim \
+        emacs \
+        shellcheck
+
+    # UTIL
+    xbps-install \
+        b3sum \
+        bat \
+        eza \
+        fd \
+        fzf \
+        hexyl \
+        jq \
+        moreutils \
+        ripgrep \
+        tree \
+        yq-go
+
+    # SYSADMIN
+    xbps-install \
+        cronie \
+        htop \
+        iotop \
+        lsof \
+        tmux
+
+    # NETWORK OPERATOR
+    xbps-install \
+        chrony \
+        curl \
+        ldns \
+        openssh \
+        rsync
+
+    # PLT
+    xbps-install \
+        go \
+        gopls \
+        delve \
+        python3{,-pip,-mypy} \
+        black \
+        ruff \
+        rust{,-analyzer,-src} \
+        rust-cargo-audit \
+        cargo-outdated \
+        mold \
+        rust-sccache
+
+    # GAME
+    xbps-install \
+        cmatrix \
+        cowsay \
+        fortune-mod \
+        sl
+
+    # DevOps
+    xbps-install \
+        ansible \
+        python3-ansible-lint \
+        python3-argcomplete \
+        bcc-tools \
+        python3-bcc \
+        bpftool \
+        bpftrace \
+        docker{,-compose} \
+        git \
+        wireguard-tools
+
+    xbps-query --files \
+        openssh \
+        | awk --field-separator '[/ ]' '/etc\/sv\/.+[^/]$/ { printf "%-24s%s\n", "openssh", $4 }' \
+        | uniq
+
+    xbps-query --ownedby /etc/bash/bashrc
+
+    ;;&
 freebsd)
 
     # SHELL
     pkg install --no-repo-update \
         bash{,-completion} \
+        fish \
         zsh{,-autosuggestions,-syntax-highlighting} \
         texinfo \
         vim \
@@ -491,6 +660,7 @@ openbsd)
     # SHELL
     pkg_add \
         bash{,-completion}-- \
+        fish-- \
         zsh{,-syntax-highlighting}-- \
         vim--no_x11 \
         emacs--no_x11%emacs \
@@ -547,7 +717,7 @@ openbsd)
     pkg_info -E /usr/local/bin/bash
 
     ;;
-arch | archarm | fedora | kali)
+arch | archarm | fedora | gentoo | kali | void)
     ## Docker
 
     pushd "$(dirname "$(realpath "${0}")")" &> /dev/null

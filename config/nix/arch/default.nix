@@ -2,6 +2,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
     #lua-language-server
     #neovim
+    #pwru
     #stylua
     biome
     golangci-lint
@@ -23,6 +24,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     #rage (rust-rage)
     #sops
     #sqlfluff
+    #tailscale
     #tailspin
     #talosctl
     #trivy

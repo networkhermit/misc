@@ -22,6 +22,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     cowsay
     eza
     fd
+    fish
     fortune
     fzf
     go

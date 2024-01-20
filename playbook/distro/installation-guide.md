@@ -69,6 +69,7 @@ systemd-analyze cat-config systemd/timesyncd.conf --no-pager
 sudo install -D --mode 644 --target-directory /etc/chrony.d config/etc/chrony.d/10-local.conf
 sudo vim /etc/chrony.conf # kali: /etc/chrony/chrony.conf
 sudo systemctl restart chronyd.service
+sudo chronyd -q
 
 # update system clock
 timedatectl status
@@ -88,8 +89,14 @@ sudo systemctl restart systemd-networkd.service
 sudo install -D --mode 644 --target-directory /etc/pacman.d config/etc/pacman.d/mirrorlist
 ## fedora
 sudo install -D --mode 644 --target-directory /etc/yum.repos.d config/etc/yum.repos.d/fedora{,-updates}.repo
+## gentoo
+pushd config || false
+sudo find etc/portage/ -type f -exec install -D --mode 644 '{}' '/{}' \;
+popd || false
 ## kali
 sudo install -D --mode 644 --target-directory /etc/apt config/etc/apt/sources.list
+## void
+sudo install -D --mode 644 --target-directory /etc/xbps.d config/etc/config/etc/xbps.d/00-repository-main.conf
 ## freebsd
 sudo install -D --mode 644 --target-directory /usr/local/etc/pkg/repos config/bsd/usr/local/etc/pkg/repos/FreeBSD.conf
 ## openbsd
@@ -129,16 +136,20 @@ cat /proc/cmdline
 sudo vim /etc/default/grub
 # reference script=sys-boot
 
-# network control
-sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/network-control.conf
+# update sysctl configuration
+sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/networking.conf
 
 # disable dynamic resolver
-## systemd-resolved
-ls --human-readable -l /etc/resolv.conf
+## dhcpcd
+printf '\n%s' 'nohook resolv.conf' | sudo tee --append /etc/dhcpcd.conf
 ## networkmanager
 sudo install -D --mode 644 --target-directory /etc/NetworkManager/conf.d config/etc/NetworkManager/conf.d/no-dns.conf
+## resolvconf
+printf '\n%s' 'resolvconf=NO' | sudo tee --append /etc/resolvconf.conf
 ## resolvd
 rcctl check resolvd
+## systemd-resolved
+ls --human-readable -l /etc/resolv.conf
 
 # install command-not-found
 ## arch
@@ -242,7 +253,7 @@ sudo install -D --mode 644 --target-directory /etc config/etc/hosts
 
 # update boot loader
 
-# network control
+# update sysctl configuration
 
 # disable dynamic resolver
 
@@ -250,7 +261,7 @@ sudo install -D --mode 644 --target-directory /etc config/etc/hosts
 
 # update system locale
 sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
-sudo sed --in-place 's/^#\(en_US\.UTF-8 UTF-8\)/\1/' /etc/locale.gen
+printf '\n%s' 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/locale.gen
 sudo locale-gen
 sudo install -D --mode 644 --target-directory /etc config/etc/vconsole.conf
 
@@ -322,7 +333,7 @@ sudo firewall-cmd --reload
 
 # update boot loader
 
-# network control
+# update sysctl configuration
 
 # disable dynamic resolver
 
@@ -342,10 +353,92 @@ sudo firewall-cmd --permanent --add-service mdns
 # reboot system
 ```
 
+Gentoo
+======
+
+> Add `console=ttyS0,115200n8` to boot parameters for KVM.
+>
+> `printf '\n%s' 's0:12345:respawn:/sbin/agetty 115200 ttyS0 vt100' | sudo tee --append /etc/inittab`
+
+```bash
+# shellcheck shell=bash
+
+# change root password
+
+# check sudo support
+emerge --ask --getbinpkg --noreplace app-admin/sudo
+
+# add default sysadmin
+
+# manage system service
+rc-status
+rc-update show default
+rc-update show --all
+sudo rc-update delete netmount default
+
+# change hostname
+
+# check internet connection
+
+# modify dns resolver
+
+# configure default address selection
+
+# modify default ntp server
+sudo rc-update add chronyd default
+sudo rc-service chronyd restart
+
+# update system clock
+
+# modify time zone
+
+# configure system network
+
+# change distro source
+
+# make distro sync
+
+# update message of the day
+
+# modify secure shell daemon
+sudo rc-update add sshd default
+sudo rc-service sshd restart
+
+# update initramfs image
+
+# update boot loader
+
+# update sysctl configuration
+sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/inotify.conf
+sudo sysctl --system
+
+# disable dynamic resolver
+
+# install command-not-found
+
+# update system locale
+printf '\n%s' 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/locale.gen
+sudo locale-gen
+sudo vim /etc/env.d/02locale
+sudo env-update
+
+# use nftables backend for iptables
+iptables --version | grep nf_tables
+eselect iptables list
+sudo eselect iptables set xtables-nft-multi
+
+# setup mdns (optional)
+sudo emerge --ask --getbinpkg --noreplace net-dns/avahi sys-auth/nss-mdns
+sudo rc-update add avahi-daemon default
+sudo rc-service avahi-daemon restart
+
+# reboot system
+```
+
 Kali
 ====
 
-> netboot iso
+> netboot image:
 > https://archive.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/mini.iso
 
 ```bash
@@ -354,7 +447,7 @@ Kali
 # change root password
 
 # check sudo support
-SUDO_EDITOR=vim visudo --file /etc/sudoers.d/10-local
+SUDO_EDITOR=vim visudo --file /etc/sudoers.d/10-local # wheel -> sudo
 
 # add default sysadmin
 sudo gpasswd --add vac sudo
@@ -394,7 +487,9 @@ sudo systemctl restart ssh.service
 
 # update boot loader
 
-# network control
+# update sysctl configuration
+sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/inotify.conf
+sudo sysctl --system
 
 # disable dynamic resolver
 
@@ -411,6 +506,85 @@ sudo rmdir /mnt/root
 
 # setup mdns (optional)
 sudo apt install --assume-yes avahi-daemon libnss-mdns < /dev/null
+
+# reboot system
+```
+
+Void
+====
+
+> Add `console=ttyS0,115200n8` to boot parameters for KVM.
+>
+> `cd /etc/runit/runsvdir/default`
+>
+> `ln --force --no-dereference --symbolic /etc/sv/agetty-ttyS0`
+
+```bash
+# shellcheck shell=bash
+
+# change root password
+
+# check sudo support
+
+# add default sysadmin
+
+# manage system service
+ls /var/service
+
+# change hostname
+
+# check internet connection
+
+# modify dns resolver
+
+# configure default address selection
+
+# modify default ntp server
+sudo ln --force --no-dereference --symbolic /etc/sv/chronyd /etc/runit/runsvdir/default
+sudo sv restart chronyd
+
+# update system clock
+
+# modify time zone
+
+# configure system network
+
+# change distro source
+
+# make distro sync
+
+# update message of the day
+
+# modify secure shell daemon
+sudo ln --force --no-dereference --symbolic /etc/sv/sshd /etc/runit/runsvdir/default
+sudo sv restart sshd
+
+# update initramfs image
+
+# update boot loader
+
+# update sysctl configuration
+sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/inotify.conf
+sudo sysctl --system
+
+# disable dynamic resolver
+
+# install command-not-found
+
+# add additional terminfo files
+sudo xbps-install --yes ncurses-term
+
+# use nftables backend for iptables
+iptables --version | grep nf_tables
+sudo xbps-install --yes iptables-nft
+sudo xbps-alternatives --set iptables-nft
+
+# install xtools
+sudo xbps-install --yes xtools
+
+# setup mdns (optional)
+sudo xbps-install --yes avahi nss-mdns
+sudo ln --force --no-dereference --symbolic /etc/sv/avahi-daemon /etc/runit/runsvdir/default
 
 # reboot system
 ```
@@ -488,7 +662,7 @@ sudo service sshd restart
 # update boot loader
 sudo install -D --mode 644 --target-directory /boot config/bsd/boot/loader.conf
 
-# network control
+# update sysctl configuration
 sudo install -D --mode 644 --target-directory /etc config/etc/sysctl.conf.local
 
 # disable dynamic resolver
@@ -510,6 +684,9 @@ sudo rmdir /mnt/root
 
 # setup mdns (optional)
 sudo pkg install --yes mDNSResponder mDNSResponder_nss
+sudo vim /etc/rc.conf
+sudo service mdnsresponderposix restart
+sudo service mdnsd restart
 
 # reboot system
 ```
@@ -585,7 +762,7 @@ sudo rcctl restart sshd
 # update boot loader
 sudo install -D --mode 644 --target-directory /etc config/etc/boot.conf
 
-# network control
+# update sysctl configuration
 
 # disable dynamic resolver
 
@@ -596,6 +773,7 @@ sudo vim /etc/profile
 
 # setup mdns (optional)
 sudo pkg_add openmdns--
+sudo rcctl restart mdnsd
 
 # reboot system
 ```

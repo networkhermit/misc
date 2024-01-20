@@ -1,0 +1,13 @@
+# base
+
+neovim
+
+# blog
+
+# devops
+
+age
+helm
+hyperfine
+kubernetes-client
+open-policy-agent

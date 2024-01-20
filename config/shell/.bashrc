@@ -44,9 +44,9 @@ __prompt_command () {
 PROMPT_COMMAND='__prompt_command'
 
 # shellcheck disable=SC2034
-GIT_PS1_SHOWDIRTYSTATE=1
+#GIT_PS1_SHOWDIRTYSTATE=1
 # shellcheck disable=SC2034
-GIT_PS1_SHOWSTASHSTATE=1
+#GIT_PS1_SHOWSTASHSTATE=1
 # shellcheck disable=SC2034
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
@@ -74,17 +74,17 @@ shopt -s autocd
 shopt -s histappend
 shopt -s histverify
 
-if [[ ! -r /usr/share/bash-completion/bash_completion ]]; then
+if ! declare -F _init_completion &> /dev/null; then
     complete -cf man
     complete -cf sudo
 fi
 
-if [[ -x "$(command -v kubectl)" ]]; then
+if ! complete -p kubectl &> /dev/null && [[ -x "$(command -v kubectl)" ]]; then
     # shellcheck source=/dev/null
     source <(kubectl completion bash)
 fi
 
-if [[ -x "$(command -v helm)" ]]; then
+if ! complete -p helm &> /dev/null && [[ -x "$(command -v helm)" ]]; then
     # shellcheck source=/dev/null
     source <(helm completion bash)
 fi
@@ -148,6 +148,9 @@ FreeBSD | Darwin)
     alias ls='ls -G'
     ;;
 OpenBSD)
+    if [[ ! -x "$(command -v nvim)" ]]; then
+        unset MANPAGER
+    fi
     if [[ -x "$(command -v colordiff)" ]]; then
         alias diff='colordiff'
     else
@@ -185,7 +188,14 @@ esac
 
 case ${OS} in
 Linux | FreeBSD | OpenBSD)
-    alias clip='xclip -selection clip <'
+    case ${XDG_SESSION_TYPE} in
+    wayland)
+        alias clip='wl-copy <'
+        ;;
+    x11)
+        alias clip='xclip -selection clip <'
+        ;;
+    esac
     ;;
 Darwin)
     alias clip='pbcopy <'

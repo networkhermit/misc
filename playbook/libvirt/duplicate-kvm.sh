@@ -29,8 +29,8 @@ Synopsis:
     ${0##*/} [OPTION]... SOURCE TARGET
 
 Options:
-    --directory DIRECTORY
-        directory to store the disk image (default: ${DIRECTORY})
+    --images-path IMAGES_PATH
+        directory to store the disk image (default: ${IMAGES_PATH})
     -h, --help
         show this help message and exit
     -v, --version
@@ -44,12 +44,12 @@ Arguments:
 EOF
 }
 
-DIRECTORY=/var/local/images
+IMAGES_PATH=/var/lib/libvirt/images
 
 while (( $# > 0 )); do
     case ${1} in
     --directory)
-        DIRECTORY=${2?✗ option parsing failed: missing value for argument ‘${1}’}
+        IMAGES_PATH=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
         ;;
     -h | --help)
@@ -91,6 +91,6 @@ clean_up () {
 trap clean_up EXIT
 
 virt-clone \
-    --file "${DIRECTORY}/${TARGET}.qcow2" \
+    --file "${IMAGES_PATH}/${TARGET}.qcow2" \
     --name "${TARGET}" \
     --original "${SOURCE}"

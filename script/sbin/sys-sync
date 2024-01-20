@@ -115,6 +115,13 @@ fedora)
     dnf autoremove
     dnf clean packages
     ;;
+gentoo)
+    if [[ "${FORCE_SYNC}" = true ]]; then
+        emerge --sync
+    fi
+    emerge --ask --changed-use --deep --getbinpkg --update --verbose @world
+    emerge --ask --depclean
+    ;;
 kali)
     if [[ "${FORCE_SYNC}" = true ]]; then
         apt clean
@@ -124,6 +131,10 @@ kali)
     apt full-upgrade --purge
     apt clean
     apt autoremove --purge
+    ;;
+void)
+    xbps-install --sync --update
+    xbps-remove --clean-cache --recursive --remove-orphans
     ;;
 freebsd)
     if [[ "${FORCE_SYNC}" = true ]]; then

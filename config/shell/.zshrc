@@ -49,11 +49,13 @@ precmd () {
 }
 
 # shellcheck disable=SC2034
-GIT_PS1_SHOWDIRTYSTATE=1
+#GIT_PS1_SHOWDIRTYSTATE=1
 # shellcheck disable=SC2034
-GIT_PS1_SHOWSTASHSTATE=1
+#GIT_PS1_SHOWSTASHSTATE=1
 # shellcheck disable=SC2034
 VIRTUAL_ENV_DISABLE_PROMPT=1
+# shellcheck disable=SC2034
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
 __exit_status () {
     local x=$?
@@ -73,12 +75,12 @@ bindkey '\C-x\C-e' edit-command-line
 
 set -o noclobber
 
-if [[ -x "$(command -v kubectl)" ]]; then
+if [[ -z "${_comps[kubectl]}" ]] && [[ -x "$(command -v kubectl)" ]]; then
     # shellcheck source=/dev/null
     source <(kubectl completion zsh)
 fi
 
-if [[ -x "$(command -v helm)" ]]; then
+if [[ -z "${_comps[helm]}" ]] && [[ -x "$(command -v helm)" ]]; then
     # shellcheck source=/dev/null
     source <(helm completion zsh)
 fi
@@ -142,6 +144,9 @@ FreeBSD | Darwin)
     alias ls='ls -G'
     ;;
 OpenBSD)
+    if [[ ! -x "$(command -v nvim)" ]]; then
+        unset MANPAGER
+    fi
     if [[ -x "$(command -v colordiff)" ]]; then
         alias diff='colordiff'
     else
@@ -179,7 +184,14 @@ esac
 
 case ${OS} in
 Linux | FreeBSD | OpenBSD)
-    alias clip='xclip -selection clip <'
+    case ${XDG_SESSION_TYPE} in
+    wayland)
+        alias clip='wl-copy <'
+        ;;
+    x11)
+        alias clip='xclip -selection clip <'
+        ;;
+    esac
     ;;
 Darwin)
     alias clip='pbcopy <'

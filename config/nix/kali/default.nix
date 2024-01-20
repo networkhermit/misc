@@ -6,6 +6,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     golangci-lint
     lua-language-server
     neovim
+    pwru
     ruff
     ruff-lsp
     rust-analyzer

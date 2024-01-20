@@ -1,0 +1,19 @@
+# base
+lua-language-server
+neovim
+StyLua
+golangci-lint
+
+# blog
+zola
+
+# devops
+age
+hyperfine
+kubectl
+kubernetes-helm
+nerdctl
+sops
+tailscale
+terraform-ls
+tflint
