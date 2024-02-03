@@ -1,6 +1,9 @@
 disable ModemManager.service
 disable dnf-makecache.timer
+disable systemd-homed.service
+disable systemd-oomd.service
 disable systemd-resolved.service
+disable systemd-userdbd.socket
 enable docker.service
 enable nix-daemon.service
 enable tailscaled.service

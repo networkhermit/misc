@@ -3,6 +3,11 @@
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force
 Get-ExecutionPolicy -List
 
+[Environment]::SetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT', 'true', 'Machine')
+[Environment]::SetEnvironmentVariable('POWERSHELL_UPDATECHECK', 'Off', 'Machine')
+[Environment]::GetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT', 'Machine')
+[Environment]::GetEnvironmentVariable('POWERSHELL_UPDATECHECK', 'Machine')
+
 Get-Content $PROFILE.AllUsersAllHosts
 
 New-Item -Force -ItemType File -Path $PROFILE.CurrentUserCurrentHost

@@ -7,8 +7,8 @@ if command --query cowsay && command --query cowsay
     fortune | cowsay -f www
 end
 
-if [ -z "{$TMUX}" ] && [ -z "{$VIM}" ]
-    if [ "{$TERM}" = xterm-256color ] || [ "{$TERM}" = tmux-256color ]
+if [ -z "$TMUX" ] && [ -z "$VIM" ]
+    if [ "$TERM" = xterm-256color ] || [ "$TERM" = tmux-256color ]
         switch {$TERM_PROGRAM}
             case Lens vscode zed
             case '*'
@@ -21,7 +21,7 @@ end
 
 function __prompt_command --on-event fish_postexec
     echo
-    if [ -n "{$TMUX}" ]
+    if [ -n "$TMUX" ]
         tmux set-option -p @PWD {$PWD}
     end
 end

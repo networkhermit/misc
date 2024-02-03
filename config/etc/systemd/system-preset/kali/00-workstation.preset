@@ -1,3 +1,2 @@
-disable systemd-networkd.service
 enable avahi-daemon.service
 enable sddm.service

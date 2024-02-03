@@ -1,8 +1,8 @@
 # base
 
 neovim
-rust-coreutils
 stylua
+uutils-coreutils
 
 # blog
 
@@ -10,13 +10,11 @@ zola
 
 # devops
 
-1password-client2
 age
-helm
 hyperfine
 kubectl
-opentofu
-sops
+helm
+nerdctl
+nickel
 tailscale
-tailspin
 tflint

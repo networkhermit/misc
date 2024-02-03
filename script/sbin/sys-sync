@@ -96,7 +96,13 @@ OpenBSD)
 esac
 
 case ${DISTRO} in
-arch | archarm)
+alpine)
+    apk update
+    apk list --upgradable
+    apk upgrade --interactive
+    apk cache clean --purge
+    ;;
+arch | archarm | artix)
     if [[ "${FORCE_SYNC}" = true ]]; then
         { yes || true; } | pacman --sync --clean --clean
         pacman --sync --refresh --refresh
@@ -119,8 +125,10 @@ gentoo)
     if [[ "${FORCE_SYNC}" = true ]]; then
         emerge --sync
     fi
-    emerge --ask --changed-use --deep --getbinpkg --update --verbose @world
+    emerge --ask --binpkg-changed-deps=n --changed-use --deep --getbinpkg --update --verbose --with-bdeps=y @world
     emerge --ask --depclean
+    eclean-dist --deep
+    eclean-pkg --deep
     ;;
 kali)
     if [[ "${FORCE_SYNC}" = true ]]; then
@@ -131,6 +139,10 @@ kali)
     apt full-upgrade --purge
     apt clean
     apt autoremove --purge
+    ;;
+nixos)
+    nixos-rebuild switch --upgrade
+    nix-collect-garbage --delete-old
     ;;
 void)
     xbps-install --sync --update

@@ -1,0 +1,2 @@
+enable libvirt-guests.service
+enable libvirtd.service

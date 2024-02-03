@@ -118,7 +118,7 @@ esac
 # SYSADMIN
 #       cronie
 #       htop
-#       iotop
+#       iotop-c
 #       lsof
 #       tmux
 ##################
@@ -160,6 +160,93 @@ esac
 ##################
 
 case ${DISTRO} in
+alpine)
+
+    # SHELL
+    apk add --interactive \
+        bash{,-completion} \
+        fish \
+        zsh{,-autosuggestions,-syntax-highlighting} \
+        man{doc,doc-apropos,-pages} \
+        texinfo \
+        vim \
+        emacs-nox \
+        shellcheck
+
+    # UTIL
+    apk add --interactive \
+        b3sum \
+        bat \
+        eza \
+        fd \
+        fzf \
+        hexyl \
+        jq \
+        moreutils \
+        ripgrep \
+        tree \
+        yq
+
+    # SYSADMIN
+    apk add --interactive \
+        cronie \
+        htop \
+        iotop-c \
+        lsof \
+        tmux
+
+    # NETWORK OPERATOR
+    apk add --interactive \
+        chrony \
+        curl \
+        drill \
+        openssh \
+        rsync
+
+    # PLT
+    apk add --interactive \
+        go \
+        gopls \
+        staticcheck \
+        golangci-lint \
+        delve \
+        python3 \
+        black \
+        py3-pip \
+        py3-mypy \
+        rust{,-analyzer} \
+        cargo \
+        rustfmt \
+        rust-clippy \
+        cargo-{audit,outdated} \
+        mold \
+        sccache
+
+    # GAME
+    apk add --interactive \
+        cmatrix \
+        fortune \
+        sl
+
+    # DevOps
+    apk add --interactive \
+        ansible{,-lint} \
+        py3-argcomplete \
+        bcc-tools \
+        py3-bcc \
+        bpftool \
+        bpftrace \
+        docker{,-compose} \
+        git{,-prompt} \
+        wireguard-tools
+
+    apk info --contents \
+        openssh-server-common-openrc \
+        | awk --field-separator '[/ ]' '/etc\/init.d\/.+[^/]$/ { printf "%-24s%s\n", "openssh", $NF }'
+
+    apk info --who-owns /etc/bash/bashrc
+
+    ;;&
 arch | archarm)
 
     # SHELL
@@ -244,10 +331,101 @@ arch | archarm)
     pacman --query --owns /etc/bash.bashrc
 
     ;;&
+artix)
+
+    # SHELL
+    pacman --sync --needed \
+        bash{,-completion} \
+        fish \
+        zsh{,-autosuggestions,-syntax-highlighting} \
+        man-{db,pages} \
+        texinfo \
+        vim \
+        emacs-nox \
+        shellcheck
+
+    # UTIL
+    pacman --sync --needed \
+        fzf \
+        jq \
+        moreutils \
+        ripgrep \
+        tree \
+        go-yq \
+        \
+        b3sum \
+        bat \
+        eza \
+        fd \
+        hexyl
+
+    # SYSADMIN
+    pacman --sync --needed \
+        cronie-s6 \
+        htop \
+        lsof \
+        tmux \
+        \
+        iotop
+
+    # NETWORK OPERATOR
+    pacman --sync --needed \
+        chrony-s6 \
+        curl \
+        ldns \
+        openssh-s6 \
+        rsync-s6
+
+    # PLT
+    pacman --sync --needed \
+        go \
+        go-tools \
+        python{,-black,-pip} \
+        mypy \
+        ruff \
+        rust \
+        mold \
+        \
+        gopls \
+        staticcheck \
+        delve \
+        ruff-lsp \
+        rust-analyzer \
+        cargo-{audit,outdated} \
+        sccache
+
+    # GAME
+    pacman --sync --needed \
+        \
+        cmatrix \
+        cowsay \
+        fortune-mod \
+        sl
+
+    # DevOps
+    pacman --sync --needed \
+        ansible{,-lint} \
+        python-argcomplete \
+        bpf \
+        docker{,-compose} \
+        git \
+        wireguard-s6 \
+        \
+        bcc-tools \
+        python-bcc \
+        bpftrace
+
+    pacman --files --list \
+        openssh-s6 \
+        | awk --field-separator '[/ ]' '/etc\/s6\/sv\/[^/]+\/$/ { printf "%-24s%s\n", $1, $(NF-1) }'
+
+    pacman --query --owns /etc/bash/bashrc
+
+    ;;&
 fedora)
 
     # SHELL
-    dnf install \
+    dnf install --cacheonly \
         bash{,-completion} \
         fish \
         zsh{,-autosuggestions,-syntax-highlighting} \
@@ -258,7 +436,7 @@ fedora)
         ShellCheck
 
     # UTIL
-    dnf install \
+    dnf install --cacheonly \
         bat \
         eza \
         fd-find \
@@ -270,15 +448,15 @@ fedora)
         tree
 
     # SYSADMIN
-    dnf install \
+    dnf install --cacheonly \
         cronie \
         htop \
-        iotop \
+        iotop-c \
         lsof \
         tmux
 
     # NETWORK OPERATOR
-    dnf install \
+    dnf install --cacheonly \
         chrony \
         curl \
         ldns-utils \
@@ -286,7 +464,7 @@ fedora)
         rsync
 
     # PLT
-    dnf install \
+    dnf install --cacheonly \
         golang \
         golang-x-tools-{gopls,goimports} \
         golang-honnef-tools \
@@ -295,20 +473,20 @@ fedora)
         black \
         python3-mypy \
         rust{,-analyzer} \
+        cargo \
         rustfmt \
         clippy \
-        cargo \
         mold
 
     # GAME
-    dnf install \
+    dnf install --cacheonly \
         cmatrix \
         cowsay \
         fortune-mod \
         sl
 
     # DevOps
-    dnf install \
+    dnf install --cacheonly \
         ansible \
         python3-ansible-lint \
         python3-argcomplete \
@@ -363,7 +541,7 @@ gentoo)
     emerge --ask --getbinpkg --noreplace \
         sys-process/cronie \
         sys-process/htop \
-        sys-process/iotop \
+        sys-process/iotop-c \
         sys-process/lsof \
         app-misc/tmux
 
@@ -406,8 +584,8 @@ gentoo)
         net-vpn/wireguard-tools
 
     qlist \
-        net-misc/openssh\
-        | awk --field-separator '[/ ]' '/etc\/init.d\/.+[^/]$/ { printf "%-24s%s\n", "openssh", $4 }'
+        net-misc/openssh \
+        | awk --field-separator '[/ ]' '/etc\/init.d\/.+[^/]$/ { printf "%-24s%s\n", "openssh", $NF }'
 
     qfile /etc/bash/bashrc
 
@@ -438,11 +616,13 @@ kali)
         ripgrep \
         tree
 
+    ln --force --no-dereference --relative --symbolic --verbose "$(command -v batcat)" /usr/local/bin/bat
+
     # SYSADMIN
     apt install \
         cron \
         htop \
-        iotop \
+        iotop-c \
         lsof \
         tmux
 
@@ -464,9 +644,9 @@ kali)
         black \
         mypy \
         rust{c,-src} \
+        cargo \
         rustfmt \
         rust-clippy \
-        cargo \
         mold \
         sccache
 
@@ -527,7 +707,7 @@ void)
     xbps-install \
         cronie \
         htop \
-        iotop \
+        iotop-c \
         lsof \
         tmux
 
@@ -695,7 +875,7 @@ openbsd)
         go-tools-- \
         python3-- \
         py3-{black,pip,mypy}-- \
-        rust{,-clippy,-rustfmt,-src}-- \
+        rust{,-rustfmt,-clippy,-src}-- \
         cargo-audit--
 
     # GAME
@@ -717,7 +897,7 @@ openbsd)
     pkg_info -E /usr/local/bin/bash
 
     ;;
-arch | archarm | fedora | gentoo | kali | void)
+alpine | arch | archarm | artix | fedora | gentoo | kali | void)
     ## Docker
 
     pushd "$(dirname "$(realpath "${0}")")" &> /dev/null

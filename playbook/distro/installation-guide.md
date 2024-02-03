@@ -68,8 +68,8 @@ sudo install -D --mode 644 --target-directory /etc/systemd/timesyncd.conf.d conf
 systemd-analyze cat-config systemd/timesyncd.conf --no-pager
 sudo install -D --mode 644 --target-directory /etc/chrony.d config/etc/chrony.d/10-local.conf
 sudo vim /etc/chrony.conf # kali: /etc/chrony/chrony.conf
-sudo systemctl restart chronyd.service
 sudo chronyd -q
+sudo systemctl restart chronyd.service
 
 # update system clock
 timedatectl status
@@ -85,8 +85,13 @@ sudo install -D --mode 644 --target-directory /etc/systemd/network config/etc/sy
 sudo systemctl restart systemd-networkd.service
 
 # change distro source
+## alpine
+sudo install -D --mode 644 --target-directory /etc/apk config/etc/apk/repositories
 ## arch
 sudo install -D --mode 644 --target-directory /etc/pacman.d config/etc/pacman.d/mirrorlist
+## artix
+sudo install -D --mode 644 --target-directory /etc/pacman.d config/etc/pacman.d/mirrorlist
+sudo install -D --mode 644 --target-directory /etc/pacman.d config/etc/pacman.d/mirrorlist-arch
 ## fedora
 sudo install -D --mode 644 --target-directory /etc/yum.repos.d config/etc/yum.repos.d/fedora{,-updates}.repo
 ## gentoo
@@ -95,6 +100,8 @@ sudo find etc/portage/ -type f -exec install -D --mode 644 '{}' '/{}' \;
 popd || false
 ## kali
 sudo install -D --mode 644 --target-directory /etc/apt config/etc/apt/sources.list
+## nixos
+sudo nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-23.11 nixos
 ## void
 sudo install -D --mode 644 --target-directory /etc/xbps.d config/etc/config/etc/xbps.d/00-repository-main.conf
 ## freebsd
@@ -141,15 +148,17 @@ sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/
 
 # disable dynamic resolver
 ## dhcpcd
-printf '\n%s' 'nohook resolv.conf' | sudo tee --append /etc/dhcpcd.conf
+printf '\n%s\n' 'nohook resolv.conf' | sudo tee --append /etc/dhcpcd.conf
 ## networkmanager
 sudo install -D --mode 644 --target-directory /etc/NetworkManager/conf.d config/etc/NetworkManager/conf.d/no-dns.conf
 ## resolvconf
-printf '\n%s' 'resolvconf=NO' | sudo tee --append /etc/resolvconf.conf
+printf '\n%s\n' 'resolvconf=NO' | sudo tee --append /etc/resolvconf.conf
 ## resolvd
 rcctl check resolvd
 ## systemd-resolved
 ls --human-readable -l /etc/resolv.conf
+## udhcpc
+printf '\n%s\n' 'RESOLV_CONF=no' | sudo tee --append /etc/udhcpc/udhcpc.conf
 
 # install command-not-found
 ## arch
@@ -170,6 +179,104 @@ sudo pkg_add pkglocatedb--
 # reboot system
 sudo sync
 sudo reboot
+```
+
+Alpine
+======
+
+```bash
+# shellcheck shell=bash
+
+# bootstrap base system
+setup-alpine
+#partition and mount
+setup-disk -m sys /mnt
+
+# change root password
+
+# check sudo support
+apk add doas sudo
+sudo install -D --mode 600 --target-directory /etc config/etc/doas.conf
+
+# add default sysadmin
+sudo addgroup -g 256 -S sysadmin
+sudo addgroup -g 1000 vac
+sudo adduser -G vac -s /bin/bash -u 1000 -D vac
+sudo addgroup vac wheel
+sudo addgroup vac sysadmin
+sudo passwd vac
+ls -dhl / /home/* /root
+sudo passwd -d root
+sudo passwd -l root
+
+# manage system service
+rc-status
+rc-update show default
+rc-update show --all
+
+# change hostname
+
+# check internet connection
+
+# modify dns resolver
+
+# configure default address selection
+
+# modify default ntp server
+sudo rc-update add chronyd default
+sudo rc-service chronyd restart
+
+# update system clock
+
+# modify time zone
+
+# configure system network
+
+# change distro source
+
+# make distro sync
+
+# update message of the day
+
+# modify secure shell daemon
+sudo rc-update add sshd default
+sudo rc-service sshd restart
+
+# update initramfs image
+
+# update boot loader
+
+# update sysctl configuration
+sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/inotify.conf
+sudo sysctl -p
+
+# disable dynamic resolver
+
+# install command-not-found
+
+# install base utilities
+sudo apk add \
+    coreutils \
+    diffutils \
+    file \
+    findutils \
+    gawk \
+    grep \
+    iproute2 \
+    less \
+    procps-ng \
+    psmisc \
+    sed \
+    shadow \
+    util-linux
+sudo apk add docs
+
+# setup mdns (optional)
+sudo apk add avahi
+sudo rc-update add avahi-daemon default
+sudo rc-service avahi-daemon restart
+
+# reboot system
 ```
 
 Arch
@@ -199,17 +306,19 @@ Arch
 # manipulate disk partition
 lsblk --fs
 sudo fdisk --list
+sudo parted --list
 sudo gdisk /dev/vda
-sudo mkfs.xfs -f -L Arch /dev/vdaX
+sudo mkfs.vfat -n ESP /dev/vdaX
+sudo mkfs.xfs -f -L Arch /dev/vdaY
 
 # mount file system
-sudo mount /dev/vdaX /mnt
+sudo mount /dev/vdaY /mnt
+sudo mkdir --parents /mnt/boot/efi
+sudo mount /dev/vdaX /mnt/boot/efi
 
 # bootstrap base system
-sudo pacstrap /mnt base linux{,-firmware} iptables-nft {amd,intel}-ucode grub efibootmgr sudo vim openssh gptfdisk xfsprogs zram-generator
-sudo ln --force --no-dereference --relative --symbolic --verbose "$(command -v vim)" /usr/bin/vi
-genfstab -t PARTUUID /mnt | sudo tee /mnt/etc/fstab
-sudo cp --verbose {,/mnt}/etc/resolv.conf
+sudo pacstrap /mnt base linux{,-firmware} iptables-nft {amd,intel}-ucode grub efibootmgr sudo vim openssh gptfdisk dosfstools xfsprogs zram-generator
+genfstab -t PARTUUID /mnt | sudo tee --append /mnt/etc/fstab
 
 # chroot into node
 sudo arch-chroot /mnt
@@ -217,6 +326,7 @@ sudo arch-chroot /mnt
 # change root password
 
 # check sudo support
+sudo ln --force --no-dereference --relative --symbolic --verbose "$(command -v vim)" /usr/bin/vi
 
 # add default sysadmin
 sudo touch /etc/subuid /etc/subgid
@@ -261,7 +371,7 @@ sudo install -D --mode 644 --target-directory /etc config/etc/hosts
 
 # update system locale
 sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
-printf '\n%s' 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/locale.gen
+printf '\n%s\n' 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/locale.gen
 sudo locale-gen
 sudo install -D --mode 644 --target-directory /etc config/etc/vconsole.conf
 
@@ -284,6 +394,54 @@ EOF
 sudo umount --recursive /mnt
 
 # reboot system
+```
+
+Artix
+=====
+
+> Add `console=ttyS0,115200 init=/bin/bash` to boot parameters for KVM.
+>
+> `s6-service add default ttyS || touch /etc/s6/adminsv/default/contents.d/ttyS`
+>
+> `printf '\n%s\n' 'TTY="ttyS0"' | tee --append /etc/s6/config/ttyS.conf`
+>
+> `echo 'Server = https://mirrors.tuna.tsinghua.edu.cn/artixlinux/$repo/os/$arch' | tee /etc/pacman.d/mirrorlist`
+>
+> `exec /bin/init`
+
+```bash
+# shellcheck shell=bash
+
+# bootstrap base system
+sudo basestrap /mnt base s6-base seatd-s6 linux{,-firmware} iptables-nft {amd,intel}-ucode grub efibootmgr sudo vim openssh-s6 gptfdisk dosfstools xfsprogs dhcpcd-s6
+fstabgen -t PARTUUID /mnt | sudo tee --append /mnt/etc/fstab
+
+# chroot into node
+sudo artix-chroot /mnt /bin/bash
+
+# modify default ntp server
+sudo s6-service add default chronyd
+sudo s6-rc -u change chronyd
+
+# update system clock
+s6-rc list chronyd
+
+# configure system network
+printf '\n%s\n' 'hostname' | sudo tee --append /etc/dhcpcd.conf
+sudo s6-service add default dhcpcd
+sudo s6-rc -u change dhcpcd
+
+# modify secure shell daemon
+sudo s6-service add default sshd
+sudo s6-rc -u change sshd
+
+# install artools-base
+{ yes || true; } | sudo pacman --sync --needed artools-base
+
+# setup mdns (optional)
+{ yes || true; } | sudo pacman --sync --needed avahi-s6 nss-mdns
+sudo s6-service add default avahi-daemon
+sudo s6-rc -u change avahi-daemon
 ```
 
 Fedora
@@ -339,6 +497,12 @@ sudo firewall-cmd --reload
 
 # install command-not-found
 
+# update system locale
+sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
+
+# comment hostnamectl
+sudo vim /etc/profile
+
 # modify dnf configuration
 sudo sed --in-place 's/^\(installonly_limit\)=.*/\1=2/' /etc/dnf/dnf.conf
 
@@ -358,7 +522,7 @@ Gentoo
 
 > Add `console=ttyS0,115200n8` to boot parameters for KVM.
 >
-> `printf '\n%s' 's0:12345:respawn:/sbin/agetty 115200 ttyS0 vt100' | sudo tee --append /etc/inittab`
+> `printf '\n%s\n' 's0:12345:respawn:/sbin/agetty 115200 ttyS0 vt100' | sudo tee --append /etc/inittab`
 
 ```bash
 # shellcheck shell=bash
@@ -393,6 +557,9 @@ sudo rc-service chronyd restart
 # modify time zone
 
 # configure system network
+printf '\n%s\n' 'hostname' | sudo tee --append /etc/dhcpcd.conf
+sudo rc-update add dhcpcd default
+sudo rc-service dhcpcd restart
 
 # change distro source
 
@@ -417,15 +584,22 @@ sudo sysctl --system
 # install command-not-found
 
 # update system locale
-printf '\n%s' 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/locale.gen
+printf '\n%s\n' 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/locale.gen
 sudo locale-gen
-sudo vim /etc/env.d/02locale
+sudo install -D --mode 644 --target-directory /etc/env.d config/etc/env.d/02locale
 sudo env-update
 
 # use nftables backend for iptables
 iptables --version | grep nf_tables
 eselect iptables list
 sudo eselect iptables set xtables-nft-multi
+
+# enable acpid
+sudo emerge --ask --getbinpkg --noreplace sys-power/acpid
+sudo rc-update add acpid default
+
+# install gentoolkit
+sudo emerge --ask --getbinpkg --noreplace app-portage/gentoolkit
 
 # setup mdns (optional)
 sudo emerge --ask --getbinpkg --noreplace net-dns/avahi sys-auth/nss-mdns
@@ -495,6 +669,9 @@ sudo sysctl --system
 
 # install command-not-found
 
+# update system locale
+sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
+
 # enable tmpfs for /tmp
 sudo cp /usr/share/systemd/tmp.mount /etc/systemd/system/
 sudo systemctl enable tmp.mount
@@ -508,6 +685,19 @@ sudo rmdir /mnt/root
 sudo apt install --assume-yes avahi-daemon libnss-mdns < /dev/null
 
 # reboot system
+```
+
+NixOS
+=====
+
+> Add `console=ttyS0,115200n8` to boot parameters for KVM.
+
+```bash
+# shellcheck shell=bash
+
+sudo nixos-generate-config --root /mnt
+
+sudo nixos-install --option extra-substituters "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10" --option extra-substituters "https://mirror.sjtu.edu.cn/nix-channels/store?priority=20"
 ```
 
 Void
@@ -548,6 +738,9 @@ sudo sv restart chronyd
 # modify time zone
 
 # configure system network
+printf '\n%s\n' 'hostname' | sudo tee --append /etc/dhcpcd.conf
+sudo ln --force --no-dereference --symbolic /etc/sv/sshd /etc/runit/runsvdir/dhcpcd
+sudo sv restart dhcpcd
 
 # change distro source
 
@@ -571,6 +764,9 @@ sudo sysctl --system
 
 # install command-not-found
 
+# update system locale
+sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
+
 # add additional terminfo files
 sudo xbps-install --yes ncurses-term
 
@@ -578,6 +774,9 @@ sudo xbps-install --yes ncurses-term
 iptables --version | grep nf_tables
 sudo xbps-install --yes iptables-nft
 sudo xbps-alternatives --set iptables-nft
+
+# enable acpid
+sudo ln --force --no-dereference --symbolic /etc/sv/acpid /etc/runit/runsvdir/default
 
 # install xtools
 sudo xbps-install --yes xtools

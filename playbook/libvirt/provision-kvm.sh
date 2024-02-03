@@ -48,13 +48,14 @@ Options:
 
 Arguments:
     DISTRO
-        linux/bsd distro name (arch | fedora | gentoo | kali | void | freebsd | openbsd)
+        linux/bsd distro name (alpine | arch | artix | fedora | gentoo | kali | nixos | void | freebsd | openbsd)
     NAME
         name of the new guest virtual machine instance
 EOF
 }
 
 BOOT_PATH=/var/lib/libvirt/boot
+BRIDGE=
 CPU=4
 IMAGES_PATH=/var/lib/libvirt/images
 MEMORY=8192
@@ -129,8 +130,20 @@ EXTRA_ARGUMENT=()
 KERNEL_ARGUMENT=(--extra-args 'console=ttyS0,115200n8 nameserver=1.0.0.1')
 
 case ${DISTRO} in
+alpine)
+    IMAGE=$(find "${BOOT_PATH}" -type f -name 'alpine-standard-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
+
+    EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+    EXTRA_ARGUMENT+=(--os-variant alpinelinux3.19)
+    ;;
 arch)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'archlinux-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
+
+    EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+    EXTRA_ARGUMENT+=(--os-variant archlinux)
+    ;;
+artix)
+    IMAGE=$(find "${BOOT_PATH}" -type f -name 'artix-base-s6-*-x86_64.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
     EXTRA_ARGUMENT+=(--os-variant archlinux)
@@ -150,6 +163,12 @@ kali)
     EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/kali/dists/kali-rolling/main/installer-amd64)
     EXTRA_ARGUMENT+=("${KERNEL_ARGUMENT[@]}")
     EXTRA_ARGUMENT+=(--os-variant debiantesting)
+    ;;
+nixos)
+    IMAGE=$(find "${BOOT_PATH}" -type f -name 'nixos-minimal-*.*.*.*-x86_64-linux.iso' | sort --version-sort | tail --lines 1)
+
+    EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+    EXTRA_ARGUMENT+=(--os-variant nixos-23.11)
     ;;
 void)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'void-live-x86_64-*-base.iso' | sort --version-sort | tail --lines 1)

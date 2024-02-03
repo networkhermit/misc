@@ -4,6 +4,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     #neovim
     #pwru
     #stylua
+    #uutils-coreutils
     biome
     golangci-lint
   ];
@@ -21,7 +22,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     #kubie
     #nerdctl
     #nickel
-    #rage (rust-rage)
+    #rage (rage-encryption)
     #sops
     #sqlfluff
     #tailscale

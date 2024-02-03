@@ -1,6 +1,6 @@
 with import <nixpkgs> {config.allowUnfree = true;}; let
   base = [
-    bat
+    #uutils-coreutils (rust-coreutils)
     biome
     go-tools
     golangci-lint

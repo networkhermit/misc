@@ -17,9 +17,12 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     biome
     black
     cargo
+    cargo-audit
+    cargo-outdated
     clippy
     cmatrix
     cowsay
+    delve
     eza
     fd
     fish
@@ -39,7 +42,8 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     mypy
     neovim
     python3
-    python311Packages.pytest
+    python311Packages.argcomplete
+    python311Packages.pip
     ripgrep
     ruff
     ruff-lsp
@@ -53,6 +57,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
     stylua
     tmux
     tree
+    uutils-coreutils
     watch
     yamllint
     yq-go

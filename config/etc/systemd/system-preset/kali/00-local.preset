@@ -1,5 +1,4 @@
 disable ModemManager.service
-disable systemd-resolved.service
 enable chrony.service
 enable nix-daemon.service
 enable ssh.service

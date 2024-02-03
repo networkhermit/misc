@@ -3,6 +3,7 @@
 base64--
 colordiff--
 colorls--
+gnuwatch--
 neovim--
 
 # blog

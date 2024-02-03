@@ -16,4 +16,4 @@ LC_MESSAGES=C.utf8
 
 EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --getbinpkg"
 FEATURES="${FEATURES} binpkg-request-signature"
-GENTOO_MIRRORS="https://mirrors.tuna.tsinghua.edu.cn/gentoo"
+GENTOO_MIRRORS="https://mirrors.tuna.tsinghua.edu.cn/gentoo http://distfiles.gentoo.org"

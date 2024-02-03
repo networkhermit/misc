@@ -81,7 +81,14 @@ Linux | FreeBSD)
 esac
 
 case ${DISTRO} in
-arch | archarm)
+alpine)
+    apk info --installed --size '*' \
+        | awk 'NR % 3 == 1 { print $1; next }; NR % 3 == 2 { printf "%s%s\n", $1, $2 }' \
+        | paste - - \
+        | awk '{ printf "%-14s %s\n", $2, $1 }' \
+        | sort --human-numeric-sort --reverse
+    ;;
+arch | archarm | artix)
     pacman --query --info \
         | awk '/^Name/ { name=$3 } /^Version/ { version=$3 } /^Architecture/ { architecture=$3 } /^Installed Size/ { printf "%-14s %s-%s-%s\n", $4$5, name, version, architecture }' \
         | sort --human-numeric-sort --reverse
@@ -89,9 +96,34 @@ arch | archarm)
 fedora)
     rpm --query --all --queryformat '%-14{SIZE:humaniec} %{NAME}-%{VERSION}.%{ARCH}\n'
     ;;
+gentoo)
+    qsize --format '%{CATEGORY}/%{PF}' \
+        | awk --field-separator '(: |, )' '{ printf "%-14s %s\n", $NF, $1 }' \
+        | sort --human-numeric-sort --reverse
+    ;;
 kali)
     dpkg-query --show --showformat '${Installed-Size} ${Package}_${Version}_${Architecture}\n' \
         | numfmt --field 1 --format '%-14.2f' --from none --from-unit 1024 --to iec-i \
+        | sort --human-numeric-sort --reverse
+    ;;
+void)
+    xbps-query --list-pkgs \
+        | awk '{ print $2 }' \
+        | xargs --max-args 1 --no-run-if-empty xbps-query --property installed_size,pkgver,architecture \
+        | paste - - - \
+        | awk '{ printf "%-14s %s.%s\n", $1, $2, $3 }' \
+        | sort --human-numeric-sort --reverse
+    ;;
+freebsd)
+    pkg info --all --size \
+        | awk '{ printf "%-14s %s\n", $2, $1 }' \
+        | sort --human-numeric-sort --reverse
+    ;;
+openbsd)
+    pkg_info -as \
+        | paste -d ' ' - - - - \
+        | awk -F '[ :]' '{ printf "%s %s\n", $(NF-1), $4 }' \
+        | gnumfmt --field 1 --format '%-14.2f' --from none --to iec-i \
         | sort --human-numeric-sort --reverse
     ;;
 *)

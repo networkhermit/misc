@@ -85,7 +85,13 @@ Linux | FreeBSD)
 esac
 
 case ${DISTRO} in
-arch | archarm)
+alpine)
+    echo ------ [ package ] ------
+    apk list --orphaned
+    echo ------ [ configuration ] ------
+    find /etc -type f -iregex '.*/.+\.\(old\|apk-\(new\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
+    ;;
+arch | archarm | artix)
     echo ------ [ package ] ------
     { pacman --query --foreign || true; } | sed 's/$/ [foreign]/' | column --table
     { pacman --query --deps --unrequired || true; } | sed 's/$/ [orphan]/' | column --table
@@ -117,6 +123,11 @@ kali)
 void)
     echo ------ [ package ] ------
     xbps-query --list-orphans
+    for pkg in /var/cache/xbps/*.xbps; do
+        if ! xbps-query --property pkgver "$(xbps-uhelper binpkgver "${pkg}")" 1>/dev/null 2>&1; then
+            printf '%s\n' "${pkg}"{,.sig2}
+        fi
+    done
     echo ------ [ configuration ] ------
     find /etc -type f -iregex '.*/.+\.\(old\|new-.+\)' -print0 | sort --zero-terminated | tr '\0' '\n'
     ;;
