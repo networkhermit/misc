@@ -497,10 +497,7 @@ fedora)
         git \
         wireguard-tools
 
-    ## docker [official]
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-    ## docker [tsinghua]
-    dnf config-manager --add-repo https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/fedora/docker-ce.repo
     dnf makecache
     dnf install docker-ce docker-compose-plugin
     dnf clean packages

@@ -1,0 +1,16 @@
+[build]
+rustc-wrapper = "sccache"
+target-dir = ".cargo/target"
+
+#[http]
+#proxy = "http://127.0.0.1:6666"
+
+[source.crates-io]
+replace-with = 'crates-io-mirror'
+
+[source.crates-io-mirror]
+registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
+
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-C", "link-arg=-fuse-ld=mold"]

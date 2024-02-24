@@ -1,0 +1,9 @@
+[http "https://github.com"]
+    proxy = http://127.0.0.1:6666
+[init]
+    defaultBranch = main
+[push]
+    autoSetupRemote = true
+[user]
+    name = vac
+    email = dot.fun@protonmail.com

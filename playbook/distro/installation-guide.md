@@ -66,10 +66,10 @@ sudo install -D --mode 644 --target-directory /etc config/etc/gai.conf
 # modify default ntp server
 sudo install -D --mode 644 --target-directory /etc/systemd/timesyncd.conf.d config/etc/systemd/timesyncd.conf.d/10-local.conf
 systemd-analyze cat-config systemd/timesyncd.conf --no-pager
-sudo install -D --mode 644 --target-directory /etc/chrony.d config/etc/chrony.d/10-local.conf
+sudo install -D --mode 644 --target-directory /etc/chrony.d config/etc/chrony.d/10-{local,source}.conf
 sudo vim /etc/chrony.conf # kali: /etc/chrony/chrony.conf
-sudo chronyd -q
 sudo systemctl restart chronyd.service
+chronyc sources -v
 
 # update system clock
 timedatectl status
@@ -101,7 +101,8 @@ popd || false
 ## kali
 sudo install -D --mode 644 --target-directory /etc/apt config/etc/apt/sources.list
 ## nixos
-sudo nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-23.11 nixos
+sudo nix-channel --add https://nixos.org/channels/nixos-23.11 nixos
+#sudo nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-23.11 nixos
 ## void
 sudo install -D --mode 644 --target-directory /etc/xbps.d config/etc/config/etc/xbps.d/00-repository-main.conf
 ## freebsd
@@ -405,7 +406,7 @@ Artix
 >
 > `printf '\n%s\n' 'TTY="ttyS0"' | tee --append /etc/s6/config/ttyS.conf`
 >
-> `echo 'Server = https://mirrors.tuna.tsinghua.edu.cn/artixlinux/$repo/os/$arch' | tee /etc/pacman.d/mirrorlist`
+> # change distro source
 >
 > `exec /bin/init`
 
@@ -697,7 +698,8 @@ NixOS
 
 sudo nixos-generate-config --root /mnt
 
-sudo nixos-install --option extra-substituters "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10" --option extra-substituters "https://mirror.sjtu.edu.cn/nix-channels/store?priority=20"
+sudo nixos-install
+#sudo nixos-install --option extra-substituters "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10" --option extra-substituters "https://mirror.sjtu.edu.cn/nix-channels/store?priority=20"
 ```
 
 Void
