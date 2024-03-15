@@ -1,6 +1,7 @@
 resource "harbor_retention_policy" "proxy_cache" {
   for_each = {
     dockerhub    = harbor_project.dockerhub.id
+    gcr          = harbor_project.gcr.id
     ghcr         = harbor_project.ghcr.id
     k8s_registry = harbor_project.k8s_registry.id
     quay         = harbor_project.quay.id

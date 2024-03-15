@@ -8,6 +8,7 @@ resource "harbor_robot_account" "proxy_cache" {
   dynamic "permissions" {
     for_each = [
       harbor_project.dockerhub.name,
+      harbor_project.gcr.name,
       harbor_project.ghcr.name,
       harbor_project.k8s_registry.name,
       harbor_project.quay.name,

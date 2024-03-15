@@ -9,6 +9,17 @@ resource "harbor_registry" "dockerhub" {
   provider_name = "docker-hub"
 }
 
+resource "harbor_project" "gcr" {
+  name        = "gcr.io"
+  registry_id = harbor_registry.gcr.registry_id
+}
+
+resource "harbor_registry" "gcr" {
+  endpoint_url  = "https://gcr.io"
+  name          = "gcr.io"
+  provider_name = "docker-registry"
+}
+
 resource "harbor_project" "ghcr" {
   name        = "ghcr.io"
   registry_id = harbor_registry.ghcr.registry_id

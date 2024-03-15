@@ -142,11 +142,11 @@ in {
 
   environment.etc = {
     "gai.conf" = {
-      source = /etc/nixos/git/config/etc/gai.conf;
+      source = ./git/config/etc/gai.conf;
     };
     "resolv.conf" = {
       source =
-        /etc/nixos/git/config/etc/resolv.conf
+        ./git/config/etc/resolv.conf
         + (
           if config.local.direct
           then ""
@@ -311,6 +311,7 @@ in {
       then []
       else [
         "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10"
+        "https://mirrors.ustc.edu.cn/nix-channels/store?priority=15"
         "https://mirror.sjtu.edu.cn/nix-channels/store?priority=20"
       ];
     keep-outputs = true;
@@ -346,6 +347,7 @@ in {
       }
     ];
   };
+
   services.cron.enable = true;
   services.tailscale.enable = true;
   services.timesyncd.enable = false;
@@ -365,6 +367,10 @@ in {
     enableRTCTrimming = false;
     extraConfig = builtins.readFile ./git/config/etc/chrony.d/10-local.conf;
   };
+
+  services.journald.extraConfig = ''
+    MaxRetentionSec=30day
+  '';
 
   services.openssh = {
     hostKeys = [
@@ -446,7 +452,7 @@ in {
       home = "/home/${user}";
       isNormalUser = true;
       openssh.authorizedKeys.keyFiles = [
-        /etc/nixos/git/config/vault/authorized_keys.d/${hostname}/${user}
+        ./git/config/vault/authorized_keys.d/${hostname}/${user}
       ];
       shell = pkgs.zsh;
       uid = 1000;
@@ -458,7 +464,7 @@ in {
       home = "/home/${ansibleUser}";
       isSystemUser = true;
       openssh.authorizedKeys.keyFiles = [
-        /etc/nixos/git/config/vault/authorized_keys.d/${hostname}/${ansibleUser}
+        ./git/config/vault/authorized_keys.d/${hostname}/${ansibleUser}
       ];
       shell = pkgs.bashInteractive;
       uid = 8128;

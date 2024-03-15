@@ -3,6 +3,7 @@ connect-timeout = 10
 cores = 0
 experimental-features = nix-command flakes
 extra-substituters = https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10
+extra-substituters = https://mirrors.ustc.edu.cn/nix-channels/store?priority=15
 extra-substituters = https://mirror.sjtu.edu.cn/nix-channels/store?priority=20
 keep-outputs = true
 max-jobs = auto

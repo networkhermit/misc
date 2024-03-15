@@ -66,6 +66,7 @@ with import <nixpkgs> {config.allowUnfree = true;}; let
   ];
   devops = [
     _1password
+    cloudflared
     hyperfine
     kubebuilder
     kubectl

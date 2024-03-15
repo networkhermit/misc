@@ -42,6 +42,7 @@ sudo passwd --lock root
 
 # manage system service
 sudo install -D --mode 644 --target-directory /etc/systemd/system-preset config/etc/systemd/system-preset/00-local.preset
+sudo install -D --mode 644 --target-directory /etc/systemd/journald.conf.d config/etc/systemd/journald.conf.d/10-local.conf
 sudo systemctl preset-all
 
 # change hostname
