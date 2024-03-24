@@ -64,11 +64,11 @@ done
 
 NAME=${1?✗ argument parsing failed: missing argument ‘NAME’}
 case ${1} in
-alertmanager | caddy | coredns | gotify | grafana | minio | mosquitto | nginx | node-exporter | postgres | prometheus | v2ray)
+alertmanager | caddy | coredns | gotify | grafana | minio | mosquitto | nginx | node-exporter | postgres | prometheus | uptime-kuma | v2ray)
     NAME=${1}
     ;;
 *)
-    die "✗ argument parsing failed: acceptable values for ‘NAME’ are alertmanager | caddy | coredns | gotify | grafana | minio | mosquitto | nginx | node-exporter | postgres | prometheus | v2ray"
+    die "✗ argument parsing failed: acceptable values for ‘NAME’ are alertmanager | caddy | coredns | gotify | grafana | minio | mosquitto | nginx | node-exporter | postgres | prometheus | uptime-kuma | v2ray"
     ;;
 esac
 shift
@@ -223,7 +223,7 @@ postgres)
         --publish 172.24.0.1:5432:5432 \
         --restart always \
         --mount type=bind,source=/srv/postgres/data,destination=/var/lib/postgresql/data \
-        postgres:12
+        postgres
     ;;
 prometheus)
     docker run \
@@ -237,6 +237,17 @@ prometheus)
         --mount type=bind,source=/srv/prometheus/prometheus.yml,destination=/etc/prometheus/prometheus.yml \
         --mount type=bind,source=/srv/prometheus/conf.d,destination=/etc/prometheus/conf.d \
         prom/prometheus
+    ;;
+uptime-kuma)
+    docker run \
+        --detach \
+        --label managed-by=docker \
+        --name "${NAME}" \
+        --network cluster \
+        --publish 3001:3001 \
+        --restart always \
+        --mount type=bind,source=/srv/uptime-kuma,destination=/app/data \
+        louislam/uptime-kuma
     ;;
 *)
     docker run \

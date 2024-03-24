@@ -1,9 +1,0 @@
-# base
-
-app-editors/neovim
-
-# blog
-
-# devops
-
-net-vpn/tailscale

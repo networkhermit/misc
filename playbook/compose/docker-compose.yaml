@@ -174,7 +174,7 @@ services:
         type: bind
   postgres:
     container_name: postgres
-    image: postgres:12
+    image: postgres
     labels:
       managed-by: docker-compose
     ports:
@@ -203,6 +203,19 @@ services:
         type: bind
       - source: /srv/prometheus/conf.d
         target: /etc/prometheus/conf.d
+        type: bind
+  uptime-kuma:
+    container_name: uptime-kuma
+    image: louislam/uptime-kuma
+    labels:
+      managed-by: docker-compose
+    ports:
+      - 3001:3001
+    profiles: ["uptime-kuma"]
+    restart: always
+    volumes:
+      - source: /srv/uptime-kuma
+        target: /app/data
         type: bind
   v2fly:
     command:

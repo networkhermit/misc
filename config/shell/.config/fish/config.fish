@@ -64,6 +64,7 @@ end
 
 alias acp 'scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias ash 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+alias b 'b3sum'
 alias batdiff 'git diff --diff-filter d --name-only --relative | xargs bat --diff'
 alias d 'cd - &> /dev/null'
 alias diff 'diff --color=auto'

@@ -437,6 +437,7 @@ fedora)
 
     # UTIL
     dnf install --cacheonly \
+        b3sum \
         bat \
         eza \
         fd-find \
@@ -472,6 +473,7 @@ fedora)
         python3{,-pip} \
         black \
         python3-mypy \
+        ruff{,-lsp} \
         rust{,-analyzer} \
         cargo \
         rustfmt \

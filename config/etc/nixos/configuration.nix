@@ -240,6 +240,7 @@ in {
 
     zola
 
+    #_1password
     age
     cilium-cli
     conftest
@@ -267,10 +268,10 @@ in {
     tflint
     trivy
 
+    alejandra
+
     avahi
     nssmdns
-
-    alejandra
   ];
 
   environment.wordlist.enable = true;
@@ -317,6 +318,11 @@ in {
     keep-outputs = true;
     stalled-download-timeout = 30;
   };
+
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+      "1password-cli"
+    ];
 
   programs.fish.enable = true;
   programs.git.enable = true;
@@ -439,7 +445,7 @@ in {
     };
   };
 
-  users.motd = builtins.replaceStrings ["OS_RELEASE_NAME"] ["NixOS"] (builtins.readFile ./git/config/etc/motd);
+  users.motd = with builtins; replaceStrings ["OS_RELEASE_NAME"] ["NixOS"] (readFile ./git/config/etc/motd);
 
   users.users = let
     ansibleUser = config.local.ansibleUser;
