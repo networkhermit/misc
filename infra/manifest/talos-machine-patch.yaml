@@ -33,7 +33,7 @@ machine:
     nodeIP:
       validSubnets:
         - 172.31.0.0/24
-        #- fd00:1:2:3::10/64
+        #- fd00:ebee:172:31::/64
   network:
     nameservers:
       - 1.1.1.1

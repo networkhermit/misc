@@ -380,8 +380,14 @@ sudo install -D --mode 644 --target-directory /etc config/etc/vconsole.conf
 # color setup for ls
 sudo tee --append /etc/bash.bashrc << 'EOF'
 
-if [[ -x /usr/bin/dircolors ]]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+if [[ -x "$(command -v dircolors)" ]]; then
+    if [[ -r ~/.dircolors ]]; then
+        eval "$(dircolors -b ~/.dircolors)"
+    elif [[ -r /etc/DIR_COLORS ]]; then
+        eval "$(dircolors -b /etc/DIR_COLORS)"
+    else
+        eval "$(dircolors -b)"
+    fi
 fi
 EOF
 

@@ -55,10 +55,10 @@ services:
     restart: always
     volumes:
       - source: /srv/coredns/Corefile
-        target: /Corefile
+        target: /home/nonroot/Corefile
         type: bind
       - source: /srv/coredns/zones
-        target: /zones
+        target: /home/nonroot/zones
         type: bind
   gotify:
     container_name: gotify

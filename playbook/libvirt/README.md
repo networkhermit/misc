@@ -23,6 +23,12 @@ sudo virsh detach-disk "${DOMAIN}" "${TARGET}" --persistent
 virt-filesystems --add "${DISK_IMAGE}" --all --human-readable --long
 virt-df --add "${DISK_IMAGE}" --human-readable
 
+# defrag or optimize qcow2 disk
+sudo qemu-img check "${FILENAME}"
+sudo qemu-img convert -O qcow2 -o lazy_refcounts=on,preallocation=metadata "${FILENAME}" "${OUTPUT_FILENAME}"
+sudo qemu-img amend -o lazy_refcounts=on "${FILENAME}"
+sudo qemu-img info --output json "${FILENAME}" | jq '."format-specific".data."lazy-refcounts"'
+
 # mount disk image
 
 ## via libguestfs

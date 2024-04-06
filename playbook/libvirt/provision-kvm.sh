@@ -183,11 +183,10 @@ freebsd)
     EXTRA_ARGUMENT+=(--os-variant freebsd14.0)
     ;;
 openbsd)
-    IMAGE=$(find "${BOOT_PATH}" -type f -name 'install*.img' | sort --version-sort | tail --lines 1)
+    IMAGE=$(find "${BOOT_PATH}" -type f -name 'install[0-9]*.iso' | sort --version-sort | tail --lines 1)
 
-    EXTRA_ARGUMENT+=(--import)
-    EXTRA_ARGUMENT+=(--disk "device=disk,format=raw,path=${IMAGE},transient=on")
-    EXTRA_ARGUMENT+=(--os-variant openbsd7.4)
+    EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+    EXTRA_ARGUMENT+=(--os-variant openbsd7.5)
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"

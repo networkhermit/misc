@@ -58,9 +58,10 @@ in
           #age
           #hyperfine
           #kubectl
-          #helm
+          #kubernetes-helm (helm)
           #nerdctl
           #nickel
+          #sops
           #tailscale
           #tflint
         ];
@@ -114,7 +115,10 @@ in
           terraform-ls
           tflint
         ];
-        nix = [alejandra];
+        nix = [
+          alejandra
+          nix-tree
+        ];
       in
         base ++ blog ++ dev ++ devops ++ nix
     else if distro == "fedora"
@@ -127,9 +131,9 @@ in
         ];
         devops = [
           #age
-          #helm
           #hyperfine
           #kubectl (kubernetes-client)
+          #kubernetes-helm (helm)
           #open-policy-agent
         ];
       in
@@ -194,7 +198,10 @@ in
           terraform-ls
           tflint
         ];
-        nix = [alejandra];
+        nix = [
+          alejandra
+          nix-tree
+        ];
       in
         base ++ blog ++ devops ++ nix
     else if distro == "void"
@@ -235,9 +242,9 @@ in
         devops = [
           #_1password (1password-client2)
           #age
-          #helm
           #hyperfine
           #kubectl
+          #kubernetes-helm (helm)
           #opentofu
           #sops
           #tailscale
@@ -355,7 +362,10 @@ in
         tflint
         trivy
       ];
-      nix = [alejandra];
+      nix = [
+        alejandra
+        nix-tree
+      ];
     in
       base ++ devops ++ nix
   else abort "✗ unknown os: ‘${builtins.currentSystem}’"

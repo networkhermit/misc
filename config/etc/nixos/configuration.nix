@@ -185,6 +185,7 @@ in {
     htop
     iotop-c
     lsof
+    sysstat
     tmux
 
     chrony

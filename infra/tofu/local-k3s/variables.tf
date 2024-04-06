@@ -24,6 +24,14 @@ variable "KUBE_HOST" {
   type     = string
 }
 
+variable "cluster_specific" {
+  default  = {}
+  nullable = false
+  type = object({
+    cilium_devices = optional(list(string), [])
+  })
+}
+
 variable "git_source" {
   nullable = false
   type = object({

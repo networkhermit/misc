@@ -120,6 +120,7 @@ esac
 #       htop
 #       iotop-c
 #       lsof
+#       sysstat
 #       tmux
 ##################
 
@@ -193,6 +194,7 @@ alpine)
         htop \
         iotop-c \
         lsof \
+        sysstat \
         tmux
 
     # NETWORK OPERATOR
@@ -280,6 +282,7 @@ arch | archarm)
         htop \
         iotop \
         lsof \
+        sysstat \
         tmux
 
     # NETWORK OPERATOR
@@ -320,7 +323,7 @@ arch | archarm)
         python-bcc \
         bpf \
         bpftrace \
-        docker{,-compose} \
+        docker{,-buildx,-compose} \
         git \
         wireguard-tools
 
@@ -366,7 +369,8 @@ artix)
         lsof \
         tmux \
         \
-        iotop
+        iotop \
+        sysstat
 
     # NETWORK OPERATOR
     pacman --sync --needed \
@@ -407,7 +411,7 @@ artix)
         ansible{,-lint} \
         python-argcomplete \
         bpf \
-        docker{,-compose} \
+        docker{,-buildx,-compose} \
         git \
         wireguard-s6 \
         \
@@ -454,6 +458,7 @@ fedora)
         htop \
         iotop-c \
         lsof \
+        sysstat \
         tmux
 
     # NETWORK OPERATOR
@@ -542,6 +547,7 @@ gentoo)
         sys-process/htop \
         sys-process/iotop-c \
         sys-process/lsof \
+        app-admin/sysstat \
         app-misc/tmux
 
     # NETWORK OPERATOR
@@ -623,6 +629,7 @@ kali)
         htop \
         iotop-c \
         lsof \
+        sysstat \
         tmux
 
     # NETWORK OPERATOR
@@ -708,6 +715,7 @@ void)
         htop \
         iotop-c \
         lsof \
+        sysstat \
         tmux
 
     # NETWORK OPERATOR
@@ -728,7 +736,6 @@ void)
         ruff \
         rust{,-analyzer,-src} \
         rust-cargo-audit \
-        cargo-outdated \
         mold \
         rust-sccache
 
@@ -748,7 +755,7 @@ void)
         python3-bcc \
         bpftool \
         bpftrace \
-        docker{,-compose} \
+        docker{,-buildx,-compose} \
         git \
         wireguard-tools
 
@@ -848,7 +855,7 @@ openbsd)
     # UTIL
     pkg_add \
         bat-- \
-        exa-- \
+        eza-- \
         fd-- \
         fzf-- \
         hexyl-- \
@@ -874,8 +881,9 @@ openbsd)
         go-tools-- \
         python3-- \
         py3-{black,pip,mypy}-- \
-        rust{,-rustfmt,-clippy,-src}-- \
-        cargo-audit--
+        rust{,-rustfmt,-clippy,-analyzer,-src}-- \
+        cargo-audit-- \
+        sccache
 
     # GAME
     pkg_add \

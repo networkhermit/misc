@@ -9,4 +9,4 @@ kind: JoinConfiguration
 nodeRegistration:
   criSocket: unix:///run/containerd/containerd.sock
   kubeletExtraArgs:
-    node-ip: 172.31.0.11,fd00:1:2:3::11
+    node-ip: 172.31.0.11,fd00:ebee:172:31::11

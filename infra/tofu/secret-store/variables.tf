@@ -32,16 +32,3 @@ variable "harbor_secret" {
     })
   )
 }
-
-variable "weave_gitops_secret" {
-  default  = {}
-  nullable = false
-  type = map(
-    object({
-      cluster_user_auth = object({
-        PASSWORD = string
-        USERNAME = string
-      })
-    })
-  )
-}

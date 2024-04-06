@@ -1,0 +1,17 @@
+(o11y) {
+    errors
+    log
+    prometheus :9153
+}
+
+ts.net {
+    cache
+    forward ts.net 100.100.100.100
+    import o11y
+}
+
+. {
+    cache 30
+    import forward.conf
+    import o11y
+}

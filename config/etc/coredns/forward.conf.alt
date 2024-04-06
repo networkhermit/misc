@@ -1,0 +1,4 @@
+forward . 223.6.6.6 1.0.0.1 8.8.4.4 {
+    force_tcp
+    health_check 5s
+}

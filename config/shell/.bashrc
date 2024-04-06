@@ -140,7 +140,7 @@ Linux)
     alias la='ls --almost-all'
     alias ll='ls --human-readable -l --time-style long-iso'
     alias ls='ls --color=auto'
-    alias pass='echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr --delete +/= | dd bs=32 count=1 2>/dev/null)"'
+    alias pass='dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr --delete +/= | dd bs=32 count=1 2>/dev/null'
     ;;
 FreeBSD | Darwin)
     alias l='ls -F -1'
@@ -180,10 +180,31 @@ esac
 
 case ${OS} in
 FreeBSD)
-    alias pass='echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr -d +/= | dd bs=32 count=1 2>/dev/null)"'
+    alias pass='dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr -d +/= | dd bs=32 count=1 2>/dev/null'
     ;;
-OpenBSD | Darwin)
-    alias pass='echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d +/= | dd bs=32 count=1 2>/dev/null)"'
+OpenBSD)
+    alias pass='dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "\r\n" | tr -d +/= | dd bs=32 count=1 2>/dev/null'
+    ;;
+Darwin)
+    alias pass='dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d +/= | dd bs=32 count=1 2>/dev/null'
+    ;;
+esac
+
+case ${OS} in
+Linux | FreeBSD)
+    tmux-clip () {
+        printf '\033]52;c;%s\a' "$(base64 --wrap 0 "${1}")" >"$(tmux display-message -p '#{client_tty}')"
+    }
+    ;;
+OpenBSD)
+    tmux-clip () {
+        printf '\033]52;c;%s\a' "$(base64 "${1}" | tr -d '\r\n')" >"$(tmux display-message -p '#{client_tty}')"
+    }
+    ;;
+Darwin)
+    tmux-clip () {
+        printf '\033]52;c;%s\a' "$(base64 --input "${1}")" >"$(tmux display-message -p '#{client_tty}')"
+    }
     ;;
 esac
 
@@ -195,6 +216,11 @@ Linux | FreeBSD | OpenBSD)
         ;;
     x11)
         alias clip='xclip -selection clip <'
+        ;;
+    *)
+        if [[ -n "${TMUX}" ]]; then
+            alias clip='tmux-clip'
+        fi
         ;;
     esac
     ;;

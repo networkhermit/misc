@@ -64,7 +64,7 @@ end
 
 alias acp 'scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias ash 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-alias b 'b3sum'
+alias b b3sum
 alias batdiff 'git diff --diff-filter d --name-only --relative | xargs bat --diff'
 alias d 'cd - &> /dev/null'
 alias diff 'diff --color=auto'
@@ -75,7 +75,7 @@ alias emacs 'emacs --no-window-system'
 alias grep 'grep --color=auto'
 alias json 'jq --sort-keys .'
 alias less 'less --quit-if-one-screen'
-alias n 'nvim'
+alias n nvim
 alias s 'cd ..'
 alias sc shellcheck
 alias sha sha256sum
@@ -101,7 +101,7 @@ switch {$OS}
         alias la 'ls --almost-all'
         alias ll 'ls --human-readable -l --time-style long-iso'
         alias ls 'ls --color=auto'
-        alias pass 'echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr --delete +/= | dd bs=32 count=1 2>/dev/null)"'
+        alias pass 'dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr --delete +/= | dd bs=32 count=1 2>/dev/null'
     case FreeBSD Darwin
         alias l 'ls -F -1'
         alias la 'ls -A'
@@ -137,9 +137,26 @@ end
 
 switch {$OS}
     case FreeBSD
-        alias pass 'echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr -d +/= | dd bs=32 count=1 2>/dev/null)"'
-    case OpenBSD Darwin
-        alias pass 'echo "$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d +/= | dd bs=32 count=1 2>/dev/null)"'
+        alias pass 'dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr -d +/= | dd bs=32 count=1 2>/dev/null'
+    case OpenBSD
+        alias pass 'dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "\r\n" | tr -d +/= | dd bs=32 count=1 2>/dev/null'
+    case Darwin
+        alias pass 'dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d +/= | dd bs=32 count=1 2>/dev/null'
+end
+
+switch {$OS}
+    case Linux FreeBSD
+        function tmux-clip
+            printf '\033]52;c;%s\a' (base64 --wrap 0 {$argv[1]}) >(tmux display-message -p '#{client_tty}')
+        end
+    case OpenBSD
+        function tmux-clip
+            printf '\033]52;c;%s\a' (base64 {$argv[1]} | tr -d '\r\n') >(tmux display-message -p '#{client_tty}')
+        end
+    case Darwin
+        function tmux-clip
+            printf '\033]52;c;%s\a' (base64 --input {$argv[1]}) >(tmux display-message -p '#{client_tty}')
+        end
 end
 
 switch {$OS}
@@ -149,6 +166,10 @@ switch {$OS}
                 alias clip 'wl-copy <'
             case x11
                 alias clip 'xclip -selection clip <'
+            case '*'
+                if [ -n "$TMUX" ]
+                    alias clip tmux-clip
+                end
         end
     case Darwin
         alias clip 'pbcopy <'

@@ -12,5 +12,5 @@ disable-network-policy: true
 flannel-backend: none
 kubelet-arg:
   - config=/etc/rancher/k3s/kubelet.yaml
-node-ip: 172.31.0.10,fd00:1:2:3::10
+node-ip: 172.31.0.10,fd00:ebee:172:31::10
 service-cidr: 10.43.0.0/16,fd00:ebee:10:4300::/112
