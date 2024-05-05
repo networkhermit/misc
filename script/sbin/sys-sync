@@ -129,6 +129,7 @@ gentoo)
     emerge --ask --depclean
     eclean-dist --deep
     eclean-pkg --deep
+    eclean-kernel --num 2
     ;;
 kali)
     if [[ "${FORCE_SYNC}" = true ]]; then
@@ -147,6 +148,7 @@ nixos)
 void)
     xbps-install --sync --update
     xbps-remove --clean-cache --recursive --remove-orphans
+    vkpurge list | head --lines -1 | xargs --no-run-if-empty vkpurge rm
     ;;
 freebsd)
     if [[ "${FORCE_SYNC}" = true ]]; then

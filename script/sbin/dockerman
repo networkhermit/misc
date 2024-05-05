@@ -132,9 +132,9 @@ coredns)
         --publish 53:53/tcp \
         --publish "[::1]:53:53/udp" \
         --restart always \
-        --mount type=bind,source=/srv/coredns/Corefile,destination=/home/nonroot/Corefile \
-        --mount type=bind,source=/srv/coredns/zones,destination=/home/nonroot/zones \
-        coredns/coredns
+        --mount type=bind,source=/srv/coredns,destination=/etc/coredns \
+        coredns/coredns \
+        -conf /etc/coredns/Corefile
     ;;
 gotify)
     docker run \

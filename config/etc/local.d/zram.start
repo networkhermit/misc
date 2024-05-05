@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+modprobe zram
+
+max_zram_size=$(( 8192 * 1024 ))
+ram=$(awk '/MemTotal/ { print $2; exit }' /proc/meminfo)
+
+zram_size=${ram}
+
+if (( ram > max_zram_size )); then
+    zram_size=${max_zram_size}
+fi
+
+zramctl /dev/zram0 --algorithm zstd --size "${zram_size}K"
+
+mkswap /dev/zram0
+swapon /dev/zram0

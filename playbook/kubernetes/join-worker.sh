@@ -77,7 +77,7 @@ trap clean_up EXIT
 #kubeadm token list
 #TOKEN=$(kubeadm token create --ttl 2h)
 #HASH=$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt \
-#    | openssl rsa -pubin -outform der 2> /dev/null \
+#    | openssl rsa -pubin -outform der 2>/dev/null \
 #    | openssl dgst -sha256 -hex | sed 's/^.* //')
 #kubeadm token create --print-join-command
 

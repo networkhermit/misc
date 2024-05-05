@@ -245,6 +245,7 @@ sudo rc-update add sshd default
 sudo rc-service sshd restart
 
 # update initramfs image
+printf '\n%s\n' 'initfscomp=zstd' | sudo tee --append /etc/mkinitfs/mkinitfs.conf
 
 # update boot loader
 
@@ -272,6 +273,9 @@ sudo apk add \
     shadow \
     util-linux
 sudo apk add docs
+
+# enable zram swap
+sudo install -D --mode 644 --target-directory /etc/local.d config/etc/local.d/zram.{start,stop}
 
 # setup mdns (optional)
 sudo apk add avahi
@@ -362,6 +366,8 @@ sudo install -D --mode 644 --target-directory /etc config/etc/hosts
 # modify secure shell daemon
 
 # update initramfs image
+## archarm
+printf '\n%s\n' 'COMPRESSION="zstd"' | sudo tee --append /etc/mkinitcpio.conf
 
 # update boot loader
 
@@ -376,6 +382,9 @@ sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
 printf '\n%s\n' 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/locale.gen
 sudo locale-gen
 sudo install -D --mode 644 --target-directory /etc config/etc/vconsole.conf
+
+# enable zram swap
+sudo install -D --mode 644 --target-directory /etc/systemd/zram-generator.conf.d config/etc/systemd/zram-generator.conf.d/10-local.conf
 
 # color setup for ls
 sudo tee --append /etc/bash.bashrc << 'EOF'
@@ -443,6 +452,12 @@ sudo s6-rc -u change dhcpcd
 sudo s6-service add default sshd
 sudo s6-rc -u change sshd
 
+# enable zram swap
+{ yes || true; } | sudo pacman --sync --needed zramen-s6
+sudo install -D --mode 644 --target-directory /etc/s6/config config/etc/s6/config/zramen.conf
+sudo s6-service add default zramen
+sudo s6-rc -u change zramen
+
 # install artools-base
 { yes || true; } | sudo pacman --sync --needed artools-base
 
@@ -496,6 +511,7 @@ sudo firewall-cmd --permanent --service ssh --get-ports
 sudo firewall-cmd --reload
 
 # update initramfs image
+sudo install -D --mode 644 --target-directory /etc/dracut.conf.d config/etc/dracut.conf.d/zstd.conf
 
 # update boot loader
 
@@ -508,11 +524,14 @@ sudo firewall-cmd --reload
 # update system locale
 sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
 
+# enable zram swap
+sudo install -D --mode 644 --target-directory /etc/systemd/zram-generator.conf.d config/etc/systemd/zram-generator.conf.d/10-local.conf
+
 # comment hostnamectl
 sudo vim /etc/profile
 
 # modify dnf configuration
-sudo sed --in-place 's/^\(installonly_limit\)=.*/\1=2/' /etc/dnf/dnf.conf
+printf '\n%s\n%s\n' 'exclude_from_weak_autodetect=false' 'installonly_limit=2' | sudo tee --append /etc/dnf/dnf.conf
 
 # change selinux to permissive mode
 sudo vim /etc/selinux/config
@@ -580,6 +599,7 @@ sudo rc-update add sshd default
 sudo rc-service sshd restart
 
 # update initramfs image
+sudo install -D --mode 644 --target-directory /etc/dracut.conf.d config/etc/dracut.conf.d/{hostonly,zstd}.conf
 
 # update boot loader
 
@@ -597,6 +617,18 @@ sudo locale-gen
 sudo install -D --mode 644 --target-directory /etc/env.d config/etc/env.d/02locale
 sudo env-update
 
+# enable tmpfs for /tmp
+printf '\n%s\n' 'tmpfs /tmp tmpfs defaults,nosuid,nodev 0 0' | sudo tee --append /etc/fstab
+sudo mount --all --verbose
+sudo mkdir /mnt/root
+sudo mount --bind / /mnt/root
+sudo find /mnt/root/tmp -mindepth 1 # -delete
+sudo umount /mnt/root
+sudo rmdir /mnt/root
+
+# enable zram swap
+sudo install -D --mode 644 --target-directory /etc/local.d config/etc/local.d/zram.{start,stop}
+
 # use nftables backend for iptables
 iptables --version | grep nf_tables
 eselect iptables list
@@ -606,8 +638,8 @@ sudo eselect iptables set xtables-nft-multi
 sudo emerge --ask --getbinpkg --noreplace sys-power/acpid
 sudo rc-update add acpid default
 
-# install gentoolkit
-sudo emerge --ask --getbinpkg --noreplace app-portage/gentoolkit
+# install eclean-kernel and gentoolkit
+sudo emerge --ask --getbinpkg --noreplace app-admin/eclean-kernel app-portage/gentoolkit
 
 # setup mdns (optional)
 sudo emerge --ask --getbinpkg --noreplace net-dns/avahi sys-auth/nss-mdns
@@ -666,6 +698,7 @@ sudo apt install --assume-yes kali-linux-default < /dev/null
 sudo systemctl restart ssh.service
 
 # update initramfs image
+sudo install -D --mode 644 --target-directory /etc/initramfs-tools/conf.d config/etc/initramfs-tools/conf.d/hostonly.conf
 
 # update boot loader
 
@@ -688,6 +721,10 @@ sudo mount --bind / /mnt/root
 sudo find /mnt/root/tmp -mindepth 1 # -delete
 sudo umount /mnt/root
 sudo rmdir /mnt/root
+
+# enable zram swap
+sudo apt install --assume-yes systemd-zram-generator < /dev/null
+sudo install -D --mode 644 --target-directory /etc/systemd/zram-generator.conf.d config/etc/systemd/zram-generator.conf.d/10-local.conf
 
 # setup mdns (optional)
 sudo apt install --assume-yes avahi-daemon libnss-mdns < /dev/null
@@ -762,6 +799,7 @@ sudo ln --force --no-dereference --symbolic /etc/sv/sshd /etc/runit/runsvdir/def
 sudo sv restart sshd
 
 # update initramfs image
+sudo install -D --mode 644 --target-directory /etc/dracut.conf.d config/etc/dracut.conf.d/{hostonly,zstd}.conf
 
 # update boot loader
 
@@ -775,6 +813,11 @@ sudo sysctl --system
 
 # update system locale
 sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
+
+# enable zram swap
+sudo xbps-install --yes zramen
+sudo install -D --mode 644 --target-directory /etc/sv/zramen config/etc/sv/zramen/conf
+sudo ln --force --no-dereference --symbolic /etc/sv/zramen /etc/runit/runsvdir/default
 
 # add additional terminfo files
 sudo xbps-install --yes ncurses-term

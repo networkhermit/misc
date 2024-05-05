@@ -1,8 +1,8 @@
 provider "flux" {
   kubernetes = {
     client_certificate     = var.KUBE_CLIENT_CERT_DATA
+    client_key             = var.KUBE_CLIENT_KEY_DATA
     cluster_ca_certificate = var.KUBE_CLUSTER_CA_CERT_DATA
-    config_path            = var.KUBE_CLIENT_KEY_DATA
     host                   = var.KUBE_HOST
   }
   git = {

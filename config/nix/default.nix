@@ -57,6 +57,7 @@ in
         devops = [
           #age
           #hyperfine
+          #k9s
           #kubectl
           #kubernetes-helm (helm)
           #nerdctl
@@ -92,6 +93,7 @@ in
           #cue
           #fluxcd
           #hyperfine
+          #k9s
           #kubectl
           #kubernetes-helm (helm)
           #kubie
@@ -182,6 +184,7 @@ in
           cue
           fluxcd
           istioctl
+          k9s
           kubebuilder
           kubectl
           kubescape
@@ -218,6 +221,7 @@ in
         devops = [
           #age
           #hyperfine
+          #k9s
           #kubectl
           #kubernetes-helm
           #nerdctl
@@ -243,6 +247,7 @@ in
           #_1password (1password-client2)
           #age
           #hyperfine
+          #k9s
           #kubectl
           #kubernetes-helm (helm)
           #opentofu
@@ -347,8 +352,8 @@ in
       ];
       devops = [
         _1password
-        cloudflared
         hyperfine
+        k9s
         kubebuilder
         kubectl
         kubernetes-helm

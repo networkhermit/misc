@@ -144,15 +144,29 @@ in {
     "gai.conf" = {
       source = ./git/config/etc/gai.conf;
     };
-    "resolv.conf" = {
-      source =
-        ./git/config/etc/resolv.conf
-        + (
-          if config.local.direct
-          then ""
-          else ".alt"
-        );
-    };
+    "resolv.conf" =
+      if config.networking.nameservers != []
+      then {
+        text = ''
+          options attempts:3 rotate timeout:1 use-vc
+
+          ${builtins.concatStringsSep "\n" (map (x: "nameserver ${x}") config.networking.nameservers)}
+          ${
+            if config.networking.search != []
+            then "search " + toString config.networking.search
+            else ""
+          }
+        '';
+      }
+      else {
+        source =
+          ./git/config/etc/resolv.conf
+          + (
+            if config.local.direct
+            then ""
+            else ".alt"
+          );
+      };
   };
 
   environment.systemPackages = with pkgs; [
@@ -250,6 +264,7 @@ in {
     hubble
     hyperfine
     istioctl
+    k9s
     kubebuilder
     kubectl
     kubernetes-helm

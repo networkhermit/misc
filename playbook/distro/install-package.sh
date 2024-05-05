@@ -436,7 +436,7 @@ fedora)
         man-{db,pages} \
         info \
         vim-enhanced \
-        emacs-nox \
+        emacs-nw \
         ShellCheck
 
     # UTIL

@@ -112,8 +112,8 @@ gentoo)
     ;;
 kali)
     echo ------ [ package ] ------
-    apt list 2> /dev/null | (grep '\<\(local\|residual-config\)\]' || true) | column --table
-    apt search '\<(dummy|transitional)\>' 2> /dev/null | (grep '\[installed\>' || true) | column --table
+    apt list 2>/dev/null | (grep '\<\(local\|residual-config\)\]' || true) | column --table
+    apt search '\<(dummy|transitional)\>' 2>/dev/null | (grep '\[installed\>' || true) | column --table
     echo ------ [ configuration ] ------
     find /etc -type f \( -iregex '.*/.+\.dpkg-\(dist\|new\|old\)' -o -iregex '.*/.+\.old' -o -iregex '.*/.+\.ucf-\(dist\|new\|old\)' \) -print0 | sort --zero-terminated | tr '\0' '\n'
     dpkg-query --show --showformat '${Package}\n${Conffiles}\n' | awk '/^[^ ]/{pkg=$1}/ obsolete$/{print pkg,$0}' | column --table

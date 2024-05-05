@@ -41,6 +41,9 @@ services:
         target: /data
         type: bind
   coredns:
+    command:
+      - -conf
+      - /etc/coredns/Corefile
     container_name: coredns
     image: coredns/coredns
     labels:
@@ -54,11 +57,8 @@ services:
     profiles: ["coredns"]
     restart: always
     volumes:
-      - source: /srv/coredns/Corefile
-        target: /home/nonroot/Corefile
-        type: bind
-      - source: /srv/coredns/zones
-        target: /home/nonroot/zones
+      - source: /srv/coredns
+        target: /etc/coredns
         type: bind
   gotify:
     container_name: gotify

@@ -63,6 +63,7 @@
       }
     }
   },
+  "restore_on_startup": "none",
   "telemetry": {
     "diagnostics": false,
     "metrics": false
@@ -77,7 +78,6 @@
     "option_as_meta": true
   },
   "theme": "Rosé Pine Dawn",
-  "ui_font_family": "SF Pro",
   "vim": {
     "use_system_clipboard": "never"
   },

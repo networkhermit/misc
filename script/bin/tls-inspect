@@ -77,7 +77,7 @@ for i in "$@"; do
         if [[ -f "${i}" ]]; then
             if [[ -r "${i}" ]]; then
                 if [[ -s "${i}" ]]; then
-                    CERT=$(cat "${i}" 2> /dev/null)
+                    CERT=$(cat "${i}" 2>/dev/null)
                 else
                     warn "✗ file is empty: ‘${i}’"
                     continue
@@ -91,7 +91,7 @@ for i in "$@"; do
             continue
         fi
     else
-        CERT=$(openssl s_client -connect "${i}" < /dev/null 2> /dev/null)
+        CERT=$(openssl s_client -connect "${i}" < /dev/null 2>/dev/null)
     fi
 
     if [[ -z "${CERT}" ]]; then

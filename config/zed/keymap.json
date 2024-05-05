@@ -14,7 +14,7 @@
   {
     "bindings": {
       "shift-backspace": "zed::OpenSettings",
-      "shift-k": "workspace::NewTerminal",
+      "shift-k": "workspace::OpenInTerminal",
       "shift-q": "pane::CloseActiveItem"
     },
     "context": "Editor && vim_mode == normal && !VimWaiting && !menu"

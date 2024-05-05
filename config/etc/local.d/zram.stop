@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+swapoff /dev/zram0
+
+zramctl --reset /dev/zram0
+
+modprobe --remove zram
