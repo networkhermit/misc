@@ -1,2 +1,2 @@
-server time.cloudflare.com iburst nts
+server time.cloudflare.com iburst
 server time.apple.com iburst

@@ -14,13 +14,13 @@ data "talos_cluster_kubeconfig" "default" {
   node                 = local.control_plane_nodes[0]
 }
 
-output "kube_config" {
-  value     = one(data.talos_cluster_kubeconfig.default[*].kubernetes_client_configuration)
+output "kubeconfig" {
+  value     = one(data.talos_cluster_kubeconfig.default[*].kubeconfig_raw)
   sensitive = true
 }
 
-output "kube_config_raw" {
-  value     = one(data.talos_cluster_kubeconfig.default[*].kubeconfig_raw)
+output "kubernetes_client_configuration" {
+  value     = one(data.talos_cluster_kubeconfig.default[*].kubernetes_client_configuration)
   sensitive = true
 }
 

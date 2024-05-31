@@ -157,12 +157,12 @@ in
     then
       with pkgs; let
         base = [
+          #neovim
           #uutils-coreutils (rust-coreutils)
           biome
           go-tools
           golangci-lint
           lua-language-server
-          neovim
           pwru
           ruff
           ruff-lsp

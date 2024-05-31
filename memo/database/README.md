@@ -9,7 +9,12 @@ postgres
 psql --host 127.0.0.1 --port 5432 --username postgres
 create user demo password 'impl';
 create database demo;
+grant connect on database demo to demo;
 grant all on database demo to demo;
+grant usage on schema public to demo;
+grant all on schema public to demo;
+grant pg_read_all_data to demo;
+grant pg_write_all_data to demo;
 
 # dump database
 

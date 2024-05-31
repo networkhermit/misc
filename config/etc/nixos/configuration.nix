@@ -135,6 +135,10 @@ in {
     "net.ipv4.tcp_congestion_control" = "bbr";
     "net.ipv4.tcp_fastopen" = 3;
   };
+  boot.kernelModules =
+    if config.local.useVirtualPHC
+    then ["ptp_kvm"]
+    else [];
 
   boot.tmp.useTmpfs = true;
 
@@ -383,12 +387,26 @@ in {
     };
   };
 
-  services.chrony = {
-    #enableNTS = true;
-    enable = true;
-    enableRTCTrimming = false;
-    extraConfig = builtins.readFile ./git/config/etc/chrony.d/10-local.conf;
-  };
+  services.chrony = let
+    baseConfig = builtins.readFile ./git/config/etc/chrony.d/10-local.conf;
+  in
+    {
+      enable = true;
+      enableRTCTrimming = false;
+      extraConfig = baseConfig;
+    }
+    // (
+      if config.local.useVirtualPHC
+      then {
+        servers = [];
+        extraConfig = ''
+          ${baseConfig}
+
+          ${builtins.readFile ./git/config/etc/chrony.d/10-source-phc.conf}
+        '';
+      }
+      else {}
+    );
 
   services.journald.extraConfig = ''
     MaxRetentionSec=30day

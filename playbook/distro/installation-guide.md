@@ -366,8 +366,6 @@ sudo install -D --mode 644 --target-directory /etc config/etc/hosts
 # modify secure shell daemon
 
 # update initramfs image
-## archarm
-printf '\n%s\n' 'COMPRESSION="zstd"' | sudo tee --append /etc/mkinitcpio.conf
 
 # update boot loader
 

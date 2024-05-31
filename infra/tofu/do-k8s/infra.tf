@@ -17,19 +17,3 @@ module "talos_bootstrap" {
   pinned_version   = local.infra.pinned_version
   talos_override   = local.talos_override
 }
-
-resource "local_sensitive_file" "kubeconfig" {
-  count = local.infra.cluster_spec.control_plane.count > 0 ? 1 : 0
-
-  content         = module.talos_bootstrap.kube_config_raw
-  file_permission = "0600"
-  filename        = var.KUBE_CONFIG_PATH
-}
-
-resource "local_sensitive_file" "talosconfig" {
-  count = local.infra.cluster_spec.control_plane.count > 0 ? 1 : 0
-
-  content         = module.talos_bootstrap.talosconfig
-  file_permission = "0600"
-  filename        = var.TALOSCONFIG
-}

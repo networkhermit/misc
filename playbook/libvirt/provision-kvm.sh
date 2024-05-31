@@ -134,7 +134,7 @@ alpine)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'alpine-standard-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
-    EXTRA_ARGUMENT+=(--os-variant alpinelinux3.19)
+    EXTRA_ARGUMENT+=(--os-variant alpinelinux3.20)
     ;;
 arch)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'archlinux-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
@@ -151,7 +151,7 @@ artix)
 fedora)
     EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/40/Server/x86_64/os)
     EXTRA_ARGUMENT+=("${KERNEL_ARGUMENT[@]}")
-    EXTRA_ARGUMENT+=(--os-variant fedora-rawhide)
+    EXTRA_ARGUMENT+=(--os-variant fedora40)
     ;;
 gentoo)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'install-amd64-minimal-*.iso' | sort --version-sort | tail --lines 1)

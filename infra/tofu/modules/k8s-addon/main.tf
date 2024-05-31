@@ -62,13 +62,14 @@ resource "helm_release" "prometheus_operator_crds" {
   chart      = "prometheus-operator-crds"
   name       = "prometheus-operator-crds"
   namespace  = "kube-system"
-  repository = "https://prometheus-community.github.io/helm-charts"
+  repository = "oci://ghcr.io/prometheus-community/charts"
   version    = var.pinned_version.prometheus_operator_crds
 }
 
 resource "flux_bootstrap_git" "fleet" {
   depends_on = [helm_release.cilium, helm_release.kubelet_csr_approver]
 
-  cluster_domain = var.cluster_domain
-  path           = var.addon_override.flux.watch_path
+  cluster_domain     = var.cluster_domain
+  embedded_manifests = true
+  path               = var.addon_override.flux.watch_path
 }

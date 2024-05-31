@@ -186,7 +186,7 @@ alpine)
         moreutils \
         ripgrep \
         tree \
-        yq
+        yq-go
 
     # SYSADMIN
     apk add --interactive \
@@ -808,7 +808,7 @@ freebsd)
 
     # PLT
     pkg install --no-repo-update \
-        go121 \
+        go \
         gopls \
         go-tools \
         golangci-lint \
