@@ -56,12 +56,14 @@ in
         ];
         devops = [
           #age
+          #cue (cue-cli)
           #hyperfine
           #k9s
           #kubectl
           #kubernetes-helm (helm)
           #nerdctl
           #nickel
+          #opentofu
           #sops
           #tailscale
           #tflint
@@ -93,6 +95,7 @@ in
           #cue
           #fluxcd
           #hyperfine
+          #istioctl (istio)
           #k9s
           #kubectl
           #kubernetes-helm (helm)
@@ -109,7 +112,6 @@ in
           _1password
           conftest
           hubble
-          istioctl
           kubebuilder
           kubescape
           open-policy-agent
@@ -137,6 +139,8 @@ in
           #kubectl (kubernetes-client)
           #kubernetes-helm (helm)
           #open-policy-agent
+          #opentofu
+          #trivy
         ];
       in
         base ++ blog ++ devops
@@ -170,7 +174,9 @@ in
           stylua
           yq-go
         ];
-        blog = [zola];
+        blog = [
+          zola
+        ];
         devops = [
           #age
           #cilium-cli
@@ -211,9 +217,10 @@ in
     then
       with pkgs; let
         base = [
-          #stylua (StyLua)
           #lua-language-server
           #neovim
+          #pwru
+          #stylua (StyLua)
         ];
         blog = [
           #zola
@@ -237,8 +244,8 @@ in
       with pkgs; let
         base = [
           #neovim
-          #uutils-coreutils (rust-coreutils)
           #stylua
+          #uutils-coreutils (rust-coreutils)
         ];
         blog = [
           #zola
@@ -251,10 +258,12 @@ in
           #kubectl
           #kubernetes-helm (helm)
           #opentofu
+          #rage (rage-encryption)
           #sops
           #tailscale
           #tailspin
           #tflint
+          #trivy
         ];
       in
         base ++ blog ++ devops
@@ -263,11 +272,11 @@ in
   then
     with pkgs; let
       base = [
-        #libb64 (base64--)
         #colordiff--
         #colorls--
-        #watch (gnuwatch--)
+        #libb64 (base64--)
         #neovim--
+        #watch (gnuwatch--)
       ];
       blog = [
         #zola--

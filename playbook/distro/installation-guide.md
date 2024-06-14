@@ -102,8 +102,8 @@ popd || false
 ## kali
 sudo install -D --mode 644 --target-directory /etc/apt config/etc/apt/sources.list
 ## nixos
-sudo nix-channel --add https://nixos.org/channels/nixos-23.11 nixos
-#sudo nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-23.11 nixos
+sudo nix-channel --add https://nixos.org/channels/nixos-24.05 nixos
+#sudo nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-22.05 nixos
 ## void
 sudo install -D --mode 644 --target-directory /etc/xbps.d config/etc/config/etc/xbps.d/00-repository-main.conf
 ## freebsd
@@ -170,7 +170,7 @@ sudo tee --append /etc/bash.bashrc << 'EOF'
 [[ -r /usr/share/doc/pkgfile/command-not-found.bash ]] && . /usr/share/doc/pkgfile/command-not-found.bash
 EOF
 ## fedora
-sudo dnf install --assumeyes PackageKit-command-not-found
+sudo dnf install --assumeyes --setopt metadata_expire=never PackageKit-command-not-found
 ## kali
 sudo apt install --assume-yes command-not-found < /dev/null
 sudo apt update
@@ -536,7 +536,7 @@ sudo vim /etc/selinux/config
 sudo fixfiles -F onboot
 
 # setup mdns (optional)
-sudo dnf install --assumeyes avahi nss-mdns
+sudo dnf install --assumeyes --setopt metadata_expire=never avahi nss-mdns
 sudo firewall-cmd --permanent --add-service mdns
 
 # reboot system

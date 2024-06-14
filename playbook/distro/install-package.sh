@@ -216,6 +216,7 @@ alpine)
         black \
         py3-pip \
         py3-mypy \
+        ruff \
         rust{,-analyzer} \
         cargo \
         rustfmt \
@@ -280,7 +281,7 @@ arch | archarm)
     pacman --sync --needed \
         cronie \
         htop \
-        iotop \
+        iotop-c \
         lsof \
         sysstat \
         tmux
@@ -345,7 +346,7 @@ artix)
         texinfo \
         vim \
         emacs-nox \
-        shellcheck
+        shellcheck-bin
 
     # UTIL
     pacman --sync --needed \
@@ -369,7 +370,7 @@ artix)
         lsof \
         tmux \
         \
-        iotop \
+        iotop-c \
         sysstat
 
     # NETWORK OPERATOR
@@ -429,7 +430,7 @@ artix)
 fedora)
 
     # SHELL
-    dnf install --cacheonly \
+    dnf install --setopt metadata_expire=never \
         bash{,-completion} \
         fish \
         zsh{,-autosuggestions,-syntax-highlighting} \
@@ -440,7 +441,7 @@ fedora)
         ShellCheck
 
     # UTIL
-    dnf install --cacheonly \
+    dnf install --setopt metadata_expire=never \
         b3sum \
         bat \
         eza \
@@ -450,10 +451,11 @@ fedora)
         jq \
         moreutils \
         ripgrep \
-        tree
+        tree \
+        yq
 
     # SYSADMIN
-    dnf install --cacheonly \
+    dnf install --setopt metadata_expire=never \
         cronie \
         htop \
         iotop-c \
@@ -462,7 +464,7 @@ fedora)
         tmux
 
     # NETWORK OPERATOR
-    dnf install --cacheonly \
+    dnf install --setopt metadata_expire=never \
         chrony \
         curl \
         ldns-utils \
@@ -470,7 +472,7 @@ fedora)
         rsync
 
     # PLT
-    dnf install --cacheonly \
+    dnf install --setopt metadata_expire=never \
         golang \
         golang-x-tools-{gopls,goimports} \
         golang-honnef-tools \
@@ -486,14 +488,14 @@ fedora)
         mold
 
     # GAME
-    dnf install --cacheonly \
+    dnf install --setopt metadata_expire=never \
         cmatrix \
         cowsay \
         fortune-mod \
         sl
 
     # DevOps
-    dnf install --cacheonly \
+    dnf install --setopt metadata_expire=never \
         ansible \
         python3-ansible-lint \
         python3-argcomplete \
@@ -506,7 +508,7 @@ fedora)
 
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     dnf makecache
-    dnf install docker-ce docker-compose-plugin
+    dnf install --setopt metadata_expire=never docker-ce docker-compose-plugin
     dnf clean packages
 
     rpm --query \
@@ -539,7 +541,8 @@ gentoo)
         app-misc/jq \
         sys-apps/moreutils \
         sys-apps/ripgrep \
-        app-text/tree
+        app-text/tree \
+        app-misc/yq-go
 
     # SYSADMIN
     emerge --ask --getbinpkg --noreplace \
@@ -584,7 +587,7 @@ gentoo)
         dev-util/bcc \
         dev-util/bpftool \
         dev-debug/bpftrace \
-        app-containers/docker{,compose} \
+        app-containers/docker{,-compose} \
         dev-vcs/git \
         net-vpn/wireguard-tools
 
@@ -653,6 +656,7 @@ kali)
         cargo \
         rustfmt \
         rust-clippy \
+        cargo-outdated \
         mold \
         sccache
 
@@ -689,7 +693,8 @@ void)
         bash{,-completion} \
         fish-shell \
         zsh{,-autosuggestions,-syntax-highlighting} \
-        man{doc,-pages} \
+        mdocml \
+        man-pages \
         texinfo \
         vim \
         emacs \
@@ -730,6 +735,7 @@ void)
     xbps-install \
         go \
         gopls \
+        golangci-lint \
         delve \
         python3{,-pip,-mypy} \
         black \
@@ -813,11 +819,12 @@ freebsd)
         go-tools \
         golangci-lint \
         delve \
-        python311 \
+        python3 \
         py39-{black,pip,mypy} \
         ruff \
         rust{,-analyzer} \
         cargo-audit \
+        mold \
         sccache
 
     # GAME
@@ -830,7 +837,7 @@ freebsd)
     # DevOps
     pkg install --no-repo-update \
         py39-ansible{,-lint} \
-        py39-argparse \
+        py39-argcomplete \
         git \
         wireguard-tools
 
@@ -894,6 +901,7 @@ openbsd)
     # DevOps
     pkg_add \
         ansible{,-lint}-- \
+        py3-argcomplete \
         git-- \
         wireguard-tools--
 
