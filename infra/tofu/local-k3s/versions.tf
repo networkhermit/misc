@@ -15,11 +15,11 @@ terraform {
     }
     github = {
       source  = "integrations/github"
-      version = "~> 6.2.1"
+      version = "~> 6.2.2"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.13.2"
+      version = "~> 2.14.0"
     }
     tls = {
       source  = "hashicorp/tls"

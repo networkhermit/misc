@@ -6,7 +6,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 2.13"
+      version = ">= 2.14"
     }
   }
   required_version = ">= 1.6"

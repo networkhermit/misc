@@ -157,6 +157,7 @@ esac
 #       docker
 #       docker-compose
 #       git
+#       perf
 #       wireguard-tools
 ##################
 
@@ -241,6 +242,7 @@ alpine)
         bpftrace \
         docker{,-compose} \
         git{,-prompt} \
+        perf \
         wireguard-tools
 
     apk info --contents \
@@ -326,6 +328,7 @@ arch | archarm)
         bpftrace \
         docker{,-buildx,-compose} \
         git \
+        perf \
         wireguard-tools
 
     pacman --files --list \
@@ -414,6 +417,7 @@ artix)
         bpf \
         docker{,-buildx,-compose} \
         git \
+        perf \
         wireguard-s6 \
         \
         bcc-tools \
@@ -504,6 +508,7 @@ fedora)
         bpftool \
         bpftrace \
         git \
+        perf \
         wireguard-tools
 
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -589,6 +594,7 @@ gentoo)
         dev-debug/bpftrace \
         app-containers/docker{,-compose} \
         dev-vcs/git \
+        dev-util/perf \
         net-vpn/wireguard-tools
 
     qlist \
@@ -677,6 +683,7 @@ kali)
         bpftrace \
         docker.io \
         git \
+        linux-perf \
         wireguard-tools
 
     dpkg --listfiles \
@@ -763,6 +770,7 @@ void)
         bpftrace \
         docker{,-buildx,-compose} \
         git \
+        perf \
         wireguard-tools
 
     xbps-query --files \
@@ -820,7 +828,7 @@ freebsd)
         golangci-lint \
         delve \
         python3 \
-        py39-{black,pip,mypy} \
+        py311-{black,pip,mypy} \
         ruff \
         rust{,-analyzer} \
         cargo-audit \
@@ -836,8 +844,8 @@ freebsd)
 
     # DevOps
     pkg install --no-repo-update \
-        py39-ansible{,-lint} \
-        py39-argcomplete \
+        py311-ansible{,-lint} \
+        py311-argcomplete \
         git \
         wireguard-tools
 

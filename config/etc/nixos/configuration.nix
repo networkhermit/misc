@@ -253,6 +253,7 @@ in {
     docker
     docker-compose
     git
+    linuxKernel.packages.linux_libre.perf
     wireguard-tools
 
     biome

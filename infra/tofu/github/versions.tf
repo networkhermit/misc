@@ -11,7 +11,7 @@ terraform {
   required_providers {
     github = {
       source  = "integrations/github"
-      version = "~> 6.2.1"
+      version = "~> 6.2.2"
     }
   }
   required_version = ">= 1.6"

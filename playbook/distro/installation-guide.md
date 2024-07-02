@@ -712,8 +712,9 @@ sudo sysctl --system
 sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
 
 # enable tmpfs for /tmp
-sudo cp /usr/share/systemd/tmp.mount /etc/systemd/system/
-sudo systemctl enable tmp.mount
+sudo systemctl cat tmp.mount
+#sudo cp /usr/share/systemd/tmp.mount /etc/systemd/system/
+#sudo systemctl enable tmp.mount
 sudo mkdir /mnt/root
 sudo mount --bind / /mnt/root
 sudo find /mnt/root/tmp -mindepth 1 # -delete
@@ -811,6 +812,8 @@ sudo sysctl --system
 
 # update system locale
 sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
+printf '\n%s\n' 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/default/libc-locales
+sudo xbps-reconfigure -f glibc-locales
 
 # enable zram swap
 sudo xbps-install --yes zramen

@@ -11,7 +11,7 @@ resource "harbor_retention_policy" "proxy_cache" {
   scope    = each.value
 
   rule {
-    n_days_since_last_pull = 90
+    n_days_since_last_pull = 180
     repo_matching          = "**"
     tag_matching           = "**"
   }
