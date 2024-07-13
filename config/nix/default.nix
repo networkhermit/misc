@@ -102,6 +102,7 @@ in
           #kubie
           #nerdctl
           #nickel
+          #opentofu
           #rage (rage-encryption)
           #sops
           #sqlfluff
@@ -115,7 +116,6 @@ in
           kubebuilder
           kubescape
           open-policy-agent
-          opentofu
           terraform-ls
           tflint
         ];

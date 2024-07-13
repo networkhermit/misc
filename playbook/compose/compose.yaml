@@ -10,7 +10,8 @@ services:
       managed-by: docker-compose
     ports:
       - 172.24.0.1:9093:9093
-    profiles: ["alertmanager"]
+    profiles:
+      - alertmanager
     restart: always
     volumes:
       - source: /srv/alertmanager/data
@@ -28,7 +29,8 @@ services:
       - 80:80
       - 443:443
       - 28443-28445:28443-28445
-    profiles: ["caddy"]
+    profiles:
+      - caddy
     restart: always
     volumes:
       - source: /srv/caddy/Caddyfile
@@ -54,7 +56,8 @@ services:
       - 172.24.0.1:9153:9153
       - 53:53/tcp
       - "[::1]:53:53/udp"
-    profiles: ["coredns"]
+    profiles:
+      - coredns
     restart: always
     volumes:
       - source: /srv/coredns
@@ -67,7 +70,8 @@ services:
       managed-by: docker-compose
     ports:
       - 221:443
-    profiles: ["gotify"]
+    profiles:
+      - gotify
     restart: always
     volumes:
       - source: /srv/gotify/certs
@@ -88,7 +92,8 @@ services:
       managed-by: docker-compose
     ports:
       - 3000:3000
-    profiles: ["grafana"]
+    profiles:
+      - grafana
     restart: always
     volumes:
       - source: /srv/grafana/data
@@ -106,14 +111,16 @@ services:
       - :9001
     container_name: minio
     env_file:
-      - /srv/minio/env
+      - path: /srv/minio/env
+        required: false
     image: minio/minio
     labels:
       managed-by: docker-compose
     ports:
       - 9000:9000
       - 9001:9001
-    profiles: ["minio"]
+    profiles:
+      - minio
     restart: always
     volumes:
       - source: /srv/minio
@@ -129,7 +136,8 @@ services:
       managed-by: docker-compose
     ports:
       - 1883:1883
-    profiles: ["mosquitto"]
+    profiles:
+      - mosquitto
     restart: always
     volumes:
       - source: /srv/mosquitto
@@ -142,7 +150,8 @@ services:
       managed-by: docker-compose
     ports:
       - 8000:80
-    profiles: ["nginx"]
+    profiles:
+      - nginx
     restart: always
     volumes:
       - source: /srv/nginx/html
@@ -163,7 +172,8 @@ services:
       managed-by: docker-compose
     network_mode: host
     pid: host
-    profiles: ["node-exporter"]
+    profiles:
+      - node-exporter
     restart: always
     volumes:
       - bind:
@@ -179,7 +189,8 @@ services:
       managed-by: docker-compose
     ports:
       - 172.24.0.1:5432:5432
-    profiles: ["postgres"]
+    profiles:
+      - postgres
     restart: always
     volumes:
       - source: /srv/postgres/data
@@ -192,7 +203,8 @@ services:
       managed-by: docker-compose
     ports:
       - 172.24.0.1:9090:9090
-    profiles: ["prometheus"]
+    profiles:
+      - prometheus
     restart: always
     volumes:
       - source: /srv/prometheus/data
@@ -211,7 +223,8 @@ services:
       managed-by: docker-compose
     ports:
       - 3001:3001
-    profiles: ["uptime-kuma"]
+    profiles:
+      - uptime-kuma
     restart: always
     volumes:
       - source: /srv/uptime-kuma
@@ -228,7 +241,8 @@ services:
       managed-by: docker-compose
     ports:
       - 6666:6666
-    profiles: ["v2fly"]
+    profiles:
+      - v2fly
     restart: always
     volumes:
       - source: /srv/v2ray/config.json
