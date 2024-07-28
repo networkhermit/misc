@@ -305,7 +305,7 @@ arch | archarm)
         delve \
         python{,-black,-pip} \
         mypy \
-        ruff{,-lsp} \
+        ruff \
         rust{,-analyzer} \
         cargo-{audit,outdated} \
         mold \
@@ -397,7 +397,6 @@ artix)
         gopls \
         staticcheck \
         delve \
-        ruff-lsp \
         rust-analyzer \
         cargo-{audit,outdated} \
         sccache
@@ -484,7 +483,7 @@ fedora)
         python3{,-pip} \
         black \
         python3-mypy \
-        ruff{,-lsp} \
+        ruff \
         rust{,-analyzer} \
         cargo \
         rustfmt \

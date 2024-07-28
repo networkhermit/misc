@@ -12,6 +12,19 @@ variable "dex_secret" {
   )
 }
 
+variable "grafana_secret" {
+  default  = {}
+  nullable = false
+  type = map(
+    object({
+      grafana_credential = object({
+        ADMIN_USER     = string
+        ADMIN_PASSWORD = string
+      })
+    })
+  )
+}
+
 variable "harbor_secret" {
   default  = {}
   nullable = false

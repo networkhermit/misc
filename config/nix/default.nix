@@ -169,7 +169,6 @@ in
           lua-language-server
           pwru
           ruff
-          ruff-lsp
           rust-analyzer
           stylua
           yq-go
@@ -337,11 +336,10 @@ in
         mypy
         neovim
         python3
-        python311Packages.argcomplete
-        python311Packages.pip
+        python312Packages.argcomplete
+        python312Packages.pip
         ripgrep
         ruff
-        ruff-lsp
         rust-analyzer
         rust.packages.stable.rustPlatform.rustcSrc
         rustc
@@ -361,6 +359,7 @@ in
       ];
       devops = [
         _1password
+        actionlint
         hyperfine
         k9s
         kubebuilder
@@ -370,6 +369,7 @@ in
         #mitmproxy
         nmap
         opentofu
+        sops
         sqlfluff
         tailspin
         terraform-ls

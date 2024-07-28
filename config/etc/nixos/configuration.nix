@@ -227,7 +227,6 @@ in {
     python311Packages.pip
     mypy
     ruff
-    ruff-lsp
     rustc
     cargo
     rustfmt
