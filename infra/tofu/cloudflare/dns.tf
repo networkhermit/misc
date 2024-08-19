@@ -7,10 +7,10 @@ resource "cloudflare_zone" "dev" {
 resource "cloudflare_record" "dev" {
   for_each = { for o in var.zone_records.records : o.uuid => o }
 
+  content  = each.value.content
   name     = each.value.name
   priority = try(each.value.priority, null)
   ttl      = each.value.ttl
   type     = each.value.type
-  value    = each.value.value
   zone_id  = cloudflare_zone.dev.id
 }

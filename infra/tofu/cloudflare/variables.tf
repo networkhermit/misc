@@ -28,12 +28,12 @@ variable "zone_records" {
     domain = string
     records = list(
       object({
+        content  = string
         name     = string
         priority = optional(number)
         ttl      = number
         type     = string
         uuid     = string
-        value    = string
       })
     )
   })
