@@ -182,6 +182,7 @@ in
           #hubble
           #hyperfine
           #kubernetes-helm
+          #tailspin
           #tetragon
           #trivy
           _1password
@@ -201,7 +202,6 @@ in
           rage
           sops
           sqlfluff
-          tailspin
           talosctl
           terraform-ls
           tflint
@@ -358,19 +358,24 @@ in
         zsh-syntax-highlighting
       ];
       devops = [
+        #awscli2
+        #mitmproxy
         _1password
         actionlint
+        gh
         hyperfine
         k9s
         kubebuilder
         kubectl
         kubernetes-helm
         kubie
-        #mitmproxy
         nmap
         opentofu
+        python312Packages.cfn-lint
+        rain
         sops
         sqlfluff
+        steampipe
         tailspin
         terraform-ls
         tflint

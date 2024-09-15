@@ -2,7 +2,6 @@ locals {
   addon_override = {
     cilium = [
       yamlencode({
-        MTU = 1406
         bpf = {
           datapathMode = "netkit"
         }
