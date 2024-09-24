@@ -15,7 +15,7 @@ clusterName: fleet
 controlPlaneEndpoint: k8s.internal.cncf.site:6443
 imageRepository: registry.k8s.io
 kind: ClusterConfiguration
-kubernetesVersion: 1.30.3
+kubernetesVersion: 1.31.1
 networking:
   dnsDomain: fleet.local
   podSubnet: 10.24.0.0/16,fd00:ebee:10:2400::/56

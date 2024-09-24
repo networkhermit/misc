@@ -62,6 +62,8 @@ operator:
     serviceMonitor:
       enabled: true
   replicas: 1
+pmtuDiscovery:
+  enabled: true
 prometheus:
   enabled: true
   serviceMonitor:
