@@ -14,6 +14,7 @@ envoy:
   prometheus:
     serviceMonitor:
       enabled: true
+      interval: 30s
 gatewayAPI:
   enabled: true
 hubble:
@@ -30,12 +31,14 @@ hubble:
       - tcp
     serviceMonitor:
       enabled: true
+      interval: 30s
   relay:
     enabled: true
     prometheus:
       enabled: true
       serviceMonitor:
         enabled: true
+        interval: 30s
   ui:
     enabled: true
 ingressController:
@@ -61,6 +64,7 @@ operator:
   prometheus:
     serviceMonitor:
       enabled: true
+      interval: 30s
   replicas: 1
 pmtuDiscovery:
   enabled: true
@@ -68,6 +72,7 @@ prometheus:
   enabled: true
   serviceMonitor:
     enabled: true
+    interval: 30s
 rollOutCiliumPods: true
 routingMode: native
 socketLB:

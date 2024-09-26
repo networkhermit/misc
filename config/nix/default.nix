@@ -378,6 +378,7 @@ in
         steampipe
         tailspin
         terraform-ls
+        testssl
         tflint
         trivy
       ];
