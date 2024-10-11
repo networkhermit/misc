@@ -863,7 +863,7 @@ openbsd)
         fish-- \
         zsh{,-syntax-highlighting}-- \
         vim--no_x11 \
-        emacs--no_x11%emacs \
+        emacs--no_x11 \
         shellcheck--
 
     # UTIL
@@ -893,11 +893,11 @@ openbsd)
         go-- \
         gopls-- \
         go-tools-- \
-        python3-- \
+        python--%3 \
         py3-{black,pip,mypy}-- \
         rust{,-rustfmt,-clippy,-analyzer,-src}-- \
         cargo-audit-- \
-        sccache
+        sccache--
 
     # GAME
     pkg_add \
@@ -908,12 +908,12 @@ openbsd)
     # DevOps
     pkg_add \
         ansible{,-lint}-- \
-        py3-argcomplete \
+        py3-argcomplete-- \
         git-- \
         wireguard-tools--
 
     pkg_info -L \
-        tailscale \
+        tailscale-- \
         | awk -F '[/ ]' '/etc\/rc.d\/.+$/ { printf "%-24s%s\n", "tailscale", $NF }'
 
     pkg_info -E /usr/local/bin/bash

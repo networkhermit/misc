@@ -186,7 +186,7 @@ openbsd)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'install[0-9]*.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
-    EXTRA_ARGUMENT+=(--os-variant openbsd7.5)
+    EXTRA_ARGUMENT+=(--os-variant openbsd7.6)
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"
