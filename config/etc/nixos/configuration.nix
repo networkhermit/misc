@@ -281,7 +281,6 @@ in {
     kubie
     nerdctl
     nickel
-    open-policy-agent
     opentofu
     rage
     sops

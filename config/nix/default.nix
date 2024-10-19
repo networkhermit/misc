@@ -115,7 +115,6 @@ in
           hubble
           kubebuilder
           kubescape
-          open-policy-agent
           terraform-ls
           tflint
         ];
@@ -197,7 +196,6 @@ in
           kubie
           nerdctl
           nickel
-          open-policy-agent
           opentofu
           rage
           sops
@@ -359,7 +357,6 @@ in
       ];
       devops = [
         #awscli2
-        #mitmproxy
         _1password
         actionlint
         gh
@@ -369,6 +366,7 @@ in
         kubectl
         kubernetes-helm
         kubie
+        mitmproxy
         nmap
         opentofu
         python312Packages.cfn-lint
