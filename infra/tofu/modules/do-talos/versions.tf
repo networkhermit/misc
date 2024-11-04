@@ -2,7 +2,7 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = ">= 2.42"
+      version = ">= 2.43"
     }
     tls = {
       source  = "hashicorp/tls"

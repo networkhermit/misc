@@ -86,8 +86,7 @@ in
           #zola
         ];
         dev = [
-          corepack_20
-          nodejs_20
+          fnm
         ];
         devops = [
           #age
@@ -102,6 +101,7 @@ in
           #kubie
           #nerdctl
           #nickel
+          #open-policy-agent
           #opentofu
           #rage (rage-encryption)
           #sops
@@ -110,7 +110,7 @@ in
           #tailspin
           #talosctl
           #trivy
-          _1password
+          _1password-cli
           conftest
           hubble
           kubebuilder
@@ -129,15 +129,15 @@ in
       with pkgs; let
         base = [
           #neovim
+          #uutils-coreutils
         ];
         blog = [
         ];
         devops = [
           #age
           #hyperfine
-          #kubectl (kubernetes-client)
+          #kubectl (kubernetes1.31-client)
           #kubernetes-helm (helm)
-          #open-policy-agent
           #opentofu
           #trivy
         ];
@@ -184,7 +184,7 @@ in
           #tailspin
           #tetragon
           #trivy
-          _1password
+          _1password-cli
           conftest
           cue
           fluxcd
@@ -248,7 +248,7 @@ in
           #zola
         ];
         devops = [
-          #_1password (1password-client2)
+          #_1password-cli (1password-client2)
           #age
           #hyperfine
           #k9s
@@ -355,9 +355,12 @@ in
         zsh-autosuggestions
         zsh-syntax-highlighting
       ];
+      dev = [
+        fnm
+      ];
       devops = [
         #awscli2
-        _1password
+        _1password-cli
         actionlint
         gh
         hyperfine
@@ -385,5 +388,5 @@ in
         nix-tree
       ];
     in
-      base ++ devops ++ nix
+      base ++ dev ++ devops ++ nix
   else abort "✗ unknown os: ‘${builtins.currentSystem}’"

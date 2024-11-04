@@ -100,9 +100,9 @@ arch | archarm | artix)
     ;;
 fedora)
     echo ------ [ package ] ------
-    dnf --disableexcludes all --quiet list --extras
-    dnf --disableexcludes all --quiet list --obsoletes
-    dnf --disableexcludes all --quiet repoquery --duplicates
+    dnf --setopt 'disable_excludes=*' --quiet list --extras
+    dnf --setopt 'disable_excludes=*' --quiet list --obsoletes
+    dnf --setopt 'disable_excludes=*' --quiet repoquery --duplicates
     echo ------ [ configuration ] ------
     find /etc -type f -iregex '.*/.+\.\(old\|rpm\(new\|save\)\)' -print0 | sort --zero-terminated | tr '\0' '\n'
     ;;

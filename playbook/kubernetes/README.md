@@ -16,10 +16,10 @@ REGISTRY_USERNAME=
 REGISTRY_PASSWORD=
 IMAGE_REPOSITORY=${REGISTRY_HOST}/k8s
 
-for i in $(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)") registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.10.1 registry.k8s.io/metrics-server/metrics-server:v0.6.4; do
+for i in $(kubeadm config images list --kubernetes-version "$(kubeadm version --output short)") registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.13.0 registry.k8s.io/metrics-server/metrics-server:v0.7.2; do
     image=$(cut --delimiter / --fields 2- <<< "${i}" | tr / _)
     #image=$(cut --delimiter / --fields 2- <<< "${i}")
-    skopeo copy --all --preserve-digests "docker://${i}" "docker://${IMAGE_REPOSITORY}/${image}"
+    skopeo copy --all --preserve-digests --retry-times 5 "docker://${i}" "docker://${IMAGE_REPOSITORY}/${image}"
 done
 
 sudo docker run --rm -it --entrypoint /bin/bash quay.io/skopeo/stable:latest

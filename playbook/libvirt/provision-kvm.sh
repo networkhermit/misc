@@ -149,9 +149,9 @@ artix)
     EXTRA_ARGUMENT+=(--os-variant archlinux)
     ;;
 fedora)
-    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/40/Server/x86_64/os)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/41/Server/x86_64/os)
     EXTRA_ARGUMENT+=("${KERNEL_ARGUMENT[@]}")
-    EXTRA_ARGUMENT+=(--os-variant fedora40)
+    EXTRA_ARGUMENT+=(--os-variant fedora41)
     ;;
 gentoo)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'install-amd64-minimal-*.iso' | sort --version-sort | tail --lines 1)
