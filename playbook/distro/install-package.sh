@@ -162,7 +162,7 @@ esac
 ##################
 
 case ${DISTRO} in
-alpine)
+alpine | postmarketos)
 
     # SHELL
     apk add --interactive \

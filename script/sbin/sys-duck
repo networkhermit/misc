@@ -85,7 +85,7 @@ Linux | FreeBSD)
 esac
 
 case ${DISTRO} in
-alpine)
+alpine | postmarketos)
     echo ------ [ package ] ------
     apk list --orphaned
     echo ------ [ configuration ] ------

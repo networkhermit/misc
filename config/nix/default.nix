@@ -43,7 +43,7 @@ in
   then let
     distro = osReleaseID {};
   in
-    if distro == "alpine"
+    if builtins.elem distro ["alpine" "postmarketos"]
     then
       with pkgs; let
         base = [

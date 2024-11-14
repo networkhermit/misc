@@ -96,7 +96,7 @@ OpenBSD)
 esac
 
 case ${DISTRO} in
-alpine)
+alpine | postmarketos)
     apk update
     apk list --upgradable
     apk upgrade --interactive

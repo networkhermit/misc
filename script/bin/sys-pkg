@@ -81,7 +81,7 @@ Linux | FreeBSD)
 esac
 
 case ${DISTRO} in
-alpine)
+alpine | postmarketos)
     apk info --installed --size '*' \
         | awk 'NR % 3 == 1 { print $1; next }; NR % 3 == 2 { printf "%s%s\n", $1, $2 }' \
         | paste - - \
