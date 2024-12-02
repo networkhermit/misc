@@ -1,0 +1,2 @@
+auth    [default=ignore success=1] pam_succeed_if.so quiet user ingroup sysadmin:wheel
+account [default=ignore success=1] pam_succeed_if.so quiet user ingroup sysadmin:wheel
