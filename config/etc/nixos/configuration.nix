@@ -68,10 +68,11 @@ in {
   #   isNormalUser = true;
   #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   #   packages = with pkgs; [
-  #     firefox
   #     tree
   #   ];
   # };
+
+  # programs.firefox.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -121,7 +122,7 @@ in {
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 
   #boot.initrd.checkJournalingFS = false;
   #boot.kernelPackages = pkgs.linuxPackages_latest;

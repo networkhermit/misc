@@ -5,7 +5,6 @@ output "doppler_service_token" {
       doppler_service_token.harbor_dex_secret,
       doppler_service_token.local_k3s_grafana_secret,
       doppler_service_token.harbor_harbor_secret,
-      doppler_service_token.harbor_minio_secret,
     ) : o.config => o.key
   }
 }

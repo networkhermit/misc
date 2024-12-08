@@ -38,10 +38,6 @@ variable "harbor_secret" {
         REGISTRY_STORAGE_S3_SECRETKEY = string
         SECRET_KEY                    = string
       })
-      minio = object({
-        ROOT_PASSWORD = string
-        ROOT_USER     = string
-      })
     })
   )
 }

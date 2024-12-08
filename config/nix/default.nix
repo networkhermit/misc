@@ -47,6 +47,7 @@ in
     then
       with pkgs; let
         base = [
+          #lua-language-server
           #neovim
           #stylua
           #uutils-coreutils
@@ -61,12 +62,13 @@ in
           #k9s
           #kubectl
           #kubernetes-helm (helm)
+          #kubie
           #nerdctl
           #nickel
           #opentofu
+          #rage (rage-encryption)
           #sops
           #tailscale
-          #tflint
         ];
       in
         base ++ blog ++ devops

@@ -168,7 +168,7 @@ nixos)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'nixos-minimal-*.*.*.*-x86_64-linux.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
-    EXTRA_ARGUMENT+=(--os-variant nixos-24.05)
+    EXTRA_ARGUMENT+=(--os-variant nixos-24.11)
     ;;
 void)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'void-live-x86_64-*-base.iso' | sort --version-sort | tail --lines 1)
@@ -180,7 +180,7 @@ freebsd)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'FreeBSD-*.*-RELEASE-amd64-disc1.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
-    EXTRA_ARGUMENT+=(--os-variant freebsd14.1)
+    EXTRA_ARGUMENT+=(--os-variant freebsd14.2)
     ;;
 openbsd)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'install[0-9]*.iso' | sort --version-sort | tail --lines 1)
