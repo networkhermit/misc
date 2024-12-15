@@ -95,6 +95,7 @@ esac
 #       man-pages
 #       info
 #       vim
+#       neovim
 #       emacs
 #       \shellcheck
 ##################
@@ -107,10 +108,13 @@ esac
 #       fd
 #       fzf
 #       hexyl
+#       hyperfine
 #       jq
 #       moreutils
 #       ripgrep
+#       tailspin
 #       tree
+#       uutils-coreutils
 #       yq-go
 ##################
 
@@ -130,6 +134,7 @@ esac
 #       curl
 #       ldnsutils
 #       openssh
+#       pwru
 #       rsync
 ##################
 
@@ -150,7 +155,6 @@ esac
 
 ##################
 # DevOps
-#       ansible
 #       bcc
 #       bpftool
 #       bpftrace
@@ -158,6 +162,7 @@ esac
 #       docker-compose
 #       git
 #       perf
+#       tailscale
 #       wireguard-tools
 ##################
 
@@ -172,6 +177,7 @@ alpine | postmarketos)
         man{doc,doc-apropos,-pages} \
         texinfo \
         vim \
+        neovim \
         emacs-nox \
         shellcheck
 
@@ -183,10 +189,12 @@ alpine | postmarketos)
         fd \
         fzf \
         hexyl \
+        hyperfine \
         jq \
         moreutils \
         ripgrep \
         tree \
+        uutils-coreutils \
         yq-go
 
     # SYSADMIN
@@ -209,22 +217,10 @@ alpine | postmarketos)
     # PLT
     apk add --interactive \
         go \
-        gopls \
-        staticcheck \
-        golangci-lint \
-        delve \
         python3 \
-        black \
         py3-pip \
-        py3-mypy \
-        ruff \
-        rust{,-analyzer} \
-        cargo \
-        rustfmt \
-        rust-clippy \
-        cargo-{audit,outdated} \
-        mold \
-        sccache
+        rust \
+        cargo
 
     # GAME
     apk add --interactive \
@@ -234,8 +230,6 @@ alpine | postmarketos)
 
     # DevOps
     apk add --interactive \
-        ansible{,-lint} \
-        py3-argcomplete \
         bcc-tools \
         py3-bcc \
         bpftool \
@@ -243,6 +237,7 @@ alpine | postmarketos)
         docker{,-compose} \
         git{,-prompt} \
         perf \
+        tailscale \
         wireguard-tools
 
     apk info --contents \
@@ -252,7 +247,7 @@ alpine | postmarketos)
     apk info --who-owns /etc/bash/bashrc
 
     ;;&
-arch | archarm)
+arch)
 
     # SHELL
     pacman --sync --needed \
@@ -262,6 +257,7 @@ arch | archarm)
         man-{db,pages} \
         texinfo \
         vim \
+        neovim \
         emacs-nox \
         shellcheck
 
@@ -273,10 +269,13 @@ arch | archarm)
         fd \
         fzf \
         hexyl \
+        hyperfine \
         jq \
         moreutils \
         ripgrep \
+        tailspin \
         tree \
+        uutils-coreutils \
         go-yq
 
     # SYSADMIN
@@ -294,6 +293,7 @@ arch | archarm)
         curl \
         ldns \
         openssh \
+        pwru \
         rsync
 
     # PLT
@@ -329,6 +329,87 @@ arch | archarm)
         docker{,-buildx,-compose} \
         git \
         perf \
+        tailscale \
+        wireguard-tools
+
+    pacman --files --list \
+        openssh \
+        | awk --field-separator '[/ ]' '/usr\/lib\/systemd\/.+\/.+\..+[^/]$/ { printf "%-24s%s\n", $1, $NF }'
+
+    pacman --query --owns /etc/bash.bashrc
+
+    ;;&
+archarm)
+
+    # SHELL
+    pacman --sync --needed \
+        bash{,-completion} \
+        fish \
+        zsh{,-autosuggestions,-syntax-highlighting} \
+        man-{db,pages} \
+        texinfo \
+        vim \
+        neovim \
+        emacs-nox
+
+    # UTIL
+    pacman --sync --needed \
+        b3sum \
+        bat \
+        eza \
+        fd \
+        fzf \
+        hexyl \
+        hyperfine \
+        jq \
+        moreutils \
+        ripgrep \
+        tailspin \
+        tree \
+        uutils-coreutils \
+        go-yq
+
+    # SYSADMIN
+    pacman --sync --needed \
+        cronie \
+        htop \
+        iotop-c \
+        lsof \
+        sysstat \
+        tmux
+
+    # NETWORK OPERATOR
+    pacman --sync --needed \
+        chrony \
+        curl \
+        ldns \
+        openssh \
+        pwru \
+        rsync
+
+    # PLT
+    pacman --sync --needed \
+        go \
+        python{,-pip} \
+        rust
+
+    # GAME
+    pacman --sync --needed \
+        cmatrix \
+        cowsay \
+        fortune-mod \
+        sl
+
+    # DevOps
+    pacman --sync --needed \
+        bcc-tools \
+        python-bcc \
+        bpf \
+        bpftrace \
+        docker{,-buildx,-compose} \
+        git \
+        perf \
+        tailscale \
         wireguard-tools
 
     pacman --files --list \
@@ -348,6 +429,7 @@ artix)
         man-{db,pages} \
         texinfo \
         vim \
+        neovim \
         emacs-nox \
         shellcheck-bin
 
@@ -364,7 +446,10 @@ artix)
         bat \
         eza \
         fd \
-        hexyl
+        hexyl \
+        hyperfine \
+        tailspin \
+        uutils-coreutils
 
     # SYSADMIN
     pacman --sync --needed \
@@ -372,9 +457,9 @@ artix)
         htop \
         lsof \
         tmux \
+        sysstat \
         \
-        iotop-c \
-        sysstat
+        iotop-c
 
     # NETWORK OPERATOR
     pacman --sync --needed \
@@ -382,41 +467,31 @@ artix)
         curl \
         ldns \
         openssh-s6 \
-        rsync-s6
+        rsync-s6 \
+        \
+        pwru
 
     # PLT
     pacman --sync --needed \
         go \
-        go-tools \
-        python{,-black,-pip} \
-        mypy \
-        ruff \
+        python{,-pip} \
         rust \
-        mold \
-        \
-        gopls \
-        staticcheck \
-        delve \
-        rust-analyzer \
-        cargo-{audit,outdated} \
-        sccache
 
     # GAME
     pacman --sync --needed \
-        \
         cmatrix \
+        \
         cowsay \
         fortune-mod \
         sl
 
     # DevOps
     pacman --sync --needed \
-        ansible{,-lint} \
-        python-argcomplete \
         bpf \
         docker{,-buildx,-compose} \
         git \
         perf \
+        tailscale \
         wireguard-s6 \
         \
         bcc-tools \
@@ -440,6 +515,7 @@ fedora)
         man-{db,pages} \
         info \
         vim-enhanced \
+        neovim \
         emacs-nw \
         ShellCheck
 
@@ -451,10 +527,12 @@ fedora)
         fd-find \
         fzf \
         hexyl \
+        hyperfine \
         jq \
         moreutils \
         ripgrep \
         tree \
+        uutils-coreutils \
         yq
 
     # SYSADMIN
@@ -477,18 +555,9 @@ fedora)
     # PLT
     dnf install --setopt metadata_expire=never \
         golang \
-        golang-x-tools-{gopls,goimports} \
-        golang-honnef-tools \
-        delve \
         python3{,-pip} \
-        black \
-        python3-mypy \
-        ruff \
-        rust{,-analyzer} \
-        cargo \
-        rustfmt \
-        clippy \
-        mold
+        rust \
+        cargo
 
     # GAME
     dnf install --setopt metadata_expire=never \
@@ -499,9 +568,6 @@ fedora)
 
     # DevOps
     dnf install --setopt metadata_expire=never \
-        ansible \
-        python3-ansible-lint \
-        python3-argcomplete \
         bcc-tools \
         python3-bcc \
         bpftool \
@@ -533,6 +599,7 @@ gentoo)
         sys-apps/man-{db,pages} \
         sys-apps/texinfo \
         app-editors/vim \
+        app-editors/neovim \
         app-editors/emacs \
         dev-util/shellcheck-bin
 
@@ -542,6 +609,7 @@ gentoo)
         sys-apps/eza \
         sys-apps/fd \
         app-shells/fzf \
+        app-benchmarks/hyperfine \
         app-misc/jq \
         sys-apps/moreutils \
         sys-apps/ripgrep \
@@ -568,13 +636,9 @@ gentoo)
     # PLT
     emerge --ask --getbinpkg --noreplace \
         dev-lang/go \
-        dev-go/gopls \
         dev-lang/python \
         dev-python/pip \
-        dev-python/mypy \
-        dev-python/black \
-        dev-lang/rust \
-        sys-devel/mold
+        dev-lang/rust
 
     # GAME
     emerge --ask --getbinpkg --noreplace \
@@ -585,15 +649,13 @@ gentoo)
 
     # DevOps
     emerge --ask --getbinpkg --noreplace \
-        app-admin/ansible \
-        app-admin/ansible-lint \
-        dev-python/argcomplete \
         dev-util/bcc \
         dev-util/bpftool \
         dev-debug/bpftrace \
         app-containers/docker{,-compose} \
         dev-vcs/git \
         dev-util/perf \
+        net-vpn/tailscale \
         net-vpn/wireguard-tools
 
     qlist \
@@ -613,6 +675,7 @@ kali)
         manpages{,-dev} \
         info \
         vim \
+        neovim \
         emacs-nox \
         shellcheck
 
@@ -624,10 +687,13 @@ kali)
         fd-find \
         fzf \
         hexyl \
+        hyperfine \
         jq \
         moreutils \
         ripgrep \
-        tree
+        tailspin \
+        tree \
+        rust-coreutils
 
     ln --force --no-dereference --relative --symbolic --verbose "$(command -v batcat)" /usr/local/bin/bat
 
@@ -651,19 +717,9 @@ kali)
     # PLT
     apt install \
         golang \
-        gopls \
-        golang-golang-x-tools \
-        delve \
         python3{,-pip} \
-        black \
-        mypy \
-        rust{c,-src} \
-        cargo \
-        rustfmt \
-        rust-clippy \
-        cargo-outdated \
-        mold \
-        sccache
+        rustc \
+        cargo
 
     # GAME
     apt install \
@@ -674,8 +730,6 @@ kali)
 
     # DevOps
     apt install \
-        ansible{,-lint} \
-        python3-argcomplete \
         bpfcc-tools \
         python3-bpfcc \
         bpftool \
@@ -703,6 +757,7 @@ void)
         man-pages \
         texinfo \
         vim \
+        neovim \
         emacs \
         shellcheck
 
@@ -714,6 +769,7 @@ void)
         fd \
         fzf \
         hexyl \
+        hyperfine \
         jq \
         moreutils \
         ripgrep \
@@ -735,21 +791,15 @@ void)
         curl \
         ldns \
         openssh \
+        pwru \
         rsync
 
     # PLT
     xbps-install \
         go \
-        gopls \
-        golangci-lint \
-        delve \
-        python3{,-pip,-mypy} \
-        black \
-        ruff \
-        rust{,-analyzer,-src} \
-        rust-cargo-audit \
-        mold \
-        rust-sccache
+        python3{,-pip} \
+        rust \
+        cargo
 
     # GAME
     xbps-install \
@@ -760,9 +810,6 @@ void)
 
     # DevOps
     xbps-install \
-        ansible \
-        python3-ansible-lint \
-        python3-argcomplete \
         bcc-tools \
         python3-bcc \
         bpftool \
@@ -770,6 +817,7 @@ void)
         docker{,-buildx,-compose} \
         git \
         perf \
+        tailscale \
         wireguard-tools
 
     xbps-query --files \
@@ -789,6 +837,7 @@ freebsd)
         zsh{,-autosuggestions,-syntax-highlighting} \
         texinfo \
         vim \
+        neovim \
         emacs-nox \
         hs-ShellCheck
 
@@ -800,10 +849,13 @@ freebsd)
         fd-find \
         fzf \
         hexyl \
+        hyperfine \
         jq \
         moreutils \
         ripgrep \
+        tailspin \
         tree \
+        rust-coreutils \
         go-yq
 
     # SYSADMIN
@@ -822,17 +874,9 @@ freebsd)
     # PLT
     pkg install --no-repo-update \
         go \
-        gopls \
-        go-tools \
-        golangci-lint \
-        delve \
         python3 \
-        py311-{black,pip,mypy} \
-        ruff \
-        rust{,-analyzer} \
-        cargo-audit \
-        mold \
-        sccache
+        py311-pip \
+        rust
 
     # GAME
     pkg install --no-repo-update \
@@ -843,9 +887,8 @@ freebsd)
 
     # DevOps
     pkg install --no-repo-update \
-        py311-ansible{,-lint} \
-        py311-argcomplete \
         git \
+        tailscale \
         wireguard-tools
 
     pkg query '%n %Fp' \
@@ -863,6 +906,7 @@ openbsd)
         fish-- \
         zsh{,-syntax-highlighting}-- \
         vim--no_x11 \
+        neovim-- \
         emacs--no_x11 \
         shellcheck--
 
@@ -873,6 +917,7 @@ openbsd)
         fd-- \
         fzf-- \
         hexyl-- \
+        hyperfine-- \
         jq-- \
         moreutils-- \
         ripgrep-- \
@@ -891,13 +936,9 @@ openbsd)
     # PLT
     pkg_add \
         go-- \
-        gopls-- \
-        go-tools-- \
         python--%3 \
-        py3-{black,pip,mypy}-- \
-        rust{,-rustfmt,-clippy,-analyzer,-src}-- \
-        cargo-audit-- \
-        sccache--
+        py3-pip-- \
+        rust--
 
     # GAME
     pkg_add \
@@ -907,9 +948,8 @@ openbsd)
 
     # DevOps
     pkg_add \
-        ansible{,-lint}-- \
-        py3-argcomplete-- \
         git-- \
+        tailscale-- \
         wireguard-tools--
 
     pkg_info -L \

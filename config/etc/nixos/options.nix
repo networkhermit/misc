@@ -1,4 +1,5 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   options.local = {
     ansibleUser = lib.mkOption {
       type = lib.types.str;
@@ -15,7 +16,7 @@
     };
 
     wireguard = lib.mkOption {
-      default = {};
+      default = { };
       type = lib.types.attrs;
     };
   };

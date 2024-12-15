@@ -1020,6 +1020,13 @@ sudo install -D --mode 644 --target-directory /etc config/etc/boot.conf
 
 # install command-not-found
 
+# install base utilities
+sudo pkg_add \
+    colordiff-- \
+    colorls-- \
+    base64-- \
+    gnuwatch--
+
 # update system locale
 sudo vim /etc/profile
 

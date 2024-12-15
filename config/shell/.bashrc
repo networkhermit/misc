@@ -14,7 +14,7 @@ esac
 if [[ -z "${TMUX}" ]] && [[ -z "${VIM}" ]]; then
     if [[ "${TERM}" = xterm-256color ]] || [[ "${TERM}" = tmux-256color ]]; then
         case ${TERM_PROGRAM} in
-        Lens | vscode | zed)
+        vscode | zed)
             ;;
         *)
             exec tmux new-session -A -D -s main

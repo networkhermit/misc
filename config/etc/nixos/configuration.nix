@@ -6,10 +6,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   hostname = "nixos";
   user = "vac";
-in {
+in
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -127,7 +129,7 @@ in {
   #boot.initrd.checkJournalingFS = false;
   #boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.consoleLogLevel = 7;
-  boot.kernelParams = ["console=ttyS0,115200n8"];
+  boot.kernelParams = [ "console=ttyS0,115200n8" ];
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.grub.device = "nodev";
   boot.loader.grub.efiSupport = true;
@@ -143,10 +145,7 @@ in {
     "net.ipv4.tcp_fastopen" = 3;
   };
 
-  boot.kernelModules =
-    if config.local.useVirtualPHC
-    then ["ptp_kvm"]
-    else [];
+  boot.kernelModules = if config.local.useVirtualPHC then [ "ptp_kvm" ] else [ ];
 
   console.font = "eurlatgr";
 
@@ -155,31 +154,23 @@ in {
       source = ./git/config/etc/gai.conf;
     };
     "resolv.conf" =
-      if config.networking.nameservers != []
-      then {
-        text = ''
-          options attempts:3 rotate timeout:1 use-vc
+      if config.networking.nameservers != [ ] then
+        {
+          text = ''
+            options attempts:3 rotate timeout:1 use-vc
 
-          ${builtins.concatStringsSep "\n" (map (x: "nameserver ${x}") config.networking.nameservers)}
-          ${
-            if config.networking.search != []
-            then "search " + toString config.networking.search
-            else ""
-          }
-        '';
-      }
-      else {
-        source =
-          ./git/config/etc/resolv.conf
-          + (
-            if config.local.direct
-            then ""
-            else ".alt"
-          );
-      };
+            ${builtins.concatStringsSep "\n" (map (x: "nameserver ${x}") config.networking.nameservers)}
+            ${if config.networking.search != [ ] then "search " + toString config.networking.search else ""}
+          '';
+        }
+      else
+        {
+          source = ./git/config/etc/resolv.conf + (if config.local.direct then "" else ".alt");
+        };
   };
 
   environment.systemPackages = with pkgs; [
+    # SHELL
     bashInteractive
     bash-completion
     fish
@@ -190,21 +181,27 @@ in {
     man-pages
     texinfoInteractive
     vim
+    neovim
     emacs-nox
     shellcheck
 
+    # UTIL
     b3sum
     bat
     eza
     fd
     fzf
     hexyl
+    hyperfine
     jq
     moreutils
     ripgrep
+    tailspin
     tree
+    uutils-coreutils
     yq-go
 
+    # SYSADMIN
     cron
     htop
     iotop-c
@@ -212,41 +209,28 @@ in {
     sysstat
     tmux
 
+    # NETWORK OPERATOR
     chrony
     curl
     ldns
     openssh
+    pwru
     rsync
 
+    # PLT
     go
-    gopls
-    go-tools
-    delve
-    golangci-lint
     python3
-    black
-    python311Packages.pip
-    mypy
-    ruff
+    python312Packages.pip
     rustc
     cargo
-    rustfmt
-    clippy
-    rust-analyzer
-    cargo-audit
-    cargo-outdated
-    mold
-    sccache
 
+    # GAME
     cmatrix
     cowsay
     fortune
     sl
 
-    ansible
-    ansible-lint
-    yamllint
-    python311Packages.argcomplete
+    # DevOps
     bcc
     bpftools
     bpftrace
@@ -254,49 +238,19 @@ in {
     docker-compose
     git
     linuxKernel.packages.linux_libre.perf
+    tailscale
     wireguard-tools
 
-    biome
+    # util extra
     file
-    lua-language-server
-    neovim
-    stylua
-    uutils-coreutils
 
-    zola
-
-    #_1password
-    age
-    cilium-cli
-    conftest
-    cue
-    fluxcd
-    hubble
-    hyperfine
-    istioctl
-    k9s
-    kubebuilder
-    kubectl
-    kubernetes-helm
-    kubescape
-    kubie
-    nerdctl
-    nickel
-    opentofu
-    rage
-    sops
-    sqlfluff
-    tailscale
-    tailspin
-    talosctl
-    terraform-ls
-    tflint
-    trivy
-
-    alejandra
-
+    # mdns
     avahi
     nssmdns
+
+    # nix
+    nix-tree
+    nixfmt-rfc-style
   ];
 
   environment.wordlist.enable = true;
@@ -307,46 +261,50 @@ in {
 
   networking.hostName = "nixos";
 
-  networking.timeServers =
-    ["time.cloudflare.com"]
-    ++ (
-      if config.local.direct
-      then ["time.google.com"]
-      else ["time.apple.com"]
-    );
+  networking.timeServers = [
+    "time.cloudflare.com"
+  ] ++ (if config.local.direct then [ "time.google.com" ] else [ "time.apple.com" ]);
 
-  networking.wg-quick.interfaces = let
-    wg = config.local.wireguard;
-  in {
-    wg0 = {
-      address = wg.address;
-      peers = map (p:
-        {
-          persistentKeepalive = 15;
-        }
-        // p)
-      wg.peers;
-      privateKeyFile = wg.privateKeyFile or "/etc/wireguard/private.key";
+  networking.wg-quick.interfaces =
+    let
+      wg = config.local.wireguard;
+    in
+    {
+      wg0 = {
+        address = wg.address;
+        peers = map (
+          p:
+          {
+            persistentKeepalive = 15;
+          }
+          // p
+        ) wg.peers;
+        privateKeyFile = wg.privateKeyFile or "/etc/wireguard/private.key";
+      };
     };
-  };
 
   nix.settings = {
     auto-optimise-store = true;
     connect-timeout = 10;
-    experimental-features = ["nix-command" "flakes"];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     substituters =
-      if config.local.direct
-      then []
-      else [
-        "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10"
-        "https://mirrors.ustc.edu.cn/nix-channels/store?priority=15"
-        "https://mirror.sjtu.edu.cn/nix-channels/store?priority=20"
-      ];
+      if config.local.direct then
+        [ ]
+      else
+        [
+          "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10"
+          "https://mirrors.ustc.edu.cn/nix-channels/store?priority=15"
+          "https://mirror.sjtu.edu.cn/nix-channels/store?priority=20"
+        ];
     keep-outputs = true;
     stalled-download-timeout = 30;
   };
 
-  nixpkgs.config.allowUnfreePredicate = pkg:
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
     builtins.elem (lib.getName pkg) [
       "1password-cli"
     ];
@@ -371,12 +329,12 @@ in {
         commands = [
           {
             command = "ALL";
-            options = ["NOPASSWD"];
+            options = [ "NOPASSWD" ];
           }
         ];
         host = "ALL";
         runAs = "ALL:ALL";
-        users = [config.local.ansibleUser];
+        users = [ config.local.ansibleUser ];
       }
     ];
   };
@@ -396,25 +354,27 @@ in {
     };
   };
 
-  services.chrony = let
-    baseConfig = builtins.readFile ./git/config/etc/chrony.d/10-local.conf;
-  in
+  services.chrony =
+    let
+      baseConfig = builtins.readFile ./git/config/etc/chrony.d/10-local.conf;
+    in
     {
       enable = true;
       enableRTCTrimming = false;
       extraConfig = baseConfig;
     }
     // (
-      if config.local.useVirtualPHC
-      then {
-        servers = [];
-        extraConfig = ''
-          ${baseConfig}
+      if config.local.useVirtualPHC then
+        {
+          servers = [ ];
+          extraConfig = ''
+            ${baseConfig}
 
-          ${builtins.readFile ./git/config/etc/chrony.d/10-source-phc.conf}
-        '';
-      }
-      else {}
+            ${builtins.readFile ./git/config/etc/chrony.d/10-source-phc.conf}
+          '';
+        }
+      else
+        { }
     );
 
   services.journald.extraConfig = ''
@@ -438,7 +398,7 @@ in {
       }
     ];
     settings = {
-      AllowGroups = ["sysadmin"];
+      AllowGroups = [ "sysadmin" ];
       ClientAliveInterval = 20;
       LogLevel = "VERBOSE";
       LoginGraceTime = "30s";
@@ -467,10 +427,10 @@ in {
       ];
     };
     enable = true;
-    ports = [321];
+    ports = [ 321 ];
   };
 
-  system.nssDatabases.hosts = lib.mkAfter ["[!UNAVAIL=return]"];
+  system.nssDatabases.hosts = lib.mkAfter [ "[!UNAVAIL=return]" ];
 
   systemd.oomd.enable = false;
 
@@ -488,37 +448,47 @@ in {
     };
   };
 
-  users.motd = with builtins; replaceStrings ["OS_RELEASE_NAME"] ["NixOS"] (readFile ./git/config/etc/motd);
+  users.motd =
+    with builtins;
+    replaceStrings [ "OS_RELEASE_NAME" ] [ "NixOS" ] (readFile ./git/config/etc/motd);
 
-  users.users = let
-    ansibleUser = config.local.ansibleUser;
-  in {
-    ${user} = {
-      autoSubUidGidRange = true;
-      createHome = true;
-      extraGroups = ["wheel" "sysadmin"];
-      group = "${user}";
-      home = "/home/${user}";
-      isNormalUser = true;
-      openssh.authorizedKeys.keyFiles = [
-        ./git/config/vault/authorized_keys.d/${hostname}/${user}
-      ];
-      shell = pkgs.zsh;
-      uid = 1000;
+  users.users =
+    let
+      ansibleUser = config.local.ansibleUser;
+    in
+    {
+      ${user} = {
+        autoSubUidGidRange = true;
+        createHome = true;
+        extraGroups = [
+          "wheel"
+          "sysadmin"
+        ];
+        group = "${user}";
+        home = "/home/${user}";
+        isNormalUser = true;
+        openssh.authorizedKeys.keyFiles = [
+          ./git/config/vault/authorized_keys.d/${hostname}/${user}
+        ];
+        shell = pkgs.zsh;
+        uid = 1000;
+      };
+      ${ansibleUser} = {
+        createHome = true;
+        extraGroups = [
+          "wheel"
+          "sysadmin"
+        ];
+        group = ansibleUser;
+        home = "/home/${ansibleUser}";
+        isSystemUser = true;
+        openssh.authorizedKeys.keyFiles = [
+          ./git/config/vault/authorized_keys.d/${hostname}/${ansibleUser}
+        ];
+        shell = pkgs.bashInteractive;
+        uid = 8128;
+      };
     };
-    ${ansibleUser} = {
-      createHome = true;
-      extraGroups = ["wheel" "sysadmin"];
-      group = ansibleUser;
-      home = "/home/${ansibleUser}";
-      isSystemUser = true;
-      openssh.authorizedKeys.keyFiles = [
-        ./git/config/vault/authorized_keys.d/${hostname}/${ansibleUser}
-      ];
-      shell = pkgs.bashInteractive;
-      uid = 8128;
-    };
-  };
 
   zramSwap = {
     enable = true;

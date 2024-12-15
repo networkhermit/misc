@@ -10,7 +10,7 @@ end
 if [ -z "$TMUX" ] && [ -z "$VIM" ]
     if [ "$TERM" = xterm-256color ] || [ "$TERM" = tmux-256color ]
         switch {$TERM_PROGRAM}
-            case Lens vscode zed
+            case vscode zed
             case '*'
                 exec tmux new-session -A -D -s main
         end
