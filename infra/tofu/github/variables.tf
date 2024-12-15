@@ -33,11 +33,6 @@ variable "state_encryption_passphrase" {
   type      = string
 }
 
-variable "state_force_write_mark" {
-  default = "magic word"
-  type    = string
-}
-
 variable "team_members" {
   default  = {}
   nullable = false

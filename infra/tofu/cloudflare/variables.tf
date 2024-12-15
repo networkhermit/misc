@@ -35,11 +35,6 @@ variable "state_encryption_passphrase" {
   type      = string
 }
 
-variable "state_force_write_mark" {
-  default = "magic word"
-  type    = string
-}
-
 variable "zone_records" {
   nullable = false
   type = object({
