@@ -81,6 +81,7 @@ then
       ];
       nix = [
         nix-tree
+        nixd
         nixfmt-rfc-style
       ];
     in
@@ -163,9 +164,9 @@ else if builtins.currentSystem == "aarch64-darwin" then
       zsh-syntax-highlighting
     ];
     devops = [
-      #awscli2
       _1password-cli
       actionlint
+      awscli2
       fnm
       mitmproxy
       nmap
@@ -177,6 +178,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
     ];
     nix = [
       nix-tree
+      nixd
       nixfmt-rfc-style
     ];
   in

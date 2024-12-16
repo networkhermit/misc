@@ -1,6 +1,9 @@
 networks:
   default:
-    external: true
+    ipam:
+      config:
+        - gateway: "${CLUSTER_GATEWAY:-172.24.0.1}"
+          subnet: "${CLUSTER_SUBNET:-172.24.0.0/16}"
     name: cluster
 services:
   alertmanager:

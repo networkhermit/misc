@@ -24,6 +24,13 @@
     "JSON": {
       "enable_language_server": true
     },
+    "Nix": {
+      "enable_language_server": true,
+      "language_servers": [
+        "nixd",
+        "!nil"
+      ]
+    },
     "Python": {
       "enable_language_server": true,
       "formatter": {

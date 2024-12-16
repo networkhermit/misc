@@ -18,13 +18,11 @@
 (setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
 (show-paren-mode 1)
-(xterm-mouse-mode 1)
 
 (menu-bar-mode -1)
-(if (display-graphic-p)
-    (progn
-      (scroll-bar-mode -1)
-      (tool-bar-mode -1)))
+(when (display-graphic-p)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1))
 
 (setq default-frame-alist
       `((font . ,(concat "Fira Code-" (or (getenv "FONT_SIZE") "12")))
@@ -32,6 +30,11 @@
 (set-display-table-slot standard-display-table
                         'vertical-border
                         (make-glyph-code ?│))
+
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1)
+  (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
+  (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
 (add-hook 'term-load-hook
           (lambda ()
