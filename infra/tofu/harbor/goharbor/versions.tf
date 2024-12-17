@@ -30,7 +30,7 @@ terraform {
   required_providers {
     harbor = {
       source  = "goharbor/harbor"
-      version = "~> 3.10.16"
+      version = "~> 3.10.17"
     }
   }
   required_version = ">= 1.8"

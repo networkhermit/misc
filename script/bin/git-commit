@@ -92,7 +92,7 @@ if (( $# > 0 )); then
 fi
 
 clean_up () {
-    git gc --aggressive --prune
+    git gc
     if [[ "${PUSH}" = true ]]; then
         if [[ "${ROOT_COMMIT}" = true ]]; then
             git push --force --set-upstream origin "$(git branch --show-current)"
