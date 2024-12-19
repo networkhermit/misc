@@ -12,14 +12,21 @@
   "languages": {
     "Go": {
       "enable_language_server": true,
-      "formatter": {
-        "external": {
-          "arguments": [
-            "-s"
-          ],
-          "command": "gofmt"
+      "formatter": [
+        {
+          "external": {
+            "command": "goimports"
+          }
+        },
+        {
+          "external": {
+            "arguments": [
+              "-s"
+            ],
+            "command": "gofmt"
+          }
         }
-      }
+      ]
     },
     "JSON": {
       "enable_language_server": true
@@ -27,21 +34,37 @@
     "Nix": {
       "enable_language_server": true,
       "language_servers": [
-        "nixd",
-        "!nil"
+        "nixd"
       ]
     },
     "Python": {
       "enable_language_server": true,
-      "formatter": {
-        "external": {
-          "arguments": [
-            "--quiet",
-            "-"
-          ],
-          "command": "black"
+      "formatter": [
+        {
+          "code_actions": {
+            "source.fixAll.ruff": true,
+            "source.organizeImports.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        },
+        {
+          "external": {
+            "arguments": [
+              "--quiet",
+              "-"
+            ],
+            "command": "black"
+          }
         }
-      }
+      ],
+      "language_servers": [
+        "ruff",
+        "pyright"
+      ]
     },
     "Rust": {
       "enable_language_server": true

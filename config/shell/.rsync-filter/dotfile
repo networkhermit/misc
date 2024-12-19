@@ -1,0 +1,52 @@
+# Exclude Rule
+
+## Build
+
+H /git/**/node_modules/***
+R /git/**/node_modules/***
+
+H /git/**/.terraform/***
+R /git/**/.terraform/***
+
+H /git/**/__pycache__/***
+R /git/**/__pycache__/***
+
+H /git/**/target/***
+R /git/**/target/***
+
+## Misc
+
+H /git/blog/pages/***
+R /git/blog/pages/***
+
+H /git/blog/public/***
+R /git/blog/public/***
+
+H /git/wit/assets/***
+R /git/wit/assets/***
+
+## Shell
+
+- /.config/emacs/eln-cache/***
+- /.config/fish/fish_variables
+#- /.local/share/nvim/lazy/nvim-treesitter/parser/*.so
+
+# Include Rule
+
++ /.bashrc
++ /.config/
++ /.config/emacs/***
++ /.config/fish/***
++ /.emacs.d/***
++ /.local/
++ /.local/share/
++ /.local/share/nvim/
++ /.local/share/nvim/lazy/***
++ /.tmux/***
++ /.zshrc
++ /.zshrc.kali
++ /git/***
+
+# Catch All Rule
+
+- /**

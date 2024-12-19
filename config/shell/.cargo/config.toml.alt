@@ -1,6 +1,5 @@
 [build]
 rustc-wrapper = "sccache"
-target-dir = ".cargo/target"
 
 #[http]
 #proxy = "http://127.0.0.1:6666"

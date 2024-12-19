@@ -132,6 +132,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       go-tools
       golangci-lint
       gopls
+      gotools
       hexyl
       htop
       hyperfine
