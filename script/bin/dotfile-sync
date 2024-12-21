@@ -31,6 +31,8 @@ Synopsis:
 Options:
     --dst-host DST_HOST
         destination host (default: ${DST_HOST})
+    --filter-rule-file FILTER_RULE_FILE
+        filter rule file (default: ${FILTER_RULE_FILE})
     --no-dry-run
         no dry run (default: ${NO_DRY_RUN})
     --src-host SRC_HOST
@@ -43,13 +45,18 @@ EOF
 }
 
 DST_HOST=localhost
+FILTER_RULE_FILE=.rsync-filter/dotfile
 NO_DRY_RUN=false
 SRC_HOST=localhost
 
 while (( $# > 0 )); do
     case ${1} in
     --dst-host)
-        DST_HOST=${2?✗ argument parsing failed: missing value for option ‘--dst-host’}
+        DST_HOST=${2?✗ option parsing failed: missing value for option ‘${1}’}
+        shift 2
+        ;;
+    --filter-rule-file)
+        FILTER_RULE_FILE=${2?✗ option parsing failed: missing value for option ‘${1}’}
         shift 2
         ;;
     --no-dry-run)
@@ -57,7 +64,7 @@ while (( $# > 0 )); do
         shift
         ;;
     --src-host)
-        SRC_HOST=${2?✗ argument parsing failed: missing value for option ‘--src-host’}
+        SRC_HOST=${2?✗ option parsing failed: missing value for option ‘${1}’}
         shift 2
         ;;
     -h | --help)
@@ -116,7 +123,7 @@ rsync \
     --archive \
     --compress --compress \
     --delete \
-    --filter '. .rsync-filter/dotfile' \
+    --filter ". ${FILTER_RULE_FILE}" \
     --human-readable \
     --progress \
     --verbose \

@@ -1,0 +1,60 @@
+# SHELL
+bash
+bash-completion
+fish
+zsh
+man
+manpages
+texinfo
+vim
+neovim
+emacs
+shellcheck
+
+# UTIL
+b3sum
+bat
+eza
+fd
+fzf
+hexyl
+hyperfine
+jq
+moreutils
+ripgrep
+tree
+yq
+
+# SYSADMIN
+htop
+lsof
+tmux
+
+# NETWORK OPERATOR
+curl
+ldns
+openssh
+rsync
+
+# PLT
+golang
+python
+python-pip
+rust
+
+# GAME
+cmatrix
+cowsay
+fortune
+sl
+
+# DevOps
+git
+
+# util extra
+file
+
+# misc
+aptitude
+termux-api
+termux-services

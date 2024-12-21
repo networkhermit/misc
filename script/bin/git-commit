@@ -56,7 +56,7 @@ while (( $# > 0 )); do
         shift
         ;;
     -m | --message)
-        MESSAGE=${2?✗ argument parsing failed: missing value for option ‘-m | --message’}
+        MESSAGE=${2?✗ option parsing failed: missing value for option ‘${1}’}
         shift 2
         ;;
     --push)

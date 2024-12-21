@@ -38,7 +38,7 @@
         "workspace::SendKeystrokes",
         "ctrl-w k"
       ],
-      "shift-backspace": "zed::OpenSettings",
+      "ctrl-shift-,": "zed::OpenSettings",
       "shift-k": "workspace::OpenInTerminal",
       "shift-q": [
         "workspace::SendKeystrokes",

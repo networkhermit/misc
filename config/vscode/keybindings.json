@@ -1,6 +1,6 @@
 [
   {
-    "command": "workbench.action.toggleZenMode",
+    "command": "workbench.action.toggleFullScreen",
     "key": "ctrl+backspace"
   },
   {
@@ -12,5 +12,13 @@
     "command": "workbench.view.explorer",
     "key": "ctrl+h",
     "when": "!view.workbench.explorer.fileView.visible"
+  },
+  {
+    "command": "workbench.action.openSettingsJson",
+    "key": "ctrl+shift+,"
+  },
+  {
+    "command": "workbench.action.toggleZenMode",
+    "key": "ctrl+shift+backspace"
   }
 ]

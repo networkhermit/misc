@@ -124,14 +124,6 @@
       ]
     },
     {
-      "before": [
-        "<S-BS>"
-      ],
-      "commands": [
-        "workbench.action.openSettingsJson"
-      ]
-    },
-    {
       "after": [
         "<C-W>",
         "j"

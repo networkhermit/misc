@@ -1,0 +1,64 @@
+{
+  "$help": "https://aka.ms/terminal-documentation",
+  "$schema": "https://aka.ms/terminal-profiles-schema",
+  "actions": [
+    {
+      "command": "toggleFullscreen",
+      "id": "User.toggleFullscreen",
+      "keys": "ctrl+backspace"
+    },
+    {
+      "command": "toggleFocusMode",
+      "id": "User.toggleFocusMode",
+      "keys": "ctrl+shift+backspace"
+    }
+  ],
+  "copyFormatting": false,
+  "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+  "launchMode": "maximizedFocus",
+  "profiles": {
+    "defaults": {
+      "colorScheme": "Modus Vivendi",
+      "cursorShape": "filledBox",
+      "font": {
+        "face": "Cascadia Code",
+        "size": 12
+      },
+      "intenseTextStyle": "all",
+      "opacity": 90
+    },
+    "list": [
+      {
+        "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+        "name": "PowerShell",
+        "source": "Windows.Terminal.PowershellCore"
+      }
+    ]
+  },
+  "schemes": [
+    {
+      "background": "#000000",
+      "black": "#000000",
+      "blue": "#2FAFFF",
+      "brightBlack": "#595959",
+      "brightBlue": "#79A8FF",
+      "brightCyan": "#6AE4B9",
+      "brightGreen": "#70B900",
+      "brightPurple": "#B6A0FF",
+      "brightRed": "#EF8B50",
+      "brightWhite": "#FFFFFF",
+      "brightYellow": "#C0C530",
+      "cursorColor": "#FFFFFF",
+      "cyan": "#00D3D0",
+      "foreground": "#FFFFFF",
+      "green": "#44BC44",
+      "name": "Modus Vivendi",
+      "purple": "#FEACD0",
+      "red": "#FF8059",
+      "selectionBackground": "#FFFFFF",
+      "white": "#BFBFBF",
+      "yellow": "#D0BC00"
+    }
+  ],
+  "theme": "system"
+}
