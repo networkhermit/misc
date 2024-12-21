@@ -73,7 +73,7 @@ clean_up () {
 trap clean_up EXIT
 
 # trust kubernetes package signing key
-curl --fail --location --silent --show-error https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key \
+curl --fail --location --silent --show-error https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key \
     | gpg --dearmor --output /etc/apt/keyrings/kubernetes-archive-keyring.gpg
 
 # add kubernetes repository

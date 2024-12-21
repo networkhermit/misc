@@ -125,7 +125,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       delve
       eza
       fd
-      fish
+      #fish
       fortune
       fzf
       go
