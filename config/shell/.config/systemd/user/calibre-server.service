@@ -1,0 +1,21 @@
+[Unit]
+After=network-online.target
+Description=calibre content server
+Wants=network-online.target
+
+[Service]
+ExecStart=calibre-server \
+          --disable-fallback-to-detected-interface \
+          --disable-use-bonjour \
+          --enable-auth \
+          --listen-on 127.0.0.1 \
+          --userdb users.sqlite \
+          .
+NonBlocking=True
+Restart=on-failure
+RestartSec=5s
+Type=simple
+WorkingDirectory=%h/Documents/calibre-library
+
+[Install]
+WantedBy=default.target

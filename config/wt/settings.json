@@ -22,6 +22,9 @@
       "cursorShape": "filledBox",
       "font": {
         "face": "Cascadia Code",
+        "features": {
+          "calt": 0
+        },
         "size": 12
       },
       "intenseTextStyle": "all",

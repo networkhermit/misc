@@ -99,6 +99,7 @@ let api_socket = "/run/cloud-hypervisor-\(name).sock"
 let call_ch_remote = ["ch-remote", "--api-socket", api_socket]
 
 let vmm_logfile = "/tmp/cloud-hypervisor-\(name).log"
+let vmm_early_boot_logfile = "/tmp/cloud-hypervisor-\(name)-early-boot.log"
 
 command: start: [string]: [string]: exec.Run
 
@@ -114,7 +115,7 @@ command: start: {
 	}
 	vmm: {
 		let xs = [
-			{cmd: ["bash", "-c", "nohup cloud-hypervisor --api-socket \(api_socket) &> \(vmm_logfile) &"]},
+			{cmd: ["bash", "-c", "nohup cloud-hypervisor --api-socket \(api_socket) --log-file \(vmm_logfile) &>\(vmm_early_boot_logfile) &"]},
 			{cmd: ["sleep", "0.1"]},
 			{cmd: list.Concat([call_ch_remote, ["create"]]), stdin: json.Marshal(vm[name].config)},
 			{cmd: list.Concat([call_ch_remote, ["boot"]])},
@@ -123,9 +124,19 @@ command: start: {
 	}
 }
 
-command: stop: [string]: [string]: exec.Run & {mustSucceed: false}
+command: shutdown: [string]: [string]: exec.Run
 
-command: stop: {
+command: shutdown: vmm: {
+	let xs = [
+		{cmd: list.Concat([call_ch_remote, ["power-button"]])},
+		{cmd: ["bash", "-c", "while ch-remote --api-socket \(api_socket) ping 2>/dev/null; do sleep 1; done"]},
+	]
+	{#DepRun & {in: tasks: xs}}.out
+}
+
+command: destroy: [string]: [string]: exec.Run & {mustSucceed: false}
+
+command: destroy: {
 	tuntap: {
 		let tap = vm[name].meta.tap
 		let xs = [

@@ -1,0 +1,12 @@
+[Unit]
+After=network.target
+Description=calibre content server
+Wants=network.target
+
+[Socket]
+FreeBind=true
+ListenStream=127.0.0.1:8080
+NoDelay=true
+
+[Install]
+WantedBy=sockets.target

@@ -45,4 +45,51 @@ vm: {
 			}
 		}
 	}
+	let pets = [
+		{
+			mac:  "42:eb:ee:16:18:f1"
+			name: "alpine"
+		},
+		{
+			mac:  "42:eb:ee:16:18:f2"
+			name: "artix"
+		},
+		{
+			mac:  "42:eb:ee:16:18:f3"
+			name: "fedora"
+		},
+		{
+			mac:  "42:eb:ee:16:18:f4"
+			name: "freebsd"
+		},
+		{
+			mac:  "42:eb:ee:16:18:f5"
+			name: "gentoo"
+		},
+		{
+			mac:  "42:eb:ee:16:18:f6"
+			name: "nixos"
+		},
+		{
+			mac:  "42:eb:ee:16:18:f7"
+			name: "openbsd"
+		},
+		{
+			mac:  "42:eb:ee:16:18:f8"
+			name: "void"
+		},
+	]
+	for i, v in pets {
+		"\(v.name)": {
+			meta: tap: "vmtapwp\(i+1)"
+			config: {
+				disks: [{
+					path: "/var/lib/libvirt/images/\(v.name).raw"
+				}]
+				net: [{
+					mac: v.mac
+				}]
+			}
+		}
+	}
 }
