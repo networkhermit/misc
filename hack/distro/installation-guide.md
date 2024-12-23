@@ -102,8 +102,8 @@ popd || false
 ## kali
 sudo install -D --mode 644 --target-directory /etc/apt config/etc/apt/sources.list
 ## nixos
-sudo nix-channel --add https://nixos.org/channels/nixos-24.05 nixos
-#sudo nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-22.05 nixos
+sudo nix-channel --add https://nixos.org/channels/nixos-24.11 nixos
+#sudo nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-24.11 nixos
 ## void
 sudo install -D --mode 644 --target-directory /etc/xbps.d config/etc/config/etc/xbps.d/00-repository-main.conf
 ## freebsd
@@ -207,6 +207,7 @@ sudo adduser -G vac -s /bin/bash -u 1000 -D vac
 sudo addgroup vac wheel
 sudo addgroup vac sysadmin
 sudo passwd vac
+sudo usermod --password '*' gitops
 ls -dhl / /home/* /root
 sudo passwd -d root
 sudo passwd -l root
@@ -760,6 +761,7 @@ Void
 # change root password
 
 # check sudo support
+sudo mv --no-clobber --verbose /etc/sudoers.d/{,00-}wheel
 
 # add default sysadmin
 
@@ -775,7 +777,7 @@ ls /var/service
 # configure default address selection
 
 # modify default ntp server
-sudo ln --force --no-dereference --symbolic /etc/sv/chronyd /etc/runit/runsvdir/default
+sudo ln --force --no-dereference --symbolic /etc/sv/chronyd /etc/runit/runsvdir/default/
 sudo sv restart chronyd
 
 # update system clock
@@ -794,7 +796,7 @@ sudo sv restart dhcpcd
 # update message of the day
 
 # modify secure shell daemon
-sudo ln --force --no-dereference --symbolic /etc/sv/sshd /etc/runit/runsvdir/default
+sudo ln --force --no-dereference --symbolic /etc/sv/sshd /etc/runit/runsvdir/default/
 sudo sv restart sshd
 
 # update initramfs image
@@ -818,7 +820,7 @@ sudo xbps-reconfigure -f glibc-locales
 # enable zram swap
 sudo xbps-install --yes zramen
 sudo install -D --mode 644 --target-directory /etc/sv/zramen config/etc/sv/zramen/conf
-sudo ln --force --no-dereference --symbolic /etc/sv/zramen /etc/runit/runsvdir/default
+sudo ln --force --no-dereference --symbolic /etc/sv/zramen /etc/runit/runsvdir/default/
 
 # add additional terminfo files
 sudo xbps-install --yes ncurses-term
@@ -829,14 +831,14 @@ sudo xbps-install --yes iptables-nft
 sudo xbps-alternatives --set iptables-nft
 
 # enable acpid
-sudo ln --force --no-dereference --symbolic /etc/sv/acpid /etc/runit/runsvdir/default
+sudo ln --force --no-dereference --symbolic /etc/sv/acpid /etc/runit/runsvdir/default/
 
 # install xtools
 sudo xbps-install --yes xtools
 
 # setup mdns (optional)
 sudo xbps-install --yes avahi nss-mdns
-sudo ln --force --no-dereference --symbolic /etc/sv/avahi-daemon /etc/runit/runsvdir/default
+sudo ln --force --no-dereference --symbolic /etc/sv/avahi-daemon /etc/runit/runsvdir/default/
 
 # reboot system
 ```
@@ -863,7 +865,6 @@ sudo pw groupmod sysadmin -m vac
 sudo passwd vac
 ls -dhl / /home/* /root
 sudo pw usermod root -w no
-sudo pw lock root
 
 # manage system service
 service -e

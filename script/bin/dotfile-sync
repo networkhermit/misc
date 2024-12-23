@@ -87,6 +87,10 @@ while (( $# > 0 )); do
     esac
 done
 
+if (( $# > 0 )); then
+    die "✗ argument parsing failed: unrecognizable argument ‘${1}’"
+fi
+
 if [[ "${DST_HOST}" = "${SRC_HOST}" ]]; then
     die "✗ option parsing failed: DST_HOST should not be the same as SRC_HOST ‘${DST_HOST}’"
 fi

@@ -1,6 +1,7 @@
 [
   {
     "bindings": {
+      "ctrl-<": "zed::OpenSettings",
       "ctrl-backspace": "zed::ToggleFullScreen",
       "ctrl-h": "workspace::ToggleLeftDock"
     }
@@ -38,7 +39,6 @@
         "workspace::SendKeystrokes",
         "ctrl-w k"
       ],
-      "ctrl-shift-,": "zed::OpenSettings",
       "shift-k": "workspace::OpenInTerminal",
       "shift-q": [
         "workspace::SendKeystrokes",

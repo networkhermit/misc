@@ -490,6 +490,18 @@ in
       };
     };
 
+  virtualisation.docker = {
+    daemon.settings = {
+      log-opts = {
+        max-file = "10";
+        max-size = "10m";
+      };
+    };
+    enable = true;
+    logDriver = "json-file";
+    storageDriver = "overlay2";
+  };
+
   zramSwap = {
     enable = true;
     memoryMax = 8 * 1024 * 1024 * 1024;
