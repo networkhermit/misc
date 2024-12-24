@@ -69,6 +69,10 @@
           }
         }
       ],
+      "ctrl-l": [
+        "workspace::SendKeystrokes",
+        "\" + y"
+      ],
       "shift-m": "editor::SortLinesCaseSensitive"
     },
     "context": "vim_mode == visual"

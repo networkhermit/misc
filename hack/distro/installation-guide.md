@@ -198,7 +198,7 @@ setup-disk -m sys /mnt
 
 # check sudo support
 apk add doas sudo
-sudo install -D --mode 600 --target-directory /etc config/etc/doas.conf
+sudo install -D --mode 600 --no-target-directory config/etc/doas.conf /etc/doas.d/10-local.conf
 
 # add default sysadmin
 sudo addgroup -g 256 -S sysadmin

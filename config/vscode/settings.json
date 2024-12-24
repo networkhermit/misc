@@ -179,6 +179,16 @@
         ":'<,'>sort"
       ],
       "silent": true
+    },
+    {
+      "after": [
+        "\"",
+        "+",
+        "y"
+      ],
+      "before": [
+        "<C-L>"
+      ]
     }
   ],
   "vim.visualstar": true,
