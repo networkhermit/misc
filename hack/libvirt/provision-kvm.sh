@@ -134,7 +134,7 @@ alpine)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'alpine-standard-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
-    EXTRA_ARGUMENT+=(--os-variant alpinelinux3.20)
+    EXTRA_ARGUMENT+=(--os-variant alpinelinux3.21)
     ;;
 arch)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'archlinux-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
@@ -180,12 +180,14 @@ freebsd)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'FreeBSD-*.*-RELEASE-amd64-disc1.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+    EXTRA_ARGUMENT+=(--machine q35)
     EXTRA_ARGUMENT+=(--os-variant freebsd14.2)
     ;;
 openbsd)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'install[0-9]*.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
+    EXTRA_ARGUMENT+=(--machine q35)
     EXTRA_ARGUMENT+=(--os-variant openbsd7.6)
     ;;
 *)
