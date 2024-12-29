@@ -1,3 +1,53 @@
+IP and Socket
+=============
+
+```bash
+# shellcheck shell=bash
+
+# Check Routing Table
+
+ip route get 1.1.1.1 | awk '{ print $7; exit }'
+
+# Check Local IP Address
+
+ip -4 address | awk '/\<inet\>/ { print $2 }' | sort --field-separator / --key 1,1V --key 2,2n
+
+ip -6 address | awk '/\<inet6\>/ { print $2 }' | sort
+
+# Check Public IP Address
+
+## [ ipinfo ]
+
+curl --fail --location --silent --show-error https://ipinfo.io | jq
+
+## [ opendns ]
+
+{
+    drill -Q myip.opendns.com @208.67.222.222 a
+    drill -Q myip.opendns.com @208.67.220.220 a
+} | uniq
+
+## [ amazonaws ]
+
+curl --fail --location --silent --show-error https://checkip.amazonaws.com
+
+## [ google ]
+
+{
+    drill -Q o-o.myaddr.l.google.com @216.239.32.10 txt
+    drill -Q o-o.myaddr.l.google.com @216.239.34.10 txt
+} | tr --delete \" | uniq
+
+# Check Local Socket
+
+lsof -nP -iTCP -sTCP:LISTEN
+lsof -nP -iUDP
+
+ss --tcp --udp --raw --listening --numeric --processes
+
+netstat --tcp --udp --raw --listening --numeric --programs
+```
+
 iptables/ip6tables
 ==================
 

@@ -260,7 +260,6 @@ sudo sysctl -p
 
 # install base utilities
 sudo apk add \
-    coreutils \
     diffutils \
     file \
     findutils \
@@ -510,7 +509,6 @@ sudo firewall-cmd --permanent --service ssh --get-ports
 sudo firewall-cmd --reload
 
 # update initramfs image
-sudo install -D --mode 644 --target-directory /etc/dracut.conf.d config/etc/dracut.conf.d/zstd.conf
 
 # update boot loader
 
@@ -598,7 +596,7 @@ sudo rc-update add sshd default
 sudo rc-service sshd restart
 
 # update initramfs image
-sudo install -D --mode 644 --target-directory /etc/dracut.conf.d config/etc/dracut.conf.d/{hostonly,zstd}.conf
+sudo install -D --mode 644 --target-directory /etc/dracut.conf.d config/etc/dracut.conf.d/hostonly.conf
 
 # update boot loader
 
@@ -800,7 +798,7 @@ sudo ln --force --no-dereference --symbolic /etc/sv/sshd /etc/runit/runsvdir/def
 sudo sv restart sshd
 
 # update initramfs image
-sudo install -D --mode 644 --target-directory /etc/dracut.conf.d config/etc/dracut.conf.d/{hostonly,zstd}.conf
+sudo install -D --mode 644 --target-directory /etc/dracut.conf.d config/etc/dracut.conf.d/hostonly.conf
 
 # update boot loader
 

@@ -89,6 +89,9 @@ alpine)
     mkinitfs
     grub-mkconfig --output /boot/grub/grub.cfg
     ;;
+postmarketos)
+    mkinitfs
+    ;;
 arch | archarm | artix)
     mkinitcpio --allpresets
     grub-mkconfig --output /boot/grub/grub.cfg

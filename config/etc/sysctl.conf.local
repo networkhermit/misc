@@ -1,4 +1,1 @@
 net.inet.tcp.fastopen.server_enable=1
-
-# required for delve
-security.bsd.unprivileged_proc_debug=1

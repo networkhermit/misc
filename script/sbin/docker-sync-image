@@ -67,17 +67,11 @@ if (( EUID != 0 )); then
 fi
 
 clean_up () {
-    true
-}
-
-trap clean_up EXIT
-
-execute_exit_hook () {
     docker image prune --force
     docker image ls --all
 }
 
-trap execute_exit_hook EXIT
+trap clean_up EXIT
 
 docker image ls \
     --filter reference='*:latest' \
