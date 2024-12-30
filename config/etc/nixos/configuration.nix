@@ -165,7 +165,7 @@ in
         }
       else
         {
-          source = ./git/config/etc/resolv.conf + (if config.local.direct then "" else ".alt");
+          source = ./git/config + (if config.local.direct then "" else "/local") + /etc/resolv.conf;
         };
   };
 

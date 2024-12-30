@@ -1,6 +1,6 @@
 auto-update = off
 background-opacity = 0.8
-cursor-style = block
+bold-is-bright = true
 font-family = SF Mono
 font-feature = -calt
 font-size = 16
@@ -18,4 +18,6 @@ mouse-hide-while-typing = true
 shell-integration-features = no-cursor
 term = xterm-256color
 theme = modbus-vivendi
+window-padding-x = 4
+window-padding-y = 2
 window-save-state = never

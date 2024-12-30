@@ -41,7 +41,7 @@ sudo passwd --delete root
 sudo passwd --lock root
 
 # manage system service
-sudo install -D --mode 644 --target-directory /etc/systemd/system-preset config/etc/systemd/system-preset/00-local.preset
+sudo install -D --mode 644 --target-directory /etc/systemd/system-preset "config/distro/${DISTRO}/etc/systemd/system-preset/00-local.preset"
 sudo install -D --mode 644 --target-directory /etc/systemd/journald.conf.d config/etc/systemd/journald.conf.d/10-local.conf
 sudo systemctl preset-all
 
@@ -92,7 +92,7 @@ sudo install -D --mode 644 --target-directory /etc/apk config/etc/apk/repositori
 sudo install -D --mode 644 --target-directory /etc/pacman.d config/etc/pacman.d/mirrorlist
 ## artix
 sudo install -D --mode 644 --target-directory /etc/pacman.d config/etc/pacman.d/mirrorlist
-sudo install -D --mode 644 --target-directory /etc/pacman.d config/etc/pacman.d/mirrorlist-arch
+sudo install -D --mode 644 --target-directory /etc/pacman.d config/distro/artix/etc/pacman.d/mirrorlist-arch
 ## fedora
 sudo install -D --mode 644 --target-directory /etc/yum.repos.d config/etc/yum.repos.d/fedora{,-updates}.repo
 ## gentoo
@@ -100,14 +100,14 @@ pushd config || false
 sudo find etc/portage/ -type f -exec install -D --mode 644 '{}' '/{}' \;
 popd || false
 ## kali
-sudo install -D --mode 644 --target-directory /etc/apt config/etc/apt/sources.list
+sudo install -D --mode 644 --target-directory /etc/apt config/distro/kali/etc/apt/sources.list
 ## nixos
 sudo nix-channel --add https://nixos.org/channels/nixos-24.11 nixos
 #sudo nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-24.11 nixos
 ## void
-sudo install -D --mode 644 --target-directory /etc/xbps.d config/etc/config/etc/xbps.d/00-repository-main.conf
+sudo install -D --mode 644 --target-directory /etc/xbps.d config/etc/xbps.d/00-repository-main.conf
 ## freebsd
-sudo install -D --mode 644 --target-directory /usr/local/etc/pkg/repos config/bsd/usr/local/etc/pkg/repos/FreeBSD.conf
+sudo install -D --mode 644 --target-directory /usr/local/etc/pkg/repos config/distro/freebsd/usr/local/etc/pkg/repos/FreeBSD.conf
 ## openbsd
 sudo install -D --mode 644 --target-directory /etc config/etc/installurl
 
@@ -907,11 +907,11 @@ sudo service netif restart
 # update message of the day
 
 # modify secure shell daemon
-sudo install -D --mode 644 --target-directory /etc/ssh/sshd_config.d config/etc/ssh/sshd_config.d/00-freebsd.conf
+sudo install -D --mode 644 --target-directory /etc/ssh/sshd_config.d config/distro/freebsd/etc/ssh/sshd_config.d/20-distro.conf
 sudo service sshd restart
 
 # update boot loader
-sudo install -D --mode 644 --target-directory /boot config/bsd/boot/loader.conf
+sudo install -D --mode 644 --target-directory /boot config/distro/freebsd/boot/loader.conf.local
 
 # update sysctl configuration
 sudo install -D --mode 644 --target-directory /etc config/etc/sysctl.conf.local

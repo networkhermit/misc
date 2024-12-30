@@ -40,8 +40,8 @@ curl --fail --location --silent --show-error https://checkip.amazonaws.com
 
 # Check Local Socket
 
-lsof -nP -iTCP -sTCP:LISTEN
-lsof -nP -iUDP
+lsof +c0 -nP -iTCP -sTCP:LISTEN
+lsof +c0 -nP -iUDP
 
 ss --tcp --udp --raw --listening --numeric --processes
 
