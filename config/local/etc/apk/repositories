@@ -1,2 +1,4 @@
-http://mirrors.tuna.tsinghua.edu.cn/alpine/v3.21/main
-http://mirrors.tuna.tsinghua.edu.cn/alpine/v3.21/community
+#http://mirrors.tuna.tsinghua.edu.cn/alpine/v3.21/main
+#http://mirrors.tuna.tsinghua.edu.cn/alpine/v3.21/community
+https://mirrors.ustc.edu.cn/alpine/v3.21/main
+https://mirrors.ustc.edu.cn/alpine/v3.21/community

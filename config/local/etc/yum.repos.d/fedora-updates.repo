@@ -1,6 +1,7 @@
 [updates]
 name=Fedora $releasever - $basearch - Updates
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Everything/$basearch/
+#baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Everything/$basearch/
+baseurl=https://mirrors.ustc.edu.cn/fedora/updates/$releasever/Everything/$basearch/
 enabled=1
 countme=1
 repo_gpgcheck=0

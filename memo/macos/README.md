@@ -18,9 +18,14 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 defaults write com.apple.dock persistent-apps -array && killall Dock
 
 # disable startup sound
+
 sudo nvram StartupMute=%01
 
 # flush dns cache
 
 sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder
+
+# reset launchpad in sequoia
+
+sudo find /private/var/folders/ -type d -name com.apple.dock.launchpad -exec rm -rf {} + 2>/dev/null; killall Dock
 ```

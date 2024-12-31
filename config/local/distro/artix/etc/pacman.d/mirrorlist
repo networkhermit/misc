@@ -1,1 +1,2 @@
-Server = https://mirrors.tuna.tsinghua.edu.cn/artixlinux/$repo/os/$arch
+#Server = https://mirrors.tuna.tsinghua.edu.cn/artixlinux/$repo/os/$arch
+Server = https://mirror.nju.edu.cn/artixlinux/$repo/os/$arch

@@ -1,6 +1,7 @@
 [fedora]
 name=Fedora $releasever - $basearch
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Everything/$basearch/os/
+#baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Everything/$basearch/os/
+baseurl=https://mirrors.ustc.edu.cn/fedora/releases/$releasever/Everything/$basearch/os/
 enabled=1
 countme=1
 metadata_expire=7d

@@ -741,7 +741,7 @@ NixOS
 sudo nixos-generate-config --root /mnt
 
 sudo nixos-install
-#sudo nixos-install --option extra-substituters "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10" --option extra-substituters "https://mirror.sjtu.edu.cn/nix-channels/store?priority=20"
+#sudo nixos-install --option extra-substituters 'https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10' --option extra-substituters 'https://mirror.sjtu.edu.cn/nix-channels/store?priority=20'
 ```
 
 Void

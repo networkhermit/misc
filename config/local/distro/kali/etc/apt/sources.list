@@ -1,5 +1,8 @@
-deb https://kali.download/kali kali-rolling main contrib non-free non-free-firmware
-deb-src https://kali.download/kali kali-rolling main contrib non-free non-free-firmware
+#deb https://kali.download/kali kali-rolling main contrib non-free non-free-firmware
+#deb-src https://kali.download/kali kali-rolling main contrib non-free non-free-firmware
 
 #deb https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free non-free-firmware
 #deb-src https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free non-free-firmware
+
+deb https://mirrors.ustc.edu.cn/kali kali-rolling main contrib non-free non-free-firmware
+deb-src https://mirrors.ustc.edu.cn/kali kali-rolling main contrib non-free non-free-firmware

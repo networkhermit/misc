@@ -212,7 +212,7 @@ virt-install \
     --boot uefi \
     --connect qemu:///system \
     --console type=pty,target.type=serial \
-    --cpu host \
+    --cpu host-model \
     --disk "device=disk,format=qcow2,path=${IMAGES_PATH}/${NAME}.qcow2,size=${SIZE}" \
     --graphics none \
     --hvm \

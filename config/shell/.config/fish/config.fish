@@ -1,15 +1,15 @@
 # If not running interactively, don't do anything
-if ! status --is-interactive
+if not status --is-interactive
     return
 end
 
-if command --query cowsay && command --query cowsay
+if command --query cowsay; and command --query cowsay
     fortune | cowsay -f www
 end
 
-if [ -z "$TMUX" ] && [ -z "$VIM" ]
-    if [ "$TERM" = xterm-256color ] || [ "$TERM" = tmux-256color ]
-        switch {$TERM_PROGRAM}
+if test -z "$TMUX"; and test -z "$VIM"
+    if test "$TERM" = xterm-256color; or "$TERM" = tmux-256color
+        switch $TERM_PROGRAM
             case ghostty vscode zed
             case '*'
                 exec tmux new-session -A -D -s main
@@ -21,8 +21,8 @@ end
 
 function __prompt_command --on-event fish_postexec
     echo
-    if [ -n "$TMUX" ]
-        tmux set-option -p @PWD {$PWD}
+    if test -n "$TMUX"
+        tmux set-option -p @PWD $PWD
     end
 end
 
@@ -47,7 +47,7 @@ set --global fish_history ''
 
 ###########################################################################
 
-#set --export --global PATH {$PATH} ~/STEM/bin
+#set --export --global PATH $PATH ~/STEM/bin
 fish_add_path --append --path ~/STEM/bin
 
 set --export --global EDITOR vim
@@ -85,15 +85,15 @@ alias www 'python3 -B -W:all -m http.server'
 alias yaml 'yq "sort_keys(..)"'
 
 function jsonfmt
-    json {$argv[1]} | sponge {$argv[1]}
+    json $argv[1] | sponge $argv[1]
 end
 function yamlfmt
-    yaml {$argv[1]} | sponge {$argv[1]}
+    yaml $argv[1] | sponge $argv[1]
 end
 
-set --local OS $(uname -s)
+set --local OS (uname -s)
 
-switch {$OS}
+switch $OS
     case Linux
         alias broken-symlink "find . -xtype l -exec ls --human-readable -l --time-style long-iso '{}' +"
         alias ip 'ip -color=auto'
@@ -108,7 +108,7 @@ switch {$OS}
         alias ll "ls -h -l -D '%F %R'"
         alias ls 'ls -G'
     case OpenBSD
-        if ! command --query nvim
+        if not command --query nvim
             set --erase MANPAGER
         end
         if command --query colordiff
@@ -130,12 +130,12 @@ switch {$OS}
         end
 end
 
-switch {$OS}
+switch $OS
     case Darwin
         alias sha 'shasum --algorithm 256'
 end
 
-switch {$OS}
+switch $OS
     case FreeBSD
         alias pass 'dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 --wrap 0 | tr -d +/= | dd bs=32 count=1 2>/dev/null'
     case OpenBSD
@@ -144,30 +144,30 @@ switch {$OS}
         alias pass 'dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d +/= | dd bs=32 count=1 2>/dev/null'
 end
 
-switch {$OS}
+switch $OS
     case Linux FreeBSD
         function tmux-clip
-            printf '\033]52;c;%s\a' (base64 --wrap 0 {$argv[1]}) >(tmux display-message -p '#{client_tty}')
+            printf '\033]52;c;%s\a' (base64 --wrap 0 $argv[1]) >(tmux display-message -p '#{client_tty}')
         end
     case OpenBSD
         function tmux-clip
-            printf '\033]52;c;%s\a' (base64 {$argv[1]} | tr -d '\r\n') >(tmux display-message -p '#{client_tty}')
+            printf '\033]52;c;%s\a' (base64 $argv[1] | tr -d '\r\n') >(tmux display-message -p '#{client_tty}')
         end
     case Darwin
         function tmux-clip
-            printf '\033]52;c;%s\a' (base64 --input {$argv[1]}) >(tmux display-message -p '#{client_tty}')
+            printf '\033]52;c;%s\a' (base64 --input $argv[1]) >(tmux display-message -p '#{client_tty}')
         end
 end
 
-switch {$OS}
+switch $OS
     case Linux FreeBSD OpenBSD
-        switch {$XDG_SESSION_TYPE}
+        switch $XDG_SESSION_TYPE
             case wayland
                 alias clip 'wl-copy <'
             case x11
                 alias clip 'xclip -selection clip <'
             case '*'
-                if [ -n "$TMUX" ]
+                if test -n "$TMUX"
                     alias clip tmux-clip
                 end
         end
