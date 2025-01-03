@@ -907,7 +907,6 @@ sudo service netif restart
 # update message of the day
 
 # modify secure shell daemon
-sudo install -D --mode 644 --target-directory /etc/ssh/sshd_config.d config/distro/freebsd/etc/ssh/sshd_config.d/20-distro.conf
 sudo service sshd restart
 
 # update boot loader

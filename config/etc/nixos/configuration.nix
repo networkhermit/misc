@@ -400,6 +400,7 @@ in
     settings = {
       AllowGroups = [ "sysadmin" ];
       ClientAliveInterval = 20;
+      KbdInteractiveAuthentication = false;
       LogLevel = "VERBOSE";
       LoginGraceTime = "30s";
       PasswordAuthentication = false;
