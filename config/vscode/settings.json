@@ -33,6 +33,7 @@
     "--fast"
   ],
   "go.lintTool": "golangci-lint",
+  "python.analysis.typeCheckingMode": "standard",
   "redhat.telemetry.enabled": false,
   "remote.SSH.localServerDownload": "always",
   "remote.downloadExtensionsLocally": true,

@@ -118,7 +118,7 @@ kali)
     find /etc -type f \( -iregex '.*/.+\.dpkg-\(dist\|new\|old\)' -o -iregex '.*/.+\.old' -o -iregex '.*/.+\.ucf-\(dist\|new\|old\)' \) -print0 | sort --zero-terminated | tr '\0' '\n'
     dpkg-query --show --showformat '${Package}\n${Conffiles}\n' | awk '/^[^ ]/{pkg=$1}/ obsolete$/{print pkg,$0}' | column --table
     echo ------ [ recommend ] ------
-    aptitude search --display-format '%c %p' '~RBrecommends:~i'
+    aptitude search --display-format '%c %p' '?reverse-broken-recommends(?installed)' || true
     ;;
 void)
     echo ------ [ package ] ------
