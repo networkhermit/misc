@@ -167,6 +167,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       _1password-cli
       actionlint
       awscli2
+      biome
       fnm
       mitmproxy
       nmap

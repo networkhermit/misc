@@ -13,4 +13,5 @@ registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
 
 [target.x86_64-unknown-linux-gnu]
 linker = "clang"
+#runner = "valgrind --leak-check=full"
 rustflags = ["-C", "link-arg=-fuse-ld=mold"]
