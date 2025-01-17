@@ -7,15 +7,36 @@ if command --query cowsay; and command --query cowsay
     fortune | cowsay -f www
 end
 
-if test -z "$TMUX"; and test -z "$VIM"
-    if test "$TERM" = xterm-256color; or "$TERM" = tmux-256color
-        switch $TERM_PROGRAM
-            case ghostty vscode zed
-            case '*'
-                exec tmux new-session -A -D -s main
-        end
+function __magic
+    if test -n "$TMUX"
+        return
+    end
+    switch $TERM
+        case xterm-256color tmux-256color
+        case '*'
+            return
+    end
+    if test -n "$VIM"
+        return
+    end
+    switch $TERM_PROGRAM
+        case vscode zed
+            return
+    end
+    if test -n "$SSH_CONNECTION"
+        exec tmux new-session -A -D -s ssh
+    end
+    if test -n "$TMUX_SESSION_NAME"
+        set --local name $TMUX_SESSION_NAME
+        set --erase TMUX_SESSION_NAME
+        exec tmux new-session -A -D -s $name
+    end
+    if test -n "$PARTY_LIKE_ITS_1995"
+        set --erase PARTY_LIKE_ITS_1995
     end
 end
+__magic
+functions --erase __magic
 
 ###########################################################################
 

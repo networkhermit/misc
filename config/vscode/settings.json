@@ -24,6 +24,7 @@
   "[terraform]": {
     "editor.formatOnSave": true
   },
+  "biome.requireConfigFile": true,
   "diffEditor.ignoreTrimWhitespace": false,
   "editor.fontFamily": "Go Mono",
   "editor.fontSize": 16,

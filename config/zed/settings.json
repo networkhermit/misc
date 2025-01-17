@@ -31,6 +31,26 @@
     "JSON": {
       "enable_language_server": true
     },
+    "JavaScript": {
+      "enable_language_server": true,
+      "formatter": [
+        {
+          "code_actions": {
+            "source.fixAll.biome": true,
+            "source.organizeImports.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
+        }
+      ],
+      "language_servers": [
+        "biome",
+        "vtsls"
+      ]
+    },
     "Nix": {
       "enable_language_server": true,
       "language_servers": [
@@ -75,11 +95,36 @@
     "Terraform": {
       "enable_language_server": true
     },
+    "TypeScript": {
+      "enable_language_server": true,
+      "formatter": [
+        {
+          "code_actions": {
+            "source.fixAll.biome": true,
+            "source.organizeImports.biome": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "biome"
+          }
+        }
+      ],
+      "language_servers": [
+        "biome",
+        "vtsls"
+      ]
+    },
     "YAML": {
       "enable_language_server": true
     }
   },
   "lsp": {
+    "biome": {
+      "settings": {
+        "require_config_file": true
+      }
+    },
     "rust-analyzer": {
       "initialization_options": {
         "check": {

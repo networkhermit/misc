@@ -7,17 +7,40 @@ if [[ ! -o interactive ]]; then
     return
 fi
 
-if [[ -z "${TMUX}" ]] && [[ -z "${VIM}" ]]; then
-    if [[ "${TERM}" = xterm-256color ]] || [[ "${TERM}" = tmux-256color ]]; then
-        case ${TERM_PROGRAM} in
-        ghostty | vscode | zed)
-            ;;
-        *)
-            exec tmux new-session -A -D -s main
-            ;;
-        esac
+__magic () {
+    if [[ -n "${TMUX}" ]]; then
+        return
     fi
-fi
+    case ${TERM} in
+    xterm-256color | tmux-256color)
+        ;;
+    *)
+        return
+        ;;
+    esac
+    if [[ -n "${VIM}" ]]; then
+        return
+    fi
+    case ${TERM_PROGRAM} in
+    vscode | zed)
+        return
+        ;;
+    esac
+    if [[ -n "${SSH_CONNECTION}" ]]; then
+        exec tmux new-session -A -D -s ssh
+    fi
+    if [[ -n "${TMUX_SESSION_NAME}" ]]; then
+        local name=${TMUX_SESSION_NAME}
+        unset TMUX_SESSION_NAME
+        exec tmux new-session -A -D -s "${name}"
+    fi
+    if [[ -n "${PARTY_LIKE_ITS_1995}" ]]; then
+        unset PARTY_LIKE_ITS_1995
+        exec fish
+    fi
+}
+__magic
+unset -f __magic
 
 if [[ -r /etc/skel/.zshrc ]]; then
     # shellcheck source=/dev/null
