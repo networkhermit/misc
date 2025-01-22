@@ -30,7 +30,7 @@ variable "pinned_version" {
   nullable = false
   type = object({
     kubernetes = optional(string, "1.32.0")
-    talos      = optional(string, "v1.9.1")
+    talos      = optional(string, "v1.9.2")
   })
 }
 
