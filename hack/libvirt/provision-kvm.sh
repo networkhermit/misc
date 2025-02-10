@@ -39,6 +39,8 @@ Options:
         directory to store the disk image (default: ${IMAGES_PATH})
     --memory N (MiB)
         memory to allocate for the guest (default: ${MEMORY})
+    --print-xml
+        print-xml (default: ${PRINT_XML})
     --size N (GiB)
         size of the disk image to be created (default: ${SIZE})
     -h, --help
@@ -59,6 +61,7 @@ BRIDGE=
 CPU=4
 IMAGES_PATH=/var/lib/libvirt/images
 MEMORY=8192
+PRINT_XML=false
 SIZE=40
 
 while (( $# > 0 )); do
@@ -82,6 +85,10 @@ while (( $# > 0 )); do
     --memory)
         MEMORY=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
+        ;;
+    --print-xml)
+        PRINT_XML=true
+        shift
         ;;
     --size)
         SIZE=${2?✗ option parsing failed: missing value for argument ‘${1}’}
@@ -205,6 +212,10 @@ if [[ -x "$(command -v numad)" ]]; then
     VCPUS_OPTION=cpuset=auto,vcpus=${CPU}
 else
     VCPUS_OPTION=vcpus=${CPU}
+fi
+
+if [[ "${PRINT_XML}" = true ]]; then
+    EXTRA_ARGUMENT+=(--print-xml)
 fi
 
 virt-install \
