@@ -173,6 +173,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       nmap
       opentofu
       python312Packages.cfn-lint
+      sops
       steampipe
       terraform-ls
       tflint

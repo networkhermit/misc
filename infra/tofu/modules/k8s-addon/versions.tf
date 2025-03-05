@@ -2,7 +2,7 @@ terraform {
   required_providers {
     flux = {
       source  = "fluxcd/flux"
-      version = ">= 1.4"
+      version = ">= 1.5"
     }
     helm = {
       source  = "hashicorp/helm"
