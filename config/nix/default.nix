@@ -124,7 +124,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       delve
       eza
       fd
-      #fish
+      fish
       fortune
       fzf
       go
@@ -166,6 +166,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
     devops = [
       _1password-cli
       actionlint
+      aws-vault
       awscli2
       biome
       fnm
