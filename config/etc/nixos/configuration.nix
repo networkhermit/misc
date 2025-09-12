@@ -1,6 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
+
 {
   config,
   lib,
@@ -55,7 +56,7 @@ in
   # services.printing.enable = true;
 
   # Enable sound.
-  # hardware.pulseaudio.enable = true;
+  # services.pulseaudio.enable = true;
   # OR
   # services.pipewire = {
   #   enable = true;
@@ -76,8 +77,8 @@ in
 
   # programs.firefox.enable = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # List packages installed in system profile.
+  # You can use https://search.nixos.org/ to find more packages (and options).
   # environment.systemPackages = with pkgs; [
   #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #   wget
@@ -124,7 +125,7 @@ in
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 
   #boot.initrd.checkJournalingFS = false;
   #boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -237,7 +238,7 @@ in
     docker
     docker-compose
     git
-    linuxKernel.packages.linux_libre.perf
+    #linuxKernel.packages.linux_libre.perf
     tailscale
     wireguard-tools
 
@@ -263,7 +264,8 @@ in
 
   networking.timeServers = [
     "time.cloudflare.com"
-  ] ++ (if config.local.direct then [ "time.google.com" ] else [ "time.apple.com" ]);
+  ]
+  ++ (if config.local.direct then [ "time.google.com" ] else [ "time.apple.com" ]);
 
   networking.wg-quick.interfaces =
     let

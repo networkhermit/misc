@@ -141,7 +141,7 @@ alpine)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'alpine-standard-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
-    EXTRA_ARGUMENT+=(--os-variant alpinelinux3.21)
+    EXTRA_ARGUMENT+=(--os-variant alpinelinux3.22)
     ;;
 arch)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'archlinux-*.*.*-x86_64.iso' | sort --version-sort | tail --lines 1)
@@ -156,9 +156,9 @@ artix)
     EXTRA_ARGUMENT+=(--os-variant archlinux)
     ;;
 fedora)
-    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/41/Server/x86_64/os)
+    EXTRA_ARGUMENT+=(--location https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/42/Server/x86_64/os)
     EXTRA_ARGUMENT+=("${KERNEL_ARGUMENT[@]}")
-    EXTRA_ARGUMENT+=(--os-variant fedora41)
+    EXTRA_ARGUMENT+=(--os-variant fedora42)
     ;;
 gentoo)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'install-amd64-minimal-*.iso' | sort --version-sort | tail --lines 1)
@@ -175,7 +175,7 @@ nixos)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'nixos-minimal-*.*.*.*-x86_64-linux.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
-    EXTRA_ARGUMENT+=(--os-variant nixos-24.11)
+    EXTRA_ARGUMENT+=(--os-variant nixos-25.05)
     ;;
 void)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'void-live-x86_64-*-base.iso' | sort --version-sort | tail --lines 1)
@@ -188,14 +188,14 @@ freebsd)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
     EXTRA_ARGUMENT+=(--machine q35)
-    EXTRA_ARGUMENT+=(--os-variant freebsd14.2)
+    EXTRA_ARGUMENT+=(--os-variant freebsd14.3)
     ;;
 openbsd)
     IMAGE=$(find "${BOOT_PATH}" -type f -name 'install[0-9]*.iso' | sort --version-sort | tail --lines 1)
 
     EXTRA_ARGUMENT+=(--cdrom "${IMAGE}")
     EXTRA_ARGUMENT+=(--machine q35)
-    EXTRA_ARGUMENT+=(--os-variant openbsd7.6)
+    EXTRA_ARGUMENT+=(--os-variant openbsd7.7)
     ;;
 *)
     die "✗ unknown distro: ‘${DISTRO}’"

@@ -138,7 +138,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       jq
       ldns
       lua-language-server
-      mold
+      #mold
       moreutils
       mypy
       neovim
@@ -170,6 +170,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       awscli2
       biome
       fnm
+      jsonnet
       mitmproxy
       nmap
       opentofu

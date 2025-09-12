@@ -102,8 +102,8 @@ popd || false
 ## kali
 sudo install -D --mode 644 --target-directory /etc/apt config/distro/kali/etc/apt/sources.list
 ## nixos
-sudo nix-channel --add https://nixos.org/channels/nixos-24.11 nixos
-#sudo nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-24.11 nixos
+sudo nix-channel --add https://nixos.org/channels/nixos-25.05 nixos
+#sudo nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-25.05 nixos
 ## void
 sudo install -D --mode 644 --target-directory /etc/xbps.d config/etc/xbps.d/00-repository-main.conf
 ## freebsd
