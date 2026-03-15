@@ -6,6 +6,6 @@ resource "harbor_garbage_collection" "main" {
 
 resource "harbor_purge_audit_log" "main" {
   audit_retention_hour = 360
-  include_operations   = "create,delete,pull"
+  include_event_types  = "create_artifact,delete_artifact,pull_artifact,other"
   schedule             = "0 0 */12 * * *"
 }

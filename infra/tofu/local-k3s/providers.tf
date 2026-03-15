@@ -18,5 +18,5 @@ provider "flux" {
 provider "github" {}
 
 provider "helm" {
-  kubernetes {}
+  kubernetes = {}
 }

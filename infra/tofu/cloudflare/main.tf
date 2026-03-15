@@ -3,5 +3,5 @@ data "cloudflare_accounts" "main" {
 }
 
 locals {
-  cloudflare_accounts = { for o in data.cloudflare_accounts.main.accounts : o.name => o }
+  cloudflare_accounts = { for o in data.cloudflare_accounts.main.result : o.name => o }
 }

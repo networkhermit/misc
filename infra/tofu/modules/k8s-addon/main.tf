@@ -1,7 +1,7 @@
 locals {
   k8s_service_capture = regex("^https?://([^:@/?#]+)(:([0-9]+))?$", var.cluster_endpoint)
   k8s_service_host    = local.k8s_service_capture[0]
-  k8s_service_port    = local.k8s_service_capture[2] != null ? local.k8s_service_capture[2] : 443
+  k8s_service_port    = coalesce(local.k8s_service_capture[2], 443)
 }
 
 resource "helm_release" "cilium" {
@@ -46,6 +46,9 @@ resource "helm_release" "kubelet_csr_approver" {
     [
       yamlencode({
         bypassDnsResolution = true
+        global = {
+          clusterDomain = var.cluster_domain
+        }
         metrics = {
           serviceMonitor = {
             enabled = true
@@ -69,7 +72,8 @@ resource "helm_release" "prometheus_operator_crds" {
 resource "flux_bootstrap_git" "fleet" {
   depends_on = [helm_release.cilium, helm_release.kubelet_csr_approver]
 
-  cluster_domain     = var.cluster_domain
-  embedded_manifests = true
-  path               = var.addon_override.flux.watch_path
+  cluster_domain         = var.cluster_domain
+  embedded_manifests     = var.addon_override.flux.embedded_manifests
+  kustomization_override = var.addon_override.flux.kustomization_override
+  path                   = var.addon_override.flux.watch_path
 }

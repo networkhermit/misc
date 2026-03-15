@@ -1,4 +1,14 @@
-data "cloudflare_api_token_permission_groups" "all" {}
+data "cloudflare_api_token_permission_groups_list" "dns_write" {
+  max_items = 1
+  name      = urlencode("DNS Write")
+  scope     = "com.cloudflare.api.account.zone"
+}
+
+data "cloudflare_api_token_permission_groups_list" "zone_read" {
+  max_items = 1
+  name      = urlencode("Zone Read")
+  scope     = "com.cloudflare.api.account.zone"
+}
 
 resource "cloudflare_api_token" "acme_dns_challenge" {
   for_each = { for o in var.acme_clients.environment : o.uuid => o }
@@ -7,15 +17,20 @@ resource "cloudflare_api_token" "acme_dns_challenge" {
   name       = "${each.value.name}-acme"
   not_before = try(each.value.not_before, null)
 
-  policy {
-    permission_groups = [
-      data.cloudflare_api_token_permission_groups.all.zone["DNS Write"],
-      data.cloudflare_api_token_permission_groups.all.zone["Zone Read"],
-    ]
-    resources = {
-      "com.cloudflare.api.account.zone.${cloudflare_zone.dev.id}" = "*"
+  policies = [
+    {
+      effect = "allow"
+      permission_groups = [
+        for o in concat(
+          data.cloudflare_api_token_permission_groups_list.dns_write.result,
+          data.cloudflare_api_token_permission_groups_list.zone_read.result
+        ) : { id = o.id }
+      ]
+      resources = jsonencode({
+        "com.cloudflare.api.account.zone.${cloudflare_zone.dev.id}" = "*"
+      })
     }
-  }
+  ]
 }
 
 resource "doppler_config" "cloudflare_credential" {

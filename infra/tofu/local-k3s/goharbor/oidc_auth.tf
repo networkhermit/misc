@@ -1,6 +1,4 @@
 resource "harbor_config_auth" "oidc" {
-  count = var.oidc_credential != null ? 1 : 0
-
   auth_mode          = "oidc_auth"
   oidc_admin_group   = var.oidc_credential.admin_group
   oidc_auto_onboard  = true
@@ -13,4 +11,8 @@ resource "harbor_config_auth" "oidc" {
   oidc_user_claim    = "preferred_username"
   oidc_verify_cert   = true
   primary_auth_mode  = false
+
+  lifecycle {
+    enabled = nonsensitive(var.oidc_credential) != null
+  }
 }

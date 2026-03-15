@@ -53,8 +53,6 @@ resource "digitalocean_firewall" "internet" {
 }
 
 resource "digitalocean_firewall" "k8s_api" {
-  count = var.cluster_spec.control_plane.count > 1 ? 0 : 1
-
   name = "${var.cluster_name}-k8s-api"
   tags = [digitalocean_tag.control_plane.name]
 
@@ -63,18 +61,24 @@ resource "digitalocean_firewall" "k8s_api" {
     protocol         = "tcp"
     source_addresses = var.firewall_allowlist.k8s_api
   }
+
+  lifecycle {
+    enabled = var.cluster_spec.control_plane.count > 1
+  }
 }
 
 resource "digitalocean_firewall" "k8s_api_lb" {
-  count = var.cluster_spec.control_plane.count > 1 ? 1 : 0
-
   name = "${var.cluster_name}-k8s-api-lb"
   tags = [digitalocean_tag.control_plane.name]
 
   inbound_rule {
     port_range                = "6443"
     protocol                  = "tcp"
-    source_load_balancer_uids = digitalocean_loadbalancer.k8s_api[*].id
+    source_load_balancer_uids = [digitalocean_loadbalancer.k8s_api.id]
+  }
+
+  lifecycle {
+    enabled = var.cluster_spec.control_plane.count > 1
   }
 }
 

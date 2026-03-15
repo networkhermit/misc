@@ -6,6 +6,7 @@ terraform {
     skip_metadata_api_check     = true
     skip_region_validation      = true
     skip_s3_checksum            = true
+    use_lockfile                = true
     use_path_style              = true
   }
   encryption {
@@ -30,19 +31,19 @@ terraform {
   required_providers {
     flux = {
       source  = "fluxcd/flux"
-      version = "~> 1.5.0"
+      version = "~> 1.8.2"
     }
     github = {
       source  = "integrations/github"
-      version = "~> 6.5.0"
+      version = "~> 6.11.1"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.17.0"
+      version = "~> 3.1.1"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 4.0.6"
+      version = "~> 4.2.1"
     }
   }
   required_version = ">= 1.8"

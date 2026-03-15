@@ -17,10 +17,13 @@ resource "talos_machine_configuration_apply" "control_plane" {
 }
 
 resource "talos_machine_bootstrap" "control_plane_etcd" {
-  count      = length(local.control_plane_nodes) > 0 ? 1 : 0
   depends_on = [talos_machine_configuration_apply.control_plane]
 
   client_configuration = talos_machine_secrets.default.client_configuration
   endpoint             = local.control_plane_nodes[0]
   node                 = local.control_plane_nodes[0]
+
+  lifecycle {
+    enabled = length(local.control_plane_nodes) > 0
+  }
 }

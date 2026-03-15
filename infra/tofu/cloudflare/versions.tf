@@ -6,6 +6,7 @@ terraform {
     skip_metadata_api_check     = true
     skip_region_validation      = true
     skip_s3_checksum            = true
+    use_lockfile                = true
     use_path_style              = true
   }
   encryption {
@@ -30,11 +31,11 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.52.0"
+      version = "5.19.0-beta.1"
     }
     doppler = {
       source  = "DopplerHQ/doppler"
-      version = "~> 1.14.1"
+      version = "~> 1.21.1"
     }
   }
   required_version = ">= 1.8"

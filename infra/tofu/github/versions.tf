@@ -6,6 +6,7 @@ terraform {
     skip_metadata_api_check     = true
     skip_region_validation      = true
     skip_s3_checksum            = true
+    use_lockfile                = true
     use_path_style              = true
   }
   encryption {
@@ -30,7 +31,7 @@ terraform {
   required_providers {
     github = {
       source  = "integrations/github"
-      version = "~> 6.5.0"
+      version = "~> 6.11.1"
     }
   }
   required_version = ">= 1.8"

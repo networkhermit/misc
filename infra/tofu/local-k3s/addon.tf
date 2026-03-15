@@ -1,20 +1,20 @@
 resource "github_branch" "flux" {
-  count      = var.git_source.branch != "main" ? 1 : 0
-  depends_on = [github_branch_protection.flux]
-
   branch     = var.git_source.branch
   repository = var.git_source.repository
 
   lifecycle {
+    enabled         = var.git_source.branch != "main"
     prevent_destroy = true
   }
 }
 
 resource "github_branch_protection" "flux" {
-  count = var.git_source.branch != "main" ? 1 : 0
+  pattern       = github_branch.flux.branch
+  repository_id = github_branch.flux.repository
 
-  pattern       = var.git_source.branch
-  repository_id = var.git_source.repository
+  lifecycle {
+    enabled = var.git_source.branch != "main"
+  }
 }
 
 resource "tls_private_key" "flux" {

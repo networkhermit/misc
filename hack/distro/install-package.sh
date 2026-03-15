@@ -321,7 +321,7 @@ arch)
     pacman --sync --needed \
         ansible{,-lint} \
         python-argcomplete \
-        bcc-tools \
+        bcc-libbpf-tools \
         python-bcc \
         bpf \
         bpftrace \
@@ -401,7 +401,7 @@ archarm)
 
     # DevOps
     pacman --sync --needed \
-        bcc-tools \
+        bcc-libbpf-tools \
         python-bcc \
         bpf \
         bpftrace \
@@ -493,7 +493,7 @@ artix)
         tailscale \
         wireguard-s6 \
         \
-        bcc-tools \
+        bcc-libbpf-tools \
         python-bcc \
         bpftrace
 

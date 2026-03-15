@@ -13,7 +13,19 @@ locals {
         loadBalancer = {
           mode = "hybrid"
         }
-      })
+      }),
+      yamlencode({
+        gatewayAPI = {
+          enabled = false
+        }
+        ingressController = {
+          enabled = false
+        }
+        l7Proxy = false
+      }),
     ]
+    flux = {
+      kustomization_override = file("${path.module}/../../manifest/flux-kustomization.yaml")
+    }
   }
 }

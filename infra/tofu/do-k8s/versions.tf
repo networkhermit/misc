@@ -6,6 +6,7 @@ terraform {
     skip_metadata_api_check     = true
     skip_region_validation      = true
     skip_s3_checksum            = true
+    use_lockfile                = true
     use_path_style              = true
   }
   encryption {
@@ -30,15 +31,15 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "~> 2.49.0"
+      version = "~> 2.79.0"
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~> 0.7.1"
+      version = "~> 0.10.1"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 4.0.6"
+      version = "~> 4.2.1"
     }
   }
   required_version = ">= 1.8"

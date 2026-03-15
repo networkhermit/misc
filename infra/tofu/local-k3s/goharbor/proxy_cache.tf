@@ -50,5 +50,5 @@ resource "harbor_project" "quay" {
 resource "harbor_registry" "quay" {
   endpoint_url  = "https://quay.io"
   name          = "quay.io"
-  provider_name = "quay"
+  provider_name = "docker-registry"
 }

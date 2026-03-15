@@ -1,6 +1,4 @@
 resource "digitalocean_loadbalancer" "k8s_api" {
-  count = var.cluster_spec.control_plane.count > 1 ? 1 : 0
-
   droplet_tag = "control-plane"
   name        = "${var.cluster_name}-kubernetes-api"
   region      = var.region
@@ -17,5 +15,9 @@ resource "digitalocean_loadbalancer" "k8s_api" {
     healthy_threshold = 2
     port              = 6443
     protocol          = "tcp"
+  }
+
+  lifecycle {
+    enabled = var.cluster_spec.control_plane.count > 1
   }
 }

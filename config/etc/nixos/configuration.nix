@@ -26,9 +26,9 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   # networking.hostName = "nixos"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+  # Configure network connections interactively with nmcli or nmtui.
+  networking.networkmanager.enable = true;
 
   # Set your time zone.
   # time.timeZone = "Europe/Amsterdam";
@@ -125,7 +125,7 @@ in
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "25.05"; # Did you read the comment?
+  system.stateVersion = "25.11"; # Did you read the comment?
 
   #boot.initrd.checkJournalingFS = false;
   #boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -152,7 +152,7 @@ in
 
   environment.etc = {
     "gai.conf" = {
-      source = ./git/config/etc/gai.conf;
+      source = lib.mkForce ./git/config/etc/gai.conf;
     };
     "resolv.conf" =
       if config.networking.nameservers != [ ] then

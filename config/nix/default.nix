@@ -81,7 +81,7 @@ then
       nix = [
         nix-tree
         nixd
-        nixfmt-rfc-style
+        nixfmt
       ];
     in
     base ++ blog ++ devops ++ nix
@@ -94,7 +94,7 @@ then
       ];
       nix = [
         nix-tree
-        nixfmt-rfc-style
+        nixfmt
       ];
     in
     base ++ nix
@@ -124,7 +124,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       delve
       eza
       fd
-      fish
+      #fish
       fortune
       fzf
       go
@@ -143,7 +143,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       mypy
       neovim
       python3
-      python312Packages.pip
+      python313Packages.pip
       ripgrep
       ruff
       rust-analyzer
@@ -174,7 +174,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       mitmproxy
       nmap
       opentofu
-      python312Packages.cfn-lint
+      python313Packages.cfn-lint
       sops
       steampipe
       terraform-ls
@@ -183,7 +183,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
     nix = [
       nix-tree
       nixd
-      nixfmt-rfc-style
+      nixfmt
     ];
   in
   base ++ devops ++ nix

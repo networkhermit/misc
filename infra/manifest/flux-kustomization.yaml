@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+patches:
+  - patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: https_proxy
+          value: http://172.20.24.11:6666
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: no_proxy
+          value: 127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,localhost,.local,.internal,.svc,.bikeshed.dev
+    target:
+      group: apps
+      kind: Deployment
+      labelSelector: app.kubernetes.io/part-of=flux
+      name: "(kustomize-controller|source-controller)"
+      version: v1
+resources:
+  - gotk-components.yaml
+  - gotk-sync.yaml

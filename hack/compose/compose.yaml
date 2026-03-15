@@ -55,9 +55,9 @@ services:
       managed-by: docker-compose
     ports:
       - 127.0.0.1:53:53/udp
-      - 172.24.0.1:53:53/udp
+      - "${COREDNS_IP:-172.24.0.1}:53:53/udp"
       - 172.24.0.1:9153:9153
-      - 53:53/tcp
+      - "${COREDNS_IP:-172.24.0.1}:53:53/tcp"
       - "[::1]:53:53/udp"
     profiles:
       - coredns

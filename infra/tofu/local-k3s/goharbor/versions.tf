@@ -6,6 +6,7 @@ terraform {
     skip_metadata_api_check     = true
     skip_region_validation      = true
     skip_s3_checksum            = true
+    use_lockfile                = true
     use_path_style              = true
   }
   encryption {
@@ -30,7 +31,7 @@ terraform {
   required_providers {
     harbor = {
       source  = "goharbor/harbor"
-      version = "~> 3.10.19"
+      version = "~> 3.11.3"
     }
   }
   required_version = ">= 1.8"

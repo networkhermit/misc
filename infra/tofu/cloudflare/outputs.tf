@@ -5,6 +5,6 @@ output "doppler_service_token" {
 
 output "name_servers" {
   value = {
-    (cloudflare_zone.dev.zone) = cloudflare_zone.dev.name_servers
+    (cloudflare_zone.dev.name) = cloudflare_zone.dev.name_servers
   }
 }
