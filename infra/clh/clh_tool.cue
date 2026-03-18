@@ -78,7 +78,7 @@ command: clean: {
 	}
 	matchbox: {
 		let xs = [
-			{cmd: "docker stop matchbox"},
+			{cmd: "docker rm --force matchbox"},
 		]
 		{#DepRun & {in: tasks: xs}}.out
 	}

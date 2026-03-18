@@ -35,12 +35,12 @@ Options:
         bridge interface to use if you don't want to use NAT
     --cpu N
         number of virtual cpus to configure for the guest (default: ${CPU})
+    --dry-run
+        dry run and print xml (default: ${DRY_RUN})
     --images-path IMAGES_PATH
         directory to store the disk image (default: ${IMAGES_PATH})
     --memory N (MiB)
         memory to allocate for the guest (default: ${MEMORY})
-    --print-xml
-        print-xml (default: ${PRINT_XML})
     --size N (GiB)
         size of the disk image to be created (default: ${SIZE})
     -h, --help
@@ -59,9 +59,9 @@ EOF
 BOOT_PATH=/var/lib/libvirt/boot
 BRIDGE=
 CPU=4
+DRY_RUN=false
 IMAGES_PATH=/var/lib/libvirt/images
 MEMORY=8192
-PRINT_XML=false
 SIZE=40
 
 while (( $# > 0 )); do
@@ -78,6 +78,10 @@ while (( $# > 0 )); do
         CPU=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
         ;;
+    --dry-run)
+        DRY_RUN=true
+        shift
+        ;;
     --images-path)
         IMAGES_PATH=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
@@ -85,10 +89,6 @@ while (( $# > 0 )); do
     --memory)
         MEMORY=${2?✗ option parsing failed: missing value for argument ‘${1}’}
         shift 2
-        ;;
-    --print-xml)
-        PRINT_XML=true
-        shift
         ;;
     --size)
         SIZE=${2?✗ option parsing failed: missing value for argument ‘${1}’}
@@ -214,7 +214,8 @@ else
     VCPUS_OPTION=vcpus=${CPU}
 fi
 
-if [[ "${PRINT_XML}" = true ]]; then
+if [[ "${DRY_RUN}" = true ]]; then
+    EXTRA_ARGUMENT+=(--dry-run)
     EXTRA_ARGUMENT+=(--print-xml)
 fi
 

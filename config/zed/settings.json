@@ -35,10 +35,10 @@
       "enable_language_server": true,
       "formatter": [
         {
-          "code_actions": {
-            "source.fixAll.biome": true,
-            "source.organizeImports.biome": true
-          }
+          "code_action": "source.fixAll.biome"
+        },
+        {
+          "code_action": "source.organizeImports.biome"
         },
         {
           "language_server": {
@@ -61,10 +61,10 @@
       "enable_language_server": true,
       "formatter": [
         {
-          "code_actions": {
-            "source.fixAll.ruff": true,
-            "source.organizeImports.ruff": true
-          }
+          "code_action": "source.fixAll.ruff"
+        },
+        {
+          "code_action": "source.organizeImports.ruff"
         },
         {
           "language_server": {
@@ -99,10 +99,10 @@
       "enable_language_server": true,
       "formatter": [
         {
-          "code_actions": {
-            "source.fixAll.biome": true,
-            "source.organizeImports.biome": true
-          }
+          "code_action": "source.fixAll.biome"
+        },
+        {
+          "code_action": "source.organizeImports.biome"
         },
         {
           "language_server": {

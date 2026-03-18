@@ -4,7 +4,9 @@ package main
 	in: {
 		dep?:     _
 		parallel: bool | *false
-		tasks: [...{...}]
+		tasks: [...{
+			...
+		}]
 	}
 	out: X={
 		for i, v in in.tasks {

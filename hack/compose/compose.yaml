@@ -251,3 +251,17 @@ services:
       - source: /srv/v2ray/config.json
         target: /etc/v2ray/config.json
         type: bind
+  xray:
+    container_name: xray
+    image: teddysun/xray
+    labels:
+      managed-by: docker-compose
+    ports:
+      - 6666:6666
+    profiles:
+      - xray
+    restart: always
+    volumes:
+      - source: /srv/xray/config.json
+        target: /etc/xray/config.json
+        type: bind

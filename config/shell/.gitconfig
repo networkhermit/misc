@@ -1,9 +1,32 @@
+[branch]
+    sort = -committerdate
+[column]
+    ui = auto
+[commit]
+    verbose = true
+[diff]
+    algorithm = histogram
+    colorMoved = plain
+    mnemonicPrefix = true
+[fetch]
+    all = true
+    prune = true
+    pruneTags = true
+[help]
+    autocorrect = prompt
 [http "https://github.com"]
     proxy = http://127.0.0.1:6666
 [init]
     defaultBranch = main
+[log]
+    date = iso
 [push]
     autoSetupRemote = true
+    followTags = true
+[rebase]
+    updateRefs = true
+[tag]
+    sort = version:refname
 [user]
-    name = vac
     email = dot.fun@protonmail.com
+    name = vac

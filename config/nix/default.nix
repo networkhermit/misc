@@ -47,10 +47,10 @@ then
     with pkgs;
     let
       base = [
+        #biome
+        #golangci-lint
         #lua-language-server
         #stylua
-        biome
-        golangci-lint
       ];
       blog = [
         #zola
@@ -59,24 +59,23 @@ then
         #age
         #cue
         #fluxcd
+        #fnm
         #k9s
         #kubectl
         #kubernetes-helm (helm)
         #kubie
         #nerdctl
-        #nickel
         #open-policy-agent
         #opentofu
         #rage (rage-encryption)
         #sops
         #sqlfluff
         #talosctl
+        #tflint
         _1password-cli
         conftest
-        fnm
         kubescape
         terraform-ls
-        tflint
       ];
       nix = [
         nix-tree
@@ -124,7 +123,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       delve
       eza
       fd
-      #fish
+      fish
       fortune
       fzf
       go
@@ -138,7 +137,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       jq
       ldns
       lua-language-server
-      #mold
+      mold
       moreutils
       mypy
       neovim
@@ -170,15 +169,17 @@ else if builtins.currentSystem == "aarch64-darwin" then
       awscli2
       biome
       fnm
+      gh
       jsonnet
       mitmproxy
       nmap
       opentofu
       python313Packages.cfn-lint
       sops
-      steampipe
+      ssm-session-manager-plugin
       terraform-ls
       tflint
+      zizmor
     ];
     nix = [
       nix-tree

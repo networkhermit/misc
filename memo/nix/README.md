@@ -14,7 +14,7 @@ nix-env --query | sort
 # multi-user upgrade
 sudo su
 nix-channel --update
-nix-env --install --file '<nixpkgs>' --attr nixVersions.latest cacert -I nixpkgs=channel:nixpkgs
+nix-env --install --file '<nixpkgs>' --attr nixVersions.latest cacert -I nixpkgs=channel:nixpkgs-unstable
 
 ## Linux
 systemctl daemon-reload
