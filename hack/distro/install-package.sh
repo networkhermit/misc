@@ -183,6 +183,7 @@ alpine | postmarketos)
 
     # UTIL
     apk add --interactive \
+        b3sum \
         bat \
         eza \
         fd \
