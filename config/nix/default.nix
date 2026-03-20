@@ -71,11 +71,10 @@ then
         #sops
         #sqlfluff
         #talosctl
-        #tflint
         _1password-cli
         conftest
         kubescape
-        terraform-ls
+        tofu-ls
       ];
       nix = [
         nix-tree
@@ -177,8 +176,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       python313Packages.cfn-lint
       sops
       ssm-session-manager-plugin
-      terraform-ls
-      tflint
+      tofu-ls
       zizmor
     ];
     nix = [

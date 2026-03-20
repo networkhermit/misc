@@ -57,6 +57,9 @@
         "nixd"
       ]
     },
+    "OpenTofu": {
+      "enable_language_server": true
+    },
     "Python": {
       "enable_language_server": true,
       "formatter": [
@@ -90,9 +93,6 @@
       "enable_language_server": true
     },
     "TOML": {
-      "enable_language_server": true
-    },
-    "Terraform": {
       "enable_language_server": true
     },
     "TypeScript": {
