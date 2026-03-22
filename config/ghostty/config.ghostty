@@ -1,6 +1,6 @@
 auto-update = off
 background-opacity = 0.8
-bold-is-bright = true
+bold-color = bright
 command = /usr/bin/env PARTY_LIKE_ITS_1995=true "${SHELL}" -l
 font-family = SF Mono
 font-feature = -calt

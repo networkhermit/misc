@@ -19,4 +19,10 @@ provider "github" {}
 
 provider "helm" {
   kubernetes = {}
+
+  registries = var.registry_mirror == null ? [] : [{
+    password = var.registry_mirror_sensitive.password
+    url      = "oci://${var.registry_mirror.host}"
+    username = var.registry_mirror.username
+  }]
 }

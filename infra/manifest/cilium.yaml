@@ -41,13 +41,6 @@ hubble:
         interval: 30s
   ui:
     enabled: true
-ingressController:
-  enabled: true
-  loadbalancerMode: shared
-  service:
-    insecureNodePort: 30080
-    secureNodePort: 30443
-    type: NodePort
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: 10.24.0.0/16

@@ -38,4 +38,5 @@ module "k8s_addon" {
 
   addon_override   = local.addon_override
   cluster_endpoint = var.KUBE_HOST
+  registry_mirror  = local.registry_mirror
 }

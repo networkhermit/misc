@@ -1,16 +1,32 @@
 variable "oidc_credential" {
+  default  = null
+  nullable = true
+  type = object({
+    admin_group = string
+    endpoint    = string
+  })
+}
+
+variable "oidc_credential_sensitive" {
   default   = null
   nullable  = true
   sensitive = true
   type = object({
-    admin_group   = string
     client_id     = string
     client_secret = string
-    endpoint      = string
   })
 }
 
 variable "proxy_cache_accounts" {
+  default  = {}
+  nullable = false
+  type = map(
+    object({
+    })
+  )
+}
+
+variable "proxy_cache_accounts_sensitive" {
   default   = {}
   nullable  = false
   sensitive = true

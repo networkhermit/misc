@@ -7,11 +7,12 @@ locals {
 resource "helm_release" "cilium" {
   depends_on = [helm_release.prometheus_operator_crds]
 
-  chart      = "cilium"
-  name       = "cilium"
-  namespace  = "kube-system"
-  repository = "https://helm.cilium.io"
-  version    = var.pinned_version.cilium
+  chart       = "cilium"
+  max_history = var.max_history
+  name        = "cilium"
+  namespace   = "kube-system"
+  repository  = "oci://${var.registry_mirror.quay}/cilium/charts"
+  version     = var.pinned_version.cilium
 
   values = concat(
     [
@@ -36,11 +37,12 @@ resource "helm_release" "cilium" {
 resource "helm_release" "kubelet_csr_approver" {
   depends_on = [helm_release.prometheus_operator_crds]
 
-  chart      = "kubelet-csr-approver"
-  name       = "kubelet-csr-approver"
-  namespace  = "kube-system"
-  repository = "https://postfinance.github.io/kubelet-csr-approver"
-  version    = var.pinned_version.kubelet_csr_approver
+  chart       = "kubelet-csr-approver"
+  max_history = var.max_history
+  name        = "kubelet-csr-approver"
+  namespace   = "kube-system"
+  repository  = "oci://${var.registry_mirror.ghcr}/postfinance/charts"
+  version     = var.pinned_version.kubelet_csr_approver
 
   values = concat(
     [
@@ -62,11 +64,12 @@ resource "helm_release" "kubelet_csr_approver" {
 }
 
 resource "helm_release" "prometheus_operator_crds" {
-  chart      = "prometheus-operator-crds"
-  name       = "prometheus-operator-crds"
-  namespace  = "kube-system"
-  repository = "oci://ghcr.io/prometheus-community/charts"
-  version    = var.pinned_version.prometheus_operator_crds
+  chart       = "prometheus-operator-crds"
+  max_history = var.max_history
+  name        = "prometheus-operator-crds"
+  namespace   = "kube-system"
+  repository  = "oci://${var.registry_mirror.ghcr}/prometheus-community/charts"
+  version     = var.pinned_version.prometheus_operator_crds
 }
 
 resource "flux_bootstrap_git" "fleet" {

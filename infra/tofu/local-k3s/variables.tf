@@ -40,6 +40,22 @@ variable "git_source" {
   })
 }
 
+variable "registry_mirror" {
+  nullable = true
+  type = object({
+    host     = string
+    username = string
+  })
+}
+
+variable "registry_mirror_sensitive" {
+  nullable  = true
+  sensitive = true
+  type = object({
+    password = string
+  })
+}
+
 variable "state_backend_s3_bucket" {
   type = string
 }
