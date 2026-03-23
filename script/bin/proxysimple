@@ -42,6 +42,11 @@ Arguments:
 EOF
 }
 
+if [ -r ~/.config/local/env ]; then
+    # shellcheck source=/dev/null
+    source ~/.config/local/env
+fi
+
 while (( $# > 0 )); do
     case ${1} in
     -h | --help)
@@ -77,7 +82,7 @@ if [[ ! -x "$(command -v "${PROGRAM}")" ]]; then
     die "✗ command not found: ‘${PROGRAM}’"
 fi
 
-proxy=http://127.0.0.1:6666
+proxy=${PROXY:-http://127.0.0.1:10808}
 
 export http_proxy=${proxy}
 export https_proxy=${proxy}

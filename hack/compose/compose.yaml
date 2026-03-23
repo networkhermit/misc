@@ -243,7 +243,7 @@ services:
     labels:
       managed-by: docker-compose
     ports:
-      - 6666:6666
+      - "${PROXY_PORT:-10808}:10808"
     profiles:
       - v2fly
     restart: always
@@ -257,7 +257,7 @@ services:
     labels:
       managed-by: docker-compose
     ports:
-      - 6666:6666
+      - "${PROXY_PORT:-10808}:10808"
     profiles:
       - xray
     restart: always
