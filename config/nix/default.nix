@@ -169,7 +169,8 @@ else if builtins.currentSystem == "aarch64-darwin" then
       biome
       fnm
       gh
-      jsonnet
+      go-jsonnet
+      jsonnet-language-server
       mitmproxy
       nmap
       opentofu
