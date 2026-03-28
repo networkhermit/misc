@@ -170,7 +170,6 @@ else if builtins.currentSystem == "aarch64-darwin" then
       fnm
       gh
       go-jsonnet
-      jsonnet-language-server
       mitmproxy
       nmap
       opentofu
