@@ -1,7 +1,8 @@
 [Match]
 Name=eth0
 
-#[Link]
+[Link]
+RequiredForOnline=routable
 #RequiredForOnline=no
 
 [Network]

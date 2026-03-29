@@ -1,6 +1,10 @@
 [Match]
 Name=br0
 
+[Link]
+RequiredForOnline=routable
+#RequiredForOnline=no
+
 [Network]
 DHCP=yes
 
