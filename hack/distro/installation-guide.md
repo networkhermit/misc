@@ -323,7 +323,7 @@ sudo mkdir --parents /mnt/boot/efi
 sudo mount /dev/vdaX /mnt/boot/efi
 
 # bootstrap base system
-sudo pacstrap /mnt base linux{,-firmware} iptables-nft {amd,intel}-ucode grub efibootmgr sudo vim openssh gptfdisk dosfstools xfsprogs zram-generator
+sudo pacstrap /mnt base linux{,-firmware} iptables {amd,intel}-ucode grub efibootmgr sudo vim openssh gptfdisk dosfstools xfsprogs zram-generator
 genfstab -t PARTUUID /mnt | sudo tee --append /mnt/etc/fstab
 
 # chroot into node
@@ -428,7 +428,7 @@ Artix
 # shellcheck shell=bash
 
 # bootstrap base system
-sudo basestrap /mnt base s6-base seatd-s6 linux{,-firmware} iptables-nft {amd,intel}-ucode grub efibootmgr sudo vim openssh-s6 gptfdisk dosfstools xfsprogs dhcpcd-s6
+sudo basestrap /mnt base s6-base seatd-s6 linux{,-firmware} iptables {amd,intel}-ucode grub efibootmgr sudo vim openssh-s6 gptfdisk dosfstools xfsprogs dhcpcd-s6
 fstabgen -t PARTUUID /mnt | sudo tee --append /mnt/etc/fstab
 
 # chroot into node

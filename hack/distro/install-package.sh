@@ -435,19 +435,19 @@ artix)
 
     # UTIL
     pacman --sync --needed \
+        b3sum \
+        bat \
+        eza \
+        fd \
         fzf \
+        hyperfine \
         jq \
         moreutils \
         ripgrep \
         tree \
         go-yq \
         \
-        b3sum \
-        bat \
-        eza \
-        fd \
         hexyl \
-        hyperfine \
         tailspin \
         uutils-coreutils
 
@@ -480,13 +480,15 @@ artix)
     # GAME
     pacman --sync --needed \
         cmatrix \
+        fortune-mod \
         \
         cowsay \
-        fortune-mod \
         sl
 
     # DevOps
     pacman --sync --needed \
+        bcc-libbpf-tools \
+        python-bcc \
         bpf \
         docker{,-buildx,-compose} \
         git \
@@ -494,8 +496,6 @@ artix)
         tailscale \
         wireguard-s6 \
         \
-        bcc-libbpf-tools \
-        python-bcc \
         bpftrace
 
     pacman --files --list \

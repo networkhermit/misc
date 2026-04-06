@@ -1,6 +1,10 @@
 ```bash
 # shellcheck shell=bash
 
+# change hostname
+scutil --get HostName
+sudo scutil --set HostName macbook-pro
+
 # set user defaults
 
 defaults delete com.apple.dock tilesize && killall Dock
@@ -24,8 +28,4 @@ sudo nvram StartupMute=%01
 # flush dns cache
 
 sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder
-
-# reset launchpad in sequoia
-
-sudo find /private/var/folders/ -type d -name com.apple.dock.launchpad -exec rm -rf {} + 2>/dev/null; killall Dock
 ```

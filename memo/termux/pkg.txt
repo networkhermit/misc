@@ -31,6 +31,7 @@ lsof
 tmux
 
 # NETWORK OPERATOR
+chrony
 curl
 ldns
 openssh
@@ -55,6 +56,5 @@ git
 file
 
 # misc
-aptitude
 termux-api
 termux-services
