@@ -1,3 +1,4 @@
+disable systemd-homed-activate.service
 disable systemd-homed.service
 disable systemd-resolved.service
 disable systemd-timesyncd.service

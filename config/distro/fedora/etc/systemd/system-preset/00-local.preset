@@ -1,5 +1,6 @@
 disable ModemManager.service
 disable dnf-makecache.timer
+disable systemd-homed-activate.service
 disable systemd-homed.service
 disable systemd-oomd.service
 disable systemd-resolved.service
