@@ -1,0 +1,8 @@
+[font.bold]
+style = "Semibold"
+
+[font.bold_italic]
+style = "Semibold Italic"
+
+[window]
+decorations = "Buttonless"

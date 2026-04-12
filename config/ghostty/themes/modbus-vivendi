@@ -2,11 +2,15 @@
 palette = 8=#595959
 palette = 12=#79a8ff
 palette = 14=#6ae4b9
-palette = 10=#70b900
+palette = 10=#00c06f
 palette = 13=#b6a0ff
-palette = 9=#ef8b50
+palette = 9=#ff6b55
 palette = 15=#ffffff
-palette = 11=#c0c530
+palette = 11=#fec43f
+
+# cursor
+cursor-color = #ffffff
+cursor-text = #000000
 
 # normal
 palette = 0=#000000
@@ -14,10 +18,14 @@ palette = 4=#2fafff
 palette = 6=#00d3d0
 palette = 2=#44bc44
 palette = 5=#feacd0
-palette = 1=#ff8059
-palette = 7=#bfbfbf
+palette = 1=#ff5f59
+palette = 7=#a6a6a6
 palette = 3=#d0bc00
 
 # primary
-background = 000000
-foreground = ffffff
+background = #000000
+foreground = #ffffff
+
+# selection
+selection-background = #5a5a5a
+selection-foreground = #ffffff

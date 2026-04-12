@@ -27,7 +27,7 @@
         "size": 12
       },
       "intenseTextStyle": "all",
-      "opacity": 90
+      "opacity": 80
     },
     "list": [
       {
@@ -42,25 +42,25 @@
     {
       "background": "#000000",
       "black": "#000000",
-      "blue": "#2FAFFF",
+      "blue": "#2fafff",
       "brightBlack": "#595959",
-      "brightBlue": "#79A8FF",
-      "brightCyan": "#6AE4B9",
-      "brightGreen": "#70B900",
-      "brightPurple": "#B6A0FF",
-      "brightRed": "#EF8B50",
-      "brightWhite": "#FFFFFF",
-      "brightYellow": "#C0C530",
-      "cursorColor": "#FFFFFF",
-      "cyan": "#00D3D0",
-      "foreground": "#FFFFFF",
-      "green": "#44BC44",
+      "brightBlue": "#79a8ff",
+      "brightCyan": "#6ae4b9",
+      "brightGreen": "#00c06f",
+      "brightPurple": "#b6a0ff",
+      "brightRed": "#ff6b55",
+      "brightWhite": "#ffffff",
+      "brightYellow": "#fec43f",
+      "cursorColor": "#ffffff",
+      "cyan": "#00d3d0",
+      "foreground": "#ffffff",
+      "green": "#44bc44",
       "name": "Modus Vivendi",
-      "purple": "#FEACD0",
-      "red": "#FF8059",
-      "selectionBackground": "#FFFFFF",
-      "white": "#BFBFBF",
-      "yellow": "#D0BC00"
+      "purple": "#feacd0",
+      "red": "#ff5f59",
+      "selectionBackground": "#5a5a5a",
+      "white": "#a6a6a6",
+      "yellow": "#d0bc00"
     }
   ],
   "theme": "system"
