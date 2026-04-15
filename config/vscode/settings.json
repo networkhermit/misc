@@ -24,7 +24,7 @@
   "[rust]": {
     "editor.formatOnSave": true
   },
-  "biome.requireConfigFile": true,
+  "biome.requireConfiguration": true,
   "diffEditor.ignoreTrimWhitespace": false,
   "editor.fontFamily": "Go Mono",
   "editor.fontSize": 16,

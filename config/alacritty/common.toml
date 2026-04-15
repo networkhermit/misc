@@ -43,6 +43,7 @@ mods = "Control|Shift"
 hide_when_typing = true
 
 [window]
+dynamic_padding = true
 opacity = 0.8
 option_as_alt = "Both"
 startup_mode = "Maximized"
