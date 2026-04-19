@@ -32,7 +32,8 @@ variable "proxy_cache_accounts_sensitive" {
   sensitive = true
   type = map(
     object({
-      secret = string
+      secret            = string
+      secret_wo_version = string
     })
   )
 }

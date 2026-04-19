@@ -128,7 +128,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       go
       go-tools
       golangci-lint
-      gopls
+      (lib.lowPrio gopls)
       gotools
       hexyl
       htop

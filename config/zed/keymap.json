@@ -1,7 +1,7 @@
 [
   {
     "bindings": {
-      "ctrl-<": "zed::OpenSettings",
+      "ctrl-<": "zed::OpenSettingsFile",
       "ctrl-backspace": "zed::ToggleFullScreen",
       "ctrl-h": "workspace::ToggleLeftDock"
     }
@@ -15,20 +15,16 @@
   {
     "bindings": {
       "'": [
-        "vim::PushOperator",
+        "vim::PushJump",
         {
-          "Jump": {
-            "line": false
-          }
+          "line": false
         }
       ],
       "_": "editor::ToggleRelativeLineNumbers",
       "`": [
-        "vim::PushOperator",
+        "vim::PushJump",
         {
-          "Jump": {
-            "line": true
-          }
+          "line": true
         }
       ],
       "ctrl-j": [
@@ -54,19 +50,15 @@
   {
     "bindings": {
       "'": [
-        "vim::PushOperator",
+        "vim::PushJump",
         {
-          "Jump": {
-            "line": false
-          }
+          "line": false
         }
       ],
       "`": [
-        "vim::PushOperator",
+        "vim::PushJump",
         {
-          "Jump": {
-            "line": true
-          }
+          "line": true
         }
       ],
       "ctrl-l": [

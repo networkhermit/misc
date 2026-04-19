@@ -1,9 +1,10 @@
 resource "harbor_robot_account" "proxy_cache" {
   for_each = var.proxy_cache_accounts
 
-  level  = "system"
-  name   = each.key
-  secret = var.proxy_cache_accounts_sensitive[each.key].secret
+  level             = "system"
+  name              = each.key
+  secret_wo         = var.proxy_cache_accounts_sensitive[each.key].secret
+  secret_wo_version = var.proxy_cache_accounts_sensitive[each.key].secret_wo_version
 
   dynamic "permissions" {
     for_each = [

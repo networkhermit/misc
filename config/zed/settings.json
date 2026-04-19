@@ -1,14 +1,13 @@
 {
+  "auto_signature_help": true,
   "auto_update": false,
   "buffer_font_family": "Go Mono",
   "buffer_font_features": {
     "calt": false
   },
   "buffer_font_size": 16,
+  "disable_ai": true,
   "enable_language_server": false,
-  "features": {
-    "copilot": false
-  },
   "languages": {
     "Go": {
       "enable_language_server": true,
