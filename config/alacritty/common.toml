@@ -5,12 +5,14 @@ import = ["themes/modus-vivendi.toml"]
 draw_bold_text_with_bright_colors = true
 transparent_background_colors = true
 
+[cursor]
+blink_timeout = 0
+
 [cursor.style]
-blinking = "Always"
+blinking = "On"
 
 [env]
 TERM = "xterm-256color"
-TMUX_SESSION_NAME = "local"
 
 [font]
 size = 16.0
@@ -45,7 +47,6 @@ hide_when_typing = true
 [window]
 dynamic_padding = true
 opacity = 0.8
-option_as_alt = "Both"
 startup_mode = "Maximized"
 
 [window.padding]

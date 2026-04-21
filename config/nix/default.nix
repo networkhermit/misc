@@ -177,6 +177,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       sops
       ssm-session-manager-plugin
       tofu-ls
+      zellij
       zizmor
     ];
     nix = [

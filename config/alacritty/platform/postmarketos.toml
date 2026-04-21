@@ -1,2 +1,6 @@
+[env]
+#PARTY_LIKE_ITS_1995 = "true"
+TMUX_SESSION_NAME = "local"
+
 [font]
 size = 11.0

@@ -1,8 +1,73 @@
+[env]
+PARTY_LIKE_ITS_1995 = "true"
+#TMUX_SESSION_NAME = "local"
+
 [font.bold]
 style = "Semibold"
 
 [font.bold_italic]
 style = "Semibold Italic"
 
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "T"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "["
+mods = "Command|Shift"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "]"
+mods = "Command|Shift"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "1"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "2"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "3"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "4"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "5"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "6"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "7"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "8"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "9"
+mods = "Command"
+
 [window]
 decorations = "Buttonless"
+option_as_alt = "Both"

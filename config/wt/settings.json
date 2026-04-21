@@ -27,6 +27,7 @@
         },
         "size": 12
       },
+      "historySize": 10000,
       "intenseTextStyle": "all",
       "opacity": 80
     },

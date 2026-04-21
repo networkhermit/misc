@@ -1,0 +1,50 @@
+copy_on_select false
+default_layout "compact"
+default_mode "locked"
+default_shell "fish"
+mouse_hover_effects false
+pane_frames false
+session_serialization false
+show_release_notes false
+show_startup_tips false
+simplified_ui true
+
+keybinds {
+    locked {
+        bind "Ctrl Shift Backspace" { SwitchToMode "normal"; }
+        unbind "Ctrl g"
+    }
+    shared {
+        bind "Alt Down" { MoveFocus "Down"; SwitchToMode "locked"; }
+        bind "Alt Left" { MoveFocus "Left"; SwitchToMode "locked"; }
+        bind "Alt Right" { MoveFocus "Right"; SwitchToMode "locked"; }
+        bind "Alt Shift -" { NewPane "Down"; SwitchToMode "locked"; }
+        bind "Alt Shift =" { NewPane "Right"; SwitchToMode "locked"; }
+        bind "Alt Up" { MoveFocus "Up"; SwitchToMode "locked"; }
+        bind "Ctrl Shift Tab" "Super Shift [" { GoToPreviousTab; SwitchToMode "locked"; }
+        bind "Ctrl Shift t" "Super t" { NewTab; SwitchToMode "locked"; }
+        bind "Ctrl Tab" "Super Shift ]" { GoToNextTab; SwitchToMode "locked"; }
+        bind "Super 1" { GoToTab 1; SwitchToMode "locked"; }
+        bind "Super 2" { GoToTab 2; SwitchToMode "locked"; }
+        bind "Super 3" { GoToTab 3; SwitchToMode "locked"; }
+        bind "Super 4" { GoToTab 4; SwitchToMode "locked"; }
+        bind "Super 5" { GoToTab 5; SwitchToMode "locked"; }
+        bind "Super 6" { GoToTab 6; SwitchToMode "locked"; }
+        bind "Super 7" { GoToTab 7; SwitchToMode "locked"; }
+        bind "Super 8" { GoToTab 8; SwitchToMode "locked"; }
+        bind "Super 9" { GoToTab 9; SwitchToMode "locked"; }
+        bind "Super Shift Enter" { ToggleFocusFullscreen; SwitchToMode "locked"; }
+        bind "Super [" { FocusPreviousPane; SwitchToMode "locked"; }
+        bind "Super ]" { FocusNextPane; SwitchToMode "locked"; }
+    }
+    shared_except "locked" {
+        bind "Ctrl Shift Backspace" { SwitchToMode "locked"; }
+        unbind "Ctrl g"
+    }
+}
+
+ui {
+    pane_frames {
+        hide_session_name true
+    }
+}
