@@ -54,6 +54,7 @@
 (when (boundp 'native-comp-eln-load-path)
   (startup-redirect-eln-cache "~/.config/emacs/eln-cache"))
 
+(setq tramp-persistency-file-name nil)
 (setq treesit-extra-load-path '("~/.config/emacs/tree-sitter"))
 
 ;; library

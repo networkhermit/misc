@@ -42,7 +42,7 @@ R /git/wit/assets/***
 + /.local/share/
 + /.local/share/nvim/
 + /.local/share/nvim/lazy/***
-+ /.tmux/***
++ /.tmux.conf
 + /.zshrc
 + /.zshrc.kali
 + /git/***
