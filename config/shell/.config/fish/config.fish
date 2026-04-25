@@ -42,9 +42,6 @@ functions --erase __magic
 
 function __prompt_command --on-event fish_postexec
     echo
-    if test -n "$TMUX"
-        tmux set-option -p @PWD $PWD
-    end
 end
 
 #set --global __fish_git_prompt_showdirtystate 1

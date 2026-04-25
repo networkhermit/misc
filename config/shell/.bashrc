@@ -59,9 +59,6 @@ fi
 
 __prompt_command () {
     echo
-    if [[ -n "${TMUX}" ]]; then
-        tmux set-option -p @PWD "${PWD}"
-    fi
 }
 
 PROMPT_COMMAND='__prompt_command'

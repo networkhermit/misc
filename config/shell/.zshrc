@@ -62,9 +62,6 @@ fi
 
 __prompt_command () {
     echo
-    if [[ -n "${TMUX}" ]]; then
-        tmux set-option -p @PWD "${PWD}"
-    fi
 }
 
 precmd () {
