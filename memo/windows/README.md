@@ -8,7 +8,7 @@ Get-ExecutionPolicy -List
 [Environment]::GetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT', 'Machine')
 [Environment]::GetEnvironmentVariable('POWERSHELL_UPDATECHECK', 'Machine')
 
-Get-Content $PROFILE.AllUsersAllHosts
+Get-Content $PROFILE.CurrentUserAllHosts
 
 New-Item -Force -ItemType File -Path $PROFILE.CurrentUserCurrentHost
 Get-Content $PROFILE.CurrentUserCurrentHost
