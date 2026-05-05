@@ -221,7 +221,7 @@ in
     # PLT
     go
     python3
-    python312Packages.pip
+    python313Packages.pip
     rustc
     cargo
 
@@ -436,8 +436,6 @@ in
   };
 
   system.nssDatabases.hosts = lib.mkAfter [ "[!UNAVAIL=return]" ];
-
-  systemd.oomd.enable = false;
 
   time.timeZone = "Asia/Shanghai";
 
