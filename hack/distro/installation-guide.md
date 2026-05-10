@@ -162,22 +162,6 @@ ls --human-readable -l /etc/resolv.conf
 ## udhcpc
 printf '\n%s\n' 'RESOLV_CONF=no' | sudo tee --append /etc/udhcpc/udhcpc.conf
 
-# install command-not-found
-## arch
-{ yes || true; } | sudo pacman --sync --needed pkgfile
-sudo tee --append /etc/bash.bashrc << 'EOF'
-
-[[ -r /usr/share/doc/pkgfile/command-not-found.bash ]] && . /usr/share/doc/pkgfile/command-not-found.bash
-EOF
-## fedora
-sudo dnf install --assumeyes --setopt metadata_expire=never PackageKit-command-not-found
-## kali
-sudo apt install --assume-yes command-not-found < /dev/null
-sudo apt update
-sudo update-command-not-found
-## openbsd
-sudo pkg_add pkglocatedb--
-
 # reboot system
 sudo sync
 sudo reboot
@@ -255,8 +239,6 @@ sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/
 sudo sysctl -p
 
 # disable dynamic resolver
-
-# install command-not-found
 
 # install base utilities
 sudo apk add \
@@ -372,8 +354,6 @@ sudo install -D --mode 644 --target-directory /etc config/etc/hosts
 # update sysctl configuration
 
 # disable dynamic resolver
-
-# install command-not-found
 
 # update system locale
 sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
@@ -516,8 +496,6 @@ sudo firewall-cmd --reload
 
 # disable dynamic resolver
 
-# install command-not-found
-
 # update system locale
 sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
 
@@ -605,8 +583,6 @@ sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/
 sudo sysctl --system
 
 # disable dynamic resolver
-
-# install command-not-found
 
 # update system locale
 printf '\n%s\n' 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/locale.gen
@@ -704,8 +680,6 @@ sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/
 sudo sysctl --system
 
 # disable dynamic resolver
-
-# install command-not-found
 
 # update system locale
 sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
@@ -807,8 +781,6 @@ sudo install -D --mode 644 --target-directory /etc/sysctl.d config/etc/sysctl.d/
 sudo sysctl --system
 
 # disable dynamic resolver
-
-# install command-not-found
 
 # update system locale
 sudo install -D --mode 644 --target-directory /etc config/etc/locale.conf
@@ -917,8 +889,6 @@ sudo install -D --mode 644 --target-directory /etc config/etc/sysctl.conf.local
 
 # disable dynamic resolver
 
-# install command-not-found
-
 # update system locale
 sudo vim /etc/login.conf
 sudo cap_mkdb /etc/login.conf
@@ -1015,8 +985,6 @@ sudo install -D --mode 644 --target-directory /etc config/etc/boot.conf
 # update sysctl configuration
 
 # disable dynamic resolver
-
-# install command-not-found
 
 # install base utilities
 sudo pkg_add \

@@ -2,19 +2,19 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.opentofu.org/cloudflare/cloudflare" {
-  version     = "5.19.0-beta.1"
-  constraints = "5.19.0-beta.1"
+  version     = "5.19.1"
+  constraints = "~> 5.19.1"
   hashes = [
-    "h1:ww+abkB/1fPvl2+U8MGPI2pmlu0FosxFFbIoT8RhKyI=",
-    "zh:35bb2678ae60b19fbeb2907f6716e79b30e56a0f84e3f3e48152d0f33b9615e6",
-    "zh:47e8a190296f81e3a752ad31fc3bac6d71fbace8ba5588ff51722552d997b5ea",
-    "zh:4ca15c9e280ba454133b9ed9b8ce5ec41fef48237b2b2030b09990e4dd226d1e",
-    "zh:7135772003b4f652436b6ef35f4f585c553627b73b9458a8f7745e4ce3e6e337",
-    "zh:84d59a18fd5c2712e890638101b83242463d80d63985b6c9bafa7a7253e3c4e0",
-    "zh:a0df0a27b752cab9e777852d1e42860890775ec65ae758af834893f8776d309e",
-    "zh:afd2638778185984b2b608510fcc136d1a3583d9f471c328c724800534c16e2b",
+    "h1:mopYISyLkUVUwMjJbuPenxIUVDrna1/7ACB1hfMfciU=",
+    "zh:0651618000db705564dab5a25322b9d76ea54b7dd78931ed3565497b559babeb",
+    "zh:1a7847e9479fb6d21a65ef933ffae1416b1e4b44ca940c0d6c50fc4248cc4a0d",
+    "zh:5597cee5854131045eb9f201ae3a70b59c51955d31a647d9616863c746d902cb",
+    "zh:580786830d93e35b957754fd4c62d4681a3b19abc28b757e41acba26455663b1",
+    "zh:83c4bdfb0e74fd50e56fff3c461d76c1c1ec61af3f679e4de1aa70b5ed05a09f",
+    "zh:abb4d1052cee61d80f9cb51e5421e3c118312403afb7104b98bd7e310ac736ee",
+    "zh:b0aeeb3d66ea4d719989875e778c477065ba941e3a76e9a8caacc3be08208dd9",
+    "zh:e43b4b2dfcec1ce2115f5a5c86042d432deb49bee8eae103eb56d97ea02e2e3b",
     "zh:f809ab383cca0a5f83072981c64208cbd7fa67e986a86ee02dd2c82333221e32",
-    "zh:f94dadaff6f77352933d242c95708c05f91b8a06e1f4394a8a3725b2ad2a730b",
   ]
 }
 

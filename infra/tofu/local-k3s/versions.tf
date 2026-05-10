@@ -31,11 +31,11 @@ terraform {
   required_providers {
     flux = {
       source  = "fluxcd/flux"
-      version = "~> 1.8.5"
+      version = "~> 1.8.6"
     }
     github = {
       source  = "integrations/github"
-      version = "~> 6.11.1"
+      version = "~> 6.12.1"
     }
     helm = {
       source  = "hashicorp/helm"
