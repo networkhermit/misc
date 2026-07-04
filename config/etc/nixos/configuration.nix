@@ -125,7 +125,7 @@ in
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "25.11"; # Did you read the comment?
+  system.stateVersion = "26.05"; # Did you read the comment?
 
   #boot.initrd.checkJournalingFS = false;
   #boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -251,7 +251,7 @@ in
 
     # nix
     nix-tree
-    nixfmt-rfc-style
+    nixfmt
   ];
 
   environment.wordlist.enable = true;
@@ -261,6 +261,8 @@ in
   };
 
   networking.hostName = "nixos";
+
+  networking.resolvconf.enable = false;
 
   networking.timeServers = [
     "time.cloudflare.com"

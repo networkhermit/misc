@@ -396,7 +396,9 @@ Artix
 
 > Add `console=ttyS0,115200 init=/bin/bash` to boot parameters for KVM.
 >
-> `s6-service add default ttyS || touch /etc/s6/adminsv/default/contents.d/ttyS`
+> `s6 set enable ttyS`
+>
+> `s6 set commit && s6 live install`
 >
 > `printf '\n%s\n' 'TTY="ttyS0"' | tee --append /etc/s6/config/ttyS.conf`
 >
@@ -415,7 +417,7 @@ fstabgen -t PARTUUID /mnt | sudo tee --append /mnt/etc/fstab
 sudo artix-chroot /mnt /bin/bash
 
 # modify default ntp server
-sudo s6-service add default chronyd
+sudo s6 set enable chronyd
 sudo s6-rc -u change chronyd
 
 # update system clock
@@ -423,17 +425,17 @@ s6-rc list chronyd
 
 # configure system network
 printf '\n%s\n' 'hostname' | sudo tee --append /etc/dhcpcd.conf
-sudo s6-service add default dhcpcd
+sudo s6 set enable dhcpcd
 sudo s6-rc -u change dhcpcd
 
 # modify secure shell daemon
-sudo s6-service add default sshd
+sudo s6 set enable sshd
 sudo s6-rc -u change sshd
 
 # enable zram swap
 { yes || true; } | sudo pacman --sync --needed zramen-s6
 sudo install -D --mode 644 --target-directory /etc/s6/config config/etc/s6/config/zramen.conf
-sudo s6-service add default zramen
+sudo s6 set enable zramen
 sudo s6-rc -u change zramen
 
 # install artools-base
@@ -441,8 +443,11 @@ sudo s6-rc -u change zramen
 
 # setup mdns (optional)
 { yes || true; } | sudo pacman --sync --needed avahi-s6 nss-mdns
-sudo s6-service add default avahi-daemon
+sudo s6 set enable avahi-daemon
 sudo s6-rc -u change avahi-daemon
+
+# recompile the service database
+sudo s6 set commit && sudo s6 live install
 ```
 
 Fedora
