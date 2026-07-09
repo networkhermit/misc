@@ -35,7 +35,7 @@ resource "github_team" "sre" {
 }
 
 resource "github_team_members" "dev" {
-  team_id = github_team.dev.id
+  team_slug = github_team.dev.slug
 
   dynamic "members" {
     for_each = concat(var.team_members.dev, var.team_members.sre)
@@ -48,7 +48,7 @@ resource "github_team_members" "dev" {
 }
 
 resource "github_team_members" "sre" {
-  team_id = github_team.sre.id
+  team_slug = github_team.sre.slug
 
   dynamic "members" {
     for_each = var.team_members.sre

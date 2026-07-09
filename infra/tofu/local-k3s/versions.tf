@@ -31,19 +31,19 @@ terraform {
   required_providers {
     flux = {
       source  = "fluxcd/flux"
-      version = "~> 1.8.6"
+      version = "~> 1.9.1"
     }
     github = {
       source  = "integrations/github"
-      version = "~> 6.12.1"
+      version = "~> 6.13.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 3.1.1"
+      version = "~> 3.2.0"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 4.2.1"
+      version = "~> 4.3.0"
     }
   }
   required_version = ">= 1.11"
