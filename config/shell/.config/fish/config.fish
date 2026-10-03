@@ -3,7 +3,7 @@ if not status --is-interactive
     return
 end
 
-if command --query cowsay; and command --query cowsay
+if command --query cowsay; and command --query fortune
     fortune | cowsay -f www
 end
 

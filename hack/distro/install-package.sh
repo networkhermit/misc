@@ -178,6 +178,7 @@ alpine | postmarketos)
         texinfo \
         vim \
         neovim \
+        tree-sitter-cli \
         emacs-nox \
         shellcheck
 
@@ -218,7 +219,7 @@ alpine | postmarketos)
     apk add --interactive \
         go \
         python3 \
-        py3-pip \
+        uv \
         rust \
         cargo
 
@@ -258,6 +259,7 @@ arch)
         texinfo \
         vim \
         neovim \
+        tree-sitter-cli \
         emacs-nox \
         shellcheck
 
@@ -303,9 +305,10 @@ arch)
         go-tools \
         staticcheck \
         delve \
-        python{,-black,-pip} \
+        python{,-black} \
         mypy \
         ruff \
+        uv \
         rust{,-analyzer} \
         cargo-{audit,outdated} \
         mold \
@@ -350,6 +353,7 @@ archarm)
         texinfo \
         vim \
         neovim \
+        tree-sitter-cli \
         emacs-nox
 
     # UTIL
@@ -390,7 +394,8 @@ archarm)
     # PLT
     pacman --sync --needed \
         go \
-        python{,-pip} \
+        python \
+        uv \
         rust
 
     # GAME
@@ -430,6 +435,7 @@ artix)
         texinfo \
         vim \
         neovim \
+        tree-sitter-cli \
         emacs-nox \
         shellcheck-bin
 
@@ -474,15 +480,15 @@ artix)
     # PLT
     pacman --sync --needed \
         go \
-        python{,-pip} \
+        python \
+        uv \
         rust \
 
     # GAME
     pacman --sync --needed \
         cmatrix \
-        fortune-mod \
-        \
         cowsay \
+        fortune-mod \
         sl
 
     # DevOps
@@ -516,6 +522,7 @@ fedora)
         info \
         vim-enhanced \
         neovim \
+        tree-sitter-cli \
         emacs-nw \
         ShellCheck
 
@@ -555,7 +562,8 @@ fedora)
     # PLT
     dnf install --setopt metadata_expire=never \
         golang \
-        python3{,-pip} \
+        python3 \
+        uv \
         rust \
         cargo
 
@@ -600,6 +608,7 @@ gentoo)
         sys-apps/texinfo \
         app-editors/vim \
         app-editors/neovim \
+        dev-util/tree-sitter-cli \
         app-editors/emacs \
         dev-util/shellcheck-bin
 
@@ -637,7 +646,7 @@ gentoo)
     emerge --ask --getbinpkg --noreplace \
         dev-lang/go \
         dev-lang/python \
-        dev-python/pip \
+        dev-python/uv \
         dev-lang/rust
 
     # GAME
@@ -676,6 +685,7 @@ kali)
         info \
         vim \
         neovim \
+        tree-sitter-cli \
         emacs-nox \
         shellcheck
 
@@ -717,7 +727,7 @@ kali)
     # PLT
     apt install \
         golang \
-        python3{,-pip} \
+        python3 \
         rustc \
         cargo
 
@@ -758,6 +768,7 @@ void)
         texinfo \
         vim \
         neovim \
+        tree-sitter-cli \
         emacs \
         shellcheck
 
@@ -797,7 +808,8 @@ void)
     # PLT
     xbps-install \
         go \
-        python3{,-pip} \
+        python3 \
+        uv \
         rust \
         cargo
 
@@ -838,6 +850,7 @@ freebsd)
         texinfo \
         vim \
         neovim \
+        tree-sitter-cli \
         emacs-nox \
         hs-ShellCheck
 
@@ -875,7 +888,7 @@ freebsd)
     pkg install --no-repo-update \
         go \
         python3 \
-        py311-pip \
+        uv \
         rust
 
     # GAME
@@ -907,6 +920,7 @@ openbsd)
         zsh{,-syntax-highlighting}-- \
         vim--no_x11 \
         neovim-- \
+        tree-sitter-cli-- \
         emacs--no_x11 \
         shellcheck--
 
@@ -937,7 +951,7 @@ openbsd)
     pkg_add \
         go-- \
         python--%3 \
-        py3-pip-- \
+        uv-- \
         rust--
 
     # GAME

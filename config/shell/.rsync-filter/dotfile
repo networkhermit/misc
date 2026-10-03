@@ -29,7 +29,6 @@ R /git/wit/assets/***
 
 - /.config/emacs/eln-cache/***
 - /.config/fish/fish_variables
-#- /.local/share/nvim/lazy/nvim-treesitter/parser/*.so
 
 # Include Rule
 

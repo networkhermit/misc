@@ -1,16 +1,17 @@
 resource "harbor_config_auth" "oidc" {
-  auth_mode          = "oidc_auth"
-  oidc_admin_group   = var.oidc_credential.admin_group
-  oidc_auto_onboard  = true
-  oidc_client_id     = var.oidc_credential_sensitive.client_id
-  oidc_client_secret = var.oidc_credential_sensitive.client_secret
-  oidc_endpoint      = var.oidc_credential.endpoint
-  oidc_groups_claim  = "groups"
-  oidc_name          = "dex"
-  oidc_scope         = "email,groups,offline_access,openid,profile"
-  oidc_user_claim    = "preferred_username"
-  oidc_verify_cert   = true
-  primary_auth_mode  = false
+  auth_mode                     = "oidc_auth"
+  oidc_admin_group              = var.oidc_credential.admin_group
+  oidc_auto_onboard             = true
+  oidc_client_id                = var.oidc_credential_sensitive.client_id
+  oidc_client_secret_wo         = var.oidc_credential_sensitive.client_secret
+  oidc_client_secret_wo_version = var.oidc_credential_sensitive.client_secret_wo_version
+  oidc_endpoint                 = var.oidc_credential.endpoint
+  oidc_groups_claim             = "groups"
+  oidc_name                     = "dex"
+  oidc_scope                    = "email,groups,offline_access,openid,profile"
+  oidc_user_claim               = "preferred_username"
+  oidc_verify_cert              = true
+  primary_auth_mode             = false
 
   lifecycle {
     enabled = var.oidc_credential != null

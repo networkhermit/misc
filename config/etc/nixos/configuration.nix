@@ -183,6 +183,7 @@ in
     texinfoInteractive
     vim
     neovim
+    tree-sitter
     emacs-nox
     shellcheck
 
@@ -221,7 +222,7 @@ in
     # PLT
     go
     python3
-    python313Packages.pip
+    uv
     rustc
     cargo
 

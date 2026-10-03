@@ -8,6 +8,7 @@ manpages
 texinfo
 vim
 neovim
+tree-sitter
 emacs
 shellcheck
 
@@ -40,7 +41,7 @@ rsync
 # PLT
 golang
 python
-python-pip
+uv
 rust
 
 # GAME

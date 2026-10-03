@@ -123,12 +123,12 @@ else if builtins.currentSystem == "aarch64-darwin" then
       eza
       fd
       fish
-      fortune
+      #fortune
       fzf
       go
       go-tools
       golangci-lint
-      (lib.lowPrio gopls)
+      gopls
       gotools
       hexyl
       htop
@@ -141,7 +141,6 @@ else if builtins.currentSystem == "aarch64-darwin" then
       mypy
       neovim
       python3
-      python313Packages.pip
       ripgrep
       ruff
       rust-analyzer
@@ -155,7 +154,9 @@ else if builtins.currentSystem == "aarch64-darwin" then
       tailspin
       tmux
       tree
+      tree-sitter
       uutils-coreutils
+      uv
       watch
       yq-go
       zsh-autosuggestions
@@ -173,7 +174,7 @@ else if builtins.currentSystem == "aarch64-darwin" then
       mitmproxy
       nmap
       opentofu
-      python313Packages.cfn-lint
+      python314Packages.cfn-lint
       sops
       ssm-session-manager-plugin
       tofu-ls

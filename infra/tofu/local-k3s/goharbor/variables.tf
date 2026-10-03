@@ -12,8 +12,9 @@ variable "oidc_credential_sensitive" {
   nullable  = true
   sensitive = true
   type = object({
-    client_id     = string
-    client_secret = string
+    client_id                = string
+    client_secret            = string
+    client_secret_wo_version = string
   })
 }
 
