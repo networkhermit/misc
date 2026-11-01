@@ -80,7 +80,7 @@ install -D --mode 644 --no-target-directory <(containerd config default) /etc/co
 cat << 'EOF'
 version = 3
 [plugins.'io.containerd.cri.v1.images'.pinned_images]
-  sandbox = 'registry.k8s.io/pause:3.10'
+  sandbox = 'registry.k8s.io/pause:3.10.2'
 [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options]
   SystemdCgroup = true
 EOF
@@ -88,7 +88,7 @@ EOF
 cat << 'EOF'
 version = 2
 [plugins."io.containerd.grpc.v1.cri"]
-  sandbox_image = "registry.k8s.io/pause:3.10"
+  sandbox_image = "registry.k8s.io/pause:3.10.2"
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
   SystemdCgroup = true
 EOF

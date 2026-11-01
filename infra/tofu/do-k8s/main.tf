@@ -15,8 +15,8 @@ locals {
       internal = ["10.24.0.0/16"]
     }
     pinned_version = {
-      kubernetes = "1.36.0"
-      talos      = "1.13.0"
+      kubernetes = "1.37.1"
+      talos      = "1.14.5"
     }
   }
   talos_override = {
