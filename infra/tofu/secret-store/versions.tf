@@ -31,7 +31,7 @@ terraform {
   required_providers {
     doppler = {
       source  = "DopplerHQ/doppler"
-      version = "~> 1.21.4"
+      version = "~> 1.23.0"
     }
   }
   required_version = ">= 1.11"

@@ -41,6 +41,7 @@ variable "git_source" {
 }
 
 variable "registry_mirror" {
+  default  = null
   nullable = true
   type = object({
     host     = string
@@ -49,6 +50,7 @@ variable "registry_mirror" {
 }
 
 variable "registry_mirror_sensitive" {
+  default   = null
   nullable  = true
   sensitive = true
   type = object({

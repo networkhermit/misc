@@ -31,11 +31,11 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 5.21.1"
+      version = "~> 5.28.1"
     }
     doppler = {
       source  = "DopplerHQ/doppler"
-      version = "~> 1.21.4"
+      version = "~> 1.23.0"
     }
   }
   required_version = ">= 1.11"

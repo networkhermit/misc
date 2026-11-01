@@ -31,15 +31,15 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "~> 2.95.0"
+      version = "~> 2.106.0"
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~> 0.11.0"
+      version = "~> 0.12.0"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 4.3.0"
+      version = "~> 4.4.2"
     }
   }
   required_version = ">= 1.11"
